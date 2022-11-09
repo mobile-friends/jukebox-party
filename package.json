@@ -1,5 +1,6 @@
 {
   "private": true,
+  "prettier": "prettiest-prettier",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -8,6 +9,7 @@
   },
   "dependencies": {
     "next": "latest",
+    "prettiest-prettier": "^1.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
