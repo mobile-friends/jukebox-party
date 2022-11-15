@@ -1,4 +1,4 @@
-# jukebox-party
+# jukebox.party
 
 [Changelog](./CHANGELOG.md) - 
 [Wiki](./docs/wiki.md) - 
