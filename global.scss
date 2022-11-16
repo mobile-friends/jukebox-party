@@ -32,10 +32,11 @@ body {
     }
 
     button.btn {
-        width: 70vw;
-        height: 44px;
+        min-height: 44px;
         border-radius: 50px;
         font-weight: bold;
+
+        padding: 0 20px;
     
         &.primary {
             color: $dark-color;
@@ -51,6 +52,9 @@ body {
             color: $primary-color;
             background: none;
             border: none;
+        }
+        &.block {
+            width: 100%;
         }
         &:hover {
             opacity: 90%;
