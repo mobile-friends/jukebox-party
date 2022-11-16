@@ -1,5 +1,7 @@
-export default function Button() {
+export default function Button({ text, type }) {
     return(
-        <button>Button</button>
+        <div>
+            <button className={`btn ${type}`}>{ text }</button>
+        </div>
     )
 }
