@@ -9,10 +9,14 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.18.6",
+    "dotenv": "^16.0.3",
+    "fs": "^0.0.1-security",
     "next": "latest",
+    "next-auth": "^4.16.4",
     "prettiest-prettier": "^1.0.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sass": "^1.56.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
