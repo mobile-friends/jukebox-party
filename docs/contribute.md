@@ -37,3 +37,8 @@ We also add:
   - Feature-branches that you work on alone don't need to be pushed to origin
   - Delete completed feature-branches after completion
 - Merging can be done without explicit pull-requests
+
+## Code-conventions
+
+TS files follow official 
+[style guide](https://google.github.io/styleguide/tsguide.html).
