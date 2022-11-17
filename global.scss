@@ -5,6 +5,7 @@ $primary-color: #ECE32F;
 * {
     font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
     'Arial', sans-serif;
+    margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
@@ -12,8 +13,6 @@ $primary-color: #ECE32F;
 body {
     background-color: $dark-color;
     color: $light-color;
-
-    padding: 20px;
 
     .text-primary {
         color: $primary-color;
@@ -30,12 +29,15 @@ body {
     .text-italic {
         font-style: italic;
     }
+    .text-center {
+        text-align: center;
+    }
 
     button.btn {
         min-height: 44px;
         border-radius: 50px;
         font-weight: bold;
-
+    
         padding: 0 20px;
         margin: 5px 0;
     
