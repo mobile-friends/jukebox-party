@@ -1,6 +1,6 @@
 import { getSession, useSession } from 'next-auth/react';
 
-import LoginButton from '../components/loginButton';
+import LoginButton from '../components/elements/loginButton';
 
 export default function Home({ context: { user } }) {
   const { data: context } = useSession();
