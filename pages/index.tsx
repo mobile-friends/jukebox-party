@@ -2,8 +2,7 @@ import { getSession, useSession } from 'next-auth/react';
 
 import LoginButton from '../components/elements/loginButton';
 
-export default function Home({ context: { user } }) {
-  const { data: context } = useSession();
+export default function Home({ context }) {
   console.log(context);
 
   const play = () => {
@@ -11,7 +10,7 @@ export default function Home({ context: { user } }) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${context.user.accessToken}`,
       },
     });
   };
@@ -21,7 +20,7 @@ export default function Home({ context: { user } }) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${user.accessToken}`,
+        Authorization: `Bearer ${context.user.accessToken}`,
       },
     });
   };
