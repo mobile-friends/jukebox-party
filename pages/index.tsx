@@ -1,13 +1,8 @@
-import Button from '../components/elements/button';
-import Input from '../components/elements/input';
-
-import { getProviders, getSession, useSession } from 'next-auth/react';
-import { resolve } from 'path';
+import { getSession, useSession } from 'next-auth/react';
 
 import LoginButton from '../components/loginButton';
 
-export default function Home(session) {
-  const clientId = process.env.SPOTIFY_CLIENT_ID || 'nope';
+export default function Home({ context: { user } }) {
   const { data: context } = useSession();
   console.log(context);
 
@@ -16,7 +11,7 @@ export default function Home(session) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${context.user.accessToken}`,
+        Authorization: `Bearer ${user.accessToken}`,
       },
     });
   };
@@ -26,7 +21,7 @@ export default function Home(session) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${context.user.accessToken}`,
+        Authorization: `Bearer ${user.accessToken}`,
       },
     });
   };
@@ -55,7 +50,6 @@ export default function Home(session) {
         <Button text='Create session' type='tertiary'></Button>
       </div> */}
 
-      
       <div>
         <h1>jukebox.party</h1>
         <div onClick={play}>PLAY</div>
@@ -71,7 +65,7 @@ export default function Home(session) {
 export async function getServerSideProps(context) {
   return {
     props: {
-      session: await getSession(context),
+      context: await getSession(context),
     },
   };
 }
