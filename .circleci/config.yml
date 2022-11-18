@@ -1,9 +1,34 @@
 version: 2.1
+
 jobs:
+  test:
+    docker:
+      - image: cimg/node:19.0.1
+    steps:
+      - checkout
+      - run: npm install
+      - run: npm run test
   build:
     docker:
       - image: cimg/node:19.0.1
     steps:
       - checkout
       - run: npm install
-      - run: npm test
+      - run: npm run build
+
+workflows:
+  test_and_build:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only:
+                - indev
+                - main
+      - build:
+          requires:
+            - test
+          filters:
+            branches:
+              only:
+                - main
