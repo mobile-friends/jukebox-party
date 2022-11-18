@@ -2,4 +2,5 @@
 
 This is the jukebox.party wiki and documentation
 
-Hm... seems like nothing is here yet
+- [Contribution guide for devs](./contribute.md)
+- [Important terms](./terms.md)
