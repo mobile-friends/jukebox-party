@@ -1,22 +1,18 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession, useSession } from 'next-auth/react';
+import httpClient from '../../../httpClient';
+import { baseURL } from './index';
 
 export default async function playTrack(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === 'PUT') {
-    let spotifyRes = await fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
+    let spotifyRes = await httpClient.get(`${baseURL}/play`, {
       headers: {
-        'Content-Type': 'application/json',
         Authorization: req.headers.authorization,
       },
     });
-    spotifyRes = await spotifyRes.json();
-    console.log(spotifyRes);
-    res.status(204);
-    //res.status(204).write(spotifyRes);
-    //res.status(204).body(spotifyRes);
+    res.status(200).json(spotifyRes.data);
   } else res.status(405);
 }

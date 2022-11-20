@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@babel/preset-react": "^7.18.6",
+    "axios": "^1.1.3",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "next": "latest",
