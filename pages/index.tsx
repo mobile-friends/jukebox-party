@@ -6,8 +6,8 @@ export default function Home({ context }) {
   console.log(context);
 
   const play = () => {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
+    fetch('http://localhost:3000/api/player/play', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${context.user.accessToken}`,
