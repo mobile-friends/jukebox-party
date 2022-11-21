@@ -1,29 +1,38 @@
 declare type Url = string
 
-declare type Id = number
-
 declare type PartyCode = string
 
 declare type UserName = string
 
 declare interface Artist {
-    name: string
+    readonly name: string
 }
 
 declare interface Track {
-    name: string,
-    artists: Artist[]
-    albumArtUrl: Url
+    readonly name: string,
+    readonly artists: Artist[]
+    readonly albumArtUrl: Url
 }
 
-declare interface User {
-    id: Id,
-    name: UserName
+declare enum UserRole {
+    Host, Guest
 }
+
+declare interface Guest {
+    readonly name: UserName
+    readonly role: UserRole.Guest
+}
+
+declare interface Host {
+    readonly name: UserName
+    readonly role: UserRole.Host
+}
+
+declare type User = Guest | Host
 
 declare interface Party {
-    name: string,
-    code: PartyCode,
-    host: User,
-    guests: User[]
+    readonly code: PartyCode,
+    readonly name: string,
+    readonly host: Host
+    readonly guests: Guest[]
 }
