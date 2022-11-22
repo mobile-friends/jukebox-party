@@ -1,10 +1,9 @@
 import { getSession, useSession } from 'next-auth/react';
+import { createParty, getPartyDetails } from '../httpClient/jukebox/parties';
 
 import LoginButton from '../components/elements/loginButton';
 
 export default function Home({ context }) {
-  console.log(context);
-
   const play = () => {
     fetch('http://localhost:3000/api/player/play', {
       method: 'GET',
@@ -26,7 +25,12 @@ export default function Home({ context }) {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        height: '100vh',
+        padding: '4rem',
+      }}
+    >
       {/* <div
         style={{
           height: '100vh',
@@ -54,6 +58,21 @@ export default function Home({ context }) {
         <div onClick={play}>PLAY</div>
         <br></br>
         <div onClick={pause}>PAUSE</div>
+        <br></br>
+        <div
+          onClick={async () => {
+            await createParty('my party', 'my name');
+          }}
+        >
+          Create Room
+        </div>
+        <div
+          onClick={async () => {
+            await getPartyDetails('673994');
+          }}
+        >
+          get party details
+        </div>
         <br></br>
         <LoginButton />
       </div>
