@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import httpClient from '../../../httpClient';
+import { spotifyClient } from '../../../httpClient/spotify';
 
 export const baseURL = 'me/player/';
 export default async function handler(
@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === 'GET') {
-    let spotifyRes = await httpClient.get(baseURL, {
+    let spotifyRes = await spotifyClient.get(baseURL, {
       headers: {
         Authorization: req.headers.authorization,
       },

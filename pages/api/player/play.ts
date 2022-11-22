@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import httpClient from '../../../httpClient';
+import { spotifyClient } from '../../../httpClient/spotify';
 import { baseURL } from './index';
 
 export default async function playTrack(
@@ -8,7 +8,7 @@ export default async function playTrack(
   res: NextApiResponse
 ) {
   if (req.method === 'PUT') {
-    let spotifyRes = await httpClient.get(`${baseURL}/play`, {
+    let spotifyRes = await spotifyClient.get(`${baseURL}/play`, {
       headers: {
         Authorization: req.headers.authorization,
       },
