@@ -3,6 +3,7 @@ import database from '../../../firebase.config';
 import { addGuestTo } from '../../../lib/Party';
 import { makeGuest } from '../../../lib/User';
 
+// Join a Party with the Party-ID
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -14,12 +15,7 @@ export default async function handler(
 
   const { partyCode, guestName } = req.body;
 
-  console.log(partyCode);
-  console.log(guestName);
-
   await database
     .ref(`parties/${partyCode}/`)
     .set(addGuestTo(partyCode, makeGuest(guestName)));
-
-  res.status(201).json({ partyCode });
 }
