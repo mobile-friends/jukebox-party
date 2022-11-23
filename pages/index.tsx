@@ -70,6 +70,7 @@ export default function Home({ context }) {
         >
           Create Room
         </div>
+        <br></br>
         <div
           onClick={async () => {
             await getPartyDetails('673994');
@@ -77,6 +78,7 @@ export default function Home({ context }) {
         >
           get party details
         </div>
+        <br></br>
         <div
           onClick={async () => {
             await joinParty('673994', 'guest');
@@ -85,6 +87,7 @@ export default function Home({ context }) {
           Join Party(673994)
         </div>
         <br></br>
+        <LoginButton />
       </div>
     </div>
   );
