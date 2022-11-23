@@ -13,4 +13,12 @@ const getPartyDetails = async (partyCode: string) => {
   return res.data;
 };
 
-export { createParty, getPartyDetails };
+const joinParty = async (partyCode: string, guestName: string) => {
+  const res = await jukeboxClient.post(`${baseURL}/join`, {
+    partyCode,
+    guestName,
+  });
+  return res.data;
+};
+
+export { createParty, getPartyDetails, joinParty };

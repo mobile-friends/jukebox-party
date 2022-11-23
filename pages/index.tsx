@@ -1,5 +1,9 @@
 import { getSession, useSession } from 'next-auth/react';
-import { createParty, getPartyDetails } from '../httpClient/jukebox/parties';
+import {
+  createParty,
+  getPartyDetails,
+  joinParty,
+} from '../httpClient/jukebox/parties';
 
 import LoginButton from '../components/elements/loginButton';
 
@@ -73,8 +77,14 @@ export default function Home({ context }) {
         >
           get party details
         </div>
+        <div
+          onClick={async () => {
+            await joinParty('673994', 'guest');
+          }}
+        >
+          Join Party(673994)
+        </div>
         <br></br>
-        <LoginButton />
       </div>
     </div>
   );
