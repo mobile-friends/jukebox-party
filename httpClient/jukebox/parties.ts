@@ -18,6 +18,7 @@ const joinParty = async (partyCode: string, guestName: string) => {
     partyCode,
     guestName,
   });
+  console.log(res.data);
   return res.data;
 };
 

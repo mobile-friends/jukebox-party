@@ -5,9 +5,14 @@
  * @param host The parties host
  * @param guests The parties guests
  */
-export function makeParty(code: PartyCode, name: string, host: Host, guests: Guest[]): Party {
-    let party: Party = {code, name, host, guests}
-    return Object.freeze(party)
+export function makeParty(
+  code: PartyCode,
+  name: string,
+  host: Host,
+  guests: Guest[]
+): Party {
+  let party: Party = { code, name, host, guests };
+  return Object.freeze(party);
 }
 
 /**
@@ -34,6 +39,10 @@ export function getUsersIn(party: Party): User[] {
  * @param guest The guest
  */
 export function addGuestTo(party: Party, guest: Guest): Party {
-    let newGuests = party.guests.concat(guest)
-    return makeParty(party.name, party.code, party.host, newGuests)
+  //let newGuests = party.guests.concat(guest)
+
+  //temporary fix
+  party.guests.push(guest);
+
+  return makeParty(party.name, party.code, party.host, party.guests);
 }
