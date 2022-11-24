@@ -1,7 +1,9 @@
+declare const tag: unique symbol;
+
 /**
  * Represents a time duration
  */
-export type Duration = number;
+export type Duration = number & { readonly [tag]: 'Duration' };
 
 /**
  * Contains functions for working with durations
@@ -15,7 +17,7 @@ export namespace Duration {
    * @param seconds The seconds
    */
   export function makeFromSeconds(seconds: number): Duration {
-    return Math.ceil(seconds);
+    return Math.ceil(seconds) as Duration;
   }
 
   /**

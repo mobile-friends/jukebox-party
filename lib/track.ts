@@ -1,6 +1,8 @@
 import { Artist } from './artist';
 import { Duration } from './duration';
 
+declare const tag: unique symbol;
+
 /**
  * A track that can be played
  */
@@ -8,6 +10,7 @@ export interface Track {
   readonly name: string;
   readonly duration: Duration;
   readonly artists: Artist[];
+  readonly [tag]: 'Track';
 }
 
 /**
@@ -25,7 +28,7 @@ export namespace Track {
     duration: Duration,
     artists: Artist[]
   ): Track {
-    return Object.freeze({ name, duration, artists });
+    return Object.freeze({ name, duration, artists } as Track);
   }
 
   /**

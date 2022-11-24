@@ -1,9 +1,12 @@
+declare const tag: unique symbol;
+
 /**
  * Represents an artist that worked on a track
  * @see Track
  */
 export interface Artist {
   readonly name: string;
+  readonly [tag]: 'Artist';
 }
 
 /**
@@ -15,7 +18,7 @@ export namespace Artist {
    * @param name The artists name
    */
   export function make(name: string): Artist {
-    return Object.freeze({ name });
+    return Object.freeze({ name } as Artist);
   }
 
   /**
