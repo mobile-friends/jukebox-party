@@ -77,7 +77,7 @@ export default function Home({ context }) {
         <br></br>
         <div
           onClick={async () => {
-            await getPartyDetails('673994');
+            await getPartyDetails('581398');
           }}
         >
           get party details
@@ -85,10 +85,10 @@ export default function Home({ context }) {
         <br></br>
         <div
           onClick={async () => {
-            await joinParty('673994', 'guest');
+            await joinParty('581398', 'bruh');
           }}
         >
-          Join Party(673994)
+          Join Party(581398)
         </div>
         <br></br>
         <LoginButton />

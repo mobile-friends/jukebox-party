@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
-import { makeNewParty } from '../../../lib/Party';
-import { makeHost } from '../../../lib/User';
 import doesPartyExist from '../../../utils/parties';
-import createPartyCode from '../../../utils/partyCodes';
+import { Party } from '../../../lib/party';
 
 // Gets the data of a party by its roomcode
 // ? ONLY ONCE
@@ -25,7 +23,8 @@ export default async function handler(
     return;
   }
   await dbRef.once('value', (snapshot) => {
-    const party = snapshot.val();
+    const dto = snapshot.val();
+    const party = Party.make(dto.code, dto.name, dto.host, dto.guests ?? []);
     res.status(200).json(party);
   });
 }

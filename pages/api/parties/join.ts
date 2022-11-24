@@ -1,8 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
 import { getPartyDetails } from '../../../httpClient/jukebox/parties';
-import { addGuestTo } from '../../../lib/Party';
-import { makeGuest } from '../../../lib/User';
+import { Party } from '../../../lib/party';
+import { User } from '../../../lib/user';
+
+interface RequestBody {
+  partyCode: string;
+  guestName: string;
+}
 
 // Join a Party with the Party-ID
 export default async function handler(
@@ -14,20 +19,14 @@ export default async function handler(
     return;
   }
 
-  const { partyCode, guestName } = req.body;
+  const { partyCode, guestName }: RequestBody = req.body;
 
   //Get the Party Objekt by ID
   const party = await getPartyDetails(partyCode);
+  const guest = User.makeGuest(guestName);
+  const partyWithGuest = Party.addGuestTo(party, guest);
 
-  await database
-    .ref(`parties/${party.code}/`)
-    .set(addGuestTo(party, guestName));
+  await database.ref(`parties/${partyCode}/`).set(partyWithGuest);
 
-  //not working because of enum type
-  /* await database
-    .ref(`parties/${party.code}/`)
-    .set(addGuestTo(party, makeGuest(guestName)));
-  */
-
-  res.status(200).json({ party });
+  res.status(200).json({ party: partyWithGuest });
 }

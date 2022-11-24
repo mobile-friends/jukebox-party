@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
-import { makeNewParty } from '../../../lib/Party';
-import { makeHost } from '../../../lib/User';
 import createPartyCode from '../../../utils/partyCodes';
+import { User } from '../../../lib/user';
+import { Party } from '../../../lib/party';
 
 // Creates a new Party by adding a new collection with a randomly generated roomcode as its ID
 export default async function handler(
@@ -16,9 +16,9 @@ export default async function handler(
   }
   const { partyName, hostName } = req.body;
 
-  await database
-    .ref(`parties/${partyCode}/`)
-    .set(makeNewParty(partyName, partyCode, makeHost(hostName)));
+  const host = User.makeHost(hostName);
+  const party = Party.startNew(partyCode, partyName, host);
+  await database.ref(`parties/${partyCode}/`).set(party);
 
   // Mit dem Objekt geht es, mit dem Enum vom Ramon leider noch nicht
   /*

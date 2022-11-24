@@ -1,4 +1,5 @@
 import { jukeboxClient } from '.';
+import { Party } from '../../lib/party';
 
 const baseURL = 'parties';
 
@@ -7,9 +8,8 @@ const createParty = async (partyName: string, hostName: string) => {
   return res.data;
 };
 
-const getPartyDetails = async (partyCode: string) => {
+const getPartyDetails = async (partyCode: string): Promise<Party> => {
   const res = await jukeboxClient.get(`${baseURL}/${partyCode}`);
-  console.log(res.data);
   return res.data;
 };
 
@@ -18,7 +18,6 @@ const joinParty = async (partyCode: string, guestName: string) => {
     partyCode,
     guestName,
   });
-  console.log(res.data);
   return res.data;
 };
 
