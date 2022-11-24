@@ -22,7 +22,7 @@ export function makeParty(
  * @param host The parties host-user
  */
 export function makeNewParty(code: PartyCode, name: string, host: Host) {
-    return makeParty(code, name, host, [])
+  return makeParty(code, name, host, []);
 }
 
 /**
@@ -30,7 +30,7 @@ export function makeNewParty(code: PartyCode, name: string, host: Host) {
  * @param party The party
  */
 export function getUsersIn(party: Party): User[] {
-    return [party.host, ...party.guests]
+  return [party.host, ...party.guests];
 }
 
 /**
@@ -39,10 +39,6 @@ export function getUsersIn(party: Party): User[] {
  * @param guest The guest
  */
 export function addGuestTo(party: Party, guest: Guest): Party {
-  //let newGuests = party.guests.concat(guest)
-
-  //temporary fix
-  party.guests.push(guest);
-
-  return makeParty(party.name, party.code, party.host, party.guests);
+  let newGuests = party.guests.concat(guest);
+  return makeParty(party.name, party.code, party.host, newGuests);
 }
