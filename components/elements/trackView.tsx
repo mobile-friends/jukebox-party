@@ -1,7 +1,7 @@
 import { Track } from '../../lib/track';
 import { Artist } from '../../lib/artist';
-import { Duration } from '../../lib/duration';
 import { PlaybackState } from '../../lib/playbackState';
+import PlaybackView from './playbackView';
 
 export interface TrackViewProps {
   track: Track;
@@ -16,21 +16,14 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
     return <div key={artistName}>{artistName}</div>;
   });
 
-  const playbackView = (
-    <span>
-      {`${
-        PlaybackState.isPlaying(playbackState) ? 'Playing' : 'Paused'
-      } ${Duration.formatted(
-        PlaybackState.playTimeOf(playbackState)
-      )} / ${Duration.formatted(Track.durationOf(track))}`}
-    </span>
-  );
-
   return (
     <div>
       {nameView}
       {artistViews}
-      {playbackView}
+      <PlaybackView
+        playbackState={playbackState}
+        trackDuration={Track.durationOf(track)}
+      />
     </div>
   );
 }
