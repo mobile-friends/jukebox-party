@@ -3,7 +3,7 @@
  * @see Track
  */
 export interface Artist {
-  name: string;
+  readonly name: string;
 }
 
 /**
@@ -15,7 +15,7 @@ export namespace Artist {
    * @param name The artists name
    */
   export function make(name: string): Artist {
-    return { name };
+    return Object.freeze({ name });
   }
 
   /**

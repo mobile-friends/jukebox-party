@@ -2,9 +2,9 @@ import { Artist } from './artist';
 import { Duration } from './duration';
 
 export interface Track {
-  name: string;
-  duration: Duration;
-  artists: Artist[];
+  readonly name: string;
+  readonly duration: Duration;
+  readonly artists: Artist[];
 }
 
 export namespace Track {
@@ -13,7 +13,7 @@ export namespace Track {
     duration: Duration,
     artists: Artist[]
   ): Track {
-    return { name, duration, artists };
+    return Object.freeze({ name, duration, artists });
   }
 
   export function nameOf(track: Track): string {
