@@ -1,6 +1,6 @@
 import TrackView from '../components/elements/trackView';
-import { Track } from '../lib/Track';
-import { Artist } from '../lib/Artist';
+import { Track } from '../lib/track';
+import { Artist } from '../lib/artist';
 
 // TODO: Get this from the db or something
 const testTrack = Track.make('Test-track', [

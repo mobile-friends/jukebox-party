@@ -1,5 +1,5 @@
-import { Track } from '../../lib/Track';
-import { Artist } from '../../lib/Artist';
+import { Track } from '../../lib/track';
+import { Artist } from '../../lib/artist';
 
 export interface TrackViewProps {
   track: Track;
