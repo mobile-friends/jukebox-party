@@ -3,9 +3,6 @@
  * @see Track
  */
 export interface Artist {
-  /**
-   * The artists name
-   */
   name: string;
 }
 
