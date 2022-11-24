@@ -1,11 +1,21 @@
+import { Artist } from './Artist';
+
 export interface Track {
   name: string;
+  artists: Artist[];
 }
 
-export function makeTrack(name: string): Track {
-  return { name };
-}
+export namespace Track {
 
-export function nameOf(track: Track): string {
-  return track.name;
+  export function make(name: string, artists: Artist[]): Track {
+    return { name, artists };
+  }
+
+  export function nameOf(track: Track): string {
+    return track.name;
+  }
+
+  export function artistsOf(track: Track): Artist[] {
+    return track.artists;
+  }
 }
