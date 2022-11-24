@@ -1,4 +1,9 @@
 import { getSession, useSession } from 'next-auth/react';
+import {
+  createParty,
+  getPartyDetails,
+  joinParty,
+} from '../httpClient/jukebox/parties';
 
 import LoginButton from '../components/elements/loginButton';
 // import Input from '../components/elements/input';
@@ -7,11 +12,9 @@ import LoginButton from '../components/elements/loginButton';
 // import styles from '../styles/pages/index.module.scss';
 
 export default function Home({ context }) {
-  console.log(context);
-
   const play = () => {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      method: 'PUT',
+    fetch('http://localhost:3000/api/player/play', {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${context.user.accessToken}`,
@@ -30,8 +33,21 @@ export default function Home({ context }) {
   };
 
   return (
-    <div>
-      {/* <div className={styles.container}>
+    <div
+      style={{
+        height: '100vh',
+        padding: '4rem',
+      }}
+    >
+      {/* <div
+        style={{
+          height: '100vh',
+          padding: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
         <h1 className='text-center'>
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
@@ -50,6 +66,30 @@ export default function Home({ context }) {
         <div onClick={play}>PLAY</div>
         <br></br>
         <div onClick={pause}>PAUSE</div>
+        <br></br>
+        <div
+          onClick={async () => {
+            await createParty('my party', 'my name');
+          }}
+        >
+          Create Room
+        </div>
+        <br></br>
+        <div
+          onClick={async () => {
+            await getPartyDetails('673994');
+          }}
+        >
+          get party details
+        </div>
+        <br></br>
+        <div
+          onClick={async () => {
+            await joinParty('673994', 'guest');
+          }}
+        >
+          Join Party(673994)
+        </div>
         <br></br>
         <LoginButton />
       </div>
