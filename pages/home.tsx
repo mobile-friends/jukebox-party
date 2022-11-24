@@ -14,7 +14,10 @@ export default function Home() {
   return (
     <div>
       <h1>Home</h1>
-      <TrackView track={testTrack} playbackState={PlaybackState.Playing} />
+      <TrackView
+        track={testTrack}
+        playbackState={PlaybackState.makePlaying(Duration.Zero)}
+      />
     </div>
   );
 }

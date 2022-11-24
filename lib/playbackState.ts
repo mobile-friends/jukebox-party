@@ -1,33 +1,51 @@
+import { Duration } from './duration';
+
 declare const tag: unique symbol;
 
 /**
- * Represents whether playback is paused or playing
+ * Contains information about the playback state of a track
  */
-export type PlaybackState = boolean & { readonly [tag]: 'PlaybackState' };
+export interface PlaybackState {
+  playTime: Duration;
+  isPlaying: boolean;
+  readonly [tag]: 'PlaybackState';
+}
 
 /**
  * Contains logic for working with Playback-state
  */
 export namespace PlaybackState {
-  function make(isPlaying: boolean): PlaybackState {
-    return isPlaying as PlaybackState;
+  /**
+   * Makes a playback-state
+   * @param playTime How long the track has been playing for
+   * @param isPlaying Whether the track is playing
+   */
+  export function make(playTime: Duration, isPlaying: boolean): PlaybackState {
+    return { playTime, isPlaying } as PlaybackState;
   }
 
   /**
-   * The playing state
+   * Makes a playing playback-state
+   * @param playTime How long the track has been playing for
    */
-  export const Playing = make(true);
+  export function makePlaying(playTime: Duration): PlaybackState {
+    return make(playTime, true);
+  }
+
   /**
-   * The paused state
+   * Makes a paused playback-state
+   * @param playTime How long the track has been playing for
    */
-  export const Paused = make(false);
+  export function makePaused(playTime: Duration): PlaybackState {
+    return make(playTime, false);
+  }
 
   /**
    * Checks whether the state is currently playing
    * @param state The state
    */
   export function isPlaying(state: PlaybackState): boolean {
-    return state === Playing;
+    return state.isPlaying;
   }
 
   /**
@@ -35,14 +53,23 @@ export namespace PlaybackState {
    * @param state The state
    */
   export function isPaused(state: PlaybackState): boolean {
-    return state === Paused;
+    return !state.isPlaying;
+  }
+
+  /**
+   * Gets how long the track has been playing for
+   * @param state The state
+   */
+  export function playTimeOf(state: PlaybackState): Duration {
+    return state.playTime;
   }
 
   /**
    * Toggles the state from playing to paused and the other way around
    * @param state The current state
    */
-  export function toggle(state: PlaybackState): PlaybackState {
-    return isPlaying(state) ? Paused : Playing;
+  export function togglePlaying(state: PlaybackState): PlaybackState {
+    return make(playTimeOf(state), !isPlaying(state));
   }
+
 }

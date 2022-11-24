@@ -16,17 +16,21 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
     return <div key={artistName}>{artistName}</div>;
   });
 
-  const durationView = <p>{Duration.formatted(Track.durationOf(track))}</p>;
-  const playbackStateView = (
-    <p>{PlaybackState.isPlaying(playbackState) ? 'Playing' : 'Paused'}</p>
+  const playbackView = (
+    <span>
+      {`${
+        PlaybackState.isPlaying(playbackState) ? 'Playing' : 'Paused'
+      } ${Duration.formatted(
+        PlaybackState.playTimeOf(playbackState)
+      )} / ${Duration.formatted(Track.durationOf(track))}`}
+    </span>
   );
 
   return (
     <div>
       {nameView}
       {artistViews}
-      {durationView}
-      {playbackStateView}
+      {playbackView}
     </div>
   );
 }

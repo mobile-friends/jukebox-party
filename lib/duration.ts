@@ -55,4 +55,9 @@ export namespace Duration {
     const extraSeconds = secondsIn(duration) % SecondsInMinute;
     return `${minutes}:${extraSeconds}`;
   }
+
+  /**
+   * A duration of zero seconds
+   */
+  export const Zero = makeFromSeconds(0)
 }
