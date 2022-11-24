@@ -37,18 +37,18 @@ export namespace Track {
   }
 
   /**
-   * Gets the artists of a track
-   * @param track The track
-   */
-  export function artistsOf(track: Track): Artist[] {
-    return track.artists;
-  }
-
-  /**
    * Gets the duration of a track
    * @param track The track
    */
   export function durationOf(track: Track): Duration {
     return track.duration;
+  }
+
+  /**
+   * Gets the artists of a track
+   * @param track The track
+   */
+  export function artistsOf(track: Track): Artist[] {
+    return track.artists;
   }
 }
