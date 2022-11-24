@@ -1,6 +1,10 @@
 import { getSession, useSession } from 'next-auth/react';
 
 import LoginButton from '../components/elements/loginButton';
+// import Input from '../components/elements/input';
+// import Button from '../components/elements/button';
+
+// import styles from '../styles/pages/index.module.scss';
 
 export default function Home({ context }) {
   console.log(context);
@@ -27,15 +31,7 @@ export default function Home({ context }) {
 
   return (
     <div>
-      {/* <div
-        style={{
-          height: '100vh',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+      {/* <div className={styles.container}>
         <h1 className='text-center'>
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
