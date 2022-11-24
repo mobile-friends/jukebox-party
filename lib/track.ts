@@ -10,6 +10,7 @@ export interface Track {
   readonly name: string;
   readonly duration: Duration;
   readonly artists: Artist[];
+  readonly albumArtUrl: string;
   readonly [tag]: 'Track';
 }
 
@@ -22,13 +23,15 @@ export namespace Track {
    * @param name The tracks name
    * @param duration The tracks duration
    * @param artists The tracks artists
+   * @param albumArtUrl The url to the tracks album art
    */
   export function make(
     name: string,
     duration: Duration,
-    artists: Artist[]
+    artists: Artist[],
+    albumArtUrl: string
   ): Track {
-    return Object.freeze({ name, duration, artists } as Track);
+    return Object.freeze({ name, duration, artists, albumArtUrl } as Track);
   }
 
   /**
@@ -53,5 +56,13 @@ export namespace Track {
    */
   export function artistsOf(track: Track): Artist[] {
     return track.artists;
+  }
+
+  /**
+   * Gets the tracks album-art url
+   * @param track The track
+   */
+  export function albumArtUrlOf(track: Track): string {
+    return track.albumArtUrl;
   }
 }

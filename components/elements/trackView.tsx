@@ -9,6 +9,8 @@ export interface TrackViewProps {
 }
 
 export default function TrackView({ track, playbackState }: TrackViewProps) {
+  const albumArt = <img src={Track.albumArtUrlOf(track)} alt='Album art' />;
+
   const nameView = <p>{Track.nameOf(track)}</p>;
 
   const artistViews = Track.artistsOf(track).map((artist) => {
@@ -18,6 +20,7 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
 
   return (
     <div>
+      {albumArt}
       {nameView}
       {artistViews}
       <PlaybackView
