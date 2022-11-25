@@ -6,8 +6,8 @@ declare const tag: unique symbol;
  * Contains information about the playback state of a track
  */
 export interface PlaybackState {
-  playTime: Duration;
-  isPlaying: boolean;
+  readonly playTime: Duration;
+  readonly isPlaying: boolean;
   readonly [tag]: 'PlaybackState';
 }
 
