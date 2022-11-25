@@ -24,7 +24,12 @@ export default async function handler(
   }
   await dbRef.once('value', (snapshot) => {
     const dto = snapshot.val();
-    const party = Party.make(dto.code, dto.name, dto.host, dto.guests ?? []);
+    const party: Party = Party.make(
+      dto.code,
+      dto.name,
+      dto.host,
+      dto.guests ?? []
+    );
     res.status(200).json(party);
   });
 }
