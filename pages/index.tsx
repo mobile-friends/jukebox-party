@@ -5,7 +5,7 @@ import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { joinParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
-import styles from '../styles/pages/index.module.scss';
+import styles from '../styles/pages/main.module.scss';
 
 export default function Home({ context }) {
   const [userName, setUserName] = useState<string>('');

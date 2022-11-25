@@ -4,6 +4,7 @@ import Button from '../components/elements/button';
 import { createParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
 import { useRouter } from 'next/router';
+import styles from '../styles/pages/main.module.scss';
 
 type Props = {};
 
@@ -14,29 +15,40 @@ function CreateParty({}: Props) {
 
   return (
     <div>
-      <h1>Create Party</h1>
-      <form>
-        <Input
-          placeholder='Party Name'
-          onChange={(e) => {
-            setPartyName(e.target.value);
-          }}
-        />
-        <Input
-          placeholder='Host Name'
-          onChange={(e) => {
-            setPartyHostName(e.target.value);
-          }}
-        />
+      <div className={styles.container}>
+        <h1 className='text-center'>
+          create.<span className='text-primary text-italic'>party</span>
+        </h1>
+        <form>
+          <Input
+            placeholder='Party Name'
+            onChange={(e) => {
+              setPartyName(e.target.value);
+            }}
+          />
+          <Input
+            placeholder='Host Name'
+            onChange={(e) => {
+              setPartyHostName(e.target.value);
+            }}
+          />
+          <Button
+            text='Create session'
+            type='primary'
+            onClick={async () => {
+              const party: Party = await createParty(partyName, partyHostName);
+              router.push(`/party/${encodeURIComponent(party.code)}`);
+            }}
+          />
+        </form>
         <Button
-          text='Create session'
-          type='primary'
-          onClick={async () => {
-            const party: Party = await createParty(partyName, partyHostName);
-            router.push(`/party/${encodeURIComponent(party.code)}`);
+          text='Back'
+          type='tertiary'
+          onClick={() => {
+            router.push('/');
           }}
         />
-      </form>
+      </div>
     </div>
   );
 }
