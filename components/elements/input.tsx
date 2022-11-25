@@ -1,7 +1,9 @@
+import '../../styles/components/input.module.scss';
+
 export default function Input({ placeholder }) {
     return(
         <div>
-            <input placeholder={`${placeholder}`} className="block"></input>
+            <input className={'input block'} placeholder={`${placeholder}`}></input>
         </div>
     )
 }
