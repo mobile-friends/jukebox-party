@@ -6,10 +6,10 @@ import {
 } from '../httpClient/jukebox/parties';
 
 import LoginButton from '../components/elements/loginButton';
-// import Input from '../components/elements/input';
-// import Button from '../components/elements/button';
+import Input from '../components/elements/input';
+import Button from '../components/elements/button';
 
-// import styles from '../styles/pages/index.module.scss';
+import styles from '../styles/pages/index.module.scss';
 
 export default function Home({ context }) {
   const play = () => {
@@ -33,33 +33,20 @@ export default function Home({ context }) {
   };
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        padding: '4rem',
-      }}
-    >
-      {/* <div
-        style={{
-          height: '100vh',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+    <div>
+      <div className={styles.container}>
         <h1 className='text-center'>
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
 
         <form>
-          <Input placeholder='Name'></Input>
-          <Input placeholder='Session id'></Input>
-          <Button text='Join session' type='primary'></Button>
+          <Input placeholder='Name'/>
+          <Input placeholder='Session id'/>
+          <Button text='Join session' type='primary'/>
         </form>
 
-        <Button text='Create session' type='tertiary'></Button>
-      </div> */}
+        <Button text='Create session' type='tertiary'/>
+      </div>
 
       <div>
         <h1>jukebox.party</h1>
