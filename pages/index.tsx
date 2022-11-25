@@ -32,6 +32,26 @@ export default function Home({ context }) {
     });
   };
 
+  const currentlyPlaying = () => {
+    fetch('https://api.spotify.com/v1/me/player/currently-playing', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${context.user.accessToken}`,
+      },
+    });
+  };
+
+  const recentlyPlayed = () => {
+    fetch('https://api.spotify.com/v1/me/player/recently-played', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${context.user.accessToken}`,
+      },
+    });
+  };
+
   return (
     <div
       style={{
@@ -90,6 +110,10 @@ export default function Home({ context }) {
         >
           Join Party(581398)
         </div>
+        <br></br>
+        <div onClick={currentlyPlaying}>Currently Playing</div>
+        <br></br>
+        <div onClick={recentlyPlayed}>Recently Played</div>
         <br></br>
         <LoginButton />
       </div>

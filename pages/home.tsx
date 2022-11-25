@@ -3,6 +3,7 @@ import { Track } from '../lib/track';
 import { Artist } from '../lib/artist';
 import { Duration } from '../lib/duration';
 import { PlaybackState } from '../lib/playbackState';
+import { currentlyPlaying } from '../httpClient/spotify/player';
 
 // TODO: Get this from the db or something
 const testTrack = Track.make(
@@ -12,7 +13,7 @@ const testTrack = Track.make(
   'https://media.tenor.com/kwoZiw3sdlwAAAAM/spongebob-cartoon.gif'
 );
 
-export default function Home() {
+export default function Home({ context }) {
   return (
     <div>
       <h1>Home</h1>
