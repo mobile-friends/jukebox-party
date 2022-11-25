@@ -7,28 +7,31 @@ import {
 } from '../../httpClient/jukebox/parties';
 import database from '../../firebase.config';
 
-const useFetchParty = (code: string) => {
-  const [party, setParty] = useState<Party>();
-  const router = useRouter();
+const useFetchParty = (code: string): Party | null => {
+  const [party, setParty] = useState<Party | null>(null);
 
   useEffect(() => {
     const fetchParty = async () => {
       if (code) {
         try {
           const party = getPartyString(code);
+
           database.ref(party).on('value', (snapshot) => {
             const dto: Party = snapshot.val();
-            const party: Party = Party.make(
-              dto.code,
-              dto.name,
-              dto.host,
-              dto.guests ?? []
-            );
-            setParty(party);
+            try {
+              const party: Party = Party.make(
+                dto.code,
+                dto.name,
+                dto.host,
+                dto.guests ?? []
+              );
+              setParty(party);
+            } catch (error) {
+              setParty(null);
+            }
           });
         } catch (e) {
-          console.log('e', e);
-          router.push('/party/404');
+          setParty(null);
         }
       }
     };
