@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../components/elements/input';
 import Button from '../components/elements/button';
 import { createParty } from '../httpClient/jukebox/parties';
@@ -11,6 +11,7 @@ function CreateParty({}: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string>('');
   const [partyHostName, setPartyHostName] = useState<string>('');
+
   return (
     <div>
       <h1>Create Party</h1>
