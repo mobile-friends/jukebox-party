@@ -5,10 +5,7 @@ import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { joinParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
-
-// import Input from '../components/elements/input';
-// import Button from '../components/elements/button';
-// import styles from '../styles/pages/index.module.scss';
+import styles from '../styles/pages/index.module.scss';
 
 export default function Home({ context }) {
   const [userName, setUserName] = useState<string>('');
@@ -17,19 +14,10 @@ export default function Home({ context }) {
 
   return (
     <div>
-      <div
-        style={{
-          height: '100vh',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div className={styles.container}>
         <h1 className='text-center'>
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
-
         <form>
           <Input
             placeholder='Name'
@@ -52,7 +40,6 @@ export default function Home({ context }) {
             }}
           />
         </form>
-
         <Button
           text='Create session'
           type='tertiary'
@@ -61,10 +48,6 @@ export default function Home({ context }) {
           }}
         />
       </div>
-
-      {/* 
-        <LoginButton /> 
-        */}
     </div>
   );
 }
