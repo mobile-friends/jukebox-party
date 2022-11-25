@@ -1,16 +1,25 @@
-import { getSession } from 'next-auth/react';
+import { getProviders, getSession, signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { joinParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
 import styles from '../styles/pages/main.module.scss';
 
-export default function Home({ context }) {
+export default function Home({ provider }) {
   const [userName, setUserName] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
   const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    console.log('session', session);
+  }, [session, null]);
+
+  const clickCreateSession = () => {
+    signIn(provider.id, { callbackUrl: '/create-party' });
+  };
 
   return (
     <div>
@@ -41,10 +50,10 @@ export default function Home({ context }) {
           />
         </form>
         <Button
-          text='Create session'
+          text='Create party'
           type='tertiary'
           onClick={() => {
-            router.push('/create-party');
+            clickCreateSession();
           }}
         />
       </div>
@@ -53,9 +62,6 @@ export default function Home({ context }) {
 }
 
 export async function getServerSideProps(context) {
-  return {
-    props: {
-      context: await getSession(context),
-    },
-  };
+  const providers = await getProviders();
+  return { props: { provider: providers?.spotify } };
 }

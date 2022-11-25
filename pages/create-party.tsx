@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import Input from '../components/elements/input';
+import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import Button from '../components/elements/button';
+import Input from '../components/elements/input';
 import { createParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
-import { useRouter } from 'next/router';
 import styles from '../styles/pages/main.module.scss';
 
 type Props = {};
@@ -12,6 +13,15 @@ function CreateParty({}: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string>('');
   const [partyHostName, setPartyHostName] = useState<string>('');
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    console.log('session', session);
+  }, [session, null]);
+
+  const clickBack = () => {
+    signOut({ callbackUrl: '/' });
+  };
 
   return (
     <div>
@@ -45,7 +55,7 @@ function CreateParty({}: Props) {
           text='Back'
           type='tertiary'
           onClick={() => {
-            router.push('/');
+            clickBack();
           }}
         />
       </div>
