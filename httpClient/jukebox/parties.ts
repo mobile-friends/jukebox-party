@@ -5,6 +5,7 @@ const baseURL = 'parties';
 
 const createParty = async (partyName: string, hostName: string) => {
   const res = await jukeboxClient.post(`${baseURL}`, { partyName, hostName });
+  console.log('res', res);
   return res.data;
 };
 
@@ -28,6 +29,8 @@ const joinParty = async (partyCode: string, guestName: string) => {
     partyCode,
     guestName,
   });
+  console.log(res);
+
   return res.data;
 };
 
