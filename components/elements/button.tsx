@@ -1,9 +1,25 @@
-import '../../styles/components/button.module.scss';
+import React from 'react';
 
-export default function Button({ text, type }) {
+interface ButtonProps {
+  text: string;
+  type: string;
+  onClick?: (e) => void;
+}
+
+const Button = ({ text, type, onClick }: ButtonProps): JSX.Element => {
   return (
     <div>
-      <button className={`btn ${type} block`}>{ text }</button>
+      <button
+        className={`btn ${type} block`}
+        onClick={(e) => {
+          e.preventDefault();
+          onClick(e);
+        }}
+      >
+        {text}
+      </button>
     </div>
   );
-}
+};
+
+export default Button;

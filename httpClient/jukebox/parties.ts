@@ -9,11 +9,21 @@ const createParty = async (partyName: string, hostName: string) => {
 };
 
 const getPartyDetails = async (partyCode: string): Promise<Party> => {
-  const res = await jukeboxClient.get(`${baseURL}/${partyCode}`);
-  return res.data;
+  try {
+    const res = await jukeboxClient.get(`${baseURL}/${partyCode}`);
+    console.log('res', res);
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getPartyString = (partyCode: string) => {
+  return `${baseURL}/${partyCode}`;
 };
 
 const joinParty = async (partyCode: string, guestName: string) => {
+  guestName = encodeURIComponent(guestName);
   const res = await jukeboxClient.post(`${baseURL}/join`, {
     partyCode,
     guestName,
@@ -21,4 +31,4 @@ const joinParty = async (partyCode: string, guestName: string) => {
   return res.data;
 };
 
-export { createParty, getPartyDetails, joinParty };
+export { createParty, getPartyDetails, joinParty, getPartyString };
