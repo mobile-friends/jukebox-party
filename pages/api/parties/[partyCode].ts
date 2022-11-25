@@ -3,9 +3,6 @@ import database from '../../../firebase.config';
 import doesPartyExist from '../../../utils/parties';
 import { Party } from '../../../lib/party';
 
-// Gets the data of a party by its roomcode
-// ? ONLY ONCE
-//TODO irgendwie diesen Snapshot returnen um changes zu verfolgen
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -22,8 +19,9 @@ export default async function handler(
     res.status(404).json({ message: 'Party not found' });
     return;
   }
+
   await dbRef.once('value', (snapshot) => {
-    const dto = snapshot.val();
+    const dto: Party = snapshot.val();
     const party: Party = Party.make(
       dto.code,
       dto.name,
