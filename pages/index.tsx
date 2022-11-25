@@ -1,42 +1,22 @@
 import { getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
+import { joinParty } from '../httpClient/jukebox/parties';
+import { Party } from '../lib/party';
 
 // import Input from '../components/elements/input';
 // import Button from '../components/elements/button';
 // import styles from '../styles/pages/index.module.scss';
 
 export default function Home({ context }) {
+  const [userName, setUserName] = useState<string>('');
+  const [partyCode, setPartyCode] = useState<string>('');
   const router = useRouter();
 
-  // const play = () => {
-  //   fetch('http://localhost:3000/api/player/play', {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${context.user.accessToken}`,
-  //     },
-  //   });
-  // };
-
-  // const pause = () => {
-  //   fetch('https://api.spotify.com/v1/me/player/pause', {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Authorization: `Bearer ${context.user.accessToken}`,
-  //     },
-  //   });
-  // };
-
   return (
-    <div
-    // style={{
-    //   height: '100vh',
-    //   padding: '4rem',
-    // }}
-    >
+    <div>
       <div
         style={{
           height: '100vh',
@@ -51,9 +31,26 @@ export default function Home({ context }) {
         </h1>
 
         <form>
-          <Input placeholder='Name' />
-          <Input placeholder='Session id' />
-          <Button text='Join session' type='primary' />
+          <Input
+            placeholder='Name'
+            onChange={(e) => {
+              setUserName(e.target.value);
+            }}
+          />
+          <Input
+            placeholder='Session id'
+            onChange={(e) => {
+              setPartyCode(e.target.value);
+            }}
+          />
+          <Button
+            text='Join session'
+            type='primary'
+            onClick={async () => {
+              const joinedRoom: Party = await joinParty(partyCode, userName);
+              router.push(`/party/${joinedRoom.code}`);
+            }}
+          />
         </form>
 
         <Button
