@@ -30,7 +30,7 @@ export namespace Party {
     host: Host,
     guests: Guest[]
   ): Party {
-    return Object.freeze({ code, name, host, guests } as Party);
+    return Object.freeze({ code, name, host, guests: guests || [] } as Party);
   }
 
   /**
