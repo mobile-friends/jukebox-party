@@ -22,9 +22,9 @@ export default async function handler(
   const { partyCode, guestName }: RequestBody = req.body;
 
   //Get the Party Objekt by ID
-  const party = await getPartyDetails(partyCode);
-  const guest = User.makeGuest(guestName);
-  const partyWithGuest = Party.addGuestTo(party, guest);
+  const party: Party = await getPartyDetails(partyCode);
+  const guest: User = User.makeGuest(guestName);
+  const partyWithGuest: Party = Party.addGuestTo(party, guest);
 
   await database.ref(`parties/${partyCode}/`).set(partyWithGuest);
 

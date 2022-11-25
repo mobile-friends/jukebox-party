@@ -9,27 +9,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const partyCode = createPartyCode();
+  const code = createPartyCode();
   if (req.method !== 'POST') {
     res.status(405).json({ message: 'Method not allowed' });
     return;
   }
   const { partyName, hostName } = req.body;
 
-  const host = User.makeHost(hostName);
-  const party = Party.startNew(partyCode, partyName, host);
-  await database.ref(`parties/${partyCode}/`).set(party);
+  const host: User = User.makeHost(hostName);
+  const party: Party = Party.startNew(code, partyName, host);
+  await database.ref(`parties/${code}/`).set(party);
 
-  // Mit dem Objekt geht es, mit dem Enum vom Ramon leider noch nicht
-  /*
-    {
-    code: partyCode,
-    name: partyName,
-    host: {
-      name: hostName,
-    },
-  }
-  */
-
-  res.status(201).json({ partyCode });
+  res.status(201).json(party);
 }
