@@ -28,5 +28,5 @@ export default async function handler(
 
   await database.ref(`parties/${partyCode}/`).set(partyWithGuest);
 
-  res.status(200).json({ party: partyWithGuest });
+  res.status(200).json(partyWithGuest);
 }
