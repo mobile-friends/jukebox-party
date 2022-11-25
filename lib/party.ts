@@ -50,6 +50,6 @@ export namespace Party {
    */
   export function addGuestTo(party: Party, guest: Guest): Party {
     let newGuests = [...party.guests, guest];
-    return make(party.name, party.code, party.host, newGuests);
+    return make(party.code, party.name, party.host, newGuests);
   }
 }
