@@ -23,6 +23,7 @@ const getPartyString = (partyCode: string) => {
 };
 
 const joinParty = async (partyCode: string, guestName: string) => {
+  guestName = encodeURIComponent(guestName);
   const res = await jukeboxClient.post(`${baseURL}/join`, {
     partyCode,
     guestName,
