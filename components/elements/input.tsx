@@ -14,7 +14,7 @@ export default function Input({
       <input
         type={type}
         placeholder={`${placeholder}`}
-        className='block'
+        className='input block'
         onChange={(e) => {
           onChange(e);
         }}
