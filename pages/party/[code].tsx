@@ -25,7 +25,7 @@ const testTrack = Track.make(
 function PartyRoom({}: Props) {
   const router = useRouter();
   const { code }: QueryParams = router.query;
-  const party: Party | null = useFetchParty(code);
+  const party: Party | null | undefined = useFetchParty(code);
 
   useEffect(() => {
     if (party === null) {

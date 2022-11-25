@@ -7,8 +7,8 @@ import {
 } from '../../httpClient/jukebox/parties';
 import database from '../../firebase.config';
 
-const useFetchParty = (code: string): Party | null => {
-  const [party, setParty] = useState<Party | null>(null);
+const useFetchParty = (code: string): Party | null | undefined => {
+  const [party, setParty] = useState<Party | null | undefined>(undefined);
 
   useEffect(() => {
     const fetchParty = async () => {
