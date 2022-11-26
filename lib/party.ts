@@ -44,6 +44,14 @@ export namespace Party {
   }
 
   /**
+   * Gets the guests of a party
+   * @param party The party
+   */
+  export function guestsOf(party: Party): Guest[] {
+    return party.guests;
+  }
+
+  /**
    * Adds a guest to the party and returns the updated party
    * @param party The party
    * @param guest The guest
