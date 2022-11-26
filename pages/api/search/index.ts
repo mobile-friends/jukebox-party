@@ -10,7 +10,7 @@ export default async function handler(
     let { q, type } = req.query;
     let spotifyRes = await spotifyClient.get(`${baseURL}?q=${q}&type=${type}`, {
       headers: {
-        Authorization: req.headers.authorization,
+        Authorization: req?.headers?.authorization,
       },
     });
     console.log(spotifyRes.data);
