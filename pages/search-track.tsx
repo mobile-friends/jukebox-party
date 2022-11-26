@@ -51,13 +51,13 @@ export default function SearchTrack({ provider }) {
         <h1 className='text-center'>
           search.<span className='text-primary text-italic'>track</span>
         </h1>
-        <div className={styles.container} style={{ padding: 10 }}>
+        <div className={styles.container} style={{ padding: 0 }}>
           <Input
             placeholder='What do you want to listen to?'
             onChange={typeInput}
           />
           <ul style={{ overflow: 'scroll' }}>
-            {results?.map((track: any) => (
+            {results?.map((track) => (
               <TrackListItemView track={track} />
             ))}
           </ul>
