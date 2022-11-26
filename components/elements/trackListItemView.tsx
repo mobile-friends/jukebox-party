@@ -13,14 +13,16 @@ export default function TrackListItemView({ track }: TrackListItemViewProps) {
 
   const artistViews = Track.artistsOf(track).map((artist) => {
     let artistName = Artist.nameOf(artist);
-    return <div key={artistName}>{artistName}</div>;
+    return <div key={artistName}>{Artist.nameOf(artist)}</div>;
   });
 
   return (
     <li className={styles.row}>
       {albumArt}
-      {nameView}
-      {artistViews}
+      <div className='textInfo'>
+        {nameView}
+        {artistViews}
+      </div>
     </li>
   );
 }

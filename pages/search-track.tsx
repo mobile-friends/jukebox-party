@@ -28,7 +28,6 @@ export default function SearchTrack({ provider }) {
         'track',
         session.user.accessToken
       );
-      console.log('results', results);
       let tracks = [];
       results.tracks.items.forEach((track: any) => {
         const trackElement = Track.make(
@@ -39,8 +38,6 @@ export default function SearchTrack({ provider }) {
         );
         tracks = [...tracks, trackElement];
       });
-      console.log('tracks', tracks);
-
       setResults(tracks);
     } catch (e) {
       console.log(e);
@@ -54,17 +51,17 @@ export default function SearchTrack({ provider }) {
         <h1 className='text-center'>
           search.<span className='text-primary text-italic'>track</span>
         </h1>
-        <div className={styles.container}>
+        <div className={styles.container} style={{ padding: 10 }}>
           <Input
             placeholder='What do you want to listen to?'
             onChange={typeInput}
           />
+          <ul style={{ overflow: 'scroll' }}>
+            {results?.map((track: any) => (
+              <TrackListItemView track={track} />
+            ))}
+          </ul>
         </div>
-        <ul>
-          {results?.map((track: any) => (
-            <TrackListItemView track={track} />
-          ))}
-        </ul>
       </div>
     </div>
   );

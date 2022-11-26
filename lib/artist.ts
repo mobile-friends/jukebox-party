@@ -26,6 +26,7 @@ export namespace Artist {
    * @param artist The artist
    */
   export function nameOf(artist: Artist): string {
+    if (Array.isArray(artist)) return artist.map((a) => a.name).join(', ');
     return artist.name;
   }
 }

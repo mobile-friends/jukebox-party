@@ -3,26 +3,31 @@
 li.row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 10px 20px;
   border-bottom: 1px solid #ffffff25;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  font-family: Arial, Helvetica, sans-serif;
   &:hover {
     background: #ffffff25;
   }
-  .title {
-    color: $light-color;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .artist {
-    color: #ffffff85;
-    font-size: 14px;
-    font-weight: 400;
-  }
   img {
     width: 50px;
+  }
+  > div {
+    display: block;
+    margin-left: 20px;
+    > p {
+      margin: 0;
+      font-size: 1.2rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    > div {
+      font-size: 0.7rem;
+      color: $light-color-shade;
+    }
   }
   width: 100%;
 }
