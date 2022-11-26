@@ -13,7 +13,6 @@ export default async function handler(
         Authorization: req?.headers?.authorization,
       },
     });
-    console.log(spotifyRes.data);
     res.status(200).json(spotifyRes.data);
   }
 }

@@ -5,7 +5,7 @@ import PlaybackView from './playbackView';
 
 export interface TrackViewProps {
   track: Track;
-  playbackState: PlaybackState;
+  playbackState?: PlaybackState;
 }
 
 export default function TrackView({ track, playbackState }: TrackViewProps) {
@@ -23,10 +23,12 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
       {albumArt}
       {nameView}
       {artistViews}
-      <PlaybackView
-        playbackState={playbackState}
-        trackDuration={Track.durationOf(track)}
-      />
+      {playbackState && (
+        <PlaybackView
+          playbackState={playbackState}
+          trackDuration={Track.durationOf(track)}
+        />
+      )}
     </div>
   );
 }

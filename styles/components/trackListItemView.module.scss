@@ -1,0 +1,28 @@
+@import '../helper/variables.scss';
+
+li.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ffffff25;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background: #ffffff25;
+  }
+  .title {
+    color: $light-color;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .artist {
+    color: #ffffff85;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  img {
+    width: 50px;
+  }
+  width: 100%;
+}
