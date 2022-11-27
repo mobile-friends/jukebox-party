@@ -3,15 +3,14 @@ declare const tag: unique symbol;
 /**
  * The different roles a user can have
  */
-export enum UserRole {
+enum UserRole {
   /**
    * A host user
    */
-  Host
+  Host,
   /**
    * A guest user
-   */,
-  Guest,
+   */ Guest,
 }
 
 /**
