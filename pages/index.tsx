@@ -1,25 +1,57 @@
-import { getProviders, getSession, signIn, useSession } from 'next-auth/react';
+import {
+  ClientSafeProvider,
+  getProviders,
+  getSession,
+  signIn,
+  useSession,
+} from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
-import { joinParty } from '../httpClient/jukebox/parties';
+import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
 import styles from '../styles/pages/main.module.scss';
+import { GetServerSideProps } from 'next';
+import { GetServerSidePropsResult } from 'next/types';
 
-export default function Home({ provider }) {
-  const [userName, setUserName] = useState<string>('');
-  const [partyCode, setPartyCode] = useState<string>('');
+interface IndexProps {
+  provider: ClientSafeProvider;
+}
+
+export default function Home({ provider }: IndexProps) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const [username, setUsername] = useState<string>('');
+  const [partyCode, setPartyCode] = useState<string>('');
 
-  useEffect(() => {
-    console.log('session', session);
-  }, [session, null]);
+  function goToLogin() {
+    signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
+  }
 
-  const clickCreateSession = () => {
-    signIn(provider.id, { callbackUrl: '/create-party' });
-  };
+  async function goToPartyPage() {
+    await router.push(`/party/${partyCode}`);
+  }
+
+  async function joinParty() {
+    await sendJoinPartyRequest(partyCode, username);
+    await goToPartyPage();
+  }
+
+  function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {
+    setUsername(e.target.value);
+  }
+
+  function onPartyCodeInout(e: ChangeEvent<HTMLInputElement>) {
+    setPartyCode(e.target.value);
+  }
+
+  function onJoinPartyClicked() {
+    joinParty().catch(console.log);
+  }
+
+  function onCreatePartyClicked() {
+    goToLogin();
+  }
 
   return (
     <div>
@@ -28,40 +60,28 @@ export default function Home({ provider }) {
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input
-            placeholder='Name'
-            onChange={(e) => {
-              setUserName(e.target.value);
-            }}
-          />
-          <Input
-            placeholder='Session id'
-            onChange={(e) => {
-              setPartyCode(e.target.value);
-            }}
-          />
+          <Input placeholder='Name' onChange={onUsernameInput} />
+          <Input placeholder='Party code' onChange={onPartyCodeInout} />
           <Button
-            text='Join session'
+            text='Join party'
             type='primary'
-            onClick={async () => {
-              const joinedRoom: Party = await joinParty(partyCode, userName);
-              router.push(`/party/${joinedRoom.code}`);
-            }}
+            onClick={onJoinPartyClicked}
           />
         </form>
         <Button
           text='Create party'
           type='tertiary'
-          onClick={() => {
-            clickCreateSession();
-          }}
+          onClick={onCreatePartyClicked}
         />
       </div>
     </div>
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<IndexProps>
+> {
   const providers = await getProviders();
-  return { props: { provider: providers?.spotify } };
+  const props: IndexProps = { provider: providers.spotify };
+  return { props };
 }

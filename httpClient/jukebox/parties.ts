@@ -1,17 +1,18 @@
 import { jukeboxClient } from '.';
 import { Party } from '../../lib/party';
+import { PartyJoinRequestBody } from '../../pages/api/parties/join';
 
-const baseURL = 'parties';
+const BaseUrl = 'parties';
 
 const createParty = async (partyName: string, hostName: string) => {
-  const res = await jukeboxClient.post(`${baseURL}`, { partyName, hostName });
+  const res = await jukeboxClient.post(`${BaseUrl}`, { partyName, hostName });
   console.log('res', res);
   return res.data;
 };
 
 const getPartyDetails = async (partyCode: string): Promise<Party> => {
   try {
-    const res = await jukeboxClient.get(`${baseURL}/${partyCode}`);
+    const res = await jukeboxClient.get(`${BaseUrl}/${partyCode}`);
     console.log('res', res);
     return res.data;
   } catch (error) {
@@ -20,18 +21,21 @@ const getPartyDetails = async (partyCode: string): Promise<Party> => {
 };
 
 const getPartyString = (partyCode: string) => {
-  return `${baseURL}/${partyCode}`;
+  return `${BaseUrl}/${partyCode}`;
 };
 
-const joinParty = async (partyCode: string, guestName: string) => {
+const JoinPartyUrl = `${BaseUrl}/join`;
+
+async function sendJoinPartyRequest(
+  partyCode: string,
+  guestName: string
+): Promise<void> {
   guestName = encodeURIComponent(guestName);
-  const res = await jukeboxClient.post(`${baseURL}/join`, {
+  const data: PartyJoinRequestBody = {
     partyCode,
     guestName,
-  });
-  console.log(res);
+  };
+  await jukeboxClient.post(JoinPartyUrl, data);
+}
 
-  return res.data;
-};
-
-export { createParty, getPartyDetails, joinParty, getPartyString };
+export { createParty, getPartyDetails, sendJoinPartyRequest, getPartyString };

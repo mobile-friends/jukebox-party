@@ -4,7 +4,7 @@ import { getPartyDetails } from '../../../httpClient/jukebox/parties';
 import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
 
-interface RequestBody {
+export interface PartyJoinRequestBody {
   partyCode: string;
   guestName: string;
 }
@@ -19,7 +19,7 @@ export default async function handler(
     return;
   }
 
-  const { partyCode, guestName }: RequestBody = req.body;
+  const { partyCode, guestName }: PartyJoinRequestBody = req.body;
 
   //Get the Party Objekt by ID
   const party: Party = await getPartyDetails(partyCode);
