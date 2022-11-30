@@ -43,7 +43,7 @@ function CreateParty({}: Props) {
             }}
           />
           <Button
-            text='Create session'
+            text='Create party'
             type='primary'
             onClick={async () => {
               const party: Party = await createParty(partyName, partyHostName);
