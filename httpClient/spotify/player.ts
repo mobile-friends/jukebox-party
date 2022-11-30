@@ -1,10 +1,28 @@
 import { spotifyClient } from '.';
 
-const baseURL = 'player';
+const baseURL = 'me/player';
 
-const currentlyPlaying = async (context) => {
-  const res = await spotifyClient.get(`${baseURL}/currentlyPlaying`);
+const currentlyPlaying = async (token: string) => {
+  console.log(token);
+  const res = await spotifyClient.get(`${baseURL}/currently-playing`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };
 
-export { currentlyPlaying };
+const recentlyPlayed = async (token: string) => {
+  const now = Date.now();
+  const res = await spotifyClient.get(
+    `${baseURL}/recently-played?limit=1&before=${now}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export { currentlyPlaying, recentlyPlayed };
