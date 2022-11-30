@@ -3,7 +3,6 @@ import { spotifyClient } from '.';
 const baseURL = 'me/player';
 
 const currentlyPlaying = async (token: string) => {
-  console.log(token);
   const res = await spotifyClient.get(`${baseURL}/currently-playing`, {
     headers: {
       Authorization: `Bearer ${token}`,

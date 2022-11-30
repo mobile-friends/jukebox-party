@@ -21,6 +21,15 @@ export namespace Duration {
   }
 
   /**
+   * Makes a new duration of the given seconds.
+   * Will be rounded up to whole seconds
+   * @param seconds The seconds
+   */
+  export function makeFromMiliSeconds(miliseconds: number): Duration {
+    return Math.ceil(miliseconds / 1000) as Duration;
+  }
+
+  /**
    * Makes a new duration of the given minutes and seconds.
    * Will be rounded up to whole seconds
    * @param minutes The minutes
@@ -59,5 +68,5 @@ export namespace Duration {
   /**
    * A duration of zero seconds
    */
-  export const Zero = makeFromSeconds(0)
+  export const Zero = makeFromSeconds(0);
 }
