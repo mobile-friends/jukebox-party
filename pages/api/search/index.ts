@@ -12,13 +12,13 @@ export default async function handler(
     return;
   }
 
-  const query = tryQueryParam(req, 'q');
+  const query = tryQueryParam(req.query, 'q');
   if (query === null) {
     res.status(400).json({ message: 'Missing q parameter' });
     return;
   }
 
-  const type = tryQueryParam(req, 'type');
+  const type = tryQueryParam(req.query, 'type');
   if (type === null) {
     res.status(400).json({ message: 'Missing type parameter' });
     return;

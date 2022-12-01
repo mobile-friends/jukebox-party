@@ -13,7 +13,7 @@ export default async function handler(
     return;
   }
 
-  const partyCodeParam = tryQueryParam(req, 'partyCode');
+  const partyCodeParam = tryQueryParam(req.query, 'partyCode');
   if (partyCodeParam === null) {
     res.status(400).json({ message: 'Missing party-code param' });
     return;
