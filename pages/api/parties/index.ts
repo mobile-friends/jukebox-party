@@ -25,9 +25,9 @@ export default async function handler(
   }
 
   const { partyName, hostName } = req.body as RequestBody;
-  const partyCode = PartyCode.generate();
+
   const host = User.makeHost(hostName);
-  const party = Party.startNew(partyCode, partyName, host);
+  const party = Party.startNew(partyName, host);
 
   await PartyDb.store(database, party);
   res.status(201).json(party);

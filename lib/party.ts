@@ -36,12 +36,12 @@ export namespace Party {
 
   /**
    * Starts a new party
-   * @param code The parties code
    * @param name The parties name
    * @param host The parties host-user
    */
-  export function startNew(code: string, name: string, host: Host) {
-    return make(code, name, host, []);
+  export function startNew(name: string, host: Host) {
+    const partyCode = PartyCode.generate();
+    return make(partyCode, name, host, []);
   }
 
   /**
