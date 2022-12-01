@@ -1,16 +1,24 @@
 import NextAuth from 'next-auth';
 import SpotifyProvider from 'next-auth/providers/spotify';
 
-const scope =
+const Scope =
   'user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
+
+function tryGetSpotifyClientId(): string | null {
+  return process.env.SPOTIFY_CLIENT_ID ?? null;
+}
+
+function tryGetSpotifySecret(): string | null {
+  return process.env.SPOTIFY_CLIENT_SECRET ?? null;
+}
 
 export default NextAuth({
   providers: [
     SpotifyProvider({
-      clientId: process.env.SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      clientId: tryGetSpotifyClientId(),
+      clientSecret: tryGetSpotifySecret(),
       authorization: {
-        params: { scope },
+        params: { scope: Scope },
       },
     }),
   ],
