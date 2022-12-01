@@ -10,20 +10,6 @@ const createParty = async (partyName: string, hostName: string) => {
   return res.data;
 };
 
-const getPartyDetails = async (partyCode: string): Promise<Party> => {
-  try {
-    const res = await jukeboxClient.get(`${BaseUrl}/${partyCode}`);
-    console.log('res', res);
-    return res.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getPartyString = (partyCode: string) => {
-  return `${BaseUrl}/${partyCode}`;
-};
-
 const JoinPartyUrl = `${BaseUrl}/join`;
 
 async function sendJoinPartyRequest(
@@ -38,4 +24,4 @@ async function sendJoinPartyRequest(
   await jukeboxClient.post(JoinPartyUrl, data);
 }
 
-export { createParty, getPartyDetails, sendJoinPartyRequest, getPartyString };
+export { createParty, sendJoinPartyRequest };
