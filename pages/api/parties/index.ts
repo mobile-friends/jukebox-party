@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
 import { User } from '../../../lib/user';
 import { Party } from '../../../lib/party';
-import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
 
 interface RequestBody {

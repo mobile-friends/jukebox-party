@@ -1,7 +1,6 @@
 import { PartyCode } from './partyCode';
 import { Party } from './party';
 import firebase from 'firebase/app';
-import database from '../firebase.config';
 
 /**
  * Contains functions for interacting with parties in the database

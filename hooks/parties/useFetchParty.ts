@@ -1,8 +1,6 @@
-import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { Party } from '../../lib/party';
 import {
-  getPartyDetails,
   getPartyString,
 } from '../../httpClient/jukebox/parties';
 import database from '../../firebase.config';
