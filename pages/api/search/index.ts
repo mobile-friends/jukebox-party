@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
-import { tryQueryParam } from '../../../utils/query';
+import { tryQueryParam } from '../../../lib/query';
 
 export const baseURL = 'search';
 export default async function handler(

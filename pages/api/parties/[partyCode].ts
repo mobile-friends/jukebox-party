@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
 import { PartyCode } from '../../../lib/partyCode';
-import { tryQueryParam } from '../../../utils/query';
+import { tryQueryParam } from '../../../lib/query';
 import { PartyDb } from '../../../lib/partyDb';
 
 export default async function handler(
