@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
-import doesPartyExist from '../../../utils/parties';
-import { Party } from '../../../lib/party';
+import { PartyCode } from '../../../lib/partyCode';
+import { tryQueryParam } from '../../../utils/query';
+import { PartyDb } from '../../../lib/partyDb';
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,23 +12,24 @@ export default async function handler(
     res.status(405).json({ message: 'Method not allowed' });
     return;
   }
-  const { partyCode } = req.query;
 
-  const dbRef = database.ref(`parties/${partyCode}`);
-  const exists: boolean = await doesPartyExist(dbRef);
-  if (!exists) {
+  const partyCodeParam = tryQueryParam(req, 'partyCode');
+  if (partyCodeParam === null) {
+    res.status(400).json({ message: 'Missing party-code param' });
+    return;
+  }
+
+  const partyCode = PartyCode.tryMake(partyCodeParam);
+  if (partyCode === null) {
+    res.status(400).json({ message: 'Party-code param not valid' });
+    return;
+  }
+
+  const party = await PartyDb.tryGetByCode(database, partyCode);
+  if (party === null) {
     res.status(404).json({ message: 'Party not found' });
     return;
   }
 
-  await dbRef.once('value', (snapshot) => {
-    const dto: Party = snapshot.val();
-    const party: Party = Party.make(
-      dto.code,
-      dto.name,
-      dto.host,
-      dto.guests ?? []
-    );
-    res.status(200).json(party);
-  });
+  res.status(200).json(party);
 }
