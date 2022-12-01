@@ -24,6 +24,7 @@ export default async function handler(
     return;
   }
 
+  // TODO: Check if body is well-formed
   const { partyName, hostName } = req.body as RequestBody;
 
   const host = User.makeHost(hostName);
