@@ -28,7 +28,7 @@ function PartyRoom({}: Props) {
 
   useEffect(() => {
     if (party === null) {
-      router.push('/party/404');
+      router.push('/party/404').catch(console.log);
     }
   }, [party]);
 
