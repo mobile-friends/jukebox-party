@@ -7,12 +7,10 @@ import { Track } from '../../lib/track';
 import { Duration } from '../../lib/duration';
 import { Artist } from '../../lib/artist';
 import { PlaybackState } from '../../lib/playbackState';
+import { tryQueryParam } from '../../lib/query';
+import { PartyCode } from '../../lib/partyCode';
 
 type Props = {};
-
-interface QueryParams {
-  code?: string;
-}
 
 const testTrack = Track.make(
   'Test-track',
@@ -23,8 +21,20 @@ const testTrack = Track.make(
 
 function PartyRoom({}: Props) {
   const router = useRouter();
-  const { code }: QueryParams = router.query;
-  const party: Party | null | undefined = useFetchParty(code);
+
+  const partyCodeParam = tryQueryParam(router.query, "code")
+  if (partyCodeParam === null){
+    // TODO: Handle missing query param error
+    throw new Error("Missing query param")
+  }
+
+  const partyCode = PartyCode.tryMake(partyCodeParam)
+  if (partyCode === null){
+    // TODO: Handle invalid party-code
+    throw new Error("Invalid party code")
+  }
+
+  const party = useFetchParty(partyCode)
 
   useEffect(() => {
     if (party === null) {

@@ -1,40 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Party } from '../../lib/party';
-import {
-  getPartyString,
-} from '../../httpClient/jukebox/parties';
 import database from '../../firebase.config';
+import { PartyCode } from '../../lib/partyCode';
+import { PartyDb } from '../../lib/partyDb';
 
-const useFetchParty = (code: string): Party | null | undefined => {
-  const [party, setParty] = useState<Party | null | undefined>(undefined);
+const useFetchParty = (partyCode: PartyCode): Party | null => {
+  const [party, setParty] = useState<Party | null>(null);
 
   useEffect(() => {
-    const fetchParty = async () => {
-      if (code) {
-        try {
-          const party = getPartyString(code);
-
-          database.ref(party).on('value', (snapshot) => {
-            const dto: Party = snapshot.val();
-            try {
-              const party: Party = Party.make(
-                dto.code,
-                dto.name,
-                dto.host,
-                dto.guests ?? []
-              );
-              setParty(party);
-            } catch (error) {
-              setParty(null);
-            }
-          });
-        } catch (e) {
-          setParty(null);
-        }
-      }
-    };
-    fetchParty();
-  }, [code]);
+    PartyDb.tryGetByCode(database, partyCode)
+      .then(setParty)
+      .catch(() => setParty(null));
+  }, [partyCode]);
 
   return party;
 };
