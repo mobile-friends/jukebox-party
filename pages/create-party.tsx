@@ -47,7 +47,9 @@ function CreateParty({}: Props) {
             type='primary'
             onClick={async () => {
               const party: Party = await createParty(partyName, partyHostName);
-              router.push(`/party/${encodeURIComponent(party.code)}`);
+              router
+                .push(`/party/${encodeURIComponent(party.code)}`)
+                .catch(console.log);
             }}
           />
         </form>
