@@ -1,4 +1,5 @@
 import { Guest, Host } from './user';
+import { PartyCode } from './partyCode';
 
 declare const tag: unique symbol;
 
@@ -6,7 +7,7 @@ declare const tag: unique symbol;
  * A party
  */
 export interface Party {
-  readonly code: string;
+  readonly code: PartyCode;
   readonly name: string;
   readonly host: Host;
   readonly guests: Guest[];
