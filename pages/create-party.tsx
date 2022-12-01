@@ -20,7 +20,7 @@ function CreateParty({}: Props) {
   }, [session, null]);
 
   const clickBack = () => {
-    signOut({ callbackUrl: '/' }).catch(console.log);;
+    signOut({ callbackUrl: '/' }).catch(console.log);
   };
 
   return (
