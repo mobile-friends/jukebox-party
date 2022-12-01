@@ -1,15 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
-import { getPartyDetails } from '../../../httpClient/jukebox/parties';
 import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
+import { PartyCode } from '../../../lib/partyCode';
+import { PartyDb } from '../../../lib/partyDb';
 
 export interface PartyJoinRequestBody {
   partyCode: string;
   guestName: string;
 }
 
-// Join a Party with the Party-ID
+/**
+ * Join a party using its party-code
+ * @param req The request
+ * @param res The response
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -19,14 +24,23 @@ export default async function handler(
     return;
   }
 
-  const { partyCode, guestName }: PartyJoinRequestBody = req.body;
+  const { partyCode: unparsedPartyCode, guestName } =
+    req.body as PartyJoinRequestBody;
 
-  //Get the Party Objekt by ID
-  const party: Party = await getPartyDetails(partyCode);
-  const guest: User = User.makeGuest(guestName);
-  const partyWithGuest: Party = Party.addGuestTo(party, guest);
+  const partyCode = PartyCode.tryMake(unparsedPartyCode);
+  if (partyCode === null) {
+    res.status(400).json({ message: 'Invalid party-code' });
+    return;
+  }
 
-  await database.ref(`parties/${partyCode}/`).set(partyWithGuest);
+  const party = await PartyDb.tryGetByCode(database, partyCode);
+  if (party === null) {
+    res.status(404).json({ message: 'Party not found' });
+  }
 
+  const guest = User.makeGuest(guestName);
+  const partyWithGuest = Party.addGuestTo(party, guest);
+
+  await PartyDb.store(database, partyWithGuest);
   res.status(200).json(partyWithGuest);
 }
