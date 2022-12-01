@@ -15,13 +15,17 @@ export default function Home({ context }) {
   useEffect(() => {
     console.log(session);
     getCurrentlyPlaying();
+  }, [session, null]);
+
+  useEffect(() => {
+    getCurrentlyPlaying();
   }, [currentTrack]);
 
   const getCurrentlyPlaying = async () => {
     if (session?.user?.accessToken) {
       const result = await currentlyPlaying(session.user.accessToken);
       if (result) {
-        console.log(result.item);
+        //console.log(result.item);
         var artists = [];
         result.item.artists.forEach((artist: any) => {
           artists.push(Artist.make(artist.name));

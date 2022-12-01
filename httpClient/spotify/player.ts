@@ -14,7 +14,7 @@ const currentlyPlaying = async (token: string) => {
 const recentlyPlayed = async (token: string) => {
   const now = Date.now();
   const res = await spotifyClient.get(
-    `${baseURL}/recently-played?limit=1&before=${now}`,
+    `${baseURL}/recently-played?limit=5&before=${now}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
