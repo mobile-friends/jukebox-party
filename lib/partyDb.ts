@@ -1,6 +1,7 @@
 import { PartyCode } from './partyCode';
 import { Party } from './party';
 import firebase from 'firebase/app';
+import database from '../firebase.config';
 
 /**
  * Contains functions for interacting with parties in the database
@@ -38,5 +39,18 @@ export namespace PartyDb {
         return null;
       }
     });
+  }
+
+  /**
+   * Stores a party in the database
+   * @param db The database
+   * @param party The party
+   */
+  export async function store(
+    db: firebase.database.Database,
+    party: Party
+  ): Promise<void> {
+    const doc = documentFor(db, party.code);
+    await doc.set(party);
   }
 }

@@ -3,10 +3,11 @@ import database from '../../../firebase.config';
 import { User } from '../../../lib/user';
 import { Party } from '../../../lib/party';
 import { PartyCode } from '../../../lib/partyCode';
+import { PartyDb } from '../../../lib/partyDb';
 
 interface RequestBody {
-  partyName: string,
-  hostName: string
+  partyName: string;
+  hostName: string;
 }
 
 /**
@@ -28,6 +29,6 @@ export default async function handler(
   const host = User.makeHost(hostName);
   const party = Party.startNew(partyCode, partyName, host);
 
-  await database.ref(`parties/${partyCode}/`).set(party);
+  await PartyDb.store(database, party);
   res.status(201).json(party);
 }
