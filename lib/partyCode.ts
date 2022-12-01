@@ -1,5 +1,3 @@
-import { throws } from 'assert';
-
 declare const tag: unique symbol;
 
 /**

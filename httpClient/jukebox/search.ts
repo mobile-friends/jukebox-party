@@ -1,5 +1,4 @@
 import { jukeboxClient } from '.';
-import { Party } from '../../lib/party';
 
 const baseURL = 'search';
 

@@ -1,18 +1,15 @@
 import {
   ClientSafeProvider,
   getProviders,
-  getSession,
   signIn,
-  useSession,
+
 } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
-import { Party } from '../lib/party';
 import styles from '../styles/pages/main.module.scss';
-import { GetServerSideProps } from 'next';
 import { GetServerSidePropsResult } from 'next/types';
 
 interface IndexProps {
