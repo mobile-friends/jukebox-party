@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import { Party } from '../../lib/party';
 import useFetchParty from '../../hooks/parties/useFetchParty';
 import TrackView from '../../components/elements/trackView';
 import { Track } from '../../lib/track';
