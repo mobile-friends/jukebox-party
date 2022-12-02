@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Party } from '../../lib/party';
 import database from '../../firebase.config';
 import { PartyCode } from '../../lib/partyCode';
 import { PartyDb } from '../../lib/partyDb';
 
-const useFetchParty = (partyCode: PartyCode): Party | null => {
-  const [party, setParty] = useState<Party | null>(null);
+function useFetchParty(partyCode: PartyCode): Party | null | PartyDb.Error {
+  const [party, setParty] = useState<Party | null | PartyDb.Error>(null);
 
   useEffect(() => {
     PartyDb.tryGetByCode(database, partyCode)
@@ -14,6 +14,6 @@ const useFetchParty = (partyCode: PartyCode): Party | null => {
   }, [partyCode]);
 
   return party;
-};
+}
 
 export default useFetchParty;

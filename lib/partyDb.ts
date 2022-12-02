@@ -7,6 +7,58 @@ import { FirebaseDatabase } from '@firebase/database-types';
  * Contains functions for interacting with parties in the database
  */
 export namespace PartyDb {
+  export enum ErrorType {
+    PartyNotFound,
+    InvalidEntry,
+  }
+
+  /**
+   * Error for when a party with a specific code was not found
+   */
+  export interface PartyNotFoundError {
+    readonly kind: ErrorType.PartyNotFound;
+    readonly partyCode: PartyCode;
+  }
+
+  /**
+   * Error for the parties entry in the db was malformed
+   */
+  export interface InvalidEntryError {
+    readonly kind: ErrorType.InvalidEntry;
+    readonly entry: any;
+  }
+
+  /**
+   * An error that occurs while interacting with the db
+   */
+  export type Error = PartyNotFoundError | InvalidEntryError;
+
+  /**
+   * Checks if an object is a PartyDb.Error
+   * @param result The object
+   */
+  export function isError<T>(
+    result: T | PartyDb.Error
+  ): result is PartyDb.Error {
+    return result instanceof Object && 'kind' in result;
+  }
+
+  function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {
+    return { kind: ErrorType.PartyNotFound, partyCode };
+  }
+
+  function invalidEntryError(entry: any): PartyDb.Error {
+    return { kind: ErrorType.InvalidEntry, entry };
+  }
+
+  function tryParseEntry(entry: any): Party | PartyDb.Error {
+    try {
+      return Party.make(entry.code, entry.name, entry.host, entry.guests ?? []);
+    } catch {
+      return invalidEntryError(entry);
+    }
+  }
+
   function documentPathFor(partyCode: PartyCode): string {
     return `parties/${partyCode}`;
   }
@@ -28,16 +80,12 @@ export namespace PartyDb {
   export function tryGetByCode(
     db: FirebaseDatabase,
     partyCode: PartyCode
-  ): Promise<Party | null> {
+  ): Promise<Party | PartyDb.Error> {
     const doc = documentFor(db, partyCode);
     return doc.once('value').then((snapshot) => {
-      if (!snapshot.exists()) return null;
-      const dto = snapshot.val();
-      try {
-        return Party.make(dto.code, dto.name, dto.host, dto.guests ?? []);
-      } catch {
-        return null;
-      }
+      if (!snapshot.exists()) return partyNotFoundError(partyCode);
+      const entry = snapshot.val();
+      return tryParseEntry(entry);
     });
   }
 

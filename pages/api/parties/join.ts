@@ -33,14 +33,20 @@ export default async function handler(
     return;
   }
 
-  const party = await PartyDb.tryGetByCode(database, partyCode);
-  if (party === null) {
-    res.status(404).json({ message: 'Party not found' });
-    return;
+  const result = await PartyDb.tryGetByCode(database, partyCode);
+  if (PartyDb.isError(result)) {
+    switch (result.kind) {
+      case PartyDb.ErrorType.PartyNotFound:
+        res.status(404).json({ message: 'Party not found' });
+        return;
+      case PartyDb.ErrorType.InvalidEntry:
+        res.status(500).json({ message: 'Internal db error' });
+        return;
+    }
   }
 
   const guest = User.makeGuest(guestName);
-  const partyWithGuest = Party.addGuestTo(party, guest);
+  const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(database, partyWithGuest);
   res.status(200).json(partyWithGuest);

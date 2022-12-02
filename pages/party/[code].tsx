@@ -8,6 +8,7 @@ import { Artist } from '../../lib/artist';
 import { PlaybackState } from '../../lib/playbackState';
 import { tryQueryParam } from '../../lib/query';
 import { PartyCode } from '../../lib/partyCode';
+import { PartyDb } from '../../lib/partyDb';
 
 type Props = {};
 
@@ -33,31 +34,41 @@ function PartyRoom({}: Props) {
     throw new Error('Invalid party code');
   }
 
-  const party = useFetchParty(partyCode);
+  const result = useFetchParty(partyCode);
 
   useEffect(() => {
-    if (party === null) {
-      router.push('/party/404').catch(console.log);
+    if (PartyDb.isError(result)) {
+      switch (result.kind) {
+        case PartyDb.ErrorType.PartyNotFound:
+          router.push('/party/404').catch(console.log);
+          break;
+        default:
+          // TODO: Handle other errors
+          break;
+      }
     }
-  }, [party]);
+  }, [result]);
 
-  return party ? (
-    <div>
-      <h1>Party Room</h1>
-      <p>Party Code: {party?.code}</p>
-      <p>Party Name: {party?.name}</p>
-      <p>Party Host: {party?.host.name}</p>
-      <p>
-        Party Guests:{' '}
-        {party?.guests.map((guest) => guest.name).join(', ') ||
-          'No guests have joined the party yet'}
-      </p>
-      <TrackView
-        track={testTrack}
-        playbackState={PlaybackState.makePlaying(Duration.Zero)}
-      />
-    </div>
-  ) : null;
+  if (!PartyDb.isError(result)) {
+    const party = result;
+    return party ? (
+      <div>
+        <h1>Party Room</h1>
+        <p>Party Code: {party?.code}</p>
+        <p>Party Name: {party?.name}</p>
+        <p>Party Host: {party?.host.name}</p>
+        <p>
+          Party Guests:{' '}
+          {party?.guests.map((guest) => guest.name).join(', ') ||
+            'No guests have joined the party yet'}
+        </p>
+        <TrackView
+          track={testTrack}
+          playbackState={PlaybackState.makePlaying(Duration.Zero)}
+        />
+      </div>
+    ) : null;
+  }
 }
 
 export default PartyRoom;
