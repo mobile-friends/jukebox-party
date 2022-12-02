@@ -21,19 +21,19 @@ const testTrack = Track.make(
 function PartyRoom({}: Props) {
   const router = useRouter();
 
-  const partyCodeParam = tryQueryParam(router.query, "code")
-  if (partyCodeParam === null){
+  const partyCodeParam = tryQueryParam(router.query, 'code');
+  if (partyCodeParam === null) {
     // TODO: Handle missing query param error
-    throw new Error("Missing query param")
+    throw new Error('Missing query param');
   }
 
-  const partyCode = PartyCode.tryMake(partyCodeParam)
-  if (partyCode === null){
+  const partyCode = PartyCode.tryMake(partyCodeParam);
+  if (partyCode === null) {
     // TODO: Handle invalid party-code
-    throw new Error("Invalid party code")
+    throw new Error('Invalid party code');
   }
 
-  const party = useFetchParty(partyCode)
+  const party = useFetchParty(partyCode);
 
   useEffect(() => {
     if (party === null) {

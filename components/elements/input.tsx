@@ -18,7 +18,7 @@ export default function Input({
         placeholder={`${placeholder}`}
         className='input block'
         onChange={(e) => {
-          onChange(e);
+          if (onChange !== undefined) onChange(e);
         }}
       ></input>
     </div>

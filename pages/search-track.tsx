@@ -28,7 +28,7 @@ export default function SearchTrack({ provider }) {
         'track',
         session.user.accessToken
       );
-      let tracks = [];
+      let tracks: Track[] = [];
       results.tracks.items.forEach((track: any) => {
         const trackElement = Track.make(
           track.name,

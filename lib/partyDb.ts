@@ -1,6 +1,7 @@
 import { PartyCode } from './partyCode';
 import { Party } from './party';
 import firebase from 'firebase/app';
+import { FirebaseDatabase } from '@firebase/database-types';
 
 /**
  * Contains functions for interacting with parties in the database
@@ -11,7 +12,7 @@ export namespace PartyDb {
   }
 
   function documentFor(
-    db: firebase.database.Database,
+    db: FirebaseDatabase,
     partyCode: PartyCode
   ): firebase.database.Reference {
     const path = documentPathFor(partyCode);
@@ -25,7 +26,7 @@ export namespace PartyDb {
    * @param partyCode The code of the party to search
    */
   export function tryGetByCode(
-    db: firebase.database.Database,
+    db: FirebaseDatabase,
     partyCode: PartyCode
   ): Promise<Party | null> {
     const doc = documentFor(db, partyCode);
@@ -46,7 +47,7 @@ export namespace PartyDb {
    * @param party The party
    */
   export async function store(
-    db: firebase.database.Database,
+    db: FirebaseDatabase,
     party: Party
   ): Promise<void> {
     const doc = documentFor(db, party.code);

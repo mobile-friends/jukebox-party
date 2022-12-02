@@ -1,9 +1,4 @@
-import {
-  ClientSafeProvider,
-  getProviders,
-  signIn,
-
-} from 'next-auth/react';
+import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
 import Button from '../components/elements/button';
@@ -79,6 +74,8 @@ export async function getServerSideProps(): Promise<
   GetServerSidePropsResult<IndexProps>
 > {
   const providers = await getProviders();
+  if (providers === null) throw new Error('Could not get spotify providers');
+
   const props: IndexProps = { provider: providers.spotify };
   return { props };
 }

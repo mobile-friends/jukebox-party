@@ -36,6 +36,7 @@ export default async function handler(
   const party = await PartyDb.tryGetByCode(database, partyCode);
   if (party === null) {
     res.status(404).json({ message: 'Party not found' });
+    return;
   }
 
   const guest = User.makeGuest(guestName);

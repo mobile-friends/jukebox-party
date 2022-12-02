@@ -13,7 +13,7 @@ const Button = ({ text, type, onClick }: ButtonProps): JSX.Element => {
         className={`btn ${type} block`}
         onClick={(e) => {
           e.preventDefault();
-          onClick(e);
+          if (onClick !== undefined) onClick(e);
         }}
       >
         {text}
