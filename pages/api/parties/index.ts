@@ -20,7 +20,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return sendError(res, methodNotAllowed(req.method, ['POST']));
+    return sendError(res, methodNotAllowed('/parties', req.method, ['POST']));
   }
 
   // TODO: Check if body is well-formed
