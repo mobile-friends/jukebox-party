@@ -5,13 +5,13 @@ import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
-import { GetServerSidePropsResult } from 'next/types';
+import { GetServerSideProps, GetServerSidePropsResult } from 'next/types';
 
-interface IndexProps {
+interface Props {
   provider: ClientSafeProvider;
 }
 
-export default function Home({ provider }: IndexProps) {
+export default function Home({ provider }: Props) {
   const router = useRouter();
   const [username, setUsername] = useState<string>('');
   const [partyCode, setPartyCode] = useState<string>('');
@@ -70,12 +70,8 @@ export default function Home({ provider }: IndexProps) {
   );
 }
 
-export async function getServerSideProps(): Promise<
-  GetServerSidePropsResult<IndexProps>
-> {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const providers = await getProviders();
   if (providers === null) throw new Error('Could not get spotify providers');
-
-  const props: IndexProps = { provider: providers.spotify };
-  return { props };
-}
+  return { props: { provider: providers.spotify } };
+};
