@@ -4,7 +4,11 @@ import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
-import { methodNotAllowed, sendError } from '../../../lib/apiError';
+import {
+  invalidPartyCode,
+  methodNotAllowed,
+  sendError,
+} from '../../../lib/apiError';
 
 export interface PartyJoinRequestBody {
   partyCode: string;
@@ -24,13 +28,12 @@ export default async function handler(
     return sendError(req, res, methodNotAllowed(['POST']));
   }
 
-  const { partyCode: unparsedPartyCode, guestName } =
+  const { partyCode: partyCodeParam, guestName } =
     req.body as PartyJoinRequestBody;
 
-  const partyCode = PartyCode.tryMake(unparsedPartyCode);
+  const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    res.status(400).json({ message: 'Invalid party-code' });
-    return;
+    return sendError(req, res, invalidPartyCode(partyCodeParam, 'partyCode'));
   }
 
   const result = await PartyDb.tryGetByCode(database, partyCode);

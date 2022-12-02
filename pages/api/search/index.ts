@@ -3,7 +3,7 @@ import { spotifyClient } from '../../../httpClient/spotify';
 import { tryQueryParam } from '../../../lib/query';
 import {
   methodNotAllowed,
-  missingQueryParam,
+  missingParam,
   sendError,
 } from '../../../lib/apiError';
 
@@ -18,12 +18,12 @@ export default async function handler(
 
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
-    return sendError(req, res, missingQueryParam('q'));
+    return sendError(req, res, missingParam('q'));
   }
 
   const type = tryQueryParam(req.query, 'type');
   if (type === null) {
-    return sendError(req, res, missingQueryParam('type'));
+    return sendError(req, res, missingParam('type'));
   }
 
   const spotifyRes = await spotifyClient.get(

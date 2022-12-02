@@ -1,35 +1,30 @@
 import { HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-/**
- * An error for when a http-method is not allowed
- */
-export interface MethodNotAllowedError {
+interface MethodNotAllowedError {
   readonly code: HttpStatusCode.MethodNotAllowed;
   readonly message: string;
   readonly allowedMethods: string[];
 }
 
-/**
- * An error for when a required query-parameter is missing
- */
-export interface MissingQueryParamError {
+interface ParamError {
   readonly code: HttpStatusCode.BadRequest;
   readonly message: string;
   readonly paramName: string;
 }
 
-type ApiError = MethodNotAllowedError | MissingQueryParamError;
+type ApiError = MethodNotAllowedError | ParamError;
+
 /**
  * An error the API can return to the user
  */
-export type ApiErrorResponse = ApiError & {
+type ApiErrorResponse = ApiError & {
   readonly endpoint: string;
   readonly usedMethod: string;
 };
 
 /**
- * Creates a MethodNotAllowedError error
+ * Error for when a http-method is not allowed
  * @param allowedMethods The methods that are allowed on this endpoint
  */
 export function methodNotAllowed(allowedMethods: string[]): ApiError {
@@ -41,15 +36,28 @@ export function methodNotAllowed(allowedMethods: string[]): ApiError {
 }
 
 /**
- * Creates a MissingQueryParamError error
+ * Error for when a parameter is missing
  * @param paramName The missing parameter name
  */
-export function missingQueryParam(paramName: string): ApiError {
+export function missingParam(paramName: string): ApiError {
   return {
     code: HttpStatusCode.BadRequest,
-    message: 'Your request is missing a required query-parameter',
+    message: 'Your request is missing a required parameter',
     paramName,
   };
+}
+
+/**
+ * Error for when a party-code parameter is malformed
+ * @param partyCodeParam The parameter
+ * @param paramName The name of the parameter
+ */
+export function invalidPartyCode(
+  partyCodeParam: string,
+  paramName: string
+): ApiError {
+  const message = `${partyCodeParam} is not a valid party-code`;
+  return { code: HttpStatusCode.BadRequest, message, paramName };
 }
 
 /**

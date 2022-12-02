@@ -4,10 +4,13 @@ import { PartyCode } from '../../../lib/partyCode';
 import { tryQueryParam } from '../../../lib/query';
 import { PartyDb } from '../../../lib/partyDb';
 import {
+  invalidPartyCode,
   methodNotAllowed,
-  missingQueryParam,
+  missingParam,
   sendError,
 } from '../../../lib/apiError';
+
+const ParamName = 'partyCode';
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,15 +20,14 @@ export default async function handler(
     return sendError(req, res, methodNotAllowed(['GET']));
   }
 
-  const partyCodeParam = tryQueryParam(req.query, 'partyCode');
+  const partyCodeParam = tryQueryParam(req.query, ParamName);
   if (partyCodeParam === null) {
-    return sendError(req, res, missingQueryParam('partyCode'));
+    return sendError(req, res, missingParam(ParamName));
   }
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    res.status(400).json({ message: 'Party-code param not valid' });
-    return;
+    return sendError(req, res, invalidPartyCode(partyCodeParam, ParamName));
   }
 
   const party = await PartyDb.tryGetByCode(database, partyCode);
