@@ -73,7 +73,8 @@ function PartyRoom({}: Props) {
         </div>
       );
     } else {
-      return null;
+      // TODO: Extract component
+      return <p>Loading party...</p>;
     }
   }
 }
