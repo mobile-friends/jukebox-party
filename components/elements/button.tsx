@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
   text: string;
   type: string;
-  onClick?: (e) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const Button = ({ text, type, onClick }: ButtonProps): JSX.Element => {

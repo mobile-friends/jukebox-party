@@ -1,16 +1,34 @@
 import { jukeboxClient } from '.';
+import { Track } from '../../lib/track';
+import { Duration } from '../../lib/duration';
+import { Artist } from '../../lib/artist';
 
 const baseURL = 'search';
 
-const search = async (q: string, type: string, token: string) => {
+type SearchType = 'track';
+
+const search = async (
+  q: string,
+  type: SearchType,
+  token: string
+): Promise<Track[]> => {
   q = encodeURIComponent(q);
-  type = encodeURIComponent(type);
-  const res = await jukeboxClient.get(`${baseURL}?q=${q}&type=${type}`, {
+  const encodedType = encodeURIComponent(type);
+  const url = `${baseURL}?q=${q}&type=${encodedType}`;
+  const res = await jukeboxClient.get(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  return res?.data;
+  const trackData: any[] = res.data.tracks;
+  return trackData.map((data) =>
+    Track.make(
+      data.name,
+      Duration.make(0, data.duration_ms / 1000),
+      [data.artists.map((artist: any) => Artist.make(artist.name))],
+      data.album.images[0].url
+    )
+  );
 };
 
 export { search };

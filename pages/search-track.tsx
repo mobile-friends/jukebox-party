@@ -1,43 +1,36 @@
-import { getProviders, useSession } from 'next-auth/react';
+import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Input from '../components/elements/input';
 import TrackListItemView from '../components/elements/trackListItemView';
 import { search } from '../httpClient/jukebox/search';
-import { Artist } from '../lib/artist';
-import { Duration } from '../lib/duration';
 import { Track } from '../lib/track';
 import styles from '../styles/pages/main.module.scss';
+import { GetServerSideProps } from 'next/types';
 
-export default function SearchTrack({ provider }) {
+interface Props {
+  provider: ClientSafeProvider;
+}
+
+export default function SearchTrack({ provider }: Props) {
   const [queryString, setQueryString] = useState<string>('');
-  const [results, setResults] = useState<any>(null);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const router = useRouter();
   let { data: session } = useSession() as any;
-  
+
   const typeInput = async (e: any) => {
     setQueryString(e.target.value);
     if (queryString?.length <= 3) return;
     try {
-      const results = await search(
+      const tracks = await search(
         queryString,
         'track',
         session.user.accessToken
       );
-      let tracks: Track[] = [];
-      results.tracks.items.forEach((track: any) => {
-        const trackElement = Track.make(
-          track.name,
-          Duration.make(0, track.duration_ms / 1000),
-          [track.artists.map((artist: any) => Artist.make(artist.name))],
-          track.album.images[0].url
-        );
-        tracks = [...tracks, trackElement];
-      });
-      setResults(tracks);
+      setTracks(tracks);
     } catch (e) {
       console.log(e);
-      setResults(null);
+      setTracks([]);
     }
   };
 
@@ -53,7 +46,7 @@ export default function SearchTrack({ provider }) {
             onChange={typeInput}
           />
           <ul style={{ overflow: 'scroll' }}>
-            {results?.map((track) => (
+            {tracks?.map((track) => (
               <TrackListItemView track={track} />
             ))}
           </ul>
@@ -63,7 +56,9 @@ export default function SearchTrack({ provider }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const providers = await getProviders();
-  return { props: { provider: providers?.spotify } };
-}
+  if (providers === null) throw new Error('Could not get spotify providers');
+
+  return { props: { provider: providers.spotify } };
+};
