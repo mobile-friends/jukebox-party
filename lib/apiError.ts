@@ -1,19 +1,25 @@
 import { HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { PartyCode } from './partyCode';
 
-interface MethodNotAllowedError {
-  readonly code: HttpStatusCode.MethodNotAllowed;
+interface ErrorBase {
+  readonly code: HttpStatusCode;
   readonly message: string;
+}
+
+interface MethodNotAllowedError extends ErrorBase {
   readonly allowedMethods: string[];
 }
 
-interface ParamError {
-  readonly code: HttpStatusCode.BadRequest;
-  readonly message: string;
+interface ParamError extends ErrorBase {
   readonly paramName: string;
 }
 
-type ApiError = MethodNotAllowedError | ParamError;
+interface PartyNotFoundError extends ErrorBase {
+  readonly partyCode: PartyCode;
+}
+
+type ApiError = MethodNotAllowedError | ParamError | PartyNotFoundError;
 
 /**
  * An error the API can return to the user
@@ -58,6 +64,15 @@ export function invalidPartyCode(
 ): ApiError {
   const message = `${partyCodeParam} is not a valid party-code`;
   return { code: HttpStatusCode.BadRequest, message, paramName };
+}
+
+/**
+ * Error for when a party with a specific code could not be found
+ * @param partyCode The party-code
+ */
+export function partyNotFound(partyCode: PartyCode): ApiError {
+  const message = `Could not find a party with the code ${partyCode}`;
+  return { code: HttpStatusCode.NotFound, message, partyCode };
 }
 
 /**

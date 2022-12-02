@@ -7,6 +7,7 @@ import {
   invalidPartyCode,
   methodNotAllowed,
   missingParam,
+  partyNotFound,
   sendError,
 } from '../../../lib/apiError';
 
@@ -32,8 +33,7 @@ export default async function handler(
 
   const party = await PartyDb.tryGetByCode(database, partyCode);
   if (party === null) {
-    res.status(404).json({ message: 'Party not found' });
-    return;
+    return sendError(req, res, partyNotFound(partyCode));
   }
 
   res.status(200).json(party);
