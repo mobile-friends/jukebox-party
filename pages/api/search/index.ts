@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { tryQueryParam } from '../../../lib/query';
 
-export const baseURL = 'search';
+export const BaseURL = 'search';
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -25,7 +25,7 @@ export default async function handler(
   }
 
   const spotifyRes = await spotifyClient.get(
-    `${baseURL}?q=${query}&type=${type}`,
+    `${BaseURL}?q=${query}&type=${type}`,
     {
       headers: {
         Authorization: req?.headers?.authorization,
