@@ -9,6 +9,7 @@ import { PlaybackState } from '../../lib/playbackState';
 import { tryQueryParam } from '../../lib/query';
 import { PartyCode } from '../../lib/partyCode';
 import { PartyDb } from '../../lib/partyDb';
+import { Party } from '../../lib/party';
 
 type Props = {};
 
@@ -50,24 +51,30 @@ function PartyRoom({}: Props) {
   }, [result]);
 
   if (!PartyDb.isError(result)) {
+    // TODO: Extract component
     const party = result;
-    return party ? (
-      <div>
-        <h1>Party Room</h1>
-        <p>Party Code: {party?.code}</p>
-        <p>Party Name: {party?.name}</p>
-        <p>Party Host: {party?.host.name}</p>
-        <p>
-          Party Guests:{' '}
-          {party?.guests.map((guest) => guest.name).join(', ') ||
-            'No guests have joined the party yet'}
-        </p>
-        <TrackView
-          track={testTrack}
-          playbackState={PlaybackState.makePlaying(Duration.Zero)}
-        />
-      </div>
-    ) : null;
+    const partyIsLoaded = party !== null;
+    if (partyIsLoaded) {
+      const guestList =
+        Party.guestsOf(party)
+          .map((guest) => guest.name)
+          .join(', ') || 'No guests have joined the party yet';
+      return (
+        <div>
+          <h1>Party Room</h1>
+          <p>Party Code: {party.code}</p>
+          <p>Party Name: {party.name}</p>
+          <p>Party Host: {party.host.name}</p>
+          <p>Party Guests: {guestList}</p>
+          <TrackView
+            track={testTrack}
+            playbackState={PlaybackState.makePlaying(Duration.Zero)}
+          />
+        </div>
+      );
+    } else {
+      return null;
+    }
   }
 }
 
