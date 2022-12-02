@@ -4,9 +4,12 @@ import { PartyJoinRequestBody } from '../../pages/api/parties/join';
 
 const BaseUrl = 'parties';
 
-const createParty = async (partyName: string, hostName: string) => {
+const createParty = async (
+  partyName: string,
+  hostName: string
+): Promise<Party> => {
   const res = await jukeboxClient.post(`${BaseUrl}`, { partyName, hostName });
-  console.log('res', res);
+  // TODO: Handle error responses
   return res.data;
 };
 

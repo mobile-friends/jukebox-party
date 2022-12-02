@@ -1,11 +1,12 @@
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { createParty } from '../httpClient/jukebox/parties';
 import { Party } from '../lib/party';
 import styles from '../styles/pages/main.module.scss';
+import { PartyCode } from '../lib/partyCode';
 
 type Props = {};
 
@@ -19,9 +20,26 @@ function CreateParty({}: Props) {
     console.log('session', session);
   }, [session, null]);
 
-  const clickBack = () => {
+  function onBackClicked() {
     signOut({ callbackUrl: '/' }).catch(console.log);
-  };
+  }
+
+  function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
+    setPartyName(e.target.value);
+  }
+
+  function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
+    setPartyHostName(e.target.value);
+  }
+
+  async function goToPartyPage(partyCode: PartyCode) {
+    await router.push(`/party/${encodeURIComponent(partyCode)}`);
+  }
+
+  async function onCreatePartyClicked() {
+    const party = await createParty(partyName, partyHostName);
+    await goToPartyPage(party.code);
+  }
 
   return (
     <div>
@@ -30,36 +48,15 @@ function CreateParty({}: Props) {
           create.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input
-            placeholder='Party Name'
-            onChange={(e) => {
-              setPartyName(e.target.value);
-            }}
-          />
-          <Input
-            placeholder='Host Name'
-            onChange={(e) => {
-              setPartyHostName(e.target.value);
-            }}
-          />
+          <Input placeholder='Party Name' onChange={onPartyNameChanged} />
+          <Input placeholder='Host Name' onChange={onHostNameChanged} />
           <Button
             text='Create party'
             type='primary'
-            onClick={async () => {
-              const party: Party = await createParty(partyName, partyHostName);
-              router
-                .push(`/party/${encodeURIComponent(party.code)}`)
-                .catch(console.log);
-            }}
+            onClick={onCreatePartyClicked}
           />
         </form>
-        <Button
-          text='Back'
-          type='tertiary'
-          onClick={() => {
-            clickBack();
-          }}
-        />
+        <Button text='Back' type='tertiary' onClick={onBackClicked} />
       </div>
     </div>
   );
