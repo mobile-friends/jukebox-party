@@ -3,7 +3,11 @@ import database from '../../../firebase.config';
 import { PartyCode } from '../../../lib/partyCode';
 import { tryQueryParam } from '../../../lib/query';
 import { PartyDb } from '../../../lib/partyDb';
-import { methodNotAllowed, sendError } from '../../../lib/apiError';
+import {
+  methodNotAllowed,
+  missingQueryParam,
+  sendError,
+} from '../../../lib/apiError';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,8 +19,7 @@ export default async function handler(
 
   const partyCodeParam = tryQueryParam(req.query, 'partyCode');
   if (partyCodeParam === null) {
-    res.status(400).json({ message: 'Missing party-code param' });
-    return;
+    return sendError(req, res, missingQueryParam('partyCode'));
   }
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
