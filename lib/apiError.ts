@@ -17,17 +17,25 @@ export interface MethodNotAllowedError extends ApiErrorBase {
 }
 
 /**
- * An error the API can return to the user
+ * An error for when a required query-parameter is missing
  */
-export type ApiError = MethodNotAllowedError;
+export interface MissingQueryParamError extends ApiErrorBase {
+  readonly code: HttpStatusCode.BadRequest;
+  readonly paramName: string;
+}
 
 /**
- * Create a MethodNotAllowedError error
+ * An error the API can return to the user
+ */
+export type ApiError = MethodNotAllowedError | MissingQueryParamError;
+
+/**
+ * Creates a MethodNotAllowedError error
  * @param endpoint The endpoint that was accessed
  * @param usedMethod The incorrect method that was used
  * @param allowedMethods The methods that are allowed on this endpoint
  */
-export function methodNotAllowedError(
+export function methodNotAllowed(
   endpoint: string,
   usedMethod: string | undefined,
   allowedMethods: string[]
@@ -38,6 +46,26 @@ export function methodNotAllowedError(
     message: 'Method is not allowed',
     usedMethod: usedMethod ?? 'Unknown',
     allowedMethods,
+  };
+}
+
+/**
+ * Creates a MissingQueryParamError error
+ * @param endpoint The endpoint that was accessed
+ * @param usedMethod The method that was used
+ * @param paramName The missing parameter name
+ */
+export function missingQueryParam(
+  endpoint: string,
+  usedMethod: string | undefined,
+  paramName: string
+): ApiError {
+  return {
+    code: HttpStatusCode.BadRequest,
+    endpoint,
+    message: 'Your request was missing a required query parameter',
+    usedMethod: usedMethod ?? 'Unknown',
+    paramName,
   };
 }
 

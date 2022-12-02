@@ -1,7 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { tryQueryParam } from '../../../lib/query';
-import { methodNotAllowedError, sendError } from '../../../lib/apiError';
+import {
+  methodNotAllowed,
+  missingQueryParam,
+  sendError,
+} from '../../../lib/apiError';
 
 export const BaseURL = 'search';
 export default async function handler(
@@ -9,22 +13,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    return sendError(
-      res,
-      methodNotAllowedError('/search', req.method, ['GET'])
-    );
+    return sendError(res, methodNotAllowed('/search', req.method, ['GET']));
   }
 
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
-    res.status(400).json({ message: 'Missing q parameter' });
-    return;
+    return sendError(res, missingQueryParam('/search', req.method, 'q'));
   }
 
   const type = tryQueryParam(req.query, 'type');
   if (type === null) {
-    res.status(400).json({ message: 'Missing type parameter' });
-    return;
+    return sendError(res, missingQueryParam('/search', req.method, 'type'));
   }
 
   const spotifyRes = await spotifyClient.get(

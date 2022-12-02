@@ -3,7 +3,7 @@ import database from '../../../firebase.config';
 import { User } from '../../../lib/user';
 import { Party } from '../../../lib/party';
 import { PartyDb } from '../../../lib/partyDb';
-import { methodNotAllowedError, sendError } from '../../../lib/apiError';
+import { methodNotAllowed, sendError } from '../../../lib/apiError';
 
 interface RequestBody {
   partyName: string;
@@ -20,7 +20,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return sendError(res, methodNotAllowedError(req.method, ['POST']));
+    return sendError(res, methodNotAllowed(req.method, ['POST']));
   }
 
   // TODO: Check if body is well-formed

@@ -4,7 +4,7 @@ import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
-import { methodNotAllowedError, sendError } from '../../../lib/apiError';
+import { methodNotAllowed, sendError } from '../../../lib/apiError';
 
 export interface PartyJoinRequestBody {
   partyCode: string;
@@ -21,7 +21,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return sendError(res, methodNotAllowedError(req.method, ['POST']));
+    return sendError(res, methodNotAllowed(req.method, ['POST']));
   }
 
   const { partyCode: unparsedPartyCode, guestName } =
