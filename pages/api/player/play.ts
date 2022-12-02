@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { BaseURL } from './index';
+import { methodNotAllowedError, sendError } from '../../../lib/apiError';
 
 export default async function playTrack(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method !== 'PUT') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(res, methodNotAllowedError(req.method, ['PUT']));
   }
 
   let spotifyRes = await spotifyClient.get(`${BaseURL}/play`, {

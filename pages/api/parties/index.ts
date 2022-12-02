@@ -3,6 +3,7 @@ import database from '../../../firebase.config';
 import { User } from '../../../lib/user';
 import { Party } from '../../../lib/party';
 import { PartyDb } from '../../../lib/partyDb';
+import { methodNotAllowedError, sendError } from '../../../lib/apiError';
 
 interface RequestBody {
   partyName: string;
@@ -19,8 +20,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(res, methodNotAllowedError(req.method, ['POST']));
   }
 
   // TODO: Check if body is well-formed

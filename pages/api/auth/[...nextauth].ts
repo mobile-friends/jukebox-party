@@ -7,14 +7,14 @@ const Scope =
 
 function tryGetSpotifyClientId(): string {
   const id = process.env.SPOTIFY_CLIENT_ID;
-  if (id !== undefined) return id
-  else throw new Error("SPOTIFY_CLIENT_ID env not defined")
+  if (id !== undefined) return id;
+  else throw new Error('SPOTIFY_CLIENT_ID env not defined');
 }
 
 function tryGetSpotifySecret(): string {
   const secret = process.env.SPOTIFY_CLIENT_SECRET;
-  if (secret !== undefined) return secret
-  else throw new Error("SPOTIFY_CLIENT_SECRET env not defined")
+  if (secret !== undefined) return secret;
+  else throw new Error('SPOTIFY_CLIENT_SECRET env not defined');
 }
 
 export default NextAuth({

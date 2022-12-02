@@ -3,14 +3,14 @@ import database from '../../../firebase.config';
 import { PartyCode } from '../../../lib/partyCode';
 import { tryQueryParam } from '../../../lib/query';
 import { PartyDb } from '../../../lib/partyDb';
+import { methodNotAllowedError, sendError } from '../../../lib/apiError';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(res, methodNotAllowedError(req.method, ['GET']));
   }
 
   const partyCodeParam = tryQueryParam(req.query, 'partyCode');

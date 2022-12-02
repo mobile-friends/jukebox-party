@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { tryQueryParam } from '../../../lib/query';
+import { methodNotAllowedError, sendError } from '../../../lib/apiError';
 
 export const BaseURL = 'search';
 export default async function handler(
@@ -8,8 +9,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(
+      res,
+      methodNotAllowedError('/search', req.method, ['GET'])
+    );
   }
 
   const query = tryQueryParam(req.query, 'q');

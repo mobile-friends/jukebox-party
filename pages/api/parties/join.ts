@@ -4,6 +4,7 @@ import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
+import { methodNotAllowedError, sendError } from '../../../lib/apiError';
 
 export interface PartyJoinRequestBody {
   partyCode: string;
@@ -20,8 +21,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(res, methodNotAllowedError(req.method, ['POST']));
   }
 
   const { partyCode: unparsedPartyCode, guestName } =
