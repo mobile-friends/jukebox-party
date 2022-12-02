@@ -1,79 +1,72 @@
 import { HttpStatusCode } from 'axios';
-import { NextApiResponse } from 'next';
-
-interface ApiErrorBase {
-  readonly code: HttpStatusCode;
-  readonly endpoint: string;
-  readonly message: string;
-  readonly usedMethod: string;
-}
+import { NextApiRequest, NextApiResponse } from 'next';
 
 /**
  * An error for when a http-method is not allowed
  */
-export interface MethodNotAllowedError extends ApiErrorBase {
+export interface MethodNotAllowedError {
   readonly code: HttpStatusCode.MethodNotAllowed;
+  readonly message: string;
   readonly allowedMethods: string[];
 }
 
 /**
  * An error for when a required query-parameter is missing
  */
-export interface MissingQueryParamError extends ApiErrorBase {
+export interface MissingQueryParamError {
   readonly code: HttpStatusCode.BadRequest;
+  readonly message: string;
   readonly paramName: string;
 }
 
+type ApiError = MethodNotAllowedError | MissingQueryParamError;
 /**
  * An error the API can return to the user
  */
-export type ApiError = MethodNotAllowedError | MissingQueryParamError;
+export type ApiErrorResponse = ApiError & {
+  readonly endpoint: string;
+  readonly usedMethod: string;
+};
 
 /**
  * Creates a MethodNotAllowedError error
- * @param endpoint The endpoint that was accessed
- * @param usedMethod The incorrect method that was used
  * @param allowedMethods The methods that are allowed on this endpoint
  */
-export function methodNotAllowed(
-  endpoint: string,
-  usedMethod: string | undefined,
-  allowedMethods: string[]
-): ApiError {
+export function methodNotAllowed(allowedMethods: string[]): ApiError {
   return {
     code: HttpStatusCode.MethodNotAllowed,
-    endpoint,
-    message: 'Method is not allowed',
-    usedMethod: usedMethod ?? 'Unknown',
+    message: 'You used a illegal http-method',
     allowedMethods,
   };
 }
 
 /**
  * Creates a MissingQueryParamError error
- * @param endpoint The endpoint that was accessed
- * @param usedMethod The method that was used
  * @param paramName The missing parameter name
  */
-export function missingQueryParam(
-  endpoint: string,
-  usedMethod: string | undefined,
-  paramName: string
-): ApiError {
+export function missingQueryParam(paramName: string): ApiError {
   return {
     code: HttpStatusCode.BadRequest,
-    endpoint,
-    message: 'Your request was missing a required query parameter',
-    usedMethod: usedMethod ?? 'Unknown',
+    message: 'Your request is missing a required query-parameter',
     paramName,
   };
 }
 
 /**
  * Send an error in a response
+ * @param req The request
  * @param res The response
  * @param error The error
  */
-export function sendError(res: NextApiResponse, error: ApiError) {
-  res.status(error.code).json(error);
+export function sendError(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  error: ApiError
+) {
+  const response: ApiErrorResponse = {
+    endpoint: req.url ?? 'Unknown url',
+    usedMethod: req.method ?? 'Unknown method',
+    ...error,
+  };
+  res.status(response.code).json(response);
 }

@@ -9,7 +9,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    return sendError(res, methodNotAllowed("/player", req.method, ['GET']));
+    return sendError(req, res, methodNotAllowed(['GET']));
   }
 
   let spotifyRes = await spotifyClient.get(BaseURL, {

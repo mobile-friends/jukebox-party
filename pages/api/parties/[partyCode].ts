@@ -10,10 +10,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    return sendError(
-      res,
-      methodNotAllowed('/[partyCode]', req.method, ['GET'])
-    );
+    return sendError(req, res, methodNotAllowed(['GET']));
   }
 
   const partyCodeParam = tryQueryParam(req.query, 'partyCode');

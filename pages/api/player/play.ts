@@ -8,10 +8,7 @@ export default async function playTrack(
   res: NextApiResponse
 ) {
   if (req.method !== 'PUT') {
-    return sendError(
-      res,
-      methodNotAllowed('/player/play', req.method, ['PUT'])
-    );
+    return sendError(req, res, methodNotAllowed(['PUT']));
   }
 
   let spotifyRes = await spotifyClient.get(`${BaseURL}/play`, {

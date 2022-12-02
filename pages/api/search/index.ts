@@ -13,17 +13,17 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'GET') {
-    return sendError(res, methodNotAllowed('/search', req.method, ['GET']));
+    return sendError(req, res, methodNotAllowed(['GET']));
   }
 
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
-    return sendError(res, missingQueryParam('/search', req.method, 'q'));
+    return sendError(req, res, missingQueryParam('q'));
   }
 
   const type = tryQueryParam(req.query, 'type');
   if (type === null) {
-    return sendError(res, missingQueryParam('/search', req.method, 'type'));
+    return sendError(req, res, missingQueryParam('type'));
   }
 
   const spotifyRes = await spotifyClient.get(

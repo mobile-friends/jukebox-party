@@ -21,10 +21,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    return sendError(
-      res,
-      methodNotAllowed('/parties/join', req.method, ['POST'])
-    );
+    return sendError(req, res, methodNotAllowed(['POST']));
   }
 
   const { partyCode: unparsedPartyCode, guestName } =
