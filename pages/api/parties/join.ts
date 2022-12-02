@@ -5,6 +5,7 @@ import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
 import {
+  internalError,
   invalidPartyCode,
   methodNotAllowed,
   partyNotFound,
@@ -43,8 +44,7 @@ export default async function handler(
       case PartyDb.ErrorType.PartyNotFound:
         return sendError(req, res, partyNotFound(partyCode));
       case PartyDb.ErrorType.InvalidEntry:
-        res.status(500).json({ message: 'Internal db error' });
-        return;
+        return sendError(req, res, internalError('Internal db error'));
     }
   }
 
