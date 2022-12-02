@@ -14,11 +14,7 @@ export default function SearchTrack({ provider }) {
   const [results, setResults] = useState<any>(null);
   const router = useRouter();
   let { data: session } = useSession() as any;
-
-  useEffect(() => {
-    console.log('session', session);
-  }, [session, null]);
-
+  
   const typeInput = async (e: any) => {
     setQueryString(e.target.value);
     if (queryString?.length <= 3) return;
