@@ -90,6 +90,25 @@ export namespace PartyDb {
   }
 
   /**
+   * Subscribe to changes on a party-document
+   * @param db The database
+   * @param partyCode The code of the party
+   * @param onChange A callback function that is called when the document changed
+   */
+  export function subscribeToPartyByCode(
+    db: FirebaseDatabase,
+    partyCode: PartyCode,
+    onChange: (result: Party | PartyDb.Error) => void
+  ) {
+    const doc = documentFor(db, partyCode);
+    doc.on('value', (snapshot) => {
+      if (!snapshot.exists()) onChange(partyNotFoundError(partyCode));
+      const entry = snapshot.val();
+      onChange(tryParseEntry(entry));
+    });
+  }
+
+  /**
    * Stores a party in the database
    * @param db The database
    * @param party The party

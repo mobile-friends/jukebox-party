@@ -7,11 +7,10 @@ import { PartyDb } from '../../lib/partyDb';
 function useFetchParty(partyCode: PartyCode): Party | null | PartyDb.Error {
   const [result, setResult] = useState<Party | null | PartyDb.Error>(null);
 
-  useEffect(() => {
-    PartyDb.tryGetByCode(database, partyCode)
-      .then(setResult)
-      .catch(() => setResult(null));
-  }, [partyCode]);
+  useEffect(
+    () => PartyDb.subscribeToPartyByCode(database, partyCode, setResult),
+    [partyCode]
+  );
 
   return result;
 }
