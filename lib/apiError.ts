@@ -1,9 +1,8 @@
-import { HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PartyCode } from './partyCode';
 
 interface GenericError {
-  readonly code: HttpStatusCode;
+  readonly code: number;
   readonly message: string;
 }
 
@@ -28,7 +27,7 @@ type ApiError =
 /**
  * An error the API can return to the user
  */
-type ApiErrorResponse = ApiError & {
+export type ApiErrorResponse = ApiError & {
   readonly endpoint: string;
   readonly usedMethod: string;
 };
@@ -39,7 +38,7 @@ type ApiErrorResponse = ApiError & {
  */
 export function methodNotAllowed(allowedMethods: string[]): ApiError {
   return {
-    code: HttpStatusCode.MethodNotAllowed,
+    code: 405,
     message: 'You used a illegal http-method',
     allowedMethods,
   };
@@ -51,7 +50,7 @@ export function methodNotAllowed(allowedMethods: string[]): ApiError {
  */
 export function missingParam(paramName: string): ApiError {
   return {
-    code: HttpStatusCode.BadRequest,
+    code: 400,
     message: 'Your request is missing a required parameter',
     paramName,
   };
@@ -67,7 +66,7 @@ export function invalidPartyCode(
   paramName: string
 ): ApiError {
   const message = `${partyCodeParam} is not a valid party-code`;
-  return { code: HttpStatusCode.BadRequest, message, paramName };
+  return { code: 400, message, paramName };
 }
 
 /**
@@ -76,7 +75,7 @@ export function invalidPartyCode(
  */
 export function partyNotFound(partyCode: PartyCode): ApiError {
   const message = `Could not find a party with the code ${partyCode}`;
-  return { code: HttpStatusCode.NotFound, message, partyCode };
+  return { code: 404, message, partyCode };
 }
 
 /**
@@ -84,7 +83,7 @@ export function partyNotFound(partyCode: PartyCode): ApiError {
  * @param message A message to describe the error
  */
 export function internalError(message: string): ApiError {
-  return { code: HttpStatusCode.InternalServerError, message };
+  return { code: 500, message };
 }
 
 /**
@@ -104,4 +103,16 @@ export function sendError(
     ...error,
   };
   res.status(response.code).json(response);
+}
+
+export function isApiErrorResult<T>(
+  item: T | ApiErrorResponse
+): item is ApiErrorResponse {
+  return (
+    item instanceof Object &&
+    'code' in item &&
+    'message' in item &&
+    'endpoint' in item &&
+    'usedMethod' in item
+  );
 }

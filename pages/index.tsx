@@ -24,9 +24,14 @@ export default function Home({ provider }: Props) {
     await router.push(`/party/${partyCode}`);
   }
 
+  async function goTo404() {
+    await router.push(`/party/404`);
+  }
+
   async function joinParty() {
-    await sendJoinPartyRequest(partyCode, username);
-    await goToPartyPage();
+    const success = await sendJoinPartyRequest(partyCode, username);
+    if (success) await goToPartyPage();
+    else await goTo404();
   }
 
   function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {

@@ -52,5 +52,5 @@ export default async function handler(
   const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(database, partyWithGuest);
-  res.status(200).json(partyWithGuest);
+  res.status(201).json({});
 }
