@@ -24,4 +24,20 @@ const recentlyPlayed = async (token: string) => {
   return res.data;
 };
 
-export { currentlyPlaying, recentlyPlayed };
+const recommendations = async (
+  artists: string,
+  tracks: string,
+  token: string
+) => {
+  const res = await spotifyClient.get(
+    `${baseURL}/recommendations?limit=1&seed_artists=${artists}&seed_tracks=${tracks}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res.data;
+};
+
+export { currentlyPlaying, recentlyPlayed, recommendations };
