@@ -1,13 +1,16 @@
-import TrackView from '../components/elements/trackView';
-import { Track } from '../lib/track';
-import { Duration } from '../lib/duration';
-import { PlaybackState } from '../lib/playbackState';
+import TrackView from '../../components/elements/trackView';
+import { Track } from '../../lib/track';
+import { Duration } from '../../lib/duration';
+import { PlaybackState } from '../../lib/playbackState';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import { currentlyPlaying, recentlyPlayed } from '../httpClient/spotify/player';
-import { createTrack } from '../utils/createTrack';
-import { recommendations } from '../httpClient/spotify/browse';
-import { createSeeds } from '../utils/recommendationSeeds';
+import {
+  currentlyPlaying,
+  recentlyPlayed,
+} from '../../httpClient/spotify/player';
+import { createTrack } from '../../utils/createTrack';
+import { recommendations } from '../../httpClient/spotify/browse';
+import { createSeeds } from '../../utils/recommendationSeeds';
 
 export default function Home() {
   let { data: session } = useSession() as any;
