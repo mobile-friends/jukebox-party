@@ -4,7 +4,7 @@ import { Artist } from '../lib/artist';
 import { Duration } from '../lib/duration';
 import { PlaybackState } from '../lib/playbackState';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import {
   currentlyPlaying,
   recentlyPlayed,
@@ -16,15 +16,14 @@ export default function Home({ context }) {
   let { data: session } = useSession() as any;
   const [currentTrack, setCurrentTrack] = useState<Track>(null);
 
-  //TODO: Refactor
   useEffect(() => {
     console.log(session);
-    getCurrentlyPlaying();
-  }, [session, null]);
+    const interval = setInterval(() => {
+      getCurrentlyPlaying();
+    }, 5000);
 
-  useEffect(() => {
-    getCurrentlyPlaying();
-  }, [currentTrack]);
+    return () => clearInterval(interval);
+  }, [session, null]);
 
   const getCurrentlyPlaying = async () => {
     if (session?.user?.accessToken) {
@@ -35,9 +34,9 @@ export default function Home({ context }) {
         setCurrentTrack(track);
       } else {
         console.log(
-          'no Track is currently playing! Get recently played Track!'
+          'no Track is currently playing! Getting recently played Track!'
         );
-        getRecentlyPlayed();
+        //getRecentlyPlayed();
       }
     } else {
       console.log('waiting for session');
@@ -46,25 +45,24 @@ export default function Home({ context }) {
 
   const getRecentlyPlayed = async () => {
     const results = await recentlyPlayed(session?.user?.accessToken);
-    console.log(results.items);
-    // const tracks = [];
-    // results.items.forEach((item) => {
-    //   tracks.push(item.track.id);
-    // });
-    // const artists = [];
-    // results.items.forEach((item) => {
-    //   item.track.artists.forEach((item) => {
-    //     artists.push(item.id);
-    //   });
-    // });
+    const tracks = [];
+    results.items.forEach((item: { track: { id: string } }) => {
+      tracks.push(item.track.id);
+    });
+    const artists = [];
+    results.items.forEach((item: { track: { artists: any[] } }) => {
+      item.track.artists.forEach((item) => {
+        artists.push(item.id);
+      });
+    });
     // console.log(tracks);
     // console.log(artists);
-    // const recommendation = await recommendations(
-    //   artists.toString(),
-    //   tracks.toString(),
-    //   session?.user?.accessToken
-    // );
-    // console.log(recommendation);
+    const recommendation = await recommendations(
+      artists.toString(),
+      tracks.toString(),
+      session?.user?.accessToken
+    );
+    //console.log(recommendation);
   };
 
   return (
