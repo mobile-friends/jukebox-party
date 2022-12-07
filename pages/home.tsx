@@ -4,12 +4,10 @@ import { Duration } from '../lib/duration';
 import { PlaybackState } from '../lib/playbackState';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
-import {
-  currentlyPlaying,
-  recentlyPlayed,
-  recommendations,
-} from '../httpClient/spotify/player';
+import { currentlyPlaying, recentlyPlayed } from '../httpClient/spotify/player';
 import { createTrack } from '../utils/createTrack';
+import { recommendations } from '../httpClient/spotify/browse';
+import { createSeeds } from '../utils/recommendationSeeds';
 
 export default function Home() {
   let { data: session } = useSession() as any;
@@ -34,7 +32,7 @@ export default function Home() {
         console.log(
           'no Track is currently playing! Getting recently played Track!'
         );
-        //getRecentlyPlayed();
+        getRecentlyPlayed();
       }
     } else {
       console.log('waiting for session');
@@ -43,24 +41,14 @@ export default function Home() {
 
   const getRecentlyPlayed = async () => {
     const results = await recentlyPlayed(session?.user?.accessToken);
-    const tracks: string[] = [];
-    results.items.forEach((item: { track: { id: string } }) => {
-      tracks.push(item.track.id);
-    });
-    const artists: string[] = [];
-    results.items.forEach((item: { track: { artists: any[] } }) => {
-      item.track.artists.forEach((item) => {
-        artists.push(item.id);
-      });
-    });
-    // console.log(tracks);
-    // console.log(artists);
+    const seeds = createSeeds(results);
     const recommendation = await recommendations(
-      artists.toString(),
-      tracks.toString(),
+      //TODO: not working with array, only working with one id
+      seeds.artists.substring(0, seeds.artists.indexOf(',')),
+      seeds.tracks.substring(0, seeds.tracks.indexOf(',')),
       session?.user?.accessToken
     );
-    console.log(recommendation);
+    console.log(recommendation.tracks[0]);
   };
 
   return (
