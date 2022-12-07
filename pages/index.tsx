@@ -1,106 +1,82 @@
-import { getSession, useSession } from 'next-auth/react';
-import {
-  createParty,
-  getPartyDetails,
-  joinParty,
-} from '../httpClient/jukebox/parties';
+import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
+import { ChangeEvent, useState } from 'react';
+import Button from '../components/elements/button';
+import Input from '../components/elements/input';
+import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
+import styles from '../styles/pages/main.module.scss';
+import { GetServerSideProps, GetServerSidePropsResult } from 'next/types';
 
-import LoginButton from '../components/elements/loginButton';
-// import Input from '../components/elements/input';
-// import Button from '../components/elements/button';
+interface Props {
+  provider: ClientSafeProvider;
+}
 
-// import styles from '../styles/pages/index.module.scss';
+export default function Home({ provider }: Props) {
+  const router = useRouter();
+  const [username, setUsername] = useState<string>('');
+  const [partyCode, setPartyCode] = useState<string>('');
 
-export default function Home({ context }) {
-  const play = () => {
-    fetch('http://localhost:3000/api/player/play', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${context.user.accessToken}`,
-      },
-    });
-  };
+  function goToLogin() {
+    signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
+  }
 
-  const pause = () => {
-    fetch('https://api.spotify.com/v1/me/player/pause', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${context.user.accessToken}`,
-      },
-    });
-  };
+  async function goToPartyPage() {
+    await router.push(`/party/${partyCode}`);
+  }
+
+  async function goTo404() {
+    await router.push(`/party/404`);
+  }
+
+  async function joinParty() {
+    const success = await sendJoinPartyRequest(partyCode, username);
+    if (success) await goToPartyPage();
+    else await goTo404();
+  }
+
+  function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {
+    setUsername(e.target.value);
+  }
+
+  function onPartyCodeInout(e: ChangeEvent<HTMLInputElement>) {
+    setPartyCode(e.target.value);
+  }
+
+  function onJoinPartyClicked() {
+    joinParty().catch(console.log);
+  }
+
+  function onCreatePartyClicked() {
+    goToLogin();
+  }
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        padding: '4rem',
-      }}
-    >
-      {/* <div
-        style={{
-          height: '100vh',
-          padding: '20px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
+    <div>
+      <div className={styles.container}>
         <h1 className='text-center'>
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
-
         <form>
-          <Input placeholder='Name'></Input>
-          <Input placeholder='Session id'></Input>
-          <Button text='Join session' type='primary'></Button>
+          <Input placeholder='Name' onChange={onUsernameInput} />
+          <Input placeholder='Party code' onChange={onPartyCodeInout} />
+          <Button
+            text='Join party'
+            type='primary'
+            onClick={onJoinPartyClicked}
+          />
         </form>
-
-        <Button text='Create session' type='tertiary'></Button>
-      </div> */}
-
-      <div>
-        <h1>jukebox.party</h1>
-        <div onClick={play}>PLAY</div>
-        <br></br>
-        <div onClick={pause}>PAUSE</div>
-        <br></br>
-        <div
-          onClick={async () => {
-            await createParty('my party', 'my name');
-          }}
-        >
-          Create Room
-        </div>
-        <br></br>
-        <div
-          onClick={async () => {
-            await getPartyDetails('581398');
-          }}
-        >
-          get party details
-        </div>
-        <br></br>
-        <div
-          onClick={async () => {
-            await joinParty('581398', 'bruh');
-          }}
-        >
-          Join Party(581398)
-        </div>
-        <br></br>
-        <LoginButton />
+        <Button
+          text='Create party'
+          type='tertiary'
+          onClick={onCreatePartyClicked}
+        />
       </div>
     </div>
   );
 }
 
-export async function getServerSideProps(context) {
-  return {
-    props: {
-      context: await getSession(context),
-    },
-  };
-}
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const providers = await getProviders();
+  if (providers === null) throw new Error('Could not get spotify providers');
+  return { props: { provider: providers.spotify } };
+};

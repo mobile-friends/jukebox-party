@@ -1,32 +1,56 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../firebase.config';
-import { getPartyDetails } from '../../../httpClient/jukebox/parties';
 import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
+import { PartyCode } from '../../../lib/partyCode';
+import { PartyDb } from '../../../lib/partyDb';
+import {
+  internalError,
+  invalidPartyCode,
+  methodNotAllowed,
+  partyNotFound,
+  sendError,
+} from '../../../lib/apiError';
 
-interface RequestBody {
+export interface PartyJoinRequestBody {
   partyCode: string;
   guestName: string;
 }
 
-// Join a Party with the Party-ID
+/**
+ * Join a party using its party-code
+ * @param req The request
+ * @param res The response
+ */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method !== 'POST') {
-    res.status(405).json({ message: 'Method not allowed' });
-    return;
+    return sendError(req, res, methodNotAllowed(['POST']));
   }
 
-  const { partyCode, guestName }: RequestBody = req.body;
+  const { partyCode: partyCodeParam, guestName } =
+    req.body as PartyJoinRequestBody;
 
-  //Get the Party Objekt by ID
-  const party = await getPartyDetails(partyCode);
+  const partyCode = PartyCode.tryMake(partyCodeParam);
+  if (partyCode === null) {
+    return sendError(req, res, invalidPartyCode(partyCodeParam, 'partyCode'));
+  }
+
+  const result = await PartyDb.tryGetByCode(database, partyCode);
+  if (PartyDb.isError(result)) {
+    switch (result.kind) {
+      case PartyDb.ErrorType.PartyNotFound:
+        return sendError(req, res, partyNotFound(partyCode));
+      case PartyDb.ErrorType.InvalidEntry:
+        return sendError(req, res, internalError('Internal db error'));
+    }
+  }
+
   const guest = User.makeGuest(guestName);
-  const partyWithGuest = Party.addGuestTo(party, guest);
+  const partyWithGuest = Party.addGuestTo(result, guest);
 
-  await database.ref(`parties/${partyCode}/`).set(partyWithGuest);
-
-  res.status(200).json({ party: partyWithGuest });
+  await PartyDb.store(database, partyWithGuest);
+  res.status(201).json({});
 }

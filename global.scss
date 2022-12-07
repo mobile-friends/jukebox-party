@@ -1,6 +1,7 @@
-$dark-color: #191919;
-$light-color: #ffffff;
-$primary-color: #ECE32F;
+@import 'styles/helper/variables.scss';
+@import 'styles/components/button.module.scss';
+@import 'styles/components/input.module.scss';
+
 
 * {
     font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
@@ -31,61 +32,5 @@ body {
     }
     .text-center {
         text-align: center;
-    }
-
-    button.btn {
-        min-height: 44px;
-        border-radius: 50px;
-        font-weight: bold;
-    
-        padding: 0 20px;
-        margin: 5px 0;
-    
-        &.primary {
-            color: $dark-color;
-            background: $primary-color;
-            border: none;
-        }
-        &.secondary {
-            color: $primary-color;
-            background: none;
-            border: 1px solid $primary-color;
-        }
-        &.tertiary {
-            color: $primary-color;
-            background: none;
-            border: none;
-        }
-        &.block {
-            width: 100%;
-        }
-        &:hover {
-            opacity: 90%;
-            cursor: pointer;
-        }
-    }
-
-    input {
-        color: $light-color;
-
-        min-height: 44px;
-        border-radius: 50px;
-
-        background: #ffffff25;
-        border: none;
-
-        padding: 0 20px;
-        margin: 5px 0;
-
-        &.block {
-            width: 100%;
-        }
-        &:focus {
-            outline: none;
-            border: 1px solid $primary-color;
-        }
-        &::placeholder {
-            color: #ffffff85;
-        }
     }
 }
