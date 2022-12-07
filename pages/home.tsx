@@ -1,10 +1,9 @@
 import TrackView from '../components/elements/trackView';
 import { Track } from '../lib/track';
-import { Artist } from '../lib/artist';
 import { Duration } from '../lib/duration';
 import { PlaybackState } from '../lib/playbackState';
 import { useSession } from 'next-auth/react';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   currentlyPlaying,
   recentlyPlayed,
@@ -12,9 +11,9 @@ import {
 } from '../httpClient/spotify/player';
 import { createTrack } from '../utils/createTrack';
 
-export default function Home({ context }) {
+export default function Home() {
   let { data: session } = useSession() as any;
-  const [currentTrack, setCurrentTrack] = useState<Track>(null);
+  const [currentTrack, setCurrentTrack] = useState<Track>();
 
   useEffect(() => {
     console.log(session);
@@ -23,14 +22,13 @@ export default function Home({ context }) {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [session, null]);
+  }, [session]);
 
   const getCurrentlyPlaying = async () => {
     if (session?.user?.accessToken) {
       const result = await currentlyPlaying(session.user.accessToken);
       if (result) {
         const track = createTrack(result.item);
-        console.log(track);
         setCurrentTrack(track);
       } else {
         console.log(
@@ -45,11 +43,11 @@ export default function Home({ context }) {
 
   const getRecentlyPlayed = async () => {
     const results = await recentlyPlayed(session?.user?.accessToken);
-    const tracks = [];
+    const tracks: string[] = [];
     results.items.forEach((item: { track: { id: string } }) => {
       tracks.push(item.track.id);
     });
-    const artists = [];
+    const artists: string[] = [];
     results.items.forEach((item: { track: { artists: any[] } }) => {
       item.track.artists.forEach((item) => {
         artists.push(item.id);
@@ -62,7 +60,7 @@ export default function Home({ context }) {
       tracks.toString(),
       session?.user?.accessToken
     );
-    //console.log(recommendation);
+    console.log(recommendation);
   };
 
   return (

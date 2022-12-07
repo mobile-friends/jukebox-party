@@ -1,27 +1,24 @@
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useFetchParty from '../../hooks/parties/useFetchParty';
 import TrackView from '../../components/elements/trackView';
 import { Track } from '../../lib/track';
 import { Duration } from '../../lib/duration';
-import { Artist } from '../../lib/artist';
 import { PlaybackState } from '../../lib/playbackState';
 import { tryQueryParam } from '../../lib/query';
 import { PartyCode } from '../../lib/partyCode';
 import { PartyDb } from '../../lib/partyDb';
 import { Party } from '../../lib/party';
+import { currentlyPlaying } from '../../httpClient/spotify/player';
+import { createTrack } from '../../utils/createTrack';
+import { useSession } from 'next-auth/react';
 
 type Props = {};
 
-const testTrack = Track.make(
-  'Test-track',
-  Duration.make(2, 30),
-  [Artist.make('Mr. guitar'), Artist.make('Mrs. music')],
-  'https://media.tenor.com/kwoZiw3sdlwAAAAM/spongebob-cartoon.gif'
-);
-
 function PartyRoom({}: Props) {
   const router = useRouter();
+  let { data: session } = useSession() as any;
+  const [currentTrack, setCurrentTrack] = useState<Track>();
 
   const partyCodeParam = tryQueryParam(router.query, 'code');
   if (partyCodeParam === null) {
@@ -48,7 +45,30 @@ function PartyRoom({}: Props) {
           break;
       }
     }
+
+    const interval = setInterval(() => {
+      getCurrentlyPlaying();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [result]);
+
+  const getCurrentlyPlaying = async () => {
+    if (session?.user?.accessToken) {
+      const result = await currentlyPlaying(session.user.accessToken);
+      if (result) {
+        const track = createTrack(result.item);
+        setCurrentTrack(track);
+      } else {
+        console.log(
+          'no Track is currently playing! Getting recently played Track!'
+        );
+        //getRecentlyPlayed();
+      }
+    } else {
+      console.log('waiting for session');
+    }
+  };
 
   if (!PartyDb.isError(result)) {
     // TODO: Extract component
@@ -66,10 +86,14 @@ function PartyRoom({}: Props) {
           <p>Party Name: {party.name}</p>
           <p>Party Host: {party.host.name}</p>
           <p>Party Guests: {guestList}</p>
-          <TrackView
-            track={testTrack}
-            playbackState={PlaybackState.makePlaying(Duration.Zero)}
-          />
+          {currentTrack ? (
+            <TrackView
+              track={currentTrack}
+              playbackState={PlaybackState.makePlaying(Duration.Zero)}
+            />
+          ) : (
+            <p>NO TRACK IS CURRENTLY PLAYING!</p>
+          )}
         </div>
       );
     } else {

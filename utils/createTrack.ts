@@ -4,16 +4,18 @@ import { Track } from '../lib/track';
 
 //creates a Track of the Result Item from the API
 const createTrack = (result: any) => {
-  const trackName = result.name;
-  const trackDuration = result.duration_ms;
-  const artists = [];
+  const trackName: string = result.name;
+  const trackDuration: Duration = Duration.makeFromMiliSeconds(
+    result.duration_ms
+  );
+  const artists: Artist[] = [];
   result.artists.forEach((element: { name: string }) => {
     artists.push(Artist.make(element.name));
   });
-  const albumArtUrl = result.album.images[1].url;
-  const track = Track.make(
+  const albumArtUrl: string = result.album.images[1].url;
+  const track: Track = Track.make(
     trackName,
-    Duration.makeFromMiliSeconds(trackDuration),
+    trackDuration,
     artists,
     albumArtUrl
   );
