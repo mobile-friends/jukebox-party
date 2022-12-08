@@ -20,7 +20,7 @@ const search = async (
       Authorization: `Bearer ${token}`,
     },
   });
-  const trackData: any[] = res.data.tracks;
+  const trackData: any[] = res.data.tracks.items;
   return trackData.map((data) =>
     Track.make(
       data.name,
