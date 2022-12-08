@@ -82,7 +82,9 @@ export function partyNotFound(partyCode: PartyCode): ApiError {
  * Generic internal server error
  * @param message A message to describe the error
  */
-export function internalError(message: string): ApiError {
+export function internalError(
+  message: string = 'An internal error occurred'
+): ApiError {
   return { code: 500, message };
 }
 
