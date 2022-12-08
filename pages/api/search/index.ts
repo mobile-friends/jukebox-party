@@ -8,14 +8,8 @@ import {
 } from '../../../lib/apiError';
 
 export const BaseURL = 'search';
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'GET') {
-    return sendError(req, res, methodNotAllowed(['GET']));
-  }
 
+async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
     return sendError(req, res, missingParam('q'));
@@ -35,4 +29,14 @@ export default async function handler(
     }
   );
   res.status(200).json(spotifyRes.data);
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === 'GET') {
+    return await handleGet(req, res);
+  }
+  return sendError(req, res, methodNotAllowed(['GET']));
 }

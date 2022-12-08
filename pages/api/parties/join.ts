@@ -17,19 +17,7 @@ export interface PartyJoinRequestBody {
   guestName: string;
 }
 
-/**
- * Join a party using its party-code
- * @param req The request
- * @param res The response
- */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'POST') {
-    return sendError(req, res, methodNotAllowed(['POST']));
-  }
-
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   const { partyCode: partyCodeParam, guestName } =
     req.body as PartyJoinRequestBody;
 
@@ -53,4 +41,19 @@ export default async function handler(
 
   await PartyDb.store(database, partyWithGuest);
   res.status(201).json({});
+}
+
+/**
+ * Join a party using its party-code
+ * @param req The request
+ * @param res The response
+ */
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === 'POST') {
+    return await handlePost(req, res);
+  }
+  return sendError(req, res, methodNotAllowed(['POST']));
 }

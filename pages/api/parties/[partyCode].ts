@@ -13,14 +13,7 @@ import {
 
 const ParamName = 'partyCode';
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== 'GET') {
-    return sendError(req, res, methodNotAllowed(['GET']));
-  }
-
+async function handleGet(req: NextApiRequest, res: NextApiResponse) {
   const partyCodeParam = tryQueryParam(req.query, ParamName);
   if (partyCodeParam === null) {
     return sendError(req, res, missingParam(ParamName));
@@ -37,4 +30,15 @@ export default async function handler(
   }
 
   res.status(200).json(party);
+}
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method === 'GET') {
+    return await handleGet(req, res);
+  }
+
+  return sendError(req, res, methodNotAllowed(['GET']));
 }
