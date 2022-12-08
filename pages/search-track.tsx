@@ -1,6 +1,6 @@
 import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../components/elements/input';
 import TrackListItemView from '../components/elements/trackListItemView';
 import { search } from '../httpClient/jukebox/search';
@@ -12,27 +12,36 @@ interface Props {
   provider: ClientSafeProvider;
 }
 
+type QueryString = string;
+
+const MinQueryLength = 4;
+
+function isValidQueryString(s: string): s is QueryString {
+  return s.length >= MinQueryLength;
+}
+
 export default function SearchTrack({ provider }: Props) {
-  const [queryString, setQueryString] = useState<string>('');
+  const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const router = useRouter();
   let { data: session } = useSession() as any;
 
-  const typeInput = async (e: any) => {
-    setQueryString(e.target.value);
-    if (queryString?.length <= 3) return;
-    try {
-      const tracks = await search(
-        queryString,
-        'track',
-        session.user.accessToken
-      );
-      setTracks(tracks);
-    } catch (e) {
-      console.log(e);
-      setTracks([]);
-    }
+  const onQueryInputChanged = async (e: ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const newQueryString = isValidQueryString(input) ? input : null;
+    setQueryString(newQueryString);
   };
+
+  useEffect(() => {
+    if (queryString === null) return;
+
+    search(queryString, 'track', session.user.accessToken)
+      .then(setTracks)
+      .catch((e) => {
+        console.error(e);
+        setTracks([]);
+      });
+  }, [queryString]);
 
   return (
     <div>
@@ -43,7 +52,7 @@ export default function SearchTrack({ provider }: Props) {
         <div className={styles.container} style={{ padding: 0 }}>
           <Input
             placeholder='What do you want to listen to?'
-            onChange={typeInput}
+            onChange={onQueryInputChanged}
           />
           <ul style={{ overflow: 'scroll' }}>
             {tracks?.map((track) => (
