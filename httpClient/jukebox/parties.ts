@@ -1,6 +1,6 @@
 import { jukeboxClient } from '.';
 import { Party } from '../../lib/party';
-import { PartyJoinRequestBody } from '../../pages/api/parties/join';
+import { PostRequestBody } from '../../pages/api/parties/join';
 import { ApiErrorResponse, isApiErrorResult } from '../../lib/apiError';
 
 const BaseUrl = 'parties';
@@ -27,7 +27,7 @@ async function sendJoinPartyRequest(
   guestName: string
 ): Promise<boolean> {
   guestName = encodeURIComponent(guestName);
-  const data: PartyJoinRequestBody = {
+  const data: PostRequestBody = {
     partyCode,
     guestName,
   };

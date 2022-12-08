@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { tryQueryParam } from '../../../lib/query';
 import {
+  ApiErrorResponse,
   methodNotAllowed,
   missingParam,
   sendError,
@@ -9,7 +10,14 @@ import {
 
 export const BaseURL = 'search';
 
-async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+export type GetResponseBody = any | ApiErrorResponse;
+
+export type ResponseBody = GetResponseBody | ApiErrorResponse;
+
+async function handleGet(
+  req: NextApiRequest,
+  res: NextApiResponse<GetResponseBody>
+) {
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
     return sendError(req, res, missingParam('q'));
@@ -33,7 +41,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'GET') {
     return await handleGet(req, res);

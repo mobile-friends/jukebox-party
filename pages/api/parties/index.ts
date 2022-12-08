@@ -3,16 +3,27 @@ import database from '../../../firebase.config';
 import { User } from '../../../lib/user';
 import { Party } from '../../../lib/party';
 import { PartyDb } from '../../../lib/partyDb';
-import { methodNotAllowed, sendError } from '../../../lib/apiError';
+import {
+  ApiErrorResponse,
+  methodNotAllowed,
+  sendError,
+} from '../../../lib/apiError';
 
-interface RequestBody {
+export interface PostRequestBody {
   partyName: string;
   hostName: string;
 }
 
-async function handlePost(req: NextApiRequest, res: NextApiResponse) {
+export type PostResponseBody = Party | ApiErrorResponse;
+
+export type ResponseBody = PostResponseBody | ApiErrorResponse;
+
+async function handlePost(
+  req: NextApiRequest,
+  res: NextApiResponse<PostResponseBody>
+) {
   // TODO: Check if body is well-formed
-  const { partyName, hostName } = req.body as RequestBody;
+  const { partyName, hostName } = req.body as PostRequestBody;
 
   const host = User.makeHost(hostName);
   const party = Party.startNew(partyName, host);
@@ -28,7 +39,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
  */
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'POST') {
     return await handlePost(req, res);

@@ -5,6 +5,7 @@ import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';
 import { PartyDb } from '../../../lib/partyDb';
 import {
+  ApiErrorResponse,
   internalError,
   invalidPartyCode,
   methodNotAllowed,
@@ -12,14 +13,20 @@ import {
   sendError,
 } from '../../../lib/apiError';
 
-export interface PartyJoinRequestBody {
+export interface PostRequestBody {
   partyCode: string;
   guestName: string;
 }
 
-async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-  const { partyCode: partyCodeParam, guestName } =
-    req.body as PartyJoinRequestBody;
+export type PostResponseBody = {} | ApiErrorResponse;
+
+export type ResponseBody = PostResponseBody | ApiErrorResponse;
+
+async function handlePost(
+  req: NextApiRequest,
+  res: NextApiResponse<PostResponseBody>
+) {
+  const { partyCode: partyCodeParam, guestName } = req.body as PostRequestBody;
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
@@ -50,7 +57,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
  */
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'POST') {
     return await handlePost(req, res);

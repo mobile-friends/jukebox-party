@@ -1,10 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
-import { methodNotAllowed, sendError } from '../../../lib/apiError';
+import {
+  ApiErrorResponse,
+  methodNotAllowed,
+  sendError,
+} from '../../../lib/apiError';
 
 export const BaseURL = 'me/player/';
 
-async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+export type GetResponseBody = any | ApiErrorResponse;
+
+export type ResponseBody = GetResponseBody | ApiErrorResponse;
+
+async function handleGet(
+  req: NextApiRequest,
+  res: NextApiResponse<GetResponseBody>
+) {
   let spotifyRes = await spotifyClient.get(BaseURL, {
     headers: {
       Authorization: req.headers.authorization,
@@ -15,7 +26,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'GET') {
     return await handleGet(req, res);

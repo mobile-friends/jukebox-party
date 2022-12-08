@@ -1,9 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '../../../httpClient/spotify';
 import { BaseURL } from './index';
-import { methodNotAllowed, sendError } from '../../../lib/apiError';
+import {
+  ApiErrorResponse,
+  methodNotAllowed,
+  sendError,
+} from '../../../lib/apiError';
 
-async function handlePut(req: NextApiRequest, res: NextApiResponse) {
+export type PutResponseBody = any;
+
+export type ResponseBody = PutResponseBody | ApiErrorResponse;
+
+async function handlePut(
+  req: NextApiRequest,
+  res: NextApiResponse<PutResponseBody>
+) {
   let spotifyRes = await spotifyClient.get(`${BaseURL}/play`, {
     headers: {
       Authorization: req.headers.authorization,
@@ -14,7 +25,7 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function playTrack(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'PUT') {
     return await handlePut(req, res);

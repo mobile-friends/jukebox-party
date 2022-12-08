@@ -4,16 +4,25 @@ import { PartyCode } from '../../../lib/partyCode';
 import { tryQueryParam } from '../../../lib/query';
 import { PartyDb } from '../../../lib/partyDb';
 import {
+  ApiErrorResponse,
   invalidPartyCode,
   methodNotAllowed,
   missingParam,
   partyNotFound,
   sendError,
 } from '../../../lib/apiError';
+import { Party } from '../../../lib/party';
 
 const ParamName = 'partyCode';
 
-async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+export type GetResponseBody = Party | PartyDb.Error | ApiErrorResponse;
+
+export type ResponseBody = GetResponseBody | ApiErrorResponse;
+
+async function handleGet(
+  req: NextApiRequest,
+  res: NextApiResponse<GetResponseBody>
+) {
   const partyCodeParam = tryQueryParam(req.query, ParamName);
   if (partyCodeParam === null) {
     return sendError(req, res, missingParam(ParamName));
@@ -34,7 +43,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<ResponseBody>
 ) {
   if (req.method === 'GET') {
     return await handleGet(req, res);

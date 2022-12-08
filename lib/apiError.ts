@@ -92,9 +92,9 @@ export function internalError(message: string): ApiError {
  * @param res The response
  * @param error The error
  */
-export function sendError(
+export function sendError<T>(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<T | ApiErrorResponse>,
   error: ApiError
 ) {
   const response: ApiErrorResponse = {
