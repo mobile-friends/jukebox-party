@@ -1,25 +1,25 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PartyCode } from './partyCode';
 
-interface GenericError {
+export interface GenericApiError {
   readonly code: number;
   readonly message: string;
 }
 
-interface MethodNotAllowedError extends GenericError {
+interface MethodNotAllowedError extends GenericApiError {
   readonly allowedMethods: string[];
 }
 
-interface ParamError extends GenericError {
+interface ParamError extends GenericApiError {
   readonly paramName: string;
 }
 
-interface PartyNotFoundError extends GenericError {
+interface PartyNotFoundError extends GenericApiError {
   readonly partyCode: PartyCode;
 }
 
 type ApiError =
-  | GenericError
+  | GenericApiError
   | MethodNotAllowedError
   | ParamError
   | PartyNotFoundError;
