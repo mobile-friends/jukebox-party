@@ -4,7 +4,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { createParty } from '../httpClient/jukebox/parties';
-import { Party } from '../lib/party';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '../lib/partyCode';
 

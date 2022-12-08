@@ -5,7 +5,7 @@ import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
-import { GetServerSideProps, GetServerSidePropsResult } from 'next/types';
+import { GetServerSideProps } from 'next/types';
 
 interface Props {
   provider: ClientSafeProvider;
