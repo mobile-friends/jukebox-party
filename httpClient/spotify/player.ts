@@ -24,4 +24,13 @@ const recentlyPlayed = async (token: string) => {
   return res.data;
 };
 
-export { currentlyPlaying, recentlyPlayed };
+const playbackState = async (token: string) => {
+  const res = await spotifyClient.get(`${baseURL}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return res.data;
+};
+
+export { currentlyPlaying, recentlyPlayed, playbackState };

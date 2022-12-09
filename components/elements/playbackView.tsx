@@ -17,6 +17,7 @@ export default function PlaybackView({
   const progressText = Duration.formatted(
     PlaybackState.playTimeOf(playbackState)
   );
+  console.log(progressText);
 
   const trackDurationText = Duration.formatted(trackDuration);
 

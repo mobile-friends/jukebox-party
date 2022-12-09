@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import {
   currentlyPlaying,
+  playbackState,
   recentlyPlayed,
 } from '../../httpClient/spotify/player';
 import { createTrack } from '../../utils/createTrack';
@@ -15,6 +16,9 @@ import { createSeeds } from '../../utils/recommendationSeeds';
 export default function Home() {
   let { data: session } = useSession() as any;
   const [currentTrack, setCurrentTrack] = useState<Track>();
+  const [playbackProgress, setPlaybackProgress] = useState<Duration>(
+    Duration.Zero
+  );
 
   useEffect(() => {
     console.log(session);
@@ -22,23 +26,24 @@ export default function Home() {
       getCurrentlyPlaying();
     }, 5000);
 
-    return () => clearInterval(interval);
+    const intervalPlayback = setInterval(() => {
+      getPlaybackState();
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(intervalPlayback);
+    };
   }, [session]);
 
   const getCurrentlyPlaying = async () => {
-    if (session?.user?.accessToken) {
-      const result = await currentlyPlaying(session.user.accessToken);
-      if (result) {
-        const track = createTrack(result.item);
-        setCurrentTrack(track);
-      } else {
-        console.log(
-          'no Track is currently playing! Getting recently played Track!'
-        );
-        getRecentlyPlayed();
-      }
+    const result = await currentlyPlaying(session?.user?.accessToken);
+    if (result) {
+      const track = createTrack(result.item);
+      setCurrentTrack(track);
     } else {
-      console.log('waiting for session');
+      console.log('no Track is currently playing! Getting Recommendation!');
+      getRecentlyPlayed();
     }
   };
 
@@ -54,13 +59,24 @@ export default function Home() {
     console.log(recommendation.tracks[0]);
   };
 
+  const getPlaybackState = async () => {
+    await playbackState(session?.user?.accessToken)
+      .then((result) => {
+        const progressDuration: Duration = Duration.makeFromMiliSeconds(
+          result.progress_ms
+        );
+        setPlaybackProgress(progressDuration);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <div>
       <h1>Home</h1>
       {currentTrack ? (
         <TrackView
           track={currentTrack}
-          playbackState={PlaybackState.makePlaying(Duration.Zero)}
+          playbackState={PlaybackState.makePlaying(playbackProgress)}
         />
       ) : (
         <></>
