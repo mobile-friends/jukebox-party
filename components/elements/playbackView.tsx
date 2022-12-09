@@ -1,6 +1,7 @@
 import { PlaybackState } from '../../lib/playbackState';
 import { Duration } from '../../lib/duration';
 import ProgressBar from './progressBar';
+import styles from '../../styles/components/playbackView.module.scss';
 
 export interface PlaybackViewProps {
   playbackState: PlaybackState;
@@ -23,11 +24,17 @@ export default function PlaybackView({
 
   return (
     <div>
-      <span>{`${isPlayingText} ${progressText} / ${trackDurationText}`}</span>
-      <ProgressBar
-        progress={playbackState.playTime}
-        duration={trackDuration}
-      ></ProgressBar>
+      <label>{isPlayingText}</label>
+      <div className={styles.container}>
+        <ProgressBar
+          progress={playbackState.playTime}
+          duration={trackDuration}
+        ></ProgressBar>
+        <div className={styles.row}>
+          <label>{progressText}</label>
+          <label>{trackDurationText}</label>
+        </div>
+      </div>
     </div>
   );
 }
