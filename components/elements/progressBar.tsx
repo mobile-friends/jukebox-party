@@ -8,7 +8,7 @@ export interface ProgressBarProps {
 
 export default function ProgressBar({ progress, duration }: ProgressBarProps) {
   const fillerWidth = {
-    width: `${Math.round((progress / duration) * 100)}%`,
+    width: `${(progress / duration) * 100}%`,
   };
 
   return (
