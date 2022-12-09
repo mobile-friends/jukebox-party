@@ -3,7 +3,7 @@ import { Track } from '../../lib/track';
 import { Duration } from '../../lib/duration';
 import { PlaybackState } from '../../lib/playbackState';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   currentlyPlaying,
   playbackState,
