@@ -18,11 +18,6 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   res.status(201).json(response);
 }
 
-/**
- * Creates a new Party by adding a new collection with a randomly generated room-code as its ID
- * @param req The request
- * @param res The response
- */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
