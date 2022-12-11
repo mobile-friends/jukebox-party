@@ -23,14 +23,10 @@ export default function Home() {
     if (!session) return;
 
     getCurrentlyPlaying();
-    const interval = setInterval(() => {
-      getCurrentlyPlaying();
-    }, 5000);
+    const interval = setInterval(getCurrentlyPlaying, 5000);
 
     getPlaybackState();
-    const intervalPlayback = setInterval(() => {
-      getPlaybackState();
-    }, 1000);
+    const intervalPlayback = setInterval(getPlaybackState, 1000);
 
     return () => {
       clearInterval(interval);
@@ -42,26 +38,25 @@ export default function Home() {
     try {
       const result = await currentlyPlaying(session?.user?.accessToken);
       if (result) {
-        if (currentTrack?.name === result.item?.name) return;
-        const track = createTrack(result.item);
-        setCurrentTrack(track);
+        setCurrentTrack(createTrack(result.item));
       } else {
         console.log('no Track is currently playing! Getting Recommendation!');
-        getRecentlyPlayed();
+        getRecentlyPlayedRecommendation();
       }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getRecentlyPlayed = async () => {
+  const getRecentlyPlayedRecommendation = async () => {
     try {
       const results = await recentlyPlayed(session?.user?.accessToken);
       const recommendation = await recommendations(
         results.items.map((item: any) => item.track.id).join(','),
         session?.user?.accessToken
       );
-      console.log(recommendation.tracks[0]);
+      console.log('Recommendation: ', recommendation.tracks[0]);
+      //TODO: add to Queue
     } catch (error) {
       console.error(error);
     }
@@ -70,6 +65,7 @@ export default function Home() {
   const getPlaybackState = async () => {
     try {
       const result = await playbackState(session?.user?.accessToken);
+      if (!result) return;
       const progressDuration: Duration = Duration.makeFromMiliSeconds(
         result.progress_ms
       );
