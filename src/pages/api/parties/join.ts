@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import database from '../../../firebase.config';
+import database from '../../../../firebase.config';
 import { Party } from '../../../lib/party';
 import { User } from '../../../lib/user';
 import { PartyCode } from '../../../lib/partyCode';

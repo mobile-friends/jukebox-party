@@ -1,4 +1,4 @@
-import { jukeboxClient } from '.';
+import { jukeboxClient } from './index';
 import { Track } from '../../lib/track';
 import { Duration } from '../../lib/duration';
 import { Artist } from '../../lib/artist';

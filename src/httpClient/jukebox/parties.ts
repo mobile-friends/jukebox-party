@@ -1,4 +1,4 @@
-import { jukeboxClient } from '.';
+import { jukeboxClient } from './index';
 import { Party } from '../../lib/party';
 import { PostRequestBody } from '../../pages/api/parties/join';
 import { ApiErrorResponse, isApiErrorResult } from '../../lib/apiError';
