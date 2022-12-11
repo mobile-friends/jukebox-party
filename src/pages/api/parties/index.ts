@@ -8,28 +8,14 @@ import {
   methodNotAllowed,
   sendError,
 } from '../../../lib/apiError';
+import { CreatePartyRequestDto } from '../../../createParty/dto';
+import tryCreateParty from '../../../createParty';
 
-export interface PostRequestBody {
-  partyName: string;
-  hostName: string;
-}
-
-export type PostResponseBody = Party | ApiErrorResponse;
-
-export type ResponseBody = PostResponseBody | ApiErrorResponse;
-
-async function handlePost(
-  req: NextApiRequest,
-  res: NextApiResponse<PostResponseBody>
-) {
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Check if body is well-formed
-  const { partyName, hostName } = req.body as PostRequestBody;
-
-  const host = User.makeHost(hostName);
-  const party = Party.startNew(partyName, host);
-
-  await PartyDb.store(database, party);
-  res.status(201).json(party);
+  const request = req.body as CreatePartyRequestDto;
+  const response = await tryCreateParty(request, database);
+  res.status(201).json(response);
 }
 
 /**
@@ -39,11 +25,12 @@ async function handlePost(
  */
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ResponseBody>
+  res: NextApiResponse
 ) {
-  if (req.method === 'POST') {
-    return await handlePost(req, res);
+  switch (req.method) {
+    case 'POST':
+      return await handlePost(req, res);
+    default:
+      return sendError(req, res, methodNotAllowed(['POST']));
   }
-
-  return sendError(req, res, methodNotAllowed(['POST']));
 }
