@@ -9,7 +9,7 @@ import {
   sendError,
 } from '@src/lib/apiError';
 import { CreatePartyRequestDto } from '@src/createParty/dto';
-import tryCreateParty from '../../../createParty';
+import tryCreateParty from '../../../createParty/server';
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Check if body is well-formed
