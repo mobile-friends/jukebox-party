@@ -9,9 +9,14 @@ import { tryQueryParam } from '../../lib/query';
 import { PartyCode } from '../../lib/partyCode';
 import { PartyDb } from '../../lib/partyDb';
 import { Party } from '../../lib/party';
-import { currentlyPlaying } from '../../httpClient/spotify/player';
+import {
+  currentlyPlaying,
+  playbackState,
+  recentlyPlayed,
+} from '../../httpClient/spotify/player';
 import { createTrack } from '../../utils/createTrack';
 import { useSession } from 'next-auth/react';
+import { recommendations } from '../../httpClient/spotify/browse';
 
 type Props = {};
 
@@ -19,6 +24,9 @@ function PartyRoom({}: Props) {
   const router = useRouter();
   let { data: session } = useSession() as any;
   const [currentTrack, setCurrentTrack] = useState<Track>();
+  const [playbackProgress, setPlaybackProgress] = useState<Duration>(
+    Duration.Zero
+  );
 
   const partyCodeParam = tryQueryParam(router.query, 'code');
   if (partyCodeParam === null) {
@@ -46,27 +54,56 @@ function PartyRoom({}: Props) {
       }
     }
 
-    const interval = setInterval(() => {
-      getCurrentlyPlaying();
-    }, 5000);
+    getCurrentlyPlaying();
+    const interval = setInterval(getCurrentlyPlaying, 5000);
 
-    return () => clearInterval(interval);
+    getPlaybackState();
+    const intervalPlayback = setInterval(getPlaybackState, 1000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(intervalPlayback);
+    };
   }, [result]);
 
   const getCurrentlyPlaying = async () => {
-    if (session?.user?.accessToken) {
-      const result = await currentlyPlaying(session.user.accessToken);
+    try {
+      const result = await currentlyPlaying(session?.user?.accessToken);
       if (result) {
-        const track = createTrack(result.item);
-        setCurrentTrack(track);
+        setCurrentTrack(createTrack(result.item));
       } else {
-        console.log(
-          'no Track is currently playing! Getting recently played Track!'
-        );
-        //getRecentlyPlayed();
+        console.log('no Track is currently playing! Getting Recommendation!');
+        getRecentlyPlayedRecommendation();
       }
-    } else {
-      console.log('waiting for session');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getRecentlyPlayedRecommendation = async () => {
+    try {
+      const results = await recentlyPlayed(session?.user?.accessToken);
+      const recommendation = await recommendations(
+        results.items.map((item: any) => item.track.id).join(','),
+        session?.user?.accessToken
+      );
+      console.log('Recommendation: ', recommendation.tracks[0]);
+      //TODO: add to Queue
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getPlaybackState = async () => {
+    try {
+      const result = await playbackState(session?.user?.accessToken);
+      if (!result) return;
+      const progressDuration: Duration = Duration.makeFromMiliSeconds(
+        result.progress_ms
+      );
+      setPlaybackProgress(progressDuration);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -89,10 +126,13 @@ function PartyRoom({}: Props) {
           {currentTrack ? (
             <TrackView
               track={currentTrack}
-              playbackState={PlaybackState.makePlaying(Duration.Zero)}
+              playbackState={PlaybackState.makePlaying(playbackProgress)}
             />
           ) : (
-            <p>NO TRACK IS CURRENTLY PLAYING!</p>
+            <div>
+              <p>NO TRACK IS CURRENTLY PLAYING!</p>
+              <p>Please press on the play button in Spotify!</p>
+            </div>
           )}
         </div>
       );
