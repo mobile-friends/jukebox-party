@@ -1,12 +1,8 @@
 import { spotifyClient } from '.';
 
-const recommendations = async (
-  artists: string,
-  tracks: string,
-  token: string
-) => {
+const recommendations = async (tracks: string, token: string) => {
   const res = await spotifyClient.get(
-    `/recommendations?limit=1&seed_artists=${artists}&seed_tracks=${tracks}`,
+    `/recommendations?limit=1&seed_tracks=${tracks}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

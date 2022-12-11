@@ -11,7 +11,6 @@ import {
 } from '../../httpClient/spotify/player';
 import { createTrack } from '../../utils/createTrack';
 import { recommendations } from '../../httpClient/spotify/browse';
-import { createSeeds } from '../../utils/recommendationSeeds';
 
 export default function Home() {
   let { data: session } = useSession() as any;
@@ -21,11 +20,14 @@ export default function Home() {
   );
 
   useEffect(() => {
-    console.log(session);
+    if (!session) return;
+
+    getCurrentlyPlaying();
     const interval = setInterval(() => {
       getCurrentlyPlaying();
     }, 5000);
 
+    getPlaybackState();
     const intervalPlayback = setInterval(() => {
       getPlaybackState();
     }, 1000);
@@ -40,6 +42,7 @@ export default function Home() {
     try {
       const result = await currentlyPlaying(session?.user?.accessToken);
       if (result) {
+        if (currentTrack?.name === result.item?.name) return;
         const track = createTrack(result.item);
         setCurrentTrack(track);
       } else {
@@ -47,23 +50,20 @@ export default function Home() {
         getRecentlyPlayed();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const getRecentlyPlayed = async () => {
     try {
       const results = await recentlyPlayed(session?.user?.accessToken);
-      const seeds = createSeeds(results);
       const recommendation = await recommendations(
-        //TODO: not working with more ids, only working with one id
-        seeds.artists.substring(0, seeds.artists.indexOf(',')),
-        seeds.tracks.substring(0, seeds.tracks.indexOf(',')),
+        results.items.map((item: any) => item.track.id).join(','),
         session?.user?.accessToken
       );
       console.log(recommendation.tracks[0]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -75,7 +75,7 @@ export default function Home() {
       );
       setPlaybackProgress(progressDuration);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
