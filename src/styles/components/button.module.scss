@@ -1,33 +1,33 @@
 @import '../helper/variables';
 
 button.btn {
-    min-height: 44px;
-    border-radius: 50px;
-    font-weight: bold;
+  min-height: 44px;
+  border-radius: 50px;
+  font-weight: bold;
 
-    padding: 0 20px;
-    margin: 5px 0;
+  padding: 0 20px;
+  margin: 5px 0;
 
-    &.primary {
-        color: $dark-color;
-        background: $primary-color;
-        border: none;
-    }
-    &.secondary {
-        color: $primary-color;
-        background: none;
-        border: 1px solid $primary-color;
-    }
-    &.tertiary {
-        color: $primary-color;
-        background: none;
-        border: none;
-    }
-    &.block {
-        width: 100%;
-    }
-    &:hover {
-        opacity: 90%;
-        cursor: pointer;
-    }
+  &.primary {
+    color: $dark-color;
+    background: $primary-color;
+    border: none;
+  }
+  &.secondary {
+    color: $primary-color;
+    background: none;
+    border: 1px solid $primary-color;
+  }
+  &.tertiary {
+    color: $primary-color;
+    background: none;
+    border: none;
+  }
+  &.block {
+    width: 100%;
+  }
+  &:hover {
+    opacity: 90%;
+    cursor: pointer;
+  }
 }

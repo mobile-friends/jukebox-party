@@ -59,5 +59,5 @@ export namespace Duration {
   /**
    * A duration of zero seconds
    */
-  export const Zero = makeFromSeconds(0)
+  export const Zero = makeFromSeconds(0);
 }

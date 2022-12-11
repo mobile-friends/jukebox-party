@@ -71,5 +71,4 @@ export namespace PlaybackState {
   export function togglePlaying(state: PlaybackState): PlaybackState {
     return make(playTimeOf(state), !isPlaying(state));
   }
-
 }
