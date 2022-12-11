@@ -1,7 +1,7 @@
 import { jukeboxClient } from './index';
-import { Party } from '../../lib/party';
-import { PostRequestBody } from '../../pages/api/parties/join';
-import { ApiErrorResponse, isApiErrorResult } from '../../lib/apiError';
+import { Party } from '@src/lib/party';
+import { PostRequestBody } from '@src/pages/api/parties/join';
+import { ApiErrorResponse, isApiErrorResult } from '@src/lib/apiError';
 
 const BaseUrl = 'parties';
 

@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { Party } from '../../../lib/party';
-import { User } from '../../../lib/user';
-import { PartyCode } from '../../../lib/partyCode';
-import { PartyDb } from '../../../lib/partyDb';
+import { Party } from '@src/lib/party';
+import { User } from '@src/lib/user';
+import { PartyCode } from '@src/lib/partyCode';
+import { PartyDb } from '@src/lib/partyDb';
 import {
   ApiErrorResponse,
   internalError,
@@ -11,7 +11,7 @@ import {
   methodNotAllowed,
   partyNotFound,
   sendError,
-} from '../../../lib/apiError';
+} from '@src/lib/apiError';
 
 export interface PostRequestBody {
   partyCode: string;

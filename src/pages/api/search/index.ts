@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { spotifyClient } from '../../../httpClient/spotify';
-import { tryQueryParam } from '../../../lib/query';
+import { spotifyClient } from '@src/httpClient/spotify';
+import { tryQueryParam } from '@src/lib/query';
 import {
   ApiErrorResponse,
   methodNotAllowed,
   missingParam,
   sendError,
-} from '../../../lib/apiError';
+} from '@src/lib/apiError';
 
 export const BaseURL = 'search';
 

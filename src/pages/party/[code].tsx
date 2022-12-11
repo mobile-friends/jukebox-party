@@ -2,14 +2,14 @@ import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import useFetchParty from '../../hooks/parties/useFetchParty';
 import TrackView from '../../components/elements/trackView';
-import { Track } from '../../lib/track';
-import { Duration } from '../../lib/duration';
-import { Artist } from '../../lib/artist';
-import { PlaybackState } from '../../lib/playbackState';
-import { tryQueryParam } from '../../lib/query';
-import { PartyCode } from '../../lib/partyCode';
-import { PartyDb } from '../../lib/partyDb';
-import { Party } from '../../lib/party';
+import { Track } from '@src/lib/track';
+import { Duration } from '@src/lib/duration';
+import { Artist } from '@src/lib/artist';
+import { PlaybackState } from '@src/lib/playbackState';
+import { tryQueryParam } from '@src/lib/query';
+import { PartyCode } from '@src/lib/partyCode';
+import { PartyDb } from '@src/lib/partyDb';
+import { Party } from '@src/lib/party';
 
 type Props = {};
 

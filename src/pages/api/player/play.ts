@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { spotifyClient } from '../../../httpClient/spotify';
+import { spotifyClient } from '@src/httpClient/spotify';
 import { BaseURL } from './index';
 import {
   ApiErrorResponse,
   methodNotAllowed,
   sendError,
-} from '../../../lib/apiError';
+} from '@src/lib/apiError';
 
 export type PutResponseBody = any;
 

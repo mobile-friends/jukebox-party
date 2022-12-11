@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { PartyCode } from '../../../lib/partyCode';
-import { tryQueryParam } from '../../../lib/query';
-import { PartyDb } from '../../../lib/partyDb';
+import { PartyCode } from '@src/lib/partyCode';
+import { tryQueryParam } from '@src/lib/query';
+import { PartyDb } from '@src/lib/partyDb';
 import {
   ApiErrorResponse,
   invalidPartyCode,
@@ -10,8 +10,8 @@ import {
   missingParam,
   partyNotFound,
   sendError,
-} from '../../../lib/apiError';
-import { Party } from '../../../lib/party';
+} from '@src/lib/apiError';
+import { Party } from '@src/lib/party';
 
 const ParamName = 'partyCode';
 

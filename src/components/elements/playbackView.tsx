@@ -1,5 +1,5 @@
-import { PlaybackState } from '../../lib/playbackState';
-import { Duration } from '../../lib/duration';
+import { PlaybackState } from '@src/lib/playbackState';
+import { Duration } from '@src/lib/duration';
 
 export interface PlaybackViewProps {
   playbackState: PlaybackState;

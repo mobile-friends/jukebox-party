@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { spotifyClient } from '../../../httpClient/spotify';
+import { spotifyClient } from '@src/httpClient/spotify';
 import {
   ApiErrorResponse,
   methodNotAllowed,
   sendError,
-} from '../../../lib/apiError';
+} from '@src/lib/apiError';
 
 export const BaseURL = 'me/player/';
 

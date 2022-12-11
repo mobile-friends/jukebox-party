@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { User } from '../../../lib/user';
-import { Party } from '../../../lib/party';
-import { PartyDb } from '../../../lib/partyDb';
+import { User } from '@src/lib/user';
+import { Party } from '@src/lib/party';
+import { PartyDb } from '@src/lib/partyDb';
 import {
   ApiErrorResponse,
   methodNotAllowed,
   sendError,
-} from '../../../lib/apiError';
-import { CreatePartyRequestDto } from '../../../createParty/dto';
+} from '@src/lib/apiError';
+import { CreatePartyRequestDto } from '@src/createParty/dto';
 import tryCreateParty from '../../../createParty';
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
