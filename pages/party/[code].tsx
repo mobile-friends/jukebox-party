@@ -27,6 +27,7 @@ function PartyRoom({}: Props) {
   const [playbackProgress, setPlaybackProgress] = useState<Duration>(
     Duration.Zero
   );
+  const [playbackIsPlaying, setPlaybackIsPlaying] = useState<boolean>(false);
 
   const partyCodeParam = tryQueryParam(router.query, 'code');
   if (partyCodeParam === null) {
@@ -101,6 +102,7 @@ function PartyRoom({}: Props) {
       const progressDuration: Duration = Duration.makeFromMiliSeconds(
         result.progress_ms
       );
+      setPlaybackIsPlaying(result.is_playing);
       setPlaybackProgress(progressDuration);
     } catch (error) {
       console.error(error);
@@ -126,7 +128,7 @@ function PartyRoom({}: Props) {
           {currentTrack ? (
             <TrackView
               track={currentTrack}
-              playbackState={PlaybackState.makePlaying(playbackProgress)}
+              playbackState={PlaybackState.makePlaying(playbackProgress, playbackIsPlaying)}
             />
           ) : (
             <div>
