@@ -51,11 +51,11 @@ function CreateParty({}: Props) {
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
           <Button
             text='Create party'
-            type='primary'
+            type='primary block'
             onClick={onCreatePartyClicked}
           />
         </form>
-        <Button text='Back' type='tertiary' onClick={onBackClicked} />
+        <Button text='Back' type='tertiary block' onClick={onBackClicked} />
       </div>
     </div>
   );
