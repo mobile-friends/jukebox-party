@@ -17,6 +17,7 @@ import {
 import { createTrack } from '../../utils/createTrack';
 import { useSession } from 'next-auth/react';
 import { recommendations } from '../../httpClient/spotify/browse';
+import Navbar from '../../components/elements/navbar';
 
 type Props = {};
 
@@ -128,7 +129,10 @@ function PartyRoom({}: Props) {
           {currentTrack ? (
             <TrackView
               track={currentTrack}
-              playbackState={PlaybackState.makePlaying(playbackProgress, playbackIsPlaying)}
+              playbackState={PlaybackState.makePlaying(
+                playbackProgress,
+                playbackIsPlaying
+              )}
             />
           ) : (
             <div>
@@ -136,6 +140,8 @@ function PartyRoom({}: Props) {
               <p>Please press on the play button in Spotify!</p>
             </div>
           )}
+
+          <Navbar />
         </div>
       );
     } else {

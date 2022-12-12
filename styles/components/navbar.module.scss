@@ -1,0 +1,12 @@
+@import '../helper/variables.scss';
+
+div.navbar {
+    padding: 10px;
+
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
+
+    width: 100vw;
+    display: flex;
+}

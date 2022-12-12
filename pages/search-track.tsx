@@ -7,6 +7,7 @@ import { search } from '../httpClient/jukebox/search';
 import { Track } from '../lib/track';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
+import Navbar from '../components/elements/navbar';
 
 interface Props {
   provider: ClientSafeProvider;
@@ -61,6 +62,8 @@ export default function SearchTrack({ provider }: Props) {
           </ul>
         </div>
       </div>
+
+      <Navbar />
     </div>
   );
 }
