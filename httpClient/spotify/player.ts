@@ -33,4 +33,30 @@ const playbackState = async (token: string) => {
   return res.data;
 };
 
-export { currentlyPlaying, recentlyPlayed, playbackState };
+const play = async (token: string) => {
+  const res = await spotifyClient.put(
+    `${baseURL}/play`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res;
+};
+
+const pause = async (token: string) => {
+  const res = await spotifyClient.put(
+    `${baseURL}/pause`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res;
+};
+
+export { currentlyPlaying, recentlyPlayed, playbackState, play, pause };

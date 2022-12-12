@@ -17,7 +17,7 @@ export default async function pauseTrack(
 ) {
   if (req.method === 'PUT') {
     await spotifyClient.put(
-      `${BaseURL}/play`,
+      `${BaseURL}/pause`,
       {},
       {
         headers: {
