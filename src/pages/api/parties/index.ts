@@ -1,20 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { User } from '@src/lib/user';
-import { Party } from '@src/lib/party';
-import { PartyDb } from '@src/lib/partyDb';
+import { methodNotAllowed, sendError } from '@src/lib/apiError';
 import {
-  ApiErrorResponse,
-  methodNotAllowed,
-  sendError,
-} from '@src/lib/apiError';
-import { CreatePartyRequestDto } from '@src/createParty/dto';
+  CreatePartyRequestDto,
+  CreatePartyResponseDto,
+} from '@src/createParty/dto';
 import tryCreateParty from '../../../createParty/server';
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Check if body is well-formed
   const request = req.body as CreatePartyRequestDto;
-  const response = await tryCreateParty(request, database);
+  const { partyName, hostName } = request;
+
+  const partyCode = await tryCreateParty(partyName, hostName, database);
+
+  const response: CreatePartyResponseDto = { partyCode };
   res.status(201).json(response);
 }
 
