@@ -14,8 +14,7 @@ export default function Queue({ provider }: Props) {
 
   useEffect(() => {
     getCurrentQueue();
-  }, [session?.user?.accessToken]);
-  // }, [setCurrentQueueTracks]);
+  }, [session]);
 
   const getCurrentQueue = async () => {
     try {
