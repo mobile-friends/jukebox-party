@@ -5,8 +5,8 @@ export interface queueTracks {
 }
 
 export default function QueueTracks({ track }: queueTracks) {
-  const albumArt = <img src={Track.albumArtUrlOf(track)} alt='Album art' />;
-  console.log(albumArt);
+  // TODO: fix track type / album art with array
+  const albumArt = <img src={track.album.images[2].url} alt='Album art' />;
 
   const nameView = <p>{Track.nameOf(track)}</p>;
 

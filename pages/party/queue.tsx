@@ -22,7 +22,7 @@ export default function Queue({ provider }: Props) {
       const result = await currentQueue(session?.user?.accessToken);
       if (result) {
         setCurrentQueueTracks(result);
-        console.log(currentQueueTracks);
+        // console.log(currentQueueTracks);
       }
     } catch (error) {
       setCurrentQueueTracks([]);
@@ -37,9 +37,7 @@ export default function Queue({ provider }: Props) {
   return (
     <div>
       Queue Template
-      <div>
-        <div>{trackNames}</div>
-      </div>
+      <div>{trackNames}</div>
     </div>
   );
 }
