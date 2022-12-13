@@ -1,41 +1,52 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { tryQueryParam } from '../../lib/query';
-import { useSession } from 'next-auth/react';
+import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
 import { currentQueue } from '../../httpClient/spotify/player';
+import { Track } from '../../lib/track';
+import { GetServerSideProps } from 'next/types';
+import QueueTracks from '../../components/elements/queueTracks';
 
-type Props = {};
-
-function Queue({}: Props) {
-  const router = useRouter();
+interface Props {
+  provider: ClientSafeProvider;
+}
+export default function Queue({ provider }: Props) {
   let { data: session } = useSession() as any;
-  //   const [currentTrack, setCurrentTrack] = useState<Track>();
-
-
-  //   const partyCodeParam = tryQueryParam(router.query, 'code');
-  //   if (partyCodeParam === null) {
-  //     // TODO: Handle missing query param error
-  //     throw new Error('Missing query param');
-  //   }
+  const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   useEffect(() => {
     getCurrentQueue();
-  }, []);
+  }, [session?.user?.accessToken]);
+  // }, [setCurrentQueueTracks]);
 
   const getCurrentQueue = async () => {
     try {
       const result = await currentQueue(session?.user?.accessToken);
       if (result) {
-        console.log(result);
-      } else {
-        console.log('no Track is currently playing! Getting Recommendation!');
+        setCurrentQueueTracks(result);
+        console.log(currentQueueTracks);
       }
     } catch (error) {
+      setCurrentQueueTracks([]);
       console.error(error);
     }
   };
 
-  return <div>Queue Template</div>;
+  const trackNames = currentQueueTracks.map((tracks: Track) => (
+    <QueueTracks track={tracks} />
+  ));
+
+  return (
+    <div>
+      Queue Template
+      <div>
+        <div>{trackNames}</div>
+      </div>
+    </div>
+  );
 }
 
-export default Queue;
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  const providers = await getProviders();
+  if (providers === null) throw new Error('Could not get spotify providers');
+
+  return { props: { provider: providers.spotify } };
+};
