@@ -1,5 +1,7 @@
 import { Track } from '../../lib/track';
 import { Artist } from '../../lib/artist';
+import styles from '../../styles/components/trackListItemView.module.scss';
+
 export interface queueTracks {
   track: Track;
 }
@@ -16,10 +18,12 @@ export default function QueueTracks({ track }: queueTracks) {
   });
 
   return (
-    <div>
+    <li className={styles.row} key={track.name}>
       {albumArt}
-      {nameView}
-      {artistViews}
-    </div>
+      <div className='textInfo'>
+        {nameView}
+        {artistViews}
+      </div>
+    </li>
   );
 }
