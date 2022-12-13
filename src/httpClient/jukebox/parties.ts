@@ -1,7 +1,6 @@
 import { jukeboxClient } from './index';
-import { Party } from '@src/lib/party';
 import { JoinPartyDto, JoinPartyResponse } from '@src/pages/api/parties/join';
-import { isErrorResponse, isSuccessResponse } from '@src/common/apiResponse';
+import { isSuccessResponse } from '@src/common/apiResponse';
 import { CreatePartyResponse } from '@src/createParty/dto';
 import { PartyCode } from '@src/lib/partyCode';
 

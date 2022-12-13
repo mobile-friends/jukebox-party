@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import http from 'http';
 import {
-  MethodNotAllowedError,
   sendMethodNotAllowedError,
 } from '@src/common/errors';
 import { ApiError, ApiResponse } from '@src/common/apiResponse';

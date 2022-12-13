@@ -20,10 +20,10 @@ function isValidQueryString(s: string): s is QueryString {
   return s.length >= MinQueryLength;
 }
 
-export default function SearchTrack({ provider }: Props) {
+export default function SearchTrack() {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
-  const router = useRouter();
+  useRouter();
   let { data: session } = useSession() as any;
 
   const onQueryInputChanged = async (e: ChangeEvent<HTMLInputElement>) => {

@@ -7,7 +7,7 @@ const jukeboxClient = axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  validateStatus: (status) => true,
+  validateStatus: () => true,
 });
 
 export { jukeboxClient };
