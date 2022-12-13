@@ -18,6 +18,9 @@
     "baseUrl": "src",
     "paths": {
       "@src/*": ["*"],
+      "@common/*": ["common/*"],
+      "@createParty/*": ["createParty/*"],
+      "@joinParty/*": ["joinParty/*"],
       "@comp/*": ["components/*"]
     }
   },
