@@ -1,35 +1,29 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@src/httpClient/spotify';
-import {
-  ApiErrorResponse,
-  methodNotAllowed,
-  sendError,
-} from '@src/lib/apiError';
+import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+import { multiMethodHandler } from '@src/common/apiUtil';
+import HTTPMethod from 'http-method-enum';
+import { StatusCodes } from 'http-status-codes';
 
 export const BaseURL = 'me/player/';
 
-export type GetResponseBody = any | ApiErrorResponse;
-
-export type ResponseBody = GetResponseBody | ApiErrorResponse;
+export type GetSpotifyPlayerResponse = ApiResponse<
+  any, // TODO: This needs typing
+  never // TODO: This needs typing
+>;
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<GetResponseBody>
+  res: NextApiResponse<GetSpotifyPlayerResponse>
 ) {
   let spotifyRes = await spotifyClient.get(BaseURL, {
     headers: {
       Authorization: req.headers.authorization,
     },
   });
-  res.status(200).json(spotifyRes.data);
+  sendSuccess(res, StatusCodes.OK, spotifyRes.data);
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseBody>
-) {
-  if (req.method === 'GET') {
-    return await handleGet(req, res);
-  }
-  return sendError(req, res, methodNotAllowed(['GET']));
-}
+export default multiMethodHandler({
+  [HTTPMethod.GET]: handleGet,
+});

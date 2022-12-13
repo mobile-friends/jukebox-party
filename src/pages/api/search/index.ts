@@ -1,31 +1,32 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@src/httpClient/spotify';
 import { tryQueryParam } from '@src/lib/query';
-import {
-  ApiErrorResponse,
-  methodNotAllowed,
-  missingParam,
-  sendError,
-} from '@src/lib/apiError';
+import { multiMethodHandler } from '@src/common/apiUtil';
+import HTTPMethod from 'http-method-enum';
+import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+import { StatusCodes } from 'http-status-codes';
+import { sendMissingQueryParamError } from '@src/common/errors';
 
 export const BaseURL = 'search';
 
-export type GetResponseBody = any | ApiErrorResponse;
+export type GetTracksDto = any; // TODO: This needs typing
 
-export type ResponseBody = GetResponseBody | ApiErrorResponse;
+export type GetTracksError = never; // TODO: This needs typing
+
+export type GetTracksResponse = ApiResponse<GetTracksDto, GetTracksError>;
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<GetResponseBody>
+  res: NextApiResponse<GetTracksResponse>
 ) {
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
-    return sendError(req, res, missingParam('q'));
+    return sendMissingQueryParamError(res, 'q');
   }
 
   const type = tryQueryParam(req.query, 'type');
   if (type === null) {
-    return sendError(req, res, missingParam('type'));
+    return sendMissingQueryParamError(res, 'type');
   }
 
   const spotifyRes = await spotifyClient.get(
@@ -36,15 +37,9 @@ async function handleGet(
       },
     }
   );
-  res.status(200).json(spotifyRes.data);
+  sendSuccess(res, StatusCodes.OK, spotifyRes.data);
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseBody>
-) {
-  if (req.method === 'GET') {
-    return await handleGet(req, res);
-  }
-  return sendError(req, res, methodNotAllowed(['GET']));
-}
+export default multiMethodHandler({
+  [HTTPMethod.GET]: handleGet,
+});

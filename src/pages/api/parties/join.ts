@@ -4,42 +4,46 @@ import { Party } from '@src/lib/party';
 import { User } from '@src/lib/user';
 import { PartyCode } from '@src/lib/partyCode';
 import { PartyDb } from '@src/lib/partyDb';
+import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
 import {
-  ApiErrorResponse,
-  internalError,
-  invalidPartyCode,
-  methodNotAllowed,
-  partyNotFound,
-  sendError,
-} from '@src/lib/apiError';
+  sendGenericServerError,
+  sendInvalidBodyError,
+  sendPartyNotFoundError,
+} from '@src/common/errors';
+import { StatusCodes } from 'http-status-codes';
+import { multiMethodHandler } from '@src/common/apiUtil';
+import HTTPMethod from 'http-method-enum';
 
-export interface PostRequestBody {
+export interface JoinPartyDto {
   partyCode: string;
   guestName: string;
 }
 
-export type PostResponseBody = {} | ApiErrorResponse;
+export type PartyJoinedDto = {};
 
-export type ResponseBody = PostResponseBody | ApiErrorResponse;
+export type JoinPartyError = never;
+
+export type JoinPartyResponse = ApiResponse<PartyJoinedDto, JoinPartyError>;
 
 async function handlePost(
   req: NextApiRequest,
-  res: NextApiResponse<PostResponseBody>
+  res: NextApiResponse<JoinPartyResponse>
 ) {
-  const { partyCode: partyCodeParam, guestName } = req.body as PostRequestBody;
+  const request = req.body as JoinPartyDto;
+  const { partyCode: partyCodeParam, guestName } = request;
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    return sendError(req, res, invalidPartyCode(partyCodeParam, 'partyCode'));
+    return sendInvalidBodyError(res, 'partyCode');
   }
 
   const result = await PartyDb.tryGetByCode(database, partyCode);
   if (PartyDb.isError(result)) {
     switch (result.kind) {
       case PartyDb.ErrorType.PartyNotFound:
-        return sendError(req, res, partyNotFound(partyCode));
+        return sendPartyNotFoundError(res, partyCode);
       case PartyDb.ErrorType.InvalidEntry:
-        return sendError(req, res, internalError('Internal db error'));
+        return sendGenericServerError(res); // TODO: Handle better
     }
   }
 
@@ -47,20 +51,9 @@ async function handlePost(
   const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(database, partyWithGuest);
-  res.status(201).json({});
+  sendSuccess(res, StatusCodes.OK, {});
 }
 
-/**
- * Join a party using its party-code
- * @param req The request
- * @param res The response
- */
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseBody>
-) {
-  if (req.method === 'POST') {
-    return await handlePost(req, res);
-  }
-  return sendError(req, res, methodNotAllowed(['POST']));
-}
+export default multiMethodHandler({
+  [HTTPMethod.POST]: handlePost,
+});

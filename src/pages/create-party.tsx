@@ -36,8 +36,8 @@ function CreateParty({}: Props) {
   }
 
   async function onCreatePartyClicked() {
-    const party = await createParty(partyName, partyHostName);
-    await goToPartyPage(party.code);
+    const partyCode = await createParty(partyName, partyHostName);
+    await goToPartyPage(partyCode);
   }
 
   return (

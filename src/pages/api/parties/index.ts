@@ -1,31 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { methodNotAllowed, sendError } from '@src/lib/apiError';
+import { CreatePartyDto, PartyCreatedDto } from '@src/createParty/dto';
 import {
-  CreatePartyRequestDto,
-  CreatePartyResponseDto,
-} from '@src/createParty/dto';
-import tryCreateParty from '../../../createParty/server';
+  handleCreatePartyRequest,
+  tryCreateParty,
+} from '@src/createParty/endpoint';
+import { sendSuccess } from '@src/common/apiResponse';
+import { StatusCodes } from 'http-status-codes';
+import { sendMethodNotAllowedError } from '@src/common/errors';
+import HTTPMethod from 'http-method-enum';
+import { multiMethodHandler } from '@src/common/apiUtil';
 
-async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-  // TODO: Check if body is well-formed
-  const request = req.body as CreatePartyRequestDto;
-  const { partyName, hostName } = request;
-
-  const partyCode = await tryCreateParty(partyName, hostName, database);
-
-  const response: CreatePartyResponseDto = { partyCode };
-  res.status(201).json(response);
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  switch (req.method) {
-    case 'POST':
-      return await handlePost(req, res);
-    default:
-      return sendError(req, res, methodNotAllowed(['POST']));
-  }
-}
+export default multiMethodHandler({
+  [HTTPMethod.POST]: handleCreatePartyRequest,
+});

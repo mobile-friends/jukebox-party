@@ -1,10 +1,18 @@
 import { PartyCode } from '../lib/partyCode';
+import { ApiResponse } from '@src/common/apiResponse';
 
-export interface CreatePartyRequestDto {
+export interface CreatePartyDto {
   partyName: string;
   hostName: string;
 }
 
-export interface CreatePartyResponseDto {
+export interface PartyCreatedDto {
   partyCode: PartyCode;
 }
+
+export type CreatePartyError = never;
+
+export type CreatePartyResponse = ApiResponse<
+  PartyCreatedDto,
+  CreatePartyError
+>;

@@ -1,17 +1,19 @@
 import { jukeboxClient } from './index';
 import { Party } from '@src/lib/party';
-import { PostRequestBody } from '@src/pages/api/parties/join';
-import { ApiErrorResponse, isApiErrorResult } from '@src/lib/apiError';
+import { JoinPartyDto, JoinPartyResponse } from '@src/pages/api/parties/join';
+import { isErrorResponse, isSuccessResponse } from '@src/common/apiResponse';
+import { CreatePartyResponse } from '@src/createParty/dto';
+import { PartyCode } from '@src/lib/partyCode';
 
 const BaseUrl = 'parties';
 
 const createParty = async (
   partyName: string,
   hostName: string
-): Promise<Party> => {
+): Promise<PartyCode> => {
   const res = await jukeboxClient.post(`${BaseUrl}`, { partyName, hostName });
-  // TODO: Handle error responses
-  return res.data;
+  const response = res.data as CreatePartyResponse;
+  return response.partyCode;
 };
 
 const JoinPartyUrl = `${BaseUrl}/join`;
@@ -27,13 +29,13 @@ async function sendJoinPartyRequest(
   guestName: string
 ): Promise<boolean> {
   guestName = encodeURIComponent(guestName);
-  const data: PostRequestBody = {
+  const data: JoinPartyDto = {
     partyCode,
     guestName,
   };
   const res = await jukeboxClient.post(JoinPartyUrl, data);
-  const result = res.data as Object | ApiErrorResponse;
-  return !isApiErrorResult(result);
+  const response = res.data as JoinPartyResponse;
+  return isSuccessResponse(response);
 }
 
 export { createParty, sendJoinPartyRequest };
