@@ -62,9 +62,7 @@ export namespace Duration {
   export function formatted(duration: Duration): string {
     const minutes = minutesIn(duration);
     const extraSeconds = secondsIn(duration) % SecondsInMinute;
-    return getLength(extraSeconds) < 2
-      ? `${minutes}:0${extraSeconds}`
-      : `${minutes}:${extraSeconds}`;
+    return `${minutes}:${String(extraSeconds).padStart(2, '0')}`
   }
 
   /**
