@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-import useFetchParty from '../../hooks/parties/useFetchParty';
-import TrackView from '../../components/elements/trackView';
+import useFetchParty from '../../common/hooks/parties/useFetchParty';
+import TrackView from '../../common/components/elements/trackView';
 import { Track } from '@common/track';
 import { Duration } from '@common/duration';
 import { Artist } from '@common/artist';

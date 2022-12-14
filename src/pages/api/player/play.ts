@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { spotifyClient } from '@src/httpClient/spotify';
+import { spotifyClient } from '@common/httpClient/spotify';
 import { BaseURL } from './index';
-import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+import { ApiResponse, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { multiMethodHandler } from '@src/common/apiUtil';
+import { multiMethodHandler } from '@common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 
 type PutSpotifyPlayerResponse = ApiResponse<

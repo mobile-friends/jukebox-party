@@ -1,9 +1,9 @@
 import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Input from '../components/elements/input';
-import TrackListItemView from '../components/elements/trackListItemView';
-import { search } from '../httpClient/jukebox/search';
+import Input from '../common/components/elements/input';
+import TrackListItemView from '../common/components/elements/trackListItemView';
+import { search } from '../common/httpClient/jukebox/search';
 import { Track } from '@common/track';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
