@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
-import { currentQueue } from '../../httpClient/spotify/player';
 import { Track } from '../../lib/track';
 import { GetServerSideProps } from 'next/types';
 import QueueTracks from '../../components/elements/queueTracks';
+import { queue } from '../../httpClient/jukebox/queue';
 
 interface Props {
   provider: ClientSafeProvider;
@@ -13,21 +13,10 @@ export default function Queue({ provider }: Props) {
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   useEffect(() => {
-    getCurrentQueue();
+    queue(session?.user?.accessToken)
+      .then(setCurrentQueueTracks)
+      .catch((e) => console.error(e));
   }, [session]);
-
-  const getCurrentQueue = async () => {
-    try {
-      const result = await currentQueue(session?.user?.accessToken);
-      if (result) {
-        setCurrentQueueTracks(result);
-        // console.log(currentQueueTracks);
-      }
-    } catch (error) {
-      setCurrentQueueTracks([]);
-      console.error(error);
-    }
-  };
 
   const trackNames = currentQueueTracks.map((tracks: Track) => (
     <QueueTracks track={tracks} />
