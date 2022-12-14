@@ -22,12 +22,12 @@ export default function Queue({}: Props) {
   ));
 
   const partyCode = router.query.code;
+  const partyName = router.query.name;
 
   return (
     <div>
-      {/* TODO get partyname localStorage? state? */}
       <div>
-        <h1>insert Partyname</h1>
+        <h1>{partyName}</h1>
       </div>
       <div>
         <h2>Code: {partyCode}</h2>
