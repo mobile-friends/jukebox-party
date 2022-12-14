@@ -140,7 +140,6 @@ function PartyRoom({}: Props) {
               <p>Please press on the play button in Spotify!</p>
             </div>
           )}
-
           <Navbar />
         </div>
       );

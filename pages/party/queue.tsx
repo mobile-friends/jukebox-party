@@ -5,6 +5,7 @@ import QueueTracks from '../../components/elements/queueTracks';
 import { queue } from '../../httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
 import Button from '../../components/elements/button';
+import Navbar from '../../components/elements/navbar';
 
 interface Props {}
 export default function Queue({}: Props) {
@@ -37,6 +38,7 @@ export default function Queue({}: Props) {
         <h2>Code: {partyCode}</h2>
       </div>
       <div>{trackNames}</div>
+      <Navbar />
     </div>
   );
 }
