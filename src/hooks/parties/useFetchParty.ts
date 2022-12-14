@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Party } from '@common/party';
-import database from '../../../../firebase.config';
+import database from '../../../firebase.config';
 import { PartyCode } from '@common/partyCode';
 import { PartyDb } from '@common/partyDb';
 

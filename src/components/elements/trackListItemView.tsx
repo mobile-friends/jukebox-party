@@ -1,6 +1,6 @@
 import { Artist } from '@common/artist';
 import { Track } from '@common/track';
-import styles from '../../../styles/components/trackListItemView.module.scss';
+import styles from '../../styles/components/trackListItemView.module.scss';
 
 export interface TrackListItemViewProps {
   track: Track;

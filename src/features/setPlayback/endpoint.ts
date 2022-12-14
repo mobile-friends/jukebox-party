@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { SetPlaybackResponse } from '@features/setPlayback/dto';
-import { spotifyClient } from '@common/httpClient/spotify';
+import { spotifyClient } from '@common/../../httpClient/spotify';
 import { noData, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 

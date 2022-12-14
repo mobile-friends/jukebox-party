@@ -1,9 +1,9 @@
 import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useState } from 'react';
-import Button from '../common/components/elements/button';
-import Input from '../common/components/elements/input';
-import { sendJoinPartyRequest } from '../common/httpClient/jukebox/parties';
+import Button from '../components/elements/button';
+import Input from '../components/elements/input';
+import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
 

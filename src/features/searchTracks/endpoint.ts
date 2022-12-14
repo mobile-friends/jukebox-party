@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { GetTracksResponse } from '@features/searchTracks/dto';
 import { tryQueryParam } from '@common/query';
 import { sendMissingQueryParamError } from '@common/errors';
-import { spotifyClient } from '@common/httpClient/spotify';
+import { spotifyClient } from '@common/../../httpClient/spotify';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { parseTracksIn } from '@features/searchTracks/spotifyParsing';

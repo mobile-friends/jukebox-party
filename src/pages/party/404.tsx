@@ -1,6 +1,6 @@
 import router from 'next/router';
 import React from 'react';
-import Button from '../../common/components/elements/button';
+import Button from '../../components/elements/button';
 import styles from '../../styles/pages/404.module.scss';
 
 type Props = {};
