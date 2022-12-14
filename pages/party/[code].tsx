@@ -115,6 +115,7 @@ function PartyRoom({}: Props) {
     const party = result;
     const partyIsLoaded = party !== null;
     if (partyIsLoaded) {
+    sessionStorage.setItem('partyName', party.name);
       const guestList =
         Party.guestsOf(party)
           .map((guest) => guest.name)
