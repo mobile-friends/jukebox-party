@@ -13,16 +13,25 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
 
   const nameView = <p>{Track.nameOf(track)}</p>;
 
-  const artistViews = Track.artistsOf(track).map((artist) => {
-    let artistName = Artist.nameOf(artist);
+  const artistViews = Track.artistsOf(track).map((artist, i, row) => {
+    let artistName =
+      i + 1 !== row.length
+        ? Artist.nameOf(artist) + ','
+        : Artist.nameOf(artist);
     return <div key={artistName}>{artistName}</div>;
   });
 
   return (
     <div>
-      {albumArt}
-      {nameView}
-      {artistViews}
+      <div style={{ textAlign: 'center' }}>{albumArt}</div>
+      <div
+        style={{ fontSize: '1.5em', fontWeight: 'bold', marginLeft: '15px' }}
+      >
+        {nameView}
+      </div>
+      <div style={{ marginLeft: '15px', marginTop: '5px', display: 'flex' }}>
+        {artistViews}
+      </div>
       <PlaybackView
         playbackState={playbackState}
         trackDuration={Track.durationOf(track)}
