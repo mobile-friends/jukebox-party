@@ -31,13 +31,7 @@ export default function playButton({ isPlaying }: PlayButtonProps) {
   }
 
   return (
-    <div
-      style={{
-        paddingBottom: '20px',
-        display: 'flex',
-        justifyContent: 'space-around',
-      }}
-    >
+    <div>
       {isPlaying ? (
         <Button
           type='icon-only big'

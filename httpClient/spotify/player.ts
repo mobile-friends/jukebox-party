@@ -59,4 +59,38 @@ const pause = async (token: string) => {
   return res;
 };
 
-export { currentlyPlaying, recentlyPlayed, playbackState, play, pause };
+const nextTrack = async (token: string) => {
+  const res = await spotifyClient.post(
+    `${baseURL}/next`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res;
+};
+
+const previousTrack = async (token: string) => {
+  const res = await spotifyClient.post(
+    `${baseURL}/previous`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return res;
+};
+
+export {
+  currentlyPlaying,
+  recentlyPlayed,
+  playbackState,
+  play,
+  pause,
+  nextTrack,
+  previousTrack,
+};
