@@ -4,6 +4,7 @@ import { Track } from '../../lib/track';
 import QueueTracks from '../../components/elements/queueTracks';
 import { queue } from '../../httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
+import Button from '../../components/elements/button';
 
 interface Props {}
 export default function Queue({}: Props) {
@@ -27,9 +28,12 @@ export default function Queue({}: Props) {
   return (
     <div>
       <div>
+        <Button
+          text='go back'
+          type='secondary'
+          onClick={() => router.back()}
+        />
         <h1>{partyName}</h1>
-      </div>
-      <div>
         <h2>Code: {partyCode}</h2>
       </div>
       <div>{trackNames}</div>
