@@ -3,8 +3,9 @@ import { NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import { methodOf, urlOf } from '@src/common/apiUtil';
 import { Dto } from '@src/common/dto';
+import { Api } from '@firebase/performance/dist/src/services/api_service';
 
-export interface ApiError {
+export interface ErrorDto {
   kind: string;
   message: string;
 
@@ -17,39 +18,35 @@ interface ApiResponseBase {
   usedMethod: HTTPMethod | null;
 }
 
-export type ApiSuccessResponse<TDto extends Dto> = ApiResponseBase & TDto;
+export type ApiResponse<TDto extends Dto | ErrorDto> = ApiResponseBase & TDto;
 
-export type ApiErrorResponse<TDto extends ApiError> = ApiResponseBase & TDto;
-
-export type ApiResponse<TResult extends Dto, TError extends ApiError> =
-  | ApiSuccessResponse<TResult>
-  | ApiErrorResponse<TError>;
-
-export function isErrorResponse<TResult extends ApiError>(
-  response: ApiResponse<any, TResult>
-): response is ApiErrorResponse<TResult> {
+export function isErrorResponse<
+  TDto extends Dto | ErrorDto,
+  TError extends ErrorDto
+>(response: ApiResponse<TDto | TError>): response is ApiResponse<TError> {
   return response.statusCode >= 400;
 }
 
-export function isSuccessResponse<TError extends Dto>(
-  response: ApiResponse<TError, any>
-): response is ApiSuccessResponse<TError> {
+export function isSuccessResponse<
+  TDto extends Dto | ErrorDto,
+  TSuccess extends Dto
+>(response: ApiResponse<TDto | TSuccess>): response is ApiResponse<TSuccess> {
   return response.statusCode >= 100 && response.statusCode < 400;
 }
 
-function sendResponse<TResult extends Dto, TError extends ApiError>(
-  res: NextApiResponse<ApiResponse<TResult, TError>>,
-  response: ApiResponse<TResult, TError>
+function sendResponse<TDto extends Dto | ErrorDto>(
+  res: NextApiResponse<ApiResponse<TDto>>,
+  response: ApiResponse<TDto>
 ) {
   res.status(response.statusCode).json(response);
 }
 
 export function sendSuccess<TSuccess extends Dto>(
-  res: NextApiResponse<ApiSuccessResponse<TSuccess>>,
+  res: NextApiResponse<ApiResponse<TSuccess>>,
   statusCode: StatusCodes,
   dto: TSuccess
 ) {
-  sendResponse<TSuccess, never>(res, {
+  sendResponse<TSuccess>(res, {
     statusCode,
     endpoint: urlOf(res.req),
     usedMethod: methodOf(res.req),
@@ -57,12 +54,12 @@ export function sendSuccess<TSuccess extends Dto>(
   });
 }
 
-export function sendError<TError extends ApiError>(
-  res: NextApiResponse<ApiErrorResponse<TError>>,
+export function sendError<TError extends ErrorDto>(
+  res: NextApiResponse<ApiResponse<TError>>,
   statusCode: StatusCodes,
   error: TError
 ) {
-  sendResponse<never, TError>(res, {
+  sendResponse<TError>(res, {
     statusCode,
     endpoint: urlOf(res.req),
     usedMethod: methodOf(res.req),

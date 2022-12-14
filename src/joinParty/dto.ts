@@ -9,4 +9,4 @@ export type PartyJoinedDto = {};
 
 export type JoinPartyError = never;
 
-export type JoinPartyResponse = ApiResponse<PartyJoinedDto, JoinPartyError>;
+export type JoinPartyResponse = ApiResponse<PartyJoinedDto | JoinPartyError>;

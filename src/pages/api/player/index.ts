@@ -8,8 +8,8 @@ import { StatusCodes } from 'http-status-codes';
 export const BaseURL = 'me/player/';
 
 export type GetSpotifyPlayerResponse = ApiResponse<
-  any, // TODO: This needs typing
-  never // TODO: This needs typing
+  | any // TODO: This needs typing
+  | never // TODO: This needs typing
 >;
 
 async function handleGet(

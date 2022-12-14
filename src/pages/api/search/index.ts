@@ -13,7 +13,7 @@ export type GetTracksDto = any; // TODO: This needs typing
 
 export type GetTracksError = never; // TODO: This needs typing
 
-export type GetTracksResponse = ApiResponse<GetTracksDto, GetTracksError>;
+export type GetTracksResponse = ApiResponse<GetTracksDto | GetTracksError>;
 
 async function handleGet(
   req: NextApiRequest,

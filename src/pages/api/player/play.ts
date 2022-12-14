@@ -7,8 +7,8 @@ import { multiMethodHandler } from '@src/common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 
 type PutSpotifyPlayerResponse = ApiResponse<
-  any, // TODO: This needs typing
-  never // TODO: This needs typing
+  | any // TODO: This needs typing
+  | never // TODO: This needs typing
 >;
 
 async function handlePut(

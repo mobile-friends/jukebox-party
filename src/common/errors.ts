@@ -1,32 +1,32 @@
-import { ApiError, ApiErrorResponse, sendError } from '@src/common/apiResponse';
+import { ApiResponse, ErrorDto, sendError } from '@src/common/apiResponse';
 import HTTPMethod from 'http-method-enum';
 import { NextApiResponse } from 'next';
 import { StatusCodes } from 'http-status-codes';
 import { PartyCode } from '@src/lib/partyCode';
 
-export interface MethodNotAllowedError extends ApiError {
+export interface MethodNotAllowedError extends ErrorDto {
   allowedMethods: HTTPMethod[];
   kind: 'MethodNotAllowedError';
 }
 
-export interface DtoError extends ApiError {
+export interface DtoError extends ErrorDto {
   paramName: string;
   location: 'query' | 'body';
   issue: 'Missing' | 'Invalid';
   kind: 'DtoError';
 }
 
-export interface GenericServerError extends ApiError {
+export interface GenericServerError extends ErrorDto {
   kind: 'Generic';
 }
 
-export interface PartyNotFoundError extends ApiError {
+export interface PartyNotFoundError extends ErrorDto {
   partyCode: PartyCode;
   kind: 'PartyNotFoundError';
 }
 
 export function sendMethodNotAllowedError(
-  res: NextApiResponse<ApiErrorResponse<MethodNotAllowedError>>,
+  res: NextApiResponse<ApiResponse<MethodNotAllowedError>>,
   allowedMethods: HTTPMethod[]
 ) {
   sendError(res, StatusCodes.METHOD_NOT_ALLOWED, {
@@ -37,7 +37,7 @@ export function sendMethodNotAllowedError(
 }
 
 export function sendMissingQueryParamError(
-  res: NextApiResponse<ApiErrorResponse<DtoError>>,
+  res: NextApiResponse<ApiResponse<DtoError>>,
   paramName: string
 ) {
   sendError(res, StatusCodes.BAD_REQUEST, {
@@ -50,7 +50,7 @@ export function sendMissingQueryParamError(
 }
 
 export function sendInvalidQueryParamError(
-  res: NextApiResponse<ApiErrorResponse<DtoError>>,
+  res: NextApiResponse<ApiResponse<DtoError>>,
   paramName: string
 ) {
   sendError(res, StatusCodes.BAD_REQUEST, {
@@ -63,7 +63,7 @@ export function sendInvalidQueryParamError(
 }
 
 export function sendInvalidBodyError(
-  res: NextApiResponse<ApiErrorResponse<DtoError>>,
+  res: NextApiResponse<ApiResponse<DtoError>>,
   paramName: string
 ) {
   sendError(res, StatusCodes.BAD_REQUEST, {
@@ -76,7 +76,7 @@ export function sendInvalidBodyError(
 }
 
 export function sendPartyNotFoundError(
-  res: NextApiResponse<ApiErrorResponse<PartyNotFoundError>>,
+  res: NextApiResponse<ApiResponse<PartyNotFoundError>>,
   partyCode: PartyCode
 ) {
   sendError(res, StatusCodes.NOT_FOUND, {
@@ -87,7 +87,7 @@ export function sendPartyNotFoundError(
 }
 
 export function sendGenericServerError(
-  res: NextApiResponse<ApiErrorResponse<GenericServerError>>,
+  res: NextApiResponse<ApiResponse<GenericServerError>>,
   message: string = 'Internal server error'
 ) {
   sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, {

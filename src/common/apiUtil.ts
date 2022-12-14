@@ -2,10 +2,12 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import http from 'http';
 import {
+  MethodNotAllowedError,
   sendMethodNotAllowedError,
 } from '@src/common/errors';
-import { ApiError, ApiResponse } from '@src/common/apiResponse';
+import { ErrorDto, ApiResponse } from '@src/common/apiResponse';
 import { Dto } from '@src/common/dto';
+import { ApiError } from 'next/dist/server/api-utils';
 
 type EndpointHandler<T = any> = (
   req: NextApiRequest,
@@ -25,9 +27,9 @@ export function urlOf(req: http.IncomingMessage): string {
   return req.url ?? 'Unknown url';
 }
 
-export function multiMethodHandler<TSuccess extends Dto>(
+export function multiMethodHandler(
   handlers: MethodHandlers
-): EndpointHandler<ApiResponse<TSuccess, ApiError>> {
+): EndpointHandler<ApiResponse<Dto | ApiError>> {
   return (req, res) => {
     const method = methodOf(req);
     if (method !== null && method in handlers) {

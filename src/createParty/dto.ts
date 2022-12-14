@@ -13,6 +13,5 @@ export interface PartyCreatedDto {
 export type CreatePartyError = never;
 
 export type CreatePartyResponse = ApiResponse<
-  PartyCreatedDto,
-  CreatePartyError
+  PartyCreatedDto | CreatePartyError
 >;

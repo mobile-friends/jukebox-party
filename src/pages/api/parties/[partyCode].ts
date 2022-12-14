@@ -20,7 +20,7 @@ const ParamName = 'partyCode';
 
 export type GetPartyError = DtoError | PartyNotFoundError;
 
-export type GetPartyResponse = ApiResponse<Party, GetPartyError>;
+export type GetPartyResponse = ApiResponse<Party | GetPartyError>;
 
 async function handleGet(
   req: NextApiRequest,
