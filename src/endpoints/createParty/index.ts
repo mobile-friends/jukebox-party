@@ -5,7 +5,7 @@ import { FirebaseDatabase } from '@firebase/database-types';
 import { PartyCode } from '@common/partyCode';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreatePartyDto, CreatePartyResponse } from '../createParty/dto';
-import database from '../../../firebase.config';
+import firebaseDb from '@common/firebaseDb';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 
@@ -29,7 +29,7 @@ export default async function handleRequest(
   const request = req.body as CreatePartyDto;
   const { partyName, hostName } = request;
 
-  const partyCode = await tryCreateParty(partyName, hostName, database);
+  const partyCode = await tryCreateParty(partyName, hostName, firebaseDb);
 
   sendSuccess(res, StatusCodes.CREATED, {
     partyCode,

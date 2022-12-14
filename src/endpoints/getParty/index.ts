@@ -7,7 +7,7 @@ import {
 } from '@common/errors';
 import { PartyCode } from '@common/partyCode';
 import { PartyDb } from '@common/partyDb';
-import database from '../../../firebase.config';
+import firebaseDb from '@common/firebaseDb';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { GetPartyResponse } from '../getParty/dto';
@@ -28,7 +28,7 @@ export default async function handleRequest(
     return sendInvalidQueryParamError(res, ParamName);
   }
 
-  const party = await PartyDb.tryGetByCode(database, partyCode);
+  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(party)) {
     return sendPartyNotFoundError(res, partyCode);
   }

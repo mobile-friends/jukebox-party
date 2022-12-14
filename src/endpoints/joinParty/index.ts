@@ -7,7 +7,7 @@ import {
   sendPartyNotFoundError,
 } from '@common/errors';
 import { PartyDb } from '@common/partyDb';
-import database from '../../../firebase.config';
+import firebaseDb from '@common/firebaseDb';
 import { User } from '@common/user';
 import { Party } from '@common/party';
 import { sendSuccess } from '@common/apiResponse';
@@ -25,7 +25,7 @@ export default async function handleRequest(
     return sendInvalidBodyError(res, 'partyCode');
   }
 
-  const result = await PartyDb.tryGetByCode(database, partyCode);
+  const result = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(result)) {
     switch (result.kind) {
       case PartyDb.ErrorType.PartyNotFound:
@@ -38,6 +38,6 @@ export default async function handleRequest(
   const guest = User.makeGuest(guestName);
   const partyWithGuest = Party.addGuestTo(result, guest);
 
-  await PartyDb.store(database, partyWithGuest);
+  await PartyDb.store(firebaseDb, partyWithGuest);
   sendSuccess(res, StatusCodes.OK, {});
 }
