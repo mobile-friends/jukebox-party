@@ -6,6 +6,7 @@ import { queue } from '../../httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
 import Button from '../../components/elements/button';
 import Navbar from '../../components/elements/navbar';
+import QueueHeader from '../../components/elements/queueHeader';
 
 interface Props {}
 export default function Queue({}: Props) {
@@ -30,11 +31,7 @@ export default function Queue({}: Props) {
 
   return (
     <div>
-      <div>
-        <Button text='go back' type='secondary' onClick={() => router.back()} />
-        <h1>{partyName}</h1>
-        <h2>Code: {partyCode}</h2>
-      </div>
+      <QueueHeader partyName={partyName} partyCode={partyCode}/>
       <div>{trackNames}</div>
       <Navbar />
     </div>
