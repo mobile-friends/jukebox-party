@@ -2,9 +2,7 @@ import { jukeboxClient } from './index';
 import { Track } from '@common/track';
 import { Duration } from '@common/duration';
 import { Artist } from '@common/artist';
-import { GetTracksResponse } from '../../../pages/api/search';
-
-const baseURL = 'search';
+import { GetTracksResponse } from '@features/searchTracks/dto';
 
 type SearchType = 'track';
 
@@ -15,7 +13,7 @@ const search = async (
 ): Promise<Track[]> => {
   q = encodeURIComponent(q);
   const encodedType = encodeURIComponent(type);
-  const url = `${baseURL}?q=${q}&type=${encodedType}`;
+  const url = `$search?q=${q}&type=${encodedType}`;
   const res = await jukeboxClient.get<GetTracksResponse>(url, {
     headers: {
       Authorization: `Bearer ${token}`,
