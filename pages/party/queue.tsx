@@ -14,9 +14,11 @@ export default function Queue({}: Props) {
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   useEffect(() => {
-    queue(session?.user?.accessToken)
-      .then(setCurrentQueueTracks)
-      .catch((e) => console.error(e));
+    if (session.user.accessToken) {
+      queue(session?.user?.accessToken)
+        .then(setCurrentQueueTracks)
+        .catch((e) => console.error(e));
+    }
   }, [session]);
 
   const trackNames = currentQueueTracks.map((tracks: Track) => (
@@ -29,11 +31,7 @@ export default function Queue({}: Props) {
   return (
     <div>
       <div>
-        <Button
-          text='go back'
-          type='secondary'
-          onClick={() => router.back()}
-        />
+        <Button text='go back' type='secondary' onClick={() => router.back()} />
         <h1>{partyName}</h1>
         <h2>Code: {partyCode}</h2>
       </div>
