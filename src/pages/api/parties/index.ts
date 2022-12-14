@@ -1,4 +1,4 @@
-import { handleCreatePartyRequest } from '@features/createParty/endpoint';
+import handleCreatePartyRequest from '@endpoint/createParty';
 import HTTPMethod from 'http-method-enum';
 import { multiMethodHandler } from '@common/apiUtil';
 

@@ -1,8 +1,8 @@
 import { jukeboxClient } from './index';
 import { isSuccessResponse } from '@common/apiResponse';
-import { CreatePartyResponse } from '@features/createParty/dto';
+import { CreatePartyResponse } from '../../endpoints/createParty/dto';
 import { PartyCode } from '@common/partyCode';
-import { JoinPartyDto, JoinPartyResponse } from '@features/joinParty/dto';
+import { JoinPartyDto, JoinPartyResponse } from '../../endpoints/joinParty/dto';
 
 const BaseUrl = 'parties';
 

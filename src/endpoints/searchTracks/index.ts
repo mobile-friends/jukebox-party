@@ -1,13 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { GetTracksResponse } from '@features/searchTracks/dto';
+import { GetTracksResponse } from '../searchTracks/dto';
 import { tryQueryParam } from '@common/query';
 import { sendMissingQueryParamError } from '@common/errors';
-import { spotifyClient } from '@common/../../httpClient/spotify';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { parseTracksIn } from '@features/searchTracks/spotifyParsing';
+import { parseTracksIn } from '../searchTracks/spotifyParsing';
+import { spotifyClient } from '../../httpClient/spotify';
 
-export async function handleGetTracksRequest(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetTracksResponse>
 ) {

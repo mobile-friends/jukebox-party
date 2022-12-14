@@ -18,7 +18,7 @@
     "baseUrl": "src",
     "paths": {
       "@common/*": ["common/*"],
-      "@features/*": ["features/*"]
+      "@endpoint/*": ["endpoints/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

@@ -10,11 +10,11 @@ import { PartyDb } from '@common/partyDb';
 import database from '../../../firebase.config';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { GetPartyResponse } from '@features/getParty/dto';
+import { GetPartyResponse } from '../getParty/dto';
 
 const ParamName = 'partyCode';
 
-export async function handleGetPartyRequest(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetPartyResponse>
 ) {

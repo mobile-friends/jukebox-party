@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { GetPlaybackResponse } from '@features/getPlayback/dto';
-import { spotifyClient } from '@common/../../httpClient/spotify';
+import { GetPlaybackResponse } from '../getPlayback/dto';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
+import { spotifyClient } from '../../httpClient/spotify';
 
-export async function handleGetPlaybackRequest(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetPlaybackResponse>
 ) {

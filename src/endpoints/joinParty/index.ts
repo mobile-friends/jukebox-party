@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { JoinPartyDto, JoinPartyResponse } from '@features/joinParty/dto';
+import { JoinPartyDto, JoinPartyResponse } from '../joinParty/dto';
 import { PartyCode } from '@common/partyCode';
 import {
   sendGenericServerError,
@@ -13,7 +13,7 @@ import { Party } from '@common/party';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 
-export async function handleJoinPartyRequest(
+export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<JoinPartyResponse>
 ) {
