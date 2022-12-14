@@ -7,8 +7,8 @@ import { Party } from '@src/lib/party';
 import { multiMethodHandler } from '@src/common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import {
-  PartyNotFoundError,
   DtoError,
+  PartyNotFoundError,
   sendInvalidQueryParamError,
   sendMissingQueryParamError,
   sendPartyNotFoundError,

@@ -1,4 +1,6 @@
-import { useSession, signIn, signOut } from 'next-auth/react'; function LoginButton(){
+import { signIn, signOut, useSession } from 'next-auth/react';
+
+function LoginButton() {
   const { data: session } = useSession();
   const userEmail = session?.user?.email ?? 'something@went.wrong';
   if (session !== null) {
@@ -17,4 +19,3 @@ import { useSession, signIn, signOut } from 'next-auth/react'; function LoginBut
     </>
   );
 }
-

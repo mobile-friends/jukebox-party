@@ -3,7 +3,6 @@ import { NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import { methodOf, urlOf } from '@src/common/apiUtil';
 import { Dto } from '@src/common/dto';
-import { Api } from '@firebase/performance/dist/src/services/api_service';
 
 export interface ErrorDto {
   kind: string;

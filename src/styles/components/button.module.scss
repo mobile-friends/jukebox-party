@@ -13,19 +13,23 @@ button.btn {
     background: $primary-color;
     border: none;
   }
+
   &.secondary {
     color: $primary-color;
     background: none;
     border: 1px solid $primary-color;
   }
+
   &.tertiary {
     color: $primary-color;
     background: none;
     border: none;
   }
+
   &.block {
     width: 100%;
   }
+
   &:hover {
     opacity: 90%;
     cursor: pointer;

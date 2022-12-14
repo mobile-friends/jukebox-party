@@ -1,11 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import http from 'http';
-import {
-  MethodNotAllowedError,
-  sendMethodNotAllowedError,
-} from '@src/common/errors';
-import { ErrorDto, ApiResponse } from '@src/common/apiResponse';
+import { sendMethodNotAllowedError } from '@src/common/errors';
+import { ApiResponse } from '@src/common/apiResponse';
 import { Dto } from '@src/common/dto';
 import { ApiError } from 'next/dist/server/api-utils';
 
