@@ -1,5 +1,11 @@
 import { ApiResponse } from '@common/apiResponse';
+import { Track } from '@common/track';
+import { DtoError } from '@common/errors';
 
-export type GetTracksDto = SpotifyApi.SearchResponse;
+export interface GetTracksDto {
+  tracks: Track[];
+}
 
-export type GetTracksResponse = ApiResponse<GetTracksDto>;
+export type GetTracksError = DtoError;
+
+export type GetTracksResponse = ApiResponse<GetTracksDto | GetTracksError>;

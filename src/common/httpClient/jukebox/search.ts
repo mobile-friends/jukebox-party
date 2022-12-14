@@ -19,20 +19,7 @@ const search = async (
       Authorization: `Bearer ${token}`,
     },
   });
-  /*
-  Currently, if the request returns undefined somewhere, we just use default
-  values to compensate, like [] if tracks is undefined.
-  TODO: Handle these errors better
-   */
-  const spotifyTracks = res.data.tracks?.items ?? [];
-  return spotifyTracks.map((track) =>
-    Track.make(
-      track.name,
-      Duration.makeFromSeconds(track.duration_ms / 1000),
-      track.artists.map((artist) => Artist.make(artist.name)),
-      track.album.images[0].url
-    )
-  );
+  return res.data.tracks;
 };
 
 export { search };

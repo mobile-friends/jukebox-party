@@ -5,6 +5,9 @@ import { sendMissingQueryParamError } from '@common/errors';
 import { spotifyClient } from '@common/httpClient/spotify';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
+import { Track } from '@common/track';
+import { Duration } from '@common/duration';
+import { Artist } from '@common/artist';
 
 export async function handleGetTracksRequest(
   req: NextApiRequest,
@@ -20,7 +23,7 @@ export async function handleGetTracksRequest(
     return sendMissingQueryParamError(res, 'type');
   }
 
-  const spotifyRes = await spotifyClient.get(
+  const spotifyRes = await spotifyClient.get<SpotifyApi.SearchResponse>(
     `$search?q=${query}&type=${type}`,
     {
       headers: {
@@ -28,5 +31,20 @@ export async function handleGetTracksRequest(
       },
     }
   );
-  sendSuccess(res, StatusCodes.OK, spotifyRes.data);
+  /*
+ Currently, if the request returns undefined somewhere, we just use default
+ values to compensate, like [] if tracks is undefined.
+ TODO: Handle these errors better
+  */
+  const spotifyTracks = spotifyRes.data.tracks?.items ?? [];
+  const tracks = spotifyTracks.map((track) =>
+    Track.make(
+      track.name,
+      Duration.makeFromSeconds(track.duration_ms / 1000),
+      track.artists.map((artist) => Artist.make(artist.name)),
+      track.album.images[0].url
+    )
+  );
+
+  sendSuccess(res, StatusCodes.OK, { tracks });
 }
