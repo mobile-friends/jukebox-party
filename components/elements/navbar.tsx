@@ -24,21 +24,18 @@ const Navbar = (): JSX.Element => {
         text='Home'
         isActive={route === '/party/[code]' ? true : false}
         directTo={`/party/${partyCode}`}
-        query={''}
       />
       <NavItem
         icon={<BsSearch />}
         text='Add'
         isActive={route === '/search-track' ? true : false}
         directTo={`/search-track`}
-        query={''}
       />
       <NavItem
         icon={<MdOutlineQueueMusic />}
         text='Queue'
         isActive={route === '/party/queue' ? true : false}
         directTo={`/party/queue`}
-        query={{ code: partyCode }}
       />
       {/*  
       // structure for query path, just delete comment     
