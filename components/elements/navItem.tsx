@@ -6,12 +6,21 @@ interface NavItemProps {
   icon: any;
   directTo: string;
   isActive: boolean;
+  query: string | any;
 }
 
-const NavItem = ({ text, icon, directTo, isActive }: NavItemProps): JSX.Element => {
-  
+const NavItem = ({
+  text,
+  icon,
+  directTo,
+  isActive,
+  query,
+}: NavItemProps): JSX.Element => {
   return (
-    <Link href={directTo} className={`navbarItem ${isActive ? 'active' : ''}`}>
+    <Link
+      href={{ pathname: directTo, query }}
+      className={`navbarItem ${isActive ? 'active' : ''}`}
+    >
       <div className='icon-container'>{icon}</div>
       <div className='text-container'>{text}</div>
     </Link>
