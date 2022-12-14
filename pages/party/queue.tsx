@@ -22,8 +22,8 @@ export default function Queue({}: Props) {
     <QueueTracks track={tracks} />
   ));
 
-  const partyCode = router.query.code;
-  const partyName = router.query.name;
+  const partyCode = sessionStorage.getItem('partyCode');
+  const partyName = sessionStorage.getItem('partyName');
 
   return (
     <div>
