@@ -1,6 +1,6 @@
-import { multiMethodHandler } from '@src/common/apiUtil';
+import { multiMethodHandler } from '@common/apiUtil';
 import HTTPMethod from 'http-method-enum';
-import { handleJoinPartyRequest } from '@src/joinParty/endpoint';
+import { handleJoinPartyRequest } from '@features/joinParty/endpoint';
 
 export default multiMethodHandler({
   [HTTPMethod.POST]: handleJoinPartyRequest,

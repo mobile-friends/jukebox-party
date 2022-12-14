@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@common/httpClient/spotify';
 import { tryQueryParam } from '@common/query';
-import { multiMethodHandler } from '@src/common/apiUtil';
+import { multiMethodHandler } from '@common/apiUtil';
 import HTTPMethod from 'http-method-enum';
-import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+import { ApiResponse, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { sendMissingQueryParamError } from '@src/common/errors';
+import { sendMissingQueryParamError } from '@common/errors';
 
 export const BaseURL = 'search';
 

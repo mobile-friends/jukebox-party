@@ -4,7 +4,7 @@ import { PartyCode } from '@common/partyCode';
 import { tryQueryParam } from '@common/query';
 import { PartyDb } from '@common/partyDb';
 import { Party } from '@common/party';
-import { multiMethodHandler } from '@src/common/apiUtil';
+import { multiMethodHandler } from '@common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import {
   DtoError,
@@ -12,8 +12,8 @@ import {
   sendInvalidQueryParamError,
   sendMissingQueryParamError,
   sendPartyNotFoundError,
-} from '@src/common/errors';
-import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+} from '@common/errors';
+import { ApiResponse, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 
 const ParamName = 'partyCode';

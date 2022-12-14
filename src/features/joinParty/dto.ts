@@ -1,4 +1,4 @@
-import { ApiResponse } from '@src/common/apiResponse';
+import { ApiResponse } from '@common/apiResponse';
 
 export interface JoinPartyDto {
   partyCode: string;

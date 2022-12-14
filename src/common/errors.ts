@@ -1,4 +1,4 @@
-import { ApiResponse, ErrorDto, sendError } from '@src/common/apiResponse';
+import { ApiResponse, ErrorDto, sendError } from '@common/apiResponse';
 import HTTPMethod from 'http-method-enum';
 import { NextApiResponse } from 'next';
 import { StatusCodes } from 'http-status-codes';

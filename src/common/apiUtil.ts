@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import HTTPMethod from 'http-method-enum';
 import http from 'http';
-import { sendMethodNotAllowedError } from '@src/common/errors';
-import { ApiResponse } from '@src/common/apiResponse';
-import { Dto } from '@src/common/dto';
+import { sendMethodNotAllowedError } from '@common/errors';
+import { ApiResponse } from '@common/apiResponse';
+import { Dto } from '@common/dto';
 import { ApiError } from 'next/dist/server/api-utils';
 
 type EndpointHandler<T = any> = (

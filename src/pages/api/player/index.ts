@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@common/httpClient/spotify';
-import { ApiResponse, sendSuccess } from '@src/common/apiResponse';
+import { ApiResponse, sendSuccess } from '@common/apiResponse';
 import { multiMethodHandler } from '@common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import { StatusCodes } from 'http-status-codes';
@@ -14,7 +14,7 @@ export type GetSpotifyPlayerResponse = ApiResponse<
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<GetSpotifyPlayerResponse>,
+  res: NextApiResponse<GetSpotifyPlayerResponse>
 ) {
   let spotifyRes = await spotifyClient.get(BaseURL, {
     headers: {

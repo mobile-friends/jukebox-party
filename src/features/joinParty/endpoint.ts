@@ -1,16 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { JoinPartyDto, JoinPartyResponse } from '@src/joinParty/dto';
+import { JoinPartyDto, JoinPartyResponse } from '@features/joinParty/dto';
 import { PartyCode } from '@common/partyCode';
 import {
   sendGenericServerError,
   sendInvalidBodyError,
   sendPartyNotFoundError,
-} from '@src/common/errors';
+} from '@common/errors';
 import { PartyDb } from '@common/partyDb';
-import database from '../../firebase.config';
+import database from '../../../firebase.config';
 import { User } from '@common/user';
 import { Party } from '@common/party';
-import { sendSuccess } from '@src/common/apiResponse';
+import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 
 export async function handleJoinPartyRequest(

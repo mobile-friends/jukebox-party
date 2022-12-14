@@ -17,10 +17,8 @@
     "strictNullChecks": true,
     "baseUrl": "src",
     "paths": {
-      "@src/*": ["*"],
       "@common/*": ["common/*"],
-      "@createParty/*": ["createParty/*"],
-      "@joinParty/*": ["joinParty/*"]
+      "@features/*": ["features/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

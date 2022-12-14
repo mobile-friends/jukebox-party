@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '../common/components/elements/button';
 import Input from '../common/components/elements/input';
-import { createParty } from '../common/httpClient/jukebox/parties';
+import { createParty } from '@common/httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/partyCode';
 
