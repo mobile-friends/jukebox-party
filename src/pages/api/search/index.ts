@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@src/httpClient/spotify';
-import { tryQueryParam } from '@src/lib/query';
+import { tryQueryParam } from '@common/query';
 import { multiMethodHandler } from '@src/common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import { ApiResponse, sendSuccess } from '@src/common/apiResponse';

@@ -1,5 +1,5 @@
-import { Party } from '../lib/party';
-import { User } from '../lib/user';
+import { Party } from '@common/party';
+import { User } from '@common/user';
 
 const testName = 'The best party';
 const testHost = User.makeHost('User McHost');

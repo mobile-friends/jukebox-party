@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import database from '../../../../firebase.config';
-import { PartyCode } from '@src/lib/partyCode';
-import { tryQueryParam } from '@src/lib/query';
-import { PartyDb } from '@src/lib/partyDb';
-import { Party } from '@src/lib/party';
+import { PartyCode } from '@common/partyCode';
+import { tryQueryParam } from '@common/query';
+import { PartyDb } from '@common/partyDb';
+import { Party } from '@common/party';
 import { multiMethodHandler } from '@src/common/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import {

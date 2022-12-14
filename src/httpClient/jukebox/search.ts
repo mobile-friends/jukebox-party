@@ -1,7 +1,7 @@
 import { jukeboxClient } from './index';
-import { Track } from '@src/lib/track';
-import { Duration } from '@src/lib/duration';
-import { Artist } from '@src/lib/artist';
+import { Track } from '@common/track';
+import { Duration } from '@common/duration';
+import { Artist } from '@common/artist';
 
 const baseURL = 'search';
 

@@ -1,8 +1,8 @@
-import { User } from '../lib/user';
-import { Party } from '../lib/party';
-import { PartyDb } from '../lib/partyDb';
+import { User } from '@common/user';
+import { Party } from '@common/party';
+import { PartyDb } from '@common/partyDb';
 import { FirebaseDatabase } from '@firebase/database-types';
-import { PartyCode } from '@src/lib/partyCode';
+import { PartyCode } from '@common/partyCode';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { CreatePartyDto, CreatePartyResponse } from '@src/createParty/dto';
 import database from '../../firebase.config';
