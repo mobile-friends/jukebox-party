@@ -2,6 +2,7 @@ import { jukeboxClient } from './index';
 import { Track } from '@common/track';
 import { Duration } from '@common/duration';
 import { Artist } from '@common/artist';
+import { GetTracksResponse } from '../../../pages/api/search';
 
 const baseURL = 'search';
 
@@ -15,18 +16,23 @@ const search = async (
   q = encodeURIComponent(q);
   const encodedType = encodeURIComponent(type);
   const url = `${baseURL}?q=${q}&type=${encodedType}`;
-  const res = await jukeboxClient.get(url, {
+  const res = await jukeboxClient.get<GetTracksResponse>(url, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  const trackData: any[] = res.data.tracks.items;
-  return trackData.map((data) =>
+  /*
+  Currently, if the request returns undefined somewhere, we just use default
+  values to compensate, like [] if tracks is undefined.
+  TODO: Handle these errors better
+   */
+  const spotifyTracks = res.data.tracks?.items ?? [];
+  return spotifyTracks.map((track) =>
     Track.make(
-      data.name,
-      Duration.make(0, data.duration_ms / 1000),
-      [data.artists.map((artist: any) => Artist.make(artist.name))],
-      data.album.images[0].url
+      track.name,
+      Duration.makeFromSeconds(track.duration_ms / 1000),
+      track.artists.map((artist) => Artist.make(artist.name)),
+      track.album.images[0].url
     )
   );
 };

@@ -9,11 +9,9 @@ import { sendMissingQueryParamError } from '@common/errors';
 
 export const BaseURL = 'search';
 
-export type GetTracksDto = any; // TODO: This needs typing
+export type GetTracksDto = SpotifyApi.SearchResponse;
 
-export type GetTracksError = never; // TODO: This needs typing
-
-export type GetTracksResponse = ApiResponse<GetTracksDto | GetTracksError>;
+export type GetTracksResponse = ApiResponse<GetTracksDto>;
 
 async function handleGet(
   req: NextApiRequest,

@@ -7,20 +7,22 @@ import { StatusCodes } from 'http-status-codes';
 
 export const BaseURL = 'me/player/';
 
-export type GetSpotifyPlayerResponse = ApiResponse<
-  | any // TODO: This needs typing
-  | never // TODO: This needs typing
->;
+export type GetPlaybackDto = SpotifyApi.CurrentPlaybackResponse;
+
+export type GetPlaybackResponse = ApiResponse<GetPlaybackDto>;
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<GetSpotifyPlayerResponse>
+  res: NextApiResponse<GetPlaybackResponse>
 ) {
-  let spotifyRes = await spotifyClient.get(BaseURL, {
-    headers: {
-      Authorization: req.headers.authorization,
-    },
-  });
+  let spotifyRes = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
+    BaseURL,
+    {
+      headers: {
+        Authorization: req.headers.authorization,
+      },
+    }
+  );
   sendSuccess(res, StatusCodes.OK, spotifyRes.data);
 }
 

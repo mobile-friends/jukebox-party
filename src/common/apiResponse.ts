@@ -19,6 +19,8 @@ interface ApiResponseBase {
 
 export type ApiResponse<TDto extends Dto | ErrorDto> = ApiResponseBase & TDto;
 
+export type NoData = {};
+
 export function isErrorResponse<
   TDto extends Dto | ErrorDto,
   TError extends ErrorDto
@@ -65,3 +67,5 @@ export function sendError<TError extends ErrorDto>(
     ...error,
   });
 }
+
+export const noData: NoData = {};
