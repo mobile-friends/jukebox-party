@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { spotifyClient } from '@common/httpClient/spotify';
-import { BaseURL } from './index';
 import { ApiResponse, noData, NoData, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { multiMethodHandler } from '@common/apiUtil';
@@ -14,7 +13,7 @@ async function handlePut(
   req: NextApiRequest,
   res: NextApiResponse<SetPlaybackResponse>
 ) {
-  await spotifyClient.get(`${BaseURL}/play`, {
+  await spotifyClient.get(`me/player/play`, {
     headers: {
       Authorization: req.headers.authorization,
     },
