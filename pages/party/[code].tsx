@@ -143,7 +143,6 @@ function PartyRoom({}: Props) {
 
           <Navbar />
         </div>
-        
       );
     } else {
       // TODO: Extract component

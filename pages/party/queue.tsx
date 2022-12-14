@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { Track } from '../../lib/track';
-import { GetServerSideProps } from 'next/types';
 import QueueTracks from '../../components/elements/queueTracks';
 import { queue } from '../../httpClient/jukebox/queue';
+import { useRouter } from 'next/router';
 
-interface Props {
-  provider: ClientSafeProvider;
-}
-export default function Queue({ provider }: Props) {
+interface Props {}
+export default function Queue({}: Props) {
+  const router = useRouter();
   let { data: session } = useSession() as any;
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
@@ -22,17 +21,18 @@ export default function Queue({ provider }: Props) {
     <QueueTracks track={tracks} />
   ));
 
+  const partyCode = router.query.code;
+
   return (
     <div>
-      Queue Template
+      {/* TODO get partyname localStorage? state? */}
+      <div>
+        <h1>insert Partyname</h1>
+      </div>
+      <div>
+        <h2>Code: {partyCode}</h2>
+      </div>
       <div>{trackNames}</div>
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const providers = await getProviders();
-  if (providers === null) throw new Error('Could not get spotify providers');
-
-  return { props: { provider: providers.spotify } };
-};
