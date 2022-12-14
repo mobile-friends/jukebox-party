@@ -2,12 +2,16 @@ import { Track } from '@common/track';
 import { Duration } from '@common/duration';
 import { Artist } from '@common/artist';
 
+function makeDurationOfMillis(millis: number): Duration {
+  return Duration.makeFromSeconds(millis / 1000);
+}
+
 /**
  * Extracts the duration from a Spotify track
  * @param track The track
  */
 export function parseDurationOf(track: SpotifyApi.TrackObjectFull): Duration {
-  return Duration.makeFromSeconds(track.duration_ms / 1000);
+  return makeDurationOfMillis(track.duration_ms);
 }
 
 /**
