@@ -1,6 +1,6 @@
-import { Track } from '@common/track';
-import { Artist } from '@common/artist';
-import { PlaybackState } from '@common/playbackState';
+import { Track } from '@common/types/track';
+import { Artist } from '@common/types/artist';
+import { PlaybackState } from '@common/types/playbackState';
 import PlaybackView from './playbackView';
 
 export interface TrackViewProps {

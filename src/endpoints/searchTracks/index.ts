@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GetTracksResponse } from '../searchTracks/dto';
-import { tryQueryParam } from '@common/query';
+import { tryQueryParam } from '@common/util/query';
 import { sendMissingQueryParamError } from '@common/errors';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';

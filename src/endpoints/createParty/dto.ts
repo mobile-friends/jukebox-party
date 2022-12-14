@@ -1,4 +1,4 @@
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 import { ApiResponse } from '@common/apiResponse';
 
 export interface CreatePartyDto {

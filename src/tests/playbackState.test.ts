@@ -1,4 +1,4 @@
-import { PlaybackState } from '@common/playbackState';
+import { PlaybackState } from '@common/types/playbackState';
 import * as fc from 'fast-check';
 import { arbDuration } from './arb/duration';
 import { arbPlaybackState } from './arb/playbackState';

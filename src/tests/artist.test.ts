@@ -1,4 +1,4 @@
-import { Artist } from '@common/artist';
+import { Artist } from '@common/types/artist';
 
 test('Created artists have the given name', () => {
   const name = 'Mr. music';

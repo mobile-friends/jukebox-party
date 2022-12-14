@@ -1,4 +1,4 @@
-import { Duration } from '@common/duration';
+import { Duration } from '@common/types/duration';
 
 test('Zero duration has 0 seconds', () => {
   expect(Duration.secondsIn(Duration.Zero)).toBe(0);

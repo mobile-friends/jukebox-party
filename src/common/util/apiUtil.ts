@@ -3,7 +3,7 @@ import HTTPMethod from 'http-method-enum';
 import http from 'http';
 import { sendMethodNotAllowedError } from '@common/errors';
 import { ApiResponse } from '@common/apiResponse';
-import { Dto } from '@common/dto';
+import { Dto } from '@common/types/dto';
 import { ApiError } from 'next/dist/server/api-utils';
 
 type EndpointHandler<T = any> = (

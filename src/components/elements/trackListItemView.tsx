@@ -1,5 +1,5 @@
-import { Artist } from '@common/artist';
-import { Track } from '@common/track';
+import { Artist } from '@common/types/artist';
+import { Track } from '@common/types/track';
 import styles from '../../styles/components/trackListItemView.module.scss';
 
 export interface TrackListItemViewProps {

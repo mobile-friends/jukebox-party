@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Party } from '@common/party';
+import { Party } from '@common/types/party';
 import firebaseDb from '@common/firebaseDb';
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 
 function useFetchParty(partyCode: PartyCode): Party | null | PartyDb.Error {

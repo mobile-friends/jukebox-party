@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { tryQueryParam } from '@common/query';
+import { tryQueryParam } from '@common/util/query';
 import {
   sendInvalidQueryParamError,
   sendMissingQueryParamError,
   sendPartyNotFoundError,
 } from '@common/errors';
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { sendSuccess } from '@common/apiResponse';

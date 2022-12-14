@@ -1,5 +1,5 @@
-import { PartyCode } from './partyCode';
-import { Party } from './party';
+import { PartyCode } from './types/partyCode';
+import { Party } from './types/party';
 import firebase from 'firebase/app';
 import { FirebaseDatabase } from '@firebase/database-types';
 

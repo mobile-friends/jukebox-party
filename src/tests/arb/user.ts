@@ -1,5 +1,5 @@
 import * as fc from 'fast-check';
-import { User } from '@common/user';
+import { User } from '@common/types/user';
 
 export const arbUsername = fc.constantFrom(
   'Ramon',

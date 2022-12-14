@@ -1,5 +1,5 @@
 import { ApiResponse } from '@common/apiResponse';
-import { Track } from '@common/track';
+import { Track } from '@common/types/track';
 import { DtoError } from '@common/errors';
 
 export interface GetTracksDto {

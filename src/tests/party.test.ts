@@ -1,5 +1,5 @@
-import { Party } from '@common/party';
-import { User } from '@common/user';
+import { Party } from '@common/types/party';
+import { User } from '@common/types/user';
 
 const testName = 'The best party';
 const testHost = User.makeHost('User McHost');

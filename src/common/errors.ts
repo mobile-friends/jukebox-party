@@ -2,7 +2,7 @@ import { ApiResponse, ErrorDto, sendError } from '@common/apiResponse';
 import HTTPMethod from 'http-method-enum';
 import { NextApiResponse } from 'next';
 import { StatusCodes } from 'http-status-codes';
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 
 export interface MethodNotAllowedError extends ErrorDto {
   allowedMethods: HTTPMethod[];

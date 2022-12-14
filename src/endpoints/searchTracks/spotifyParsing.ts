@@ -1,6 +1,6 @@
-import { Track } from '@common/track';
-import { Duration } from '@common/duration';
-import { Artist } from '@common/artist';
+import { Track } from '@common/types/track';
+import { Duration } from '@common/types/duration';
+import { Artist } from '@common/types/artist';
 
 function makeDurationOfMillis(millis: number): Duration {
   return Duration.makeFromSeconds(millis / 1000);

@@ -1,6 +1,6 @@
 import { DtoError, PartyNotFoundError } from '@common/errors';
 import { ApiResponse } from '@common/apiResponse';
-import { Party } from '@common/party';
+import { Party } from '@common/types/party';
 
 export type GetPartyError = DtoError | PartyNotFoundError;
 

@@ -1,6 +1,6 @@
 import * as fc from 'fast-check';
 import { arbGuest, arbHost, arbUser } from './arb/user';
-import { User } from '@common/user';
+import { User } from '@common/types/user';
 
 test('User can only be host OR guest', () => {
   fc.assert(

@@ -5,7 +5,7 @@ import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { createParty } from '@common/../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 
 type Props = {};
 

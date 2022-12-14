@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { JoinPartyDto, JoinPartyResponse } from '../joinParty/dto';
-import { PartyCode } from '@common/partyCode';
+import { PartyCode } from '@common/types/partyCode';
 import {
   sendGenericServerError,
   sendInvalidBodyError,
@@ -8,8 +8,8 @@ import {
 } from '@common/errors';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
-import { User } from '@common/user';
-import { Party } from '@common/party';
+import { User } from '@common/types/user';
+import { Party } from '@common/types/party';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 

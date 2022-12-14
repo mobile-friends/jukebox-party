@@ -1,4 +1,4 @@
-import { multiMethodHandler } from '@common/apiUtil';
+import { multiMethodHandler } from '@common/util/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import handleGetPlaybackRequest from '@endpoint/getPlayback';
 
