@@ -27,6 +27,9 @@ body {
     .text-dark {
         color: $dark-color;
     }
+    .text-error {
+        color: $error-color;
+    }
     .text-bold {
         font-weight: bold;
     }
@@ -36,4 +39,5 @@ body {
     .text-center {
         text-align: center;
     }
+
 }
