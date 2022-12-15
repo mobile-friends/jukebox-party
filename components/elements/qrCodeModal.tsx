@@ -1,10 +1,22 @@
 import QRCode from 'react-qr-code';
 import styles from '../../styles/components/qrCodeModal.module.scss';
+import { useRouter } from 'next/router';
 
 interface InputProps {
   code: string;
   closeModal: () => void;
 }
+
+const createRoomLink = (code: string) => {
+  const origin =
+    typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : '';
+
+  const URL = `${origin}`;
+  //TODO checken, ob der link mit der live url dann auch noch passt (auf localhost funktioniert es)
+  return `${URL}/?partyCode=${code}`;
+};
 
 export default function QRCodeModal({
   code,
@@ -18,7 +30,7 @@ export default function QRCodeModal({
       }}
     >
       <div className={styles.QRCodeContainer}>
-        <QRCode value={code} />
+        <QRCode value={createRoomLink(code)} />
       </div>
     </div>
   );

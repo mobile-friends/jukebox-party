@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as z from 'zod';
 import partyCodeSchema from '../../utils/schemas/partyCodeSchema';
 
-type UseValidatePartyCodeInput = {
+type UseValidatePartyCodeInputProps = {
   partyCode: string;
   isPartyCodeValid: boolean;
   partyCodeErrors: string[];
   validateAndSetPartyCodeInput: (input: string) => void;
 };
 
-export const useValidatePartyCodeInput = (): UseValidatePartyCodeInput => {
-  const [partyCode, setPartyCode] = useState<string>('');
+export const useValidatePartyCodeInput = (
+  code?: string
+): UseValidatePartyCodeInputProps => {
+  const [partyCode, setPartyCode] = useState<string>(code ? code : '');
   const [isPartyCodeValid, setIsPartyCodeValid] = useState<boolean>(false);
   const [partyCodeErrors, setPartyCodeErrors] = useState<string[]>([]);
 

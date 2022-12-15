@@ -28,7 +28,9 @@ export default function Home({ provider }: Props) {
     isPartyCodeValid,
     partyCodeErrors,
     validateAndSetPartyCodeInput,
-  } = useValidatePartyCodeInput();
+  } = useValidatePartyCodeInput(
+    router.query.partyCode ? router.query.partyCode.toString() : undefined
+  );
 
   function goToLogin() {
     signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
@@ -82,6 +84,7 @@ export default function Home({ provider }: Props) {
           <Input
             type='number'
             placeholder='Party code'
+            value={partyCode}
             onChange={onPartyCodeInput}
           />
           {partyCodeErrors.map((error, index) => (
