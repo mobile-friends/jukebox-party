@@ -7,7 +7,7 @@ import { createParty } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '../lib/partyCode';
 import { useValidatePartyNameInput } from '../hooks/inputs/useValidatePartyNameInput';
-import { useValidatePartyHostNameInput } from '../hooks/inputs/useValidatePartyHostNameInput';
+import { useValidatePartyUserNameInput } from '../hooks/inputs/useValidatePartyUserNameInput';
 import ErrorText from '../components/elements/errorText';
 
 type Props = {};
@@ -21,11 +21,11 @@ function CreateParty({}: Props) {
     validateAndSetPartyNameInput,
   } = useValidatePartyNameInput();
   const {
-    partyHostName,
-    isPartyHostNameValid,
-    partyHostNameErrors,
-    validateAndSetPartyHostNameInput,
-  } = useValidatePartyHostNameInput();
+    partyUserName,
+    isPartyUserNameValid,
+    partyUserNameErrors,
+    validateAndSetPartyUserNameInput,
+  } = useValidatePartyUserNameInput();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -41,7 +41,7 @@ function CreateParty({}: Props) {
   }
 
   function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    validateAndSetPartyHostNameInput(e.target.value);
+    validateAndSetPartyUserNameInput(e.target.value);
   }
 
   async function goToPartyPage(partyCode: PartyCode) {
@@ -49,8 +49,8 @@ function CreateParty({}: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (isPartyNameValid && isPartyHostNameValid) {
-      const party = await createParty(partyName, partyHostName);
+    if (isPartyNameValid && isPartyUserNameValid) {
+      const party = await createParty(partyName, partyUserName);
       sessionStorage.setItem('partyCode', party.code);
       await goToPartyPage(party.code);
     }
@@ -68,7 +68,7 @@ function CreateParty({}: Props) {
             <ErrorText errorText={error} key={index} />
           ))}
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
-          {partyHostNameErrors.map((error, index) => (
+          {partyUserNameErrors.map((error, index) => (
             <ErrorText errorText={error} key={index} />
           ))}
           <Button
