@@ -4,7 +4,6 @@ import useFetchParty from '../../hooks/parties/useFetchParty';
 import TrackView from '../../components/elements/trackView';
 import { Track } from '@common/types/track';
 import { Duration } from '@common/types/duration';
-import { Artist } from '@common/types/artist';
 import { PlaybackState } from '@common/types/playbackState';
 import { tryQueryParam } from '@common/util/query';
 import { PartyCode } from '@common/types/partyCode';
@@ -130,7 +129,7 @@ function PartyRoom({}: Props) {
           {currentTrack ? (
             <TrackView
               track={currentTrack}
-              playbackState={PlaybackState.makePlaying(
+              playbackState={PlaybackState.make(
                 playbackProgress,
                 playbackIsPlaying
               )}

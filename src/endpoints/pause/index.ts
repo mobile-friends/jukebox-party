@@ -1,14 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { SetPlaybackResponse } from './/dto';
+import { PauseResponse } from './/dto';
 import { noData, sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { spotifyClient } from '../../httpClient/spotify';
 
 export default async function handleRequest(
   req: NextApiRequest,
-  res: NextApiResponse<SetPlaybackResponse>
+  res: NextApiResponse<PauseResponse>
 ) {
-  await spotifyClient.get(`me/player/play`, {
+  await spotifyClient.get(`me/player/pause`, {
     headers: {
       Authorization: req.headers.authorization,
     },

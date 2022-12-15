@@ -30,11 +30,10 @@ export default function Home({ provider }: Props) {
 
   async function joinParty() {
     const success = await sendJoinPartyRequest(partyCode, username);
-    if (success) { 
+    if (success) {
       sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage();
-    }
-    else await goTo404();
+    } else await goTo404();
   }
 
   function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {

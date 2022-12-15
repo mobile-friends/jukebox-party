@@ -3,12 +3,12 @@ import { useSession } from 'next-auth/react';
 import QueueTracks from '../../components/elements/queueTracks';
 import { queue } from '../../httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
-import Button from '../../components/elements/button';
 import Navbar from '../../components/elements/navbar';
 import QueueHeader from '../../components/elements/queueHeader';
 import { Track } from '@common/types/track';
 
 interface Props {}
+
 export default function Queue({}: Props) {
   const router = useRouter();
   let { data: session } = useSession() as any;

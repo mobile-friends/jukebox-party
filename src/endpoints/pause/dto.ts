@@ -1,5 +1,5 @@
 import { ApiResponse, NoData } from '@common/apiResponse';
 
-export type SetPlaybackDto = NoData;
+export type PauseDto = NoData;
 
-export type SetPlaybackResponse = ApiResponse<SetPlaybackDto>;
+export type PauseResponse = ApiResponse<PauseDto>;

@@ -1,6 +1,6 @@
-import { Track } from '../../lib/track';
-import { Artist } from '../../lib/artist';
 import styles from '../../styles/components/trackListItemView.module.scss';
+import { Track } from '@common/types/track';
+import { Artist } from '@common/types/artist';
 
 export interface queueTracks {
   track: Track;

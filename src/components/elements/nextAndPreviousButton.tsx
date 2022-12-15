@@ -1,5 +1,4 @@
-import { GiNextButton } from 'react-icons/gi';
-import { GiPreviousButton } from 'react-icons/gi';
+import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
 import { useSession } from 'next-auth/react';
 import Button from './button';
 import { nextTrack, previousTrack } from '../../httpClient/spotify/player';

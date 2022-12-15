@@ -1,7 +1,7 @@
 import { multiMethodHandler } from '@common/util/apiUtil';
 import HTTPMethod from 'http-method-enum';
-import handleSetPlaybackRequest from '@endpoint/play';
+import handlePauseRequest from '@endpoint/pause';
 
 export default multiMethodHandler({
-  [HTTPMethod.PUT]: handleSetPlaybackRequest,
+  [HTTPMethod.PUT]: handlePauseRequest,
 });

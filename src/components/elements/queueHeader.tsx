@@ -1,6 +1,4 @@
-import router from 'next/router';
 import React from 'react';
-import Button from './button';
 
 type Props = {
   partyName: string | null;

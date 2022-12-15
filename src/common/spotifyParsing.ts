@@ -2,6 +2,10 @@ import { Track } from '@common/types/track';
 import { Duration } from '@common/types/duration';
 import { Artist } from '@common/types/artist';
 
+type TrackLike =
+  | SpotifyApi.TrackObjectFull
+  | SpotifyApi.RecommendationTrackObject;
+
 function makeDurationOfMillis(millis: number): Duration {
   return Duration.makeFromSeconds(millis / 1000);
 }
@@ -10,7 +14,7 @@ function makeDurationOfMillis(millis: number): Duration {
  * Extracts the duration from a Spotify track
  * @param track The track
  */
-export function parseDurationOf(track: SpotifyApi.TrackObjectFull): Duration {
+export function parseDurationOf(track: TrackLike): Duration {
   return makeDurationOfMillis(track.duration_ms);
 }
 
@@ -26,7 +30,7 @@ export function parseArtist(artist: SpotifyApi.ArtistObjectSimplified): Artist {
  * Extracts the artists from a Spotify track
  * @param track The track
  */
-export function parseArtistsOf(track: SpotifyApi.TrackObjectFull): Artist[] {
+export function parseArtistsOf(track: TrackLike): Artist[] {
   return track.artists.map(parseArtist);
 }
 
@@ -34,7 +38,7 @@ export function parseArtistsOf(track: SpotifyApi.TrackObjectFull): Artist[] {
  * Extracts the album-art-url from a Spotify track
  * @param track The track
  */
-export function parseAlbumArtUrlOf(track: SpotifyApi.TrackObjectFull): string {
+export function parseAlbumArtUrlOf(track: TrackLike): string {
   return track.album.images[0].url;
 }
 
@@ -42,25 +46,11 @@ export function parseAlbumArtUrlOf(track: SpotifyApi.TrackObjectFull): string {
  * Converts a Spotify track to a domain track
  * @param track The track
  */
-export function parseTrack(track: SpotifyApi.TrackObjectFull): Track {
+export function parseTrack(track: TrackLike): Track {
   return Track.make(
     track.name,
     parseDurationOf(track),
     parseArtistsOf(track),
     parseAlbumArtUrlOf(track)
   );
-}
-
-/**
- * Parses the tracks from a Spotify search-response object
- * @param response The response
- */
-export function parseTracksIn(response: SpotifyApi.SearchResponse): Track[] {
-  /*
-Currently, if the request returns undefined somewhere, we just use default
-values to compensate, like [] if tracks is undefined.
-TODO: Handle these errors better
-*/
-  const unparsedTracks = response.tracks?.items ?? [];
-  return unparsedTracks.map(parseTrack);
 }
