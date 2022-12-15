@@ -1,7 +1,8 @@
 import { Track } from '../../lib/track';
-import { Artist } from '../../lib/artist';
 import { PlaybackState } from '../../lib/playbackState';
 import PlaybackView from './playbackView';
+import styles from '../../styles/components/trackView.module.scss';
+import { useEffect, useRef, useState } from 'react';
 
 export interface TrackViewProps {
   track: Track;
@@ -9,29 +10,45 @@ export interface TrackViewProps {
 }
 
 export default function TrackView({ track, playbackState }: TrackViewProps) {
-  const albumArt = <img src={Track.albumArtUrlOf(track)} alt='Album art' />;
+  const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
+  const marqueeTextRef = useRef<HTMLSpanElement>(null);
+  const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
 
-  const nameView = <p>{Track.nameOf(track)}</p>;
+  const artistViews = Track.artistsOf(track)
+    .map((artist) => artist.name)
+    .join(', ');
 
-  const artistViews = Track.artistsOf(track).map((artist, i, row) => {
-    let artistName =
-      i + 1 !== row.length
-        ? Artist.nameOf(artist) + ','
-        : Artist.nameOf(artist);
-    return <div key={artistName}>{artistName}</div>;
-  });
+  useEffect(() => {
+    console.log('setting show marquee blur');
+    setShowMarqueeBlur(
+      (marqueeTextRef.current?.clientWidth ?? 0) >
+        (marqueeWrapperRef.current?.clientWidth ?? 0)
+    );
+  }, [track.name]);
 
   return (
-    <div>
-      <div style={{ textAlign: 'center' }}>{albumArt}</div>
-      <div
-        style={{ fontSize: '1.5em', fontWeight: 'bold', marginLeft: '15px' }}
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.25rem',
+        padding: '0 20px',
+      }}
+    >
+      <div style={{ textAlign: 'center' }}>
+        <img src={Track.albumArtUrlOf(track)} alt='Album art' />
+      </div>
+      <p
+        ref={marqueeWrapperRef}
+        className={styles.marquee}
+        style={{ fontSize: '1.5em', fontWeight: 'bold' }}
       >
-        {nameView}
-      </div>
-      <div style={{ marginLeft: '15px', marginTop: '5px', display: 'flex' }}>
+        {showMarqueeBlur && <div className={styles.shadow}></div>}
+        <span ref={marqueeTextRef}>{Track.nameOf(track)}</span>
+      </p>
+      <p style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem' }}>
         {artistViews}
-      </div>
+      </p>
       <PlaybackView
         playbackState={playbackState}
         trackDuration={Track.durationOf(track)}

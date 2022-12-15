@@ -22,7 +22,7 @@ export default function PlaybackView({
 
   return (
     <div>
-      <div className={styles.container}>
+      <div>
         <ProgressBar
           progress={playbackState.playTime}
           duration={trackDuration}
