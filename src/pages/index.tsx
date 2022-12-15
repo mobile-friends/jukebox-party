@@ -6,6 +6,9 @@ import Input from '../components/elements/input';
 import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
+import { useValidatePartyUserNameInput } from '../hooks/inputs/useValidatePartyUserNameInput';
+import ErrorText from '../components/elements/errorText';
+import { useValidatePartyCodeInput } from '../hooks/inputs/useValidatePartyCode';
 
 interface Props {
   provider: ClientSafeProvider;
@@ -13,8 +16,18 @@ interface Props {
 
 export default function Home({ provider }: Props) {
   const router = useRouter();
-  const [username, setUsername] = useState<string>('');
-  const [partyCode, setPartyCode] = useState<string>('');
+  const {
+    partyUserName,
+    isPartyUserNameValid,
+    partyUserNameErrors,
+    validateAndSetPartyUserNameInput,
+  } = useValidatePartyUserNameInput();
+  const {
+    partyCode,
+    isPartyCodeValid,
+    partyCodeErrors,
+    validateAndSetPartyCodeInput,
+  } = useValidatePartyCodeInput();
 
   function goToLogin() {
     signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
@@ -29,7 +42,7 @@ export default function Home({ provider }: Props) {
   }
 
   async function joinParty() {
-    const success = await sendJoinPartyRequest(partyCode, username);
+    const success = await sendJoinPartyRequest(partyCode, partyUserName);
     if (success) {
       sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage();
@@ -37,15 +50,17 @@ export default function Home({ provider }: Props) {
   }
 
   function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {
-    setUsername(e.target.value);
+    validateAndSetPartyUserNameInput(e.target.value);
   }
 
-  function onPartyCodeInout(e: ChangeEvent<HTMLInputElement>) {
-    setPartyCode(e.target.value);
+  function onPartyCodeInput(e: ChangeEvent<HTMLInputElement>) {
+    validateAndSetPartyCodeInput(e.target.value);
   }
 
   function onJoinPartyClicked() {
-    joinParty().catch(console.log);
+    if (isPartyUserNameValid && isPartyCodeValid) {
+      joinParty().catch(console.log);
+    }
   }
 
   function onCreatePartyClicked() {
@@ -60,7 +75,17 @@ export default function Home({ provider }: Props) {
         </h1>
         <form>
           <Input placeholder='Name' onChange={onUsernameInput} />
-          <Input placeholder='Party code' onChange={onPartyCodeInout} />
+          {partyUserNameErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
+          <Input
+            type='number'
+            placeholder='Party code'
+            onChange={onPartyCodeInput}
+          />
+          {partyCodeErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
           <Button
             text='Join party'
             type='primary block'
