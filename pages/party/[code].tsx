@@ -18,12 +18,16 @@ import { createTrack } from '../../utils/createTrack';
 import { useSession } from 'next-auth/react';
 import { recommendations } from '../../httpClient/spotify/browse';
 import Navbar from '../../components/elements/navbar';
+import { useModalVisibility } from '../../hooks/modals/useModalVisibility';
+import QRCodeModal from '../../components/elements/qrCodeModal';
+import Button from '../../components/elements/button';
 
 type Props = {};
 
 function PartyRoom({}: Props) {
   const router = useRouter();
   let { data: session } = useSession() as any;
+  const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track>();
   const [playbackProgress, setPlaybackProgress] = useState<Duration>(
     Duration.Zero
@@ -115,7 +119,7 @@ function PartyRoom({}: Props) {
     const party = result;
     const partyIsLoaded = party !== null;
     if (partyIsLoaded) {
-    sessionStorage.setItem('partyName', party.name);
+      sessionStorage.setItem('partyName', party.name);
       const guestList =
         Party.guestsOf(party)
           .map((guest) => guest.name)
@@ -140,6 +144,22 @@ function PartyRoom({}: Props) {
               <p>NO TRACK IS CURRENTLY PLAYING!</p>
               <p>Please press on the play button in Spotify!</p>
             </div>
+          )}
+
+          <Button
+            text='Show QR Code'
+            type='primary'
+            onClick={() => {
+              handleModalVisibility();
+            }}
+          ></Button>
+          {isModalVisible && (
+            <QRCodeModal
+              closeModal={() => {
+                handleModalVisibility();
+              }}
+              code={party.code}
+            />
           )}
           <Navbar />
         </div>
