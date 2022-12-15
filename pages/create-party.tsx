@@ -6,13 +6,20 @@ import Input from '../components/elements/input';
 import { createParty } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '../lib/partyCode';
+import { useValidatePartyNameInput } from '../hooks/inputs/useValidatePartyNameInput';
+import ErrorText from '../components/elements/errorText';
 
 type Props = {};
 
 function CreateParty({}: Props) {
   const router = useRouter();
-  const [partyName, setPartyName] = useState<string>('');
   const [partyHostName, setPartyHostName] = useState<string>('');
+  const {
+    partyName,
+    isPartyNameValid,
+    partyNameErrors,
+    validatePartyNameInput,
+  } = useValidatePartyNameInput();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -24,7 +31,7 @@ function CreateParty({}: Props) {
   }
 
   function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    setPartyName(e.target.value);
+    validatePartyNameInput(e.target.value);
   }
 
   function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
@@ -36,9 +43,11 @@ function CreateParty({}: Props) {
   }
 
   async function onCreatePartyClicked() {
-    const party = await createParty(partyName, partyHostName);
-    sessionStorage.setItem('partyCode', party.code);
-    await goToPartyPage(party.code);
+    if (isPartyNameValid) {
+      const party = await createParty(partyName, partyHostName);
+      sessionStorage.setItem('partyCode', party.code);
+      await goToPartyPage(party.code);
+    }
   }
 
   return (
@@ -49,6 +58,9 @@ function CreateParty({}: Props) {
         </h1>
         <form>
           <Input placeholder='Party Name' onChange={onPartyNameChanged} />
+          {partyNameErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
           <Button
             text='Create party'
