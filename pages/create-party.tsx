@@ -7,19 +7,25 @@ import { createParty } from '../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '../lib/partyCode';
 import { useValidatePartyNameInput } from '../hooks/inputs/useValidatePartyNameInput';
+import { useValidatePartyHostNameInput } from '../hooks/inputs/useValidatePartyHostNameInput';
 import ErrorText from '../components/elements/errorText';
 
 type Props = {};
 
 function CreateParty({}: Props) {
   const router = useRouter();
-  const [partyHostName, setPartyHostName] = useState<string>('');
   const {
     partyName,
     isPartyNameValid,
     partyNameErrors,
-    validatePartyNameInput,
+    validateAndSetPartyNameInput,
   } = useValidatePartyNameInput();
+  const {
+    partyHostName,
+    isPartyHostNameValid,
+    partyHostNameErrors,
+    validateAndSetPartyHostNameInput,
+  } = useValidatePartyHostNameInput();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -31,11 +37,11 @@ function CreateParty({}: Props) {
   }
 
   function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    validatePartyNameInput(e.target.value);
+    validateAndSetPartyNameInput(e.target.value);
   }
 
   function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    setPartyHostName(e.target.value);
+    validateAndSetPartyHostNameInput(e.target.value);
   }
 
   async function goToPartyPage(partyCode: PartyCode) {
@@ -43,7 +49,7 @@ function CreateParty({}: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (isPartyNameValid) {
+    if (isPartyNameValid && isPartyHostNameValid) {
       const party = await createParty(partyName, partyHostName);
       sessionStorage.setItem('partyCode', party.code);
       await goToPartyPage(party.code);
@@ -62,6 +68,9 @@ function CreateParty({}: Props) {
             <ErrorText errorText={error} key={index} />
           ))}
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
+          {partyHostNameErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
           <Button
             text='Create party'
             type='primary block'

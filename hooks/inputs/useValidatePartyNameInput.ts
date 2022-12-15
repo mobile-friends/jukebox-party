@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import * as z from 'zod';
+import nameInputSchema from '../../utils/schemas/nameInputSchema';
 
 type UseValidatePartyNameInput = {
   partyName: string;
   isPartyNameValid: boolean;
   partyNameErrors: string[];
-  validatePartyNameInput: (input: string) => void;
+  validateAndSetPartyNameInput: (input: string) => void;
 };
 
 export const useValidatePartyNameInput = (): UseValidatePartyNameInput => {
@@ -13,19 +14,9 @@ export const useValidatePartyNameInput = (): UseValidatePartyNameInput => {
   const [isPartyNameValid, setIsPartyNameValid] = useState<boolean>(false);
   const [partyNameErrors, setPartyNameErrors] = useState<string[]>([]);
 
-  const schema = z
-    .string()
-    .min(3, { message: 'Mindestens 3 Zeichen' })
-    .max(64, { message: 'Maximal 64 Zeichen' })
-    .regex(/^[\w\s-]*$/, {
-      message: 'Alphanumerisch + Lehrzeichen/Bindestrich/etc',
-    });
-  //TODO regex für emojis erweitern
-
-  const validatePartyNameInput = (input: string) => {
-    console.log(input);
+  const validateAndSetPartyNameInput = (input: string) => {
     const validated: z.SafeParseReturnType<string, string> =
-      schema.safeParse(input);
+      nameInputSchema.safeParse(input);
 
     setPartyName(input);
     if (validated.success) {
@@ -41,6 +32,6 @@ export const useValidatePartyNameInput = (): UseValidatePartyNameInput => {
     partyName,
     isPartyNameValid,
     partyNameErrors,
-    validatePartyNameInput,
+    validateAndSetPartyNameInput,
   };
 };
