@@ -28,8 +28,8 @@ export namespace PlaybackState {
    * Makes a playing playback-state
    * @param playTime How long the track has been playing for
    */
-  export function makePlaying(playTime: Duration): PlaybackState {
-    return make(playTime, true);
+  export function makePlaying(playTime: Duration, isPlaying: boolean): PlaybackState {
+    return make(playTime, isPlaying);
   }
 
   /**

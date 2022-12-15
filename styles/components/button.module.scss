@@ -1,0 +1,89 @@
+@import '../helper/variables.scss';
+
+button {
+
+    &.btn {
+        min-height: 44px;
+        border-radius: 50px;
+        font-weight: bold;
+
+        padding: 0 20px;
+        margin: 5px 0;
+
+        display: flex;
+        justify-content: center;
+
+        &.primary {
+            color: $dark-color;
+            background: $primary-color;
+            border: none;
+        }
+        &.secondary {
+            color: $primary-color;
+            background: none;
+            border: 1px solid $primary-color;
+        }
+        &.tertiary {
+            color: $primary-color;
+            background: none;
+            border: none;
+        }
+
+        div {
+            margin: auto 0;
+        }
+        div:first-of-type {
+            display: flex;
+            justify-content: center;
+    
+            svg {
+                font-size: 20px;
+            }
+        }
+    }
+
+    &.icon-only {
+        border: none;
+        padding: 0;
+
+        &.small {
+            background-color: $dark-color;
+            color: $light-color;
+
+            div {
+                height: 44px;
+                width: 44px;
+                display: flex;
+
+                svg {
+                    font-size: 30px;
+                }
+            }
+        }
+        &.big {
+            background-color: $light-color;
+            color: $dark-color;
+
+            div {
+                height: 60px;
+                width: 60px;
+                display: flex;
+
+                svg {
+                    font-size: 40px;
+                }
+            }
+        }
+
+        svg {
+            margin: auto;
+        }
+    }
+    &.block {
+        width: 100%;
+    }
+    &:hover {
+        opacity: 90%;
+        cursor: pointer;
+    }
+}

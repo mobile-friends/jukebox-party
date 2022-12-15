@@ -37,6 +37,7 @@ function CreateParty({}: Props) {
 
   async function onCreatePartyClicked() {
     const partyCode = await createParty(partyName, partyHostName);
+    sessionStorage.setItem('partyCode', partyCode);
     await goToPartyPage(partyCode);
   }
 
@@ -51,11 +52,11 @@ function CreateParty({}: Props) {
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
           <Button
             text='Create party'
-            type='primary'
+            type='primary block'
             onClick={onCreatePartyClicked}
           />
         </form>
-        <Button text='Back' type='tertiary' onClick={onBackClicked} />
+        <Button text='Back' type='tertiary block' onClick={onBackClicked} />
       </div>
     </div>
   );

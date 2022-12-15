@@ -1,3 +1,7 @@
+import ProgressBar from './progressBar';
+import PlayButton from './playButton';
+import NextAndPreviousButton from './nextAndPreviousButton';
+import styles from '../../styles/components/playbackView.module.scss';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 
@@ -10,10 +14,6 @@ export default function PlaybackView({
   playbackState,
   trackDuration,
 }: PlaybackViewProps) {
-  const isPlayingText = PlaybackState.isPlaying(playbackState)
-    ? 'Playing'
-    : 'Paused';
-
   const progressText = Duration.formatted(
     PlaybackState.playTimeOf(playbackState)
   );
@@ -21,6 +21,22 @@ export default function PlaybackView({
   const trackDurationText = Duration.formatted(trackDuration);
 
   return (
-    <span>{`${isPlayingText} ${progressText} / ${trackDurationText}`}</span>
+    <div>
+      <div className={styles.container}>
+        <ProgressBar
+          progress={playbackState.playTime}
+          duration={trackDuration}
+        ></ProgressBar>
+        <div className={styles.row}>
+          <label>{progressText}</label>
+          <label>{trackDurationText}</label>
+        </div>
+        <div className={styles.buttonContainer}>
+          <NextAndPreviousButton next={false}></NextAndPreviousButton>
+          <PlayButton isPlaying={playbackState.isPlaying} />
+          <NextAndPreviousButton next={true}></NextAndPreviousButton>
+        </div>
+      </div>
+    </div>
   );
 }

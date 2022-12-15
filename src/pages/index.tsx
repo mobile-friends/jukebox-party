@@ -30,7 +30,10 @@ export default function Home({ provider }: Props) {
 
   async function joinParty() {
     const success = await sendJoinPartyRequest(partyCode, username);
-    if (success) await goToPartyPage();
+    if (success) { 
+      sessionStorage.setItem('partyCode', partyCode);
+      await goToPartyPage();
+    }
     else await goTo404();
   }
 
@@ -61,13 +64,13 @@ export default function Home({ provider }: Props) {
           <Input placeholder='Party code' onChange={onPartyCodeInout} />
           <Button
             text='Join party'
-            type='primary'
+            type='primary block'
             onClick={onJoinPartyClicked}
           />
         </form>
         <Button
           text='Create party'
-          type='tertiary'
+          type='tertiary block'
           onClick={onCreatePartyClicked}
         />
       </div>
