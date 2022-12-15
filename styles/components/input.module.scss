@@ -15,9 +15,15 @@ input.input {
     &.block {
         width: 100%;
     }
+    &.input-error {
+        border: 1px solid $error-color;
+    }
     &:focus {
         outline: none;
         border: 1px solid $primary-color;
+        &.input-error {
+            border: 1px solid $error-color;
+        }
     }
     &::placeholder {
         color: #ffffff85;

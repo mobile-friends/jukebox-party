@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { ChangeEvent, useState } from 'react';
 import Button from '../components/elements/button';
+import ErrorList from '../components/elements/ErrorList';
 import ErrorText from '../components/elements/errorText';
 import Input from '../components/elements/input';
 import QRCodeModal from '../components/elements/qrCodeModal';
@@ -63,6 +64,9 @@ export default function Home({ provider }: Props) {
   function onJoinPartyClicked() {
     if (isPartyUserNameValid && isPartyCodeValid) {
       joinParty().catch(console.log);
+    } else {
+      validateAndSetPartyCodeInput(partyCode);
+      validateAndSetPartyUserNameInput(partyUserName);
     }
   }
 
@@ -77,19 +81,20 @@ export default function Home({ provider }: Props) {
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input placeholder='Name' onChange={onUsernameInput} />
-          {partyUserNameErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
+          <Input
+            placeholder='Name'
+            onChange={onUsernameInput}
+            hasError={partyUserNameErrors.length > 0}
+          />
+          <ErrorList errors={partyUserNameErrors} />
           <Input
             type='number'
             placeholder='Party code'
             value={partyCode}
             onChange={onPartyCodeInput}
+            hasError={partyCodeErrors.length > 0}
           />
-          {partyCodeErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
+          <ErrorList errors={partyCodeErrors} />
           <Button
             text='Join party'
             type='primary block'

@@ -4,6 +4,7 @@ interface InputProps {
   type?: string;
   placeholder: string;
   value?: string;
+  hasError?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -11,6 +12,7 @@ export default function Input({
   type,
   placeholder,
   value,
+  hasError,
   onChange,
 }: InputProps): JSX.Element {
   return (
@@ -18,7 +20,7 @@ export default function Input({
       <input
         type={type}
         placeholder={`${placeholder}`}
-        className='input block'
+        className={`input block ${hasError ? 'input-error' : ''}`}
         value={value}
         onChange={(e) => {
           if (onChange !== undefined) onChange(e);
