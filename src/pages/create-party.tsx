@@ -1,18 +1,31 @@
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { createParty } from '@common/../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
+import ErrorText from '../components/elements/errorText';
+import { useValidatePartyNameInput } from '../../hooks/inputs/useValidatePartyNameInput';
+import { useValidatePartyHostNameInput } from '../../hooks/inputs/useValidatePartyHostNameInput';
 
 type Props = {};
 
 function CreateParty({}: Props) {
   const router = useRouter();
-  const [partyName, setPartyName] = useState<string>('');
-  const [partyHostName, setPartyHostName] = useState<string>('');
+  const {
+    partyName,
+    isPartyNameValid,
+    partyNameErrors,
+    validateAndSetPartyNameInput,
+  } = useValidatePartyNameInput();
+  const {
+    partyHostName,
+    isPartyHostNameValid,
+    partyHostNameErrors,
+    validateAndSetPartyHostNameInput,
+  } = useValidatePartyHostNameInput();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -24,11 +37,11 @@ function CreateParty({}: Props) {
   }
 
   function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    setPartyName(e.target.value);
+    validateAndSetPartyNameInput(e.target.value);
   }
 
   function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    setPartyHostName(e.target.value);
+    validateAndSetPartyHostNameInput(e.target.value);
   }
 
   async function goToPartyPage(partyCode: PartyCode) {
@@ -36,9 +49,11 @@ function CreateParty({}: Props) {
   }
 
   async function onCreatePartyClicked() {
-    const partyCode = await createParty(partyName, partyHostName);
-    sessionStorage.setItem('partyCode', partyCode);
-    await goToPartyPage(partyCode);
+    if (isPartyNameValid && isPartyHostNameValid) {
+      const partyCode = await createParty(partyName, partyHostName);
+      sessionStorage.setItem('partyCode', partyCode);
+      await goToPartyPage(partyCode);
+    }
   }
 
   return (
@@ -49,7 +64,13 @@ function CreateParty({}: Props) {
         </h1>
         <form>
           <Input placeholder='Party Name' onChange={onPartyNameChanged} />
+          {partyNameErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
           <Input placeholder='Host Name' onChange={onHostNameChanged} />
+          {partyHostNameErrors.map((error, index) => (
+            <ErrorText errorText={error} key={index} />
+          ))}
           <Button
             text='Create party'
             type='primary block'

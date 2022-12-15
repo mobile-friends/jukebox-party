@@ -6,33 +6,36 @@
 @import 'src/styles/components/queueHeader.module.scss';
 
 * {
-    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
+  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
     'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    background-color: $dark-color;
-    color: $light-color;
+  background-color: $dark-color;
+  color: $light-color;
 
-    .text-primary {
-        color: $primary-color;
-    }
-    .text-light {
-        color: $light-color;
-    }
-    .text-dark {
-        color: $dark-color;
-    }
-    .text-bold {
-        font-weight: bold;
-    }
-    .text-italic {
-        font-style: italic;
-    }
-    .text-center {
-        text-align: center;
-    }
+  .text-primary {
+    color: $primary-color;
+  }
+  .text-light {
+    color: $light-color;
+  }
+  .text-dark {
+    color: $dark-color;
+  }
+  .text-error {
+    color: $error-color;
+  }
+  .text-bold {
+    font-weight: bold;
+  }
+  .text-italic {
+    font-style: italic;
+  }
+  .text-center {
+    text-align: center;
+  }
 }
