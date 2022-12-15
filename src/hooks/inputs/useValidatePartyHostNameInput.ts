@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as z from 'zod';
-import nameInputSchema from '../../../utils/schemas/nameInputSchema';
+import nameInputSchema from '../../schemas/nameInputSchema';
 
 type UseValidatePartyHostNameInput = {
   partyHostName: string;
