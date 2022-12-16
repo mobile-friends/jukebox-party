@@ -85,10 +85,9 @@ function PartyRoom({}: Props) {
     try {
       const recentTrackIds = await recentlyPlayed(session?.user?.accessToken);
       const recommendedTracks = await recommendations(
-        recentTrackIds.join(','),
+        recentTrackIds,
         session?.user?.accessToken
       );
-      console.log('Recommendation: ', recommendedTracks[0]);
       //TODO: add to Queue
     } catch (error) {
       console.error(error);

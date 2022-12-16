@@ -7,6 +7,7 @@ const spotifyClient = axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
+  validateStatus: (_) => true,
 });
 
 export { spotifyClient };

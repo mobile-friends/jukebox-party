@@ -22,8 +22,8 @@ export default function Queue({}: Props) {
     }
   }, [session]);
 
-  const trackNames = currentQueueTracks.map((tracks: Track) => (
-    <QueueTracks track={tracks} />
+  const trackNames = currentQueueTracks.map((track: Track) => (
+    <QueueTracks track={track} />
   ));
 
   const partyCode = sessionStorage.getItem('partyCode');

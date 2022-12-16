@@ -5,6 +5,8 @@ import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { parseTrack } from '@common/spotifyParsing';
 import { Track } from '@common/types/track';
+import { isSpotifyError } from '@common/util/typeGuards';
+import { sendGenericServerError } from '@common/errors';
 
 function isTrackItem(
   item: SpotifyApi.TrackObjectFull | SpotifyApi.EpisodeObjectFull
@@ -24,14 +26,18 @@ export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetQueueResponse>
 ) {
-  const spotifyRes = await spotifyClient.get<SpotifyApi.UsersQueueResponse>(
-    'me/player/queue',
-    {
-      headers: {
-        Authorization: req?.headers?.authorization,
-      },
-    }
-  );
-  const tracks = parseTracksIn(spotifyRes.data);
-  sendSuccess(res, StatusCodes.OK, tracks);
+  const spotifyRes = await spotifyClient.get<
+    SpotifyApi.UsersQueueResponse | SpotifyApi.ErrorObject
+  >('me/player/queue', {
+    headers: {
+      Authorization: req?.headers?.authorization,
+    },
+  });
+
+  const response = spotifyRes.data;
+  // TODO: Handle errors better
+  if (!isSpotifyError(response)) {
+    const tracks = parseTracksIn(response);
+    return sendSuccess(res, StatusCodes.OK, tracks);
+  } else return sendGenericServerError(res, 'A spotify request error occurred');
 }

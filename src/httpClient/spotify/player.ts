@@ -15,7 +15,8 @@ const currentlyPlaying = async (token: string): Promise<Track | null> => {
     }
   );
   const playingItem = res.data.item;
-  if (playingItem === null) return null;
+  console.log(res.data);
+  if (playingItem === null || playingItem === undefined) return null;
   else if (playingItem.type === 'track') return parseTrack(playingItem);
   else return null;
 };
