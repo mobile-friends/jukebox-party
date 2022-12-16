@@ -4,7 +4,7 @@ import { tryQueryParam } from '@common/util/query';
 import { sendMissingQueryParamError } from '@common/errors';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { spotifyClient } from '../../httpClient/spotify';
+import { spotifyClient } from '@httpClient/spotify';
 import { Track } from '@common/types/track';
 import { parseTrack } from '@common/spotifyParsing';
 

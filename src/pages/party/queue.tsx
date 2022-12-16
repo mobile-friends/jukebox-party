@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import QueueTracks from '../../components/elements/queueTracks';
-import { queue } from '../../httpClient/jukebox/queue';
+import { queue } from '@httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
 import Navbar from '../../components/elements/navbar';
 import QueueHeader from '../../components/elements/queueHeader';

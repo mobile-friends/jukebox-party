@@ -7,8 +7,8 @@ import { createParty } from '@common/../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import ErrorText from '../components/elements/errorText';
-import { useValidatePartyNameInput } from '../hooks/inputs/useValidatePartyNameInput';
-import { useValidatePartyUserNameInput } from '../hooks/inputs/useValidatePartyUserNameInput';
+import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
+import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 
 type Props = {};
 

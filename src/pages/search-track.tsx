@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../components/elements/input';
 import TrackListItemView from '../components/elements/trackListItemView';
-import { search } from '../httpClient/jukebox/search';
+import { search } from '@httpClient/jukebox/search';
 import { Track } from '@common/types/track';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';

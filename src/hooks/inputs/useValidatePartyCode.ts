@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as z from 'zod';
-import partyCodeSchema from '../../utils/schemas/partyCodeSchema';
+import partyCodeSchema from '../../schemas/partyCodeSchema';
 
 type UseValidatePartyCodeInput = {
   partyCode: string;

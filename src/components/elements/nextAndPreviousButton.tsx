@@ -1,7 +1,7 @@
 import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
 import { useSession } from 'next-auth/react';
 import Button from './button';
-import { nextTrack, previousTrack } from '../../httpClient/spotify/player';
+import { nextTrack, previousTrack } from '@httpClient/spotify/player';
 
 export interface NextAndPreviousProps {
   next: boolean;

@@ -1,6 +1,6 @@
 import { jukeboxClient } from './index';
 import { Track } from '@common/types/track';
-import { GetTracksResponse } from '../../endpoints/searchTracks/dto';
+import { GetTracksResponse } from '@endpoint/searchTracks/dto';
 
 type SearchType = 'track';
 

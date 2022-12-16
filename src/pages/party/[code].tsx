@@ -10,12 +10,12 @@ import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import { Party } from '@common/types/party';
 import { useSession } from 'next-auth/react';
-import { recommendations } from '../../httpClient/spotify/browse';
+import { recommendations } from '@httpClient/spotify/browse';
 import {
   currentlyPlaying,
   playbackState,
   recentlyPlayed,
-} from '../../httpClient/spotify/player';
+} from '@httpClient/spotify/player';
 import Navbar from '../../components/elements/navbar';
 
 type Props = {};

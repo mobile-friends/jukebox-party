@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GetQueueResponse } from '@endpoint/getQueue/dto';
-import { spotifyClient } from '../../httpClient/spotify';
+import { spotifyClient } from '@httpClient/spotify';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { parseTrack } from '@common/spotifyParsing';

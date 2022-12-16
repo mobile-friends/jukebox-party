@@ -1,6 +1,6 @@
 import Button from './button';
 
-import { pause, play } from '../../httpClient/spotify/player';
+import { pause, play } from '@httpClient/spotify/player';
 
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { useSession } from 'next-auth/react';

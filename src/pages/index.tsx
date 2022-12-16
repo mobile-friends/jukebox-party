@@ -1,14 +1,14 @@
 import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
-import { sendJoinPartyRequest } from '../httpClient/jukebox/parties';
+import { sendJoinPartyRequest } from '@httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
-import { useValidatePartyUserNameInput } from '../hooks/inputs/useValidatePartyUserNameInput';
+import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import ErrorText from '../components/elements/errorText';
-import { useValidatePartyCodeInput } from '../hooks/inputs/useValidatePartyCode';
+import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
 
 interface Props {
   provider: ClientSafeProvider;

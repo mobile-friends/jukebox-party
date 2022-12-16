@@ -18,7 +18,12 @@
     "baseUrl": "src",
     "paths": {
       "@common/*": ["common/*"],
-      "@endpoint/*": ["endpoints/*"]
+      "@endpoint/*": ["endpoints/*"],
+      "@page/*": ["pages/*"],
+      "@api/*": ["pages/api/*"],
+      "@component/*": ["components/*"],
+      "@hook/*": ["hooks/*"],
+      "@httpClient/*": ["httpClient/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

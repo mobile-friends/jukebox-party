@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { GetPlaybackResponse } from '../getPlayback/dto';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
-import { spotifyClient } from '../../httpClient/spotify';
+import { spotifyClient } from '@httpClient/spotify';
 
 export default async function handleRequest(
   req: NextApiRequest,
