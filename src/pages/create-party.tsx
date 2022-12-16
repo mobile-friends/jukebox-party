@@ -28,10 +28,6 @@ function CreateParty({}: Props) {
   } = useValidatePartyUserNameInput();
   const { data: session } = useSession();
 
-  useEffect(() => {
-    console.log('session', session);
-  }, [session, null]);
-
   function onBackClicked() {
     signOut({ callbackUrl: '/' }).catch(console.log);
   }
