@@ -10,8 +10,4 @@ export interface PartyCreatedDto {
   partyCode: PartyCode;
 }
 
-export type CreatePartyError = never;
-
-export type CreatePartyResponse = ApiResponse<
-  PartyCreatedDto | CreatePartyError
->;
+export type CreatePartyResponse = ApiResponse<PartyCreatedDto>;

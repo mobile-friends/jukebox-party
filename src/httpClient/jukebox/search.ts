@@ -12,12 +12,8 @@ const search = async (
   q = encodeURIComponent(q);
   const encodedType = encodeURIComponent(type);
   const url = `$search?q=${q}&type=${encodedType}`;
-  const res = await jukeboxClient.get<GetTracksResponse>(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return res.data.tracks;
+  const response = await jukeboxClient.get<GetTracksResponse>(url, token);
+  return response.tracks;
 };
 
 export { search };

@@ -6,12 +6,7 @@ import { isSuccessResponse } from '@common/apiResponse';
 const baseURL = 'queue';
 
 const queue = async (token: string): Promise<Track[]> => {
-  const res = await jukeboxClient.get<GetQueueResponse>(baseURL, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  const response = res.data;
+  const response = await jukeboxClient.get<GetQueueResponse>(baseURL, token);
   if (isSuccessResponse(response)) return response;
   // TODO: Handle errors
   else return [];

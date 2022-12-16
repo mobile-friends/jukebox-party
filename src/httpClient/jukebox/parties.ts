@@ -1,6 +1,6 @@
 import { jukeboxClient } from './index';
 import { isSuccessResponse } from '@common/apiResponse';
-import { CreatePartyResponse } from '@endpoint/createParty/dto';
+import { CreatePartyDto, CreatePartyResponse } from '@endpoint/createParty/dto';
 import { PartyCode } from '@common/types/partyCode';
 import { JoinPartyDto, JoinPartyResponse } from '@endpoint/joinParty/dto';
 
@@ -10,8 +10,10 @@ const createParty = async (
   partyName: string,
   hostName: string
 ): Promise<PartyCode> => {
-  const res = await jukeboxClient.post(`${BaseUrl}`, { partyName, hostName });
-  const response = res.data as CreatePartyResponse;
+  const response = await jukeboxClient.post<
+    CreatePartyDto,
+    CreatePartyResponse
+  >(`${BaseUrl}`, { partyName, hostName });
   return response.partyCode;
 };
 
@@ -28,12 +30,13 @@ async function sendJoinPartyRequest(
   guestName: string
 ): Promise<boolean> {
   guestName = encodeURIComponent(guestName);
-  const data: JoinPartyDto = {
-    partyCode,
-    guestName,
-  };
-  const res = await jukeboxClient.post(JoinPartyUrl, data);
-  const response = res.data as JoinPartyResponse;
+  const response = await jukeboxClient.post<JoinPartyDto, JoinPartyResponse>(
+    JoinPartyUrl,
+    {
+      partyCode,
+      guestName,
+    }
+  );
   return isSuccessResponse(response);
 }
 
