@@ -3,18 +3,23 @@ import { GetPlaybackResponse } from '../getPlayback/dto';
 import { sendSuccess } from '@common/apiResponse';
 import { StatusCodes } from 'http-status-codes';
 import { spotifyClient } from '@httpClient/spotify';
+import { isSpotifyError } from '@common/util/typeGuards';
 
 export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetPlaybackResponse>
 ) {
-  let spotifyRes = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
+  const token = req?.headers?.authorization;
+  if (token === undefined) {
+    // TODO: Handle not authorized
+    return;
+  }
+  let response = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
     'me/player/',
-    {
-      headers: {
-        Authorization: req.headers.authorization,
-      },
-    }
+    token
   );
-  sendSuccess(res, StatusCodes.OK, spotifyRes.data);
+  if (!isSpotifyError(response)) sendSuccess(res, StatusCodes.OK, response);
+  else {
+    // TODO: Handle errors
+  }
 }

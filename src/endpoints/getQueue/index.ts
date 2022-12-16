@@ -26,15 +26,16 @@ export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<GetQueueResponse>
 ) {
-  const spotifyRes = await spotifyClient.get<
-    SpotifyApi.UsersQueueResponse | SpotifyApi.ErrorObject
-  >('me/player/queue', {
-    headers: {
-      Authorization: req?.headers?.authorization,
-    },
-  });
+  const token = req?.headers?.authorization;
+  if (token === undefined) {
+    // TODO: Handle not authorized
+    return;
+  }
+  const response = await spotifyClient.get<SpotifyApi.UsersQueueResponse>(
+    'me/player/queue',
+    token
+  );
 
-  const response = spotifyRes.data;
   // TODO: Handle errors better
   if (!isSpotifyError(response)) {
     const tracks = parseTracksIn(response);

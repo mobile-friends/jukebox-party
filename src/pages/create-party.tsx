@@ -1,6 +1,6 @@
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import { createParty } from '@common/../httpClient/jukebox/parties';

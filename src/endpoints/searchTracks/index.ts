@@ -7,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import { spotifyClient } from '@httpClient/spotify';
 import { Track } from '@common/types/track';
 import { parseTrack } from '@common/spotifyParsing';
+import { isSpotifyError } from '@common/util/typeGuards';
 
 /**
  * Parses the tracks from a Spotify search-response object
@@ -36,16 +37,20 @@ export default async function handleRequest(
     return sendMissingQueryParamError(res, 'type');
   }
 
-  const spotifyRes = await spotifyClient.get<SpotifyApi.SearchResponse>(
+  const token = req?.headers?.authorization;
+  if (token === undefined) {
+    // TODO: Handle not authorized
+    return;
+  }
+  const response = await spotifyClient.get<SpotifyApi.SearchResponse>(
     `$search?q=${query}&type=${type}`,
-    {
-      headers: {
-        Authorization: req?.headers?.authorization,
-      },
-    }
+    token
   );
 
-  const tracks = parseTracksIn(spotifyRes.data);
-
-  sendSuccess(res, StatusCodes.OK, { tracks });
+  if (!isSpotifyError(response)) {
+    const tracks = parseTracksIn(response);
+    sendSuccess(res, StatusCodes.OK, { tracks });
+  } else {
+    // TODO: Handle errors
+  }
 }

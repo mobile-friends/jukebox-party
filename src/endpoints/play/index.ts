@@ -8,10 +8,12 @@ export default async function handleRequest(
   req: NextApiRequest,
   res: NextApiResponse<PlayResponse>
 ) {
-  await spotifyClient.get(`me/player/play`, {
-    headers: {
-      Authorization: req.headers.authorization,
-    },
-  });
+  const token = req?.headers?.authorization;
+  if (token === undefined) {
+    // TODO: Handle not authorized
+    return;
+  }
+  await spotifyClient.get<string>(`me/player/play`, token);
+  // TODO: Handle errors
   sendSuccess(res, StatusCodes.OK, noData);
 }

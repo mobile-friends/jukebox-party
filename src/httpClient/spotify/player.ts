@@ -1,104 +1,65 @@
 import { spotifyClient } from '.';
 import { Track } from '@common/types/track';
 import { parseTrack } from '@common/spotifyParsing';
+import { isSpotifyError } from '@common/util/typeGuards';
 import CurrentlyPlayingResponse = SpotifyApi.CurrentlyPlayingResponse;
 
 const baseURL = 'me/player';
 
 const currentlyPlaying = async (token: string): Promise<Track | null> => {
-  const res = await spotifyClient.get<CurrentlyPlayingResponse>(
+  const response = await spotifyClient.get<CurrentlyPlayingResponse>(
     `${baseURL}/currently-playing`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    token
   );
-  const playingItem = res.data.item;
-  console.log(res.data);
-  if (playingItem === null || playingItem === undefined) return null;
-  else if (playingItem.type === 'track') return parseTrack(playingItem);
-  else return null;
+  if (!isSpotifyError(response)) {
+    const playingItem = response.item;
+    if (playingItem === null || playingItem === undefined) return null;
+    else if (playingItem.type === 'track') return parseTrack(playingItem);
+    else return null;
+  } else {
+    // TODO: Handle errors
+    return null;
+  }
 };
 
 const recentlyPlayed = async (token: string): Promise<string[]> => {
   const now = Date.now();
-  const res =
+  const response =
     await spotifyClient.get<SpotifyApi.UsersRecentlyPlayedTracksResponse>(
       `${baseURL}/recently-played?limit=5&before=${now}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      token
     );
-  return res.data.items.map((it) => it.track.id);
+  if (!isSpotifyError(response)) return response.items.map((it) => it.track.id);
+  // TODO: Handle error
+  else return [];
 };
 
 const playbackState = async (
   token: string
-): Promise<SpotifyApi.CurrentPlaybackResponse> => {
-  const res = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
+): Promise<SpotifyApi.CurrentPlaybackResponse | null> => {
+  const response = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
     `${baseURL}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    token
   );
-  return res.data;
+  if (!isSpotifyError(response)) return response;
+  // TODO: Handle error
+  else return null;
 };
 
 const play = async (token: string) => {
-  const res = await spotifyClient.put(
-    `${baseURL}/play`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return res;
+  return await spotifyClient.put<string>(`${baseURL}/play`, token);
 };
 
 const pause = async (token: string) => {
-  const res = await spotifyClient.put(
-    `${baseURL}/pause`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return res;
+  return await spotifyClient.put<string>(`${baseURL}/pause`, token);
 };
 
 const nextTrack = async (token: string) => {
-  const res = await spotifyClient.post(
-    `${baseURL}/next`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return res;
+  return await spotifyClient.post<string>(`${baseURL}/next`, token);
 };
 
 const previousTrack = async (token: string) => {
-  const res = await spotifyClient.post(
-    `${baseURL}/previous`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return res;
+  return await spotifyClient.post<string>(`${baseURL}/previous`, token);
 };
 
 export {
