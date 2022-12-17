@@ -1,5 +1,5 @@
-import { ApiResponse, NoData } from '@common/apiResponse';
+import { ApiResponse, EmptyDto } from '@common/apiResponse';
 
-export type PauseDto = NoData;
+export type PauseDto = EmptyDto;
 
 export type PauseResponse = ApiResponse<PauseDto>;

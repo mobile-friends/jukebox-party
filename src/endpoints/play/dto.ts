@@ -1,5 +1,5 @@
-import { ApiResponse, NoData } from '@common/apiResponse';
+import { ApiResponse, EmptyDto } from '@common/apiResponse';
 
-export type PlayDto = NoData;
+export type PlayDto = EmptyDto;
 
 export type PlayResponse = ApiResponse<PlayDto>;
