@@ -1,6 +1,5 @@
 import QRCode from 'react-qr-code';
 import styles from '../../styles/components/qrCodeModal.module.scss';
-import { useRouter } from 'next/router';
 
 interface InputProps {
   code: string;

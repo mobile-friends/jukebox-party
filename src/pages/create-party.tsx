@@ -6,7 +6,6 @@ import Input from '../components/elements/input';
 import { createParty } from '@common/../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
-import ErrorText from '../components/elements/errorText';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import ErrorList from '../components/elements/ErrorList';

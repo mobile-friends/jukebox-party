@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as z from 'zod';
 import partyCodeSchema from '../../schemas/partyCodeSchema';
 
