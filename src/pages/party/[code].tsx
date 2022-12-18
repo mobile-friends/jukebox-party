@@ -17,9 +17,9 @@ import {
   recentlyPlayed,
 } from '@httpClient/spotify/player';
 import Navbar from '../../components/elements/navbar';
-import { useModalVisibility } from '../../hooks/modals/useModalVisibility';
 import QRCodeModal from '../../components/elements/qrCodeModal';
 import Button from '../../components/elements/button';
+import { useModalVisibility } from '../../../hooks/modals/useModalVisibility';
 
 type Props = {};
 
