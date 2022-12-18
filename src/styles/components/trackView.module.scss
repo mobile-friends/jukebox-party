@@ -1,0 +1,46 @@
+@import '../helper/variables.scss';
+
+.marquee {
+  position: relative;
+  overflow: hidden;
+  color: $light-color;
+  width: 100%;
+}
+
+.marquee > .shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  box-shadow: 0 9px 0px 0px $dark-color, 0 -9px 0px 0px $dark-color,
+    12px 0 15px -4px rgba(25, 25, 25, 0.8) inset,
+    -12px 0 15px -4px rgba(25, 25, 25, 0.8) inset;
+}
+
+.marquee span {
+  display: inline-block;
+  min-width: 100%; /* this is to prevent shorter text animate to right */
+  white-space: nowrap;
+  animation: marquee 7.5s ease-in-out forwards infinite;
+}
+
+@keyframes marquee {
+  20% {
+    transform: translateX(0);
+    margin-left: 0;
+  }
+  50% {
+    transform: translateX(-100%);
+    margin-left: 100%;
+  }
+  70% {
+    transform: translateX(-100%);
+    margin-left: 100%;
+  }
+  100% {
+    transform: translateX(0);
+    margin-left: 0;
+  }
+}

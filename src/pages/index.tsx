@@ -1,13 +1,13 @@
 import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next/types';
 import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
+import ErrorList from '../components/elements/ErrorList';
 import Input from '../components/elements/input';
 import { sendJoinPartyRequest } from '@httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
-import { GetServerSideProps } from 'next/types';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
-import ErrorText from '../components/elements/errorText';
 import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
 
 interface Props {
@@ -27,7 +27,9 @@ export default function Home({ provider }: Props) {
     isPartyCodeValid,
     partyCodeErrors,
     validateAndSetPartyCodeInput,
-  } = useValidatePartyCodeInput();
+  } = useValidatePartyCodeInput(
+    router.query.partyCode ? router.query.partyCode.toString() : undefined
+  );
 
   function goToLogin() {
     signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
@@ -60,6 +62,9 @@ export default function Home({ provider }: Props) {
   function onJoinPartyClicked() {
     if (isPartyUserNameValid && isPartyCodeValid) {
       joinParty().catch(console.log);
+    } else {
+      validateAndSetPartyCodeInput(partyCode);
+      validateAndSetPartyUserNameInput(partyUserName);
     }
   }
 
@@ -74,18 +79,20 @@ export default function Home({ provider }: Props) {
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input placeholder='Name' onChange={onUsernameInput} />
-          {partyUserNameErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
+          <Input
+            placeholder='Name'
+            onChange={onUsernameInput}
+            hasError={partyUserNameErrors.length > 0}
+          />
+          <ErrorList errors={partyUserNameErrors} />
           <Input
             type='number'
             placeholder='Party code'
+            value={partyCode}
             onChange={onPartyCodeInput}
+            hasError={partyCodeErrors.length > 0}
           />
-          {partyCodeErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
+          <ErrorList errors={partyCodeErrors} />
           <Button
             text='Join party'
             type='primary block'

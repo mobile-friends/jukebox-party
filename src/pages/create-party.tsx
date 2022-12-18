@@ -9,6 +9,7 @@ import { PartyCode } from '@common/types/partyCode';
 import ErrorText from '../components/elements/errorText';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
+import ErrorList from '../components/elements/ErrorList';
 
 type Props = {};
 
@@ -49,6 +50,9 @@ function CreateParty({}: Props) {
       const partyCode = await createParty(partyName, partyUserName);
       sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage(partyCode);
+    } else {
+      validateAndSetPartyNameInput(partyName);
+      validateAndSetPartyUserNameInput(partyUserName);
     }
   }
 
@@ -59,14 +63,18 @@ function CreateParty({}: Props) {
           create.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input placeholder='Party Name' onChange={onPartyNameChanged} />
-          {partyNameErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
-          <Input placeholder='Host Name' onChange={onHostNameChanged} />
-          {partyUserNameErrors.map((error, index) => (
-            <ErrorText errorText={error} key={index} />
-          ))}
+          <Input
+            placeholder='Party Name'
+            onChange={onPartyNameChanged}
+            hasError={partyNameErrors.length > 0}
+          />
+          <ErrorList errors={partyNameErrors} />
+          <Input
+            placeholder='Host Name'
+            onChange={onHostNameChanged}
+            hasError={partyUserNameErrors.length > 0}
+          />
+          <ErrorList errors={partyUserNameErrors} />
           <Button
             text='Create party'
             type='primary block'
