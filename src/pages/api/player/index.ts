@@ -1,7 +1,7 @@
-import { multiMethodHandler } from '@common/util/apiUtil';
 import HTTPMethod from 'http-method-enum';
+import { endpoint } from '@common/infrastructure/endpoint';
 import handleGetPlaybackRequest from '@endpoint/getPlayback';
 
-export default multiMethodHandler({
+export default endpoint({
   [HTTPMethod.GET]: handleGetPlaybackRequest,
 });

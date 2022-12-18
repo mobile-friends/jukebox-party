@@ -1,7 +1,11 @@
-import { DtoError, PartyNotFoundError } from '@common/errors';
-import { ApiResponse } from '@common/apiResponse';
+import { DtoError, PartyNotFoundError } from '@common/types/errors';
 import { Party } from '@common/types/party';
+import { SuccessResult } from '@common/infrastructure/types';
 
 export type GetPartyError = DtoError | PartyNotFoundError;
 
-export type GetPartyResponse = ApiResponse<Party | GetPartyError>;
+export interface GetPartySuccess extends SuccessResult {
+  party: Party;
+}
+
+export type GetPartyResult = GetPartySuccess | GetPartyError;

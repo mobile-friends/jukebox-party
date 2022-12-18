@@ -1,5 +1,8 @@
-import { ApiResponse, EmptyDto } from '@common/apiResponse';
+import { NoSpotifyError, NotImplementedError } from '@common/types/errors';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export type PlayDto = EmptyDto;
+export interface PlaySuccess extends SuccessResult {}
 
-export type PlayResponse = ApiResponse<PlayDto>;
+export type PlayError = NoSpotifyError | NotImplementedError;
+
+export type PlayResult = PlaySuccess | PlayError;

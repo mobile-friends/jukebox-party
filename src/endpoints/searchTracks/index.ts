@@ -1,13 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { GetTracksResponse } from '../searchTracks/dto';
+import { SearchTracksResult } from '../searchTracks/dto';
 import { tryQueryParam } from '@common/util/query';
-import { sendMissingQueryParamError } from '@common/errors';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
 import { spotifyClient } from '@httpClient/spotify';
 import { Track } from '@common/types/track';
 import { parseTrack } from '@common/spotifyParsing';
 import { isSpotifyError } from '@common/util/typeGuards';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
 
 /**
  * Parses the tracks from a Spotify search-response object
@@ -23,34 +21,30 @@ TODO: Handle these errors better
   return unparsedTracks.map(parseTrack);
 }
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<GetTracksResponse>
-) {
+export default requestHandler<NoBody, SearchTracksResult>(async (req) => {
+  if (req.spotifyToken === null) {
+    return Respond.withNoSpotifyError();
+  }
+
   const query = tryQueryParam(req.query, 'q');
   if (query === null) {
-    return sendMissingQueryParamError(res, 'q');
+    return Respond.withMissingQueryParamError('q');
   }
 
   const type = tryQueryParam(req.query, 'type');
   if (type === null) {
-    return sendMissingQueryParamError(res, 'type');
+    return Respond.withMissingQueryParamError('type');
   }
 
-  const token = req?.headers?.authorization;
-  if (token === undefined) {
-    // TODO: Handle not authorized
-    return;
-  }
   const response = await spotifyClient.get<SpotifyApi.SearchResponse>(
-    `$search?q=${query}&type=${type}`,
-    token
+    `/search?q=${query}&type=${type}`,
+    req.spotifyToken
   );
 
   if (!isSpotifyError(response)) {
     const tracks = parseTracksIn(response);
-    sendSuccess(res, StatusCodes.OK, { tracks });
+    return Respond.withOk({ tracks });
   } else {
-    // TODO: Handle errors
+    return Respond.withNotImplementedError();
   }
-}
+});

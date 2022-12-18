@@ -1,7 +1,7 @@
 import handleCreatePartyRequest from '@endpoint/createParty';
 import HTTPMethod from 'http-method-enum';
-import { multiMethodHandler } from '@common/util/apiUtil';
+import { endpoint } from '@common/infrastructure/endpoint';
 
-export default multiMethodHandler({
+export default endpoint({
   [HTTPMethod.POST]: handleCreatePartyRequest,
 });

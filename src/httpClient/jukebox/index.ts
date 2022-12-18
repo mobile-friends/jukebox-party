@@ -1,23 +1,23 @@
-import axios from 'axios';
-import { ApiResponse } from '@common/apiResponse';
-import { Dto } from '@common/types/dto';
-import { ApiError } from 'next/dist/server/api-utils';
+import axios, { AxiosRequestConfig } from 'axios';
+import { ApiResponse, ApiResult } from '@common/infrastructure/types';
 
 interface JukeboxClient {
-  get<TResponse extends ApiResponse<Dto | ApiError>>(
+  get<TResult extends ApiResult>(
     url: string,
     token?: string
-  ): Promise<TResponse>;
+  ): Promise<ApiResponse<TResult>>;
 
-  post<TData extends Dto, TResponse extends ApiResponse<Dto | ApiError>>(
+  post<TData, TResult extends ApiResult>(
     url: string,
-    data?: TData
-  ): Promise<TResponse>;
+    data: TData,
+    token?: string
+  ): Promise<ApiResponse<TResult>>;
 
-  put<TData extends Dto, TResponse extends ApiResponse<Dto | ApiError>>(
+  put<TData, TResult extends ApiResult>(
     url: string,
-    data?: TData
-  ): Promise<TResponse>;
+    data: TData,
+    token?: string
+  ): Promise<ApiResponse<TResult>>;
 }
 
 const axiosClient = axios.create({
@@ -30,32 +30,45 @@ const axiosClient = axios.create({
   validateStatus: () => true,
 });
 
+function makeConfig(token?: string): AxiosRequestConfig | undefined {
+  return token === undefined
+    ? undefined
+    : {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+}
+
 const jukeboxClient: JukeboxClient = {
-  get<TResponse extends ApiResponse<Dto | ApiError>>(
+  get<TResult extends ApiResult>(
     url: string,
     token?: string
-  ): Promise<TResponse> {
-    const config =
-      token === undefined
-        ? undefined
-        : {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          };
-    return axiosClient.get<TResponse>(url, config).then((it) => it.data);
+  ): Promise<ApiResponse<TResult>> {
+    const config = makeConfig(token);
+    return axiosClient
+      .get<ApiResponse<TResult>>(url, config)
+      .then((it) => it.data);
   },
-  post<TData extends Dto, TResponse extends ApiResponse<Dto | ApiError>>(
+  post<TData, TResult extends ApiResult>(
     url: string,
-    data?: TData
-  ): Promise<TResponse> {
-    return axiosClient.post<TResponse>(url, data).then((it) => it.data);
+    data: TData,
+    token?: string
+  ): Promise<ApiResponse<TResult>> {
+    const config = makeConfig(token);
+    return axiosClient
+      .post<ApiResponse<TResult>>(url, data, config)
+      .then((it) => it.data);
   },
-  put<TData extends Dto, TResponse extends ApiResponse<Dto | ApiError>>(
+  put<TData, TResult extends ApiResult>(
     url: string,
-    data?: TData
-  ): Promise<TResponse> {
-    return axiosClient.put<TResponse>(url, data).then((it) => it.data);
+    data: TData,
+    token?: string
+  ): Promise<ApiResponse<TResult>> {
+    const config = makeConfig(token);
+    return axiosClient
+      .put<ApiResponse<TResult>>(url, data, config)
+      .then((it) => it.data);
   },
 };
 

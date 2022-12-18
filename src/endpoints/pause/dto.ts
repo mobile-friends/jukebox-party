@@ -1,5 +1,8 @@
-import { ApiResponse, EmptyDto } from '@common/apiResponse';
+import { NoSpotifyError, NotImplementedError } from '@common/types/errors';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export type PauseDto = EmptyDto;
+export interface PauseSuccess extends SuccessResult {}
 
-export type PauseResponse = ApiResponse<PauseDto>;
+export type PauseError = NoSpotifyError | NotImplementedError;
+
+export type PauseResult = PauseSuccess | PauseError;

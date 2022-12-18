@@ -1,37 +1,28 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { tryQueryParam } from '@common/util/query';
-import {
-  sendInvalidQueryParamError,
-  sendMissingQueryParamError,
-  sendPartyNotFoundError,
-} from '@common/errors';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
-import { GetPartyResponse } from '../getParty/dto';
+import { GetPartyResult } from '../getParty/dto';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
 
 const ParamName = 'partyCode';
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<GetPartyResponse>
-) {
+export default requestHandler<NoBody, GetPartyResult>(async (req) => {
   const partyCodeParam = tryQueryParam(req.query, ParamName);
   if (partyCodeParam === null) {
-    return sendMissingQueryParamError(res, ParamName);
+    return Respond.withMissingQueryParamError(ParamName);
   }
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    return sendInvalidQueryParamError(res, ParamName);
+    return Respond.withInvalidQueryParamError(ParamName);
   }
 
   const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(party)) {
-    return sendPartyNotFoundError(res, partyCode);
+    return Respond.withPartyNotFoundError(partyCode);
   }
 
-  sendSuccess(res, StatusCodes.CREATED, party);
-}
+  return Respond.withOk({ party });
+});

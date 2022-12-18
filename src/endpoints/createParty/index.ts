@@ -3,11 +3,10 @@ import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { PartyCode } from '@common/types/partyCode';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { CreatePartyDto, CreatePartyResponse } from '../createParty/dto';
+import { CreatePartyBody, CreatePartySuccess } from '../createParty/dto';
 import firebaseDb from '@common/firebaseDb';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
+import { requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
 
 export async function tryCreateParty(
   partyName: string,
@@ -21,17 +20,12 @@ export async function tryCreateParty(
   return party.code;
 }
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<CreatePartyResponse>
-) {
-  // TODO: Check if body is well-formed
-  const request = req.body as CreatePartyDto;
-  const { partyName, hostName } = request;
-
-  const partyCode = await tryCreateParty(partyName, hostName, firebaseDb);
-
-  sendSuccess(res, StatusCodes.CREATED, {
-    partyCode,
-  });
-}
+export default requestHandler<CreatePartyBody, CreatePartySuccess>(
+  async (req) => {
+    const { partyName, hostName } = req.body;
+    const partyCode = await tryCreateParty(partyName, hostName, firebaseDb);
+    return Respond.withCreated({
+      partyCode,
+    });
+  }
+);

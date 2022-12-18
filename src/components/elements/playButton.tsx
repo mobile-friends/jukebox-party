@@ -1,9 +1,7 @@
 import Button from './button';
-
-import { pause, play } from '@httpClient/spotify/player';
-
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { useSession } from 'next-auth/react';
+import { pause, play } from '@httpClient/jukebox/playback';
 
 export interface PlayButtonProps {
   isPlaying: boolean;
@@ -13,19 +11,11 @@ export default function playButton({ isPlaying }: PlayButtonProps) {
   let { data: session } = useSession() as any;
 
   async function trySendPlayRequest() {
-    try {
-      await play(session.user.accessToken);
-    } catch (e) {
-      console.log(e);
-    }
+    await play(session.user.accessToken);
   }
 
   async function trySendPauseRequest() {
-    try {
-      await pause(session.user.accessToken);
-    } catch (e) {
-      console.log(e);
-    }
+    await pause(session.user.accessToken);
   }
 
   return (

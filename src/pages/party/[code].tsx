@@ -11,15 +11,12 @@ import { PartyDb } from '@common/partyDb';
 import { Party } from '@common/types/party';
 import { useSession } from 'next-auth/react';
 import { recommendations } from '@httpClient/spotify/browse';
-import {
-  currentlyPlaying,
-  playbackState,
-  recentlyPlayed,
-} from '@httpClient/spotify/player';
+import { currentlyPlaying, recentlyPlayed } from '@httpClient/spotify/player';
 import Navbar from '../../components/elements/navbar';
 import QRCodeModal from '../../components/elements/qrCodeModal';
 import Button from '../../components/elements/button';
 import { useModalVisibility } from '../../../hooks/modals/useModalVisibility';
+import { getPlayback } from '@httpClient/jukebox/playback';
 
 type Props = {};
 
@@ -99,17 +96,9 @@ function PartyRoom({}: Props) {
   };
 
   const getPlaybackState = async () => {
-    try {
-      const result = await playbackState(session?.user?.accessToken);
-      if (!result) return;
-      const progressDuration: Duration = Duration.makeFromMiliSeconds(
-        result.progress_ms || 0
-      );
-      setPlaybackIsPlaying(result.is_playing);
-      setPlaybackProgress(progressDuration);
-    } catch (error) {
-      console.error(error);
-    }
+    const playbackState = await getPlayback(session?.user?.accessToken);
+    setPlaybackIsPlaying(PlaybackState.isPlaying(playbackState));
+    setPlaybackProgress(PlaybackState.playTimeOf(playbackState));
   };
 
   if (!PartyDb.isError(result)) {

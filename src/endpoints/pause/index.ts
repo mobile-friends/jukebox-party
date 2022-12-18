@@ -1,19 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PauseResponse } from './/dto';
-import { emptyDto, sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
+import { PauseResult } from './/dto';
 import { spotifyClient } from '@httpClient/spotify';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
+import { isSpotifyError } from '@common/util/typeGuards';
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<PauseResponse>
-) {
-  const token = req?.headers?.authorization;
-  if (token === undefined) {
-    // TODO: Handle not authorized
-    return;
+export default requestHandler<NoBody, PauseResult>(async (req) => {
+  if (req.spotifyToken === null) {
+    return Respond.withNoSpotifyError();
   }
-  await spotifyClient.get(`me/player/pause`, token);
-  // TODO: Handle error
-  sendSuccess(res, StatusCodes.OK, emptyDto);
-}
+  const response = await spotifyClient.get<string>(
+    `me/player/pause`,
+    req.spotifyToken
+  );
+  if (!isSpotifyError(response)) return Respond.withOk({});
+  else return Respond.withNotImplementedError();
+});

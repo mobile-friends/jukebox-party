@@ -1,19 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PlayResponse } from './/dto';
-import { emptyDto, sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
 import { spotifyClient } from '@httpClient/spotify';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
+import { isSpotifyError } from '@common/util/typeGuards';
+import { PlayResult } from '@endpoint/play/dto';
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<PlayResponse>
-) {
-  const token = req?.headers?.authorization;
-  if (token === undefined) {
-    // TODO: Handle not authorized
-    return;
+export default requestHandler<NoBody, PlayResult>(async (req) => {
+  if (req.spotifyToken === null) {
+    return Respond.withNoSpotifyError();
   }
-  await spotifyClient.get<string>(`me/player/play`, token);
-  // TODO: Handle errors
-  sendSuccess(res, StatusCodes.OK, emptyDto);
-}
+  const response = await spotifyClient.get<string>(
+    `me/player/play`,
+    req.spotifyToken
+  );
+  if (!isSpotifyError(response)) return Respond.withOk({});
+  else return Respond.withNotImplementedError();
+});

@@ -6,6 +6,8 @@ import CurrentlyPlayingResponse = SpotifyApi.CurrentlyPlayingResponse;
 
 const baseURL = 'me/player';
 
+// TODO: Move spotify requests to backend
+
 const currentlyPlaying = async (token: string): Promise<Track | null> => {
   const response = await spotifyClient.get<CurrentlyPlayingResponse>(
     `${baseURL}/currently-playing`,
@@ -34,26 +36,6 @@ const recentlyPlayed = async (token: string): Promise<string[]> => {
   else return [];
 };
 
-const playbackState = async (
-  token: string
-): Promise<SpotifyApi.CurrentPlaybackResponse | null> => {
-  const response = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
-    `${baseURL}`,
-    token
-  );
-  if (!isSpotifyError(response)) return response;
-  // TODO: Handle error
-  else return null;
-};
-
-const play = async (token: string) => {
-  return await spotifyClient.put<string>(`${baseURL}/play`, token);
-};
-
-const pause = async (token: string) => {
-  return await spotifyClient.put<string>(`${baseURL}/pause`, token);
-};
-
 const nextTrack = async (token: string) => {
   return await spotifyClient.post<string>(`${baseURL}/next`, token);
 };
@@ -62,12 +44,4 @@ const previousTrack = async (token: string) => {
   return await spotifyClient.post<string>(`${baseURL}/previous`, token);
 };
 
-export {
-  currentlyPlaying,
-  recentlyPlayed,
-  playbackState,
-  play,
-  pause,
-  nextTrack,
-  previousTrack,
-};
+export { currentlyPlaying, recentlyPlayed, nextTrack, previousTrack };

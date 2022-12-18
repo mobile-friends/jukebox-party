@@ -1,11 +1,15 @@
-import { ApiResponse } from '@common/apiResponse';
 import { Track } from '@common/types/track';
-import { DtoError } from '@common/errors';
+import {
+  DtoError,
+  NoSpotifyError,
+  NotImplementedError,
+} from '@common/types/errors';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export interface GetTracksDto {
+export interface SearchTracksSuccess extends SuccessResult {
   tracks: Track[];
 }
 
-export type GetTracksError = DtoError;
+export type SearchTracksError = DtoError | NoSpotifyError | NotImplementedError;
 
-export type GetTracksResponse = ApiResponse<GetTracksDto | GetTracksError>;
+export type SearchTracksResult = SearchTracksSuccess | SearchTracksError;

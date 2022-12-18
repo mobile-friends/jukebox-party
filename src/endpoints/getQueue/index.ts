@@ -1,12 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { GetQueueResponse } from '@endpoint/getQueue/dto';
+import { GetQueueResult } from '@endpoint/getQueue/dto';
 import { spotifyClient } from '@httpClient/spotify';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
 import { parseTrack } from '@common/spotifyParsing';
 import { Track } from '@common/types/track';
 import { isSpotifyError } from '@common/util/typeGuards';
-import { sendGenericServerError } from '@common/errors';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
 
 function isTrackItem(
   item: SpotifyApi.TrackObjectFull | SpotifyApi.EpisodeObjectFull
@@ -22,23 +20,22 @@ function parseTracksIn(response: SpotifyApi.UsersQueueResponse): Track[] {
   return items.filter(isTrackItem).map(parseTrack);
 }
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<GetQueueResponse>
-) {
-  const token = req?.headers?.authorization;
-  if (token === undefined) {
-    // TODO: Handle not authorized
-    return;
+export default requestHandler<NoBody, GetQueueResult>(async (req) => {
+  if (req.spotifyToken === null) {
+    return Respond.withNoSpotifyError();
   }
+
   const response = await spotifyClient.get<SpotifyApi.UsersQueueResponse>(
-    'me/player/queue',
-    token
+    '/me/player/queue',
+    req.spotifyToken
   );
 
-  // TODO: Handle errors better
   if (!isSpotifyError(response)) {
     const tracks = parseTracksIn(response);
-    return sendSuccess(res, StatusCodes.OK, tracks);
-  } else return sendGenericServerError(res, 'A spotify request error occurred');
-}
+    return Respond.withOk({ tracks });
+  } else {
+    // TODO: We get a 403 from spotify here. Idk why
+    console.error(response);
+    return Respond.withNotImplementedError();
+  }
+});

@@ -1,25 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { GetPlaybackResponse } from '../getPlayback/dto';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
+import { GetPlaybackResult } from '../getPlayback/dto';
 import { spotifyClient } from '@httpClient/spotify';
 import { isSpotifyError } from '@common/util/typeGuards';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
+import { PlaybackState } from '@common/types/playbackState';
+import { Duration } from '@common/types/duration';
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<GetPlaybackResponse>
-) {
-  const token = req?.headers?.authorization;
-  if (token === undefined) {
-    // TODO: Handle not authorized
-    return;
+export default requestHandler<NoBody, GetPlaybackResult>(async (req) => {
+  if (req.spotifyToken === null) {
+    return Respond.withNoSpotifyError();
   }
   let response = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
     'me/player/',
-    token
+    req.spotifyToken
   );
-  if (!isSpotifyError(response)) sendSuccess(res, StatusCodes.OK, response);
-  else {
-    // TODO: Handle errors
+  if (!isSpotifyError(response)) {
+    return Respond.withOk({
+      playbackState: PlaybackState.make(
+        Duration.makeFromMillis(response.timestamp),
+        response.is_playing
+      ),
+    });
+  } else {
+    return Respond.withNotImplementedError();
   }
-}
+});

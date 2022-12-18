@@ -1,10 +1,20 @@
-import { ApiResponse, EmptyDto } from '@common/apiResponse';
+import {
+  DtoError,
+  NotImplementedError,
+  PartyNotFoundError,
+} from '@common/types/errors';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export interface JoinPartyDto {
+export interface JoinPartyBody {
   partyCode: string;
   guestName: string;
 }
 
-export type PartyJoinedDto = EmptyDto;
+export interface JoinPartySuccess extends SuccessResult {}
 
-export type JoinPartyResponse = ApiResponse<PartyJoinedDto>;
+export type JoinPartyError =
+  | DtoError
+  | PartyNotFoundError
+  | NotImplementedError;
+
+export type JoinPartyResult = JoinPartySuccess | JoinPartyError;

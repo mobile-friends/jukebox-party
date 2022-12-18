@@ -1,37 +1,27 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { JoinPartyDto, JoinPartyResponse } from '../joinParty/dto';
+import { JoinPartyBody, JoinPartyResult } from '../joinParty/dto';
 import { PartyCode } from '@common/types/partyCode';
-import {
-  sendGenericServerError,
-  sendInvalidBodyError,
-  sendPartyNotFoundError,
-} from '@common/errors';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { User } from '@common/types/user';
 import { Party } from '@common/types/party';
-import { sendSuccess } from '@common/apiResponse';
-import { StatusCodes } from 'http-status-codes';
+import { requestHandler } from '@common/infrastructure/requestHandler';
+import { Respond } from '@common/infrastructure/respond';
 
-export default async function handleRequest(
-  req: NextApiRequest,
-  res: NextApiResponse<JoinPartyResponse>
-) {
-  const request = req.body as JoinPartyDto;
-  const { partyCode: partyCodeParam, guestName } = request;
+export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
+  const { partyCode: partyCodeParam, guestName } = req.body;
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    return sendInvalidBodyError(res, 'partyCode');
+    return Respond.withInvalidBodyError('partyCode');
   }
 
   const result = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(result)) {
     switch (result.kind) {
       case PartyDb.ErrorType.PartyNotFound:
-        return sendPartyNotFoundError(res, partyCode);
+        return Respond.withPartyNotFoundError(partyCode);
       case PartyDb.ErrorType.InvalidEntry:
-        return sendGenericServerError(res); // TODO: Handle better
+        return Respond.withNotImplementedError(); // TODO: Handle better
     }
   }
 
@@ -39,5 +29,5 @@ export default async function handleRequest(
   const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(firebaseDb, partyWithGuest);
-  sendSuccess(res, StatusCodes.OK, {});
-}
+  return Respond.withOk({});
+});

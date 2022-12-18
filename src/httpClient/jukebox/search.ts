@@ -1,6 +1,7 @@
 import { jukeboxClient } from './index';
 import { Track } from '@common/types/track';
-import { GetTracksResponse } from '@endpoint/searchTracks/dto';
+import { SearchTracksResult } from '@endpoint/searchTracks/dto';
+import { isSuccess } from '@common/infrastructure/response';
 
 type SearchType = 'track';
 
@@ -11,9 +12,13 @@ const search = async (
 ): Promise<Track[]> => {
   q = encodeURIComponent(q);
   const encodedType = encodeURIComponent(type);
-  const url = `$search?q=${q}&type=${encodedType}`;
-  const response = await jukeboxClient.get<GetTracksResponse>(url, token);
-  return response.tracks;
+  const url = `/search?q=${q}&type=${encodedType}`;
+  const response = await jukeboxClient.get<SearchTracksResult>(url, token);
+  if (isSuccess(response)) return response.data.tracks;
+  else {
+    console.error(response); // TODO: Handle errors
+    throw new Error('Error not handled');
+  }
 };
 
 export { search };

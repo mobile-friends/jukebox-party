@@ -1,9 +1,11 @@
-import { ApiResponse } from '@common/apiResponse';
 import { Track } from '@common/types/track';
-import { GenericServerError } from '@common/errors';
+import { NoSpotifyError, NotImplementedError } from '@common/types/errors';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export type GetQueueDto = Track[];
+export interface GetQueueSuccess extends SuccessResult {
+  tracks: Track[];
+}
 
-export type GetQueueError = GenericServerError;
+export type GetQueueError = NoSpotifyError | NotImplementedError;
 
-export type GetQueueResponse = ApiResponse<GetQueueDto | GetQueueError>;
+export type GetQueueResult = GetQueueSuccess | GetQueueError;

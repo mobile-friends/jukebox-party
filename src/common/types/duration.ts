@@ -21,12 +21,12 @@ export namespace Duration {
   }
 
   /**
-   * Makes a new duration of the given seconds.
-   * Will be rounded up to whole seconds
-   * @param miliseconds The miliseconds
+   * Makes a new duration of the given milliseconds.
+   * Will be rounded up to whole milliseconds
+   * @param milliseconds The milliseconds
    */
-  export function makeFromMiliSeconds(miliseconds: number): Duration {
-    return Math.ceil(miliseconds / 1000) as Duration;
+  export function makeFromMillis(milliseconds: number): Duration {
+    return Math.ceil(milliseconds / 1000) as Duration;
   }
 
   /**

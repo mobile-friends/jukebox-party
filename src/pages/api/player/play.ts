@@ -1,7 +1,7 @@
-import { multiMethodHandler } from '@common/util/apiUtil';
 import HTTPMethod from 'http-method-enum';
 import handlePlayRequest from '@endpoint/play';
+import { endpoint } from '@common/infrastructure/endpoint';
 
-export default multiMethodHandler({
+export default endpoint({
   [HTTPMethod.PUT]: handlePlayRequest,
 });

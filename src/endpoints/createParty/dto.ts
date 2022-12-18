@@ -1,13 +1,13 @@
 import { PartyCode } from '@common/types/partyCode';
-import { ApiResponse } from '@common/apiResponse';
+import { SuccessResult } from '@common/infrastructure/types';
 
-export interface CreatePartyDto {
+export interface CreatePartyBody {
   partyName: string;
   hostName: string;
 }
 
-export interface PartyCreatedDto {
+export interface CreatePartySuccess extends SuccessResult {
   partyCode: PartyCode;
 }
 
-export type CreatePartyResponse = ApiResponse<PartyCreatedDto>;
+export type CreatePartyResult = CreatePartySuccess;
