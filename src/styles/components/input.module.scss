@@ -1,4 +1,4 @@
-@import '../helper/variables';
+@import '../helper/variables.scss';
 
 input.input {
   color: $light-color;
@@ -16,12 +16,30 @@ input.input {
     width: 100%;
   }
 
+  &.input-error {
+    border: 1px solid $error-color;
+  }
+
   &:focus {
     outline: none;
     border: 1px solid $primary-color;
+
+    &.input-error {
+      border: 1px solid $error-color;
+    }
   }
 
   &::placeholder {
     color: #ffffff85;
   }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }

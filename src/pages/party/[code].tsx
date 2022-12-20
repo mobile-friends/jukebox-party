@@ -15,7 +15,7 @@ import { currentlyPlaying, recentlyPlayed } from '@httpClient/spotify/player';
 import Navbar from '../../components/elements/navbar';
 import QRCodeModal from '../../components/elements/qrCodeModal';
 import Button from '../../components/elements/button';
-import { useModalVisibility } from '../../../hooks/modals/useModalVisibility';
+import { useModalVisibility } from '../../hooks/modals/useModalVisibility';
 import { getPlayback } from '@httpClient/jukebox/playback';
 
 type Props = {};
