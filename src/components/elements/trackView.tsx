@@ -36,7 +36,11 @@ export default function TrackView({ track, playbackState }: TrackViewProps) {
       }}
     >
       <div style={{ textAlign: 'center' }}>
-        <img src={Track.albumArtUrlOf(track)} alt='Album art' />
+        <img
+          style={{ maxWidth: '100%' }}
+          src={Track.albumArtUrlOf(track)}
+          alt='Album art'
+        />
       </div>
       <p
         ref={marqueeWrapperRef}

@@ -17,7 +17,7 @@ export default requestHandler<NoBody, GetPlaybackResult>(async (req) => {
   if (!isSpotifyError(response)) {
     return Respond.withOk({
       playbackState: PlaybackState.make(
-        Duration.makeFromMillis(response.timestamp),
+        Duration.makeFromMillis(response.progress_ms ?? 0),
         response.is_playing
       ),
     });
