@@ -1,3 +1,5 @@
+import { Guid } from 'guid-typescript';
+
 declare const tag: unique symbol;
 
 /**
@@ -18,6 +20,7 @@ enum UserRole {
  */
 export interface Guest {
   readonly name: string;
+  readonly id: Guid;
   readonly role: UserRole.Guest;
   readonly [tag]: 'Guest';
 }
@@ -27,6 +30,7 @@ export interface Guest {
  */
 export interface Host {
   readonly name: string;
+  readonly id: Guid;
   readonly role: UserRole.Host;
   readonly [tag]: 'Host';
 }
@@ -45,7 +49,12 @@ export namespace User {
    * @param name The hosts name
    */
   export function makeHost(name: string): Host {
-    return Object.freeze({ name, role: UserRole.Host } as Host);
+    const id = Guid.create();
+    return Object.freeze({
+      name,
+      role: UserRole.Host,
+      id
+    } as  Host);
   }
 
   /**
@@ -53,7 +62,12 @@ export namespace User {
    * @param name The guests name
    */
   export function makeGuest(name: string): Guest {
-    return Object.freeze({ name, role: UserRole.Guest } as Guest);
+    const id = Guid.create();
+    return Object.freeze({
+      name,
+      role: UserRole.Guest,
+      id,
+    } as Guest);
   }
 
   /**
@@ -66,10 +80,18 @@ export namespace User {
   }
 
   /**
+   * Gets the id of a user
+   * @param user The user
+   */
+  export function idOf(user: User): Guid {
+    return user.id;
+  }
+
+  /**
    * Checks if this user is a host
    * @param user The user
    */
-  export function isHost(user: User): boolean {
+  export function isHost(user: User): user is Host {
     return hasRole(user, UserRole.Host);
   }
 
@@ -79,14 +101,14 @@ export namespace User {
    * @param user The user
    */
   export function asHost(user: User): Host | null {
-    return isHost(user) ? (user as Host) : null;
+    return isHost(user) ? user : null;
   }
 
   /**
    * Checks if this user is a guest
    * @param user The user
    */
-  export function isGuest(user: User): boolean {
+  export function isGuest(user: User): user is Guest {
     return hasRole(user, UserRole.Guest);
   }
 
@@ -96,6 +118,6 @@ export namespace User {
    * @param user The user
    */
   export function asGuest(user: User): Guest | null {
-    return isGuest(user) ? (user as Guest) : null;
+    return isGuest(user) ? user : null;
   }
 }

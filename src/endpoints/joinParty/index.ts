@@ -29,5 +29,5 @@ export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
   const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(firebaseDb, partyWithGuest);
-  return Respond.withOk({});
+  return Respond.withOk({ userId: User.idOf(guest) });
 });
