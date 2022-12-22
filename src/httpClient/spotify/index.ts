@@ -32,7 +32,7 @@ const spotifyClient: SpotifyClient = {
   },
   post<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
     return axiosClient
-      .get<T>(url, {
+      .post<T>(url, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
