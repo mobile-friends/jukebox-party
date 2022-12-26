@@ -46,7 +46,12 @@ function CreateParty({}: Props) {
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const partyCode = await createParty(partyName, partyUserName);
+      const spotifyToken = ''; // TODO: Get token
+      const partyCode = await createParty(
+        partyName,
+        partyUserName,
+        spotifyToken!
+      );
       sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage(partyCode);
     } else {

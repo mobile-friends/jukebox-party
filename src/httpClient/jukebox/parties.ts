@@ -6,11 +6,12 @@ import { isSuccess } from '@common/infrastructure/response';
 
 const createParty = async (
   partyName: string,
-  hostName: string
+  hostName: string,
+  spotifyToken: string
 ): Promise<PartyCode> => {
   const response = await jukeboxClient.post<CreatePartyBody, CreatePartyResult>(
     `parties`,
-    { partyName, hostName }
+    { partyName, hostName, spotifyToken }
   );
   return response.data.partyCode;
 };

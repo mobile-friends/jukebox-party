@@ -53,7 +53,13 @@ export namespace PartyDb {
 
   function tryParseEntry(entry: any): Party | PartyDb.Error {
     try {
-      return Party.make(entry.code, entry.name, entry.host, entry.guests ?? []);
+      return Party.make(
+        entry.code,
+        entry.name,
+        entry.spotifyToken,
+        entry.host,
+        entry.guests ?? []
+      );
     } catch {
       return invalidEntryError(entry);
     }

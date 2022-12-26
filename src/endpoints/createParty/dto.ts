@@ -5,6 +5,7 @@ import { Guid } from 'guid-typescript';
 export interface CreatePartyBody {
   partyName: string;
   hostName: string;
+  spotifyToken: string;
 }
 
 export interface CreatePartySuccess extends SuccessResult {
