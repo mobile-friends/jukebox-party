@@ -8,7 +8,7 @@ export default requestHandler<NoBody, PlayResult>(async (req) => {
   if (req.spotifyToken === null) {
     return Respond.withNoSpotifyError();
   }
-  const response = await spotifyClient.get<string>(
+  const response = await spotifyClient.put<string>(
     `me/player/play`,
     req.spotifyToken
   );
