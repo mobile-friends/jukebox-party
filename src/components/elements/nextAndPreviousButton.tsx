@@ -28,6 +28,11 @@ export default function nextAndPreviousButton({ next }: NextAndPreviousProps) {
 
   return (
     <div style={next ? { marginRight: '3em' } : { marginLeft: '3em' }}>
+      <style jsx>{`
+        div {
+          margin: auto 0;
+        }
+      `}</style>
       <Button
         type='icon-only small'
         icon={next ? <GiNextButton /> : <GiPreviousButton />}
