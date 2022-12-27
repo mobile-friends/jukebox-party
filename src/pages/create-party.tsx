@@ -1,4 +1,3 @@
-import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
@@ -9,10 +8,11 @@ import { PartyCode } from '@common/types/partyCode';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import ErrorList from '../components/elements/ErrorList';
+import { GetServerSideProps } from 'next/types';
 
-type Props = {};
+type Props = { spotifyToken: string | null };
 
-function CreateParty({}: Props) {
+function CreateParty({ spotifyToken }: Props) {
   const router = useRouter();
   const {
     partyName,
@@ -26,10 +26,18 @@ function CreateParty({}: Props) {
     partyUserNameErrors,
     validateAndSetPartyUserNameInput,
   } = useValidatePartyUserNameInput();
-  const { data: session } = useSession();
+
+  function goBackToStart() {
+    router.push('/').catch(console.error);
+  }
+
+  if (spotifyToken === null) {
+    goBackToStart();
+    return <div>No token</div>;
+  }
 
   function onBackClicked() {
-    signOut({ callbackUrl: '/' }).catch(console.log);
+    goBackToStart();
   }
 
   function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
@@ -46,13 +54,11 @@ function CreateParty({}: Props) {
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const spotifyToken = ''; // TODO: Get token
       const partyCode = await createParty(
         partyName,
         partyUserName,
         spotifyToken!
       );
-      sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage(partyCode);
     } else {
       validateAndSetPartyNameInput(partyName);
@@ -90,5 +96,13 @@ function CreateParty({}: Props) {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  query,
+}) => {
+  const { token: spotifyToken } = query;
+  if (typeof spotifyToken === 'string') return { props: { spotifyToken } };
+  else return { props: { spotifyToken: null } };
+};
 
 export default CreateParty;
