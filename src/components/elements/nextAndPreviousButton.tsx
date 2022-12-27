@@ -29,7 +29,7 @@ export default function nextAndPreviousButton({ next }: NextAndPreviousProps) {
   return (
     <div style={next ? { marginRight: '3em' } : { marginLeft: '3em' }}>
       <Button
-        type='icon-only big'
+        type='icon-only small'
         icon={next ? <GiNextButton /> : <GiPreviousButton />}
         onClick={next ? tryNextTrackRequest : tryPreviousTrackRequest}
       />
