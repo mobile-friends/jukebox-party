@@ -73,9 +73,9 @@ export default function SearchTrack({ partyCode }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
-                                                                      req,
-                                                                      res,
-                                                                    }) => {
+  req,
+  res,
+}) => {
   const session = await unstable_getServerSession(req, res, authOptions);
   const user = session?.user ?? null;
   const party = user

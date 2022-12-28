@@ -4,7 +4,6 @@ import {
   PartyNotFoundError,
 } from '@common/types/errors';
 import { SuccessResult } from '@common/infrastructure/types';
-import { Guid } from 'guid-typescript';
 
 export interface JoinPartyBody {
   partyCode: string;
@@ -12,7 +11,7 @@ export interface JoinPartyBody {
 }
 
 export interface JoinPartySuccess extends SuccessResult {
-  userId: string
+  userId: string;
 }
 
 export type JoinPartyError =

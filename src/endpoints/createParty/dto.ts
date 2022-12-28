@@ -1,6 +1,5 @@
 import { PartyCode } from '@common/types/partyCode';
 import { SuccessResult } from '@common/infrastructure/types';
-import { Guid } from 'guid-typescript';
 
 export interface CreatePartyBody {
   partyName: string;

@@ -41,11 +41,15 @@ const spotifyClient: SpotifyClient = {
   },
   put<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
     return axiosClient
-      .put<T>(url, {}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put<T>(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then((it) => it.data);
   },
 };

@@ -17,11 +17,13 @@ button {
       background: $primary-color;
       border: none;
     }
+
     &.secondary {
       color: $primary-color;
       background: none;
       border: 1px solid $primary-color;
     }
+
     &.tertiary {
       color: $primary-color;
       background: none;
@@ -31,6 +33,7 @@ button {
     div {
       margin: auto 0;
     }
+
     div:first-of-type {
       display: flex;
       justify-content: center;
@@ -59,6 +62,7 @@ button {
         }
       }
     }
+
     &.big {
       background-color: $light-color;
       color: $dark-color;
@@ -78,9 +82,11 @@ button {
       margin: auto;
     }
   }
+
   &.block {
     width: 100%;
   }
+
   &:hover {
     opacity: 90%;
     cursor: pointer;
