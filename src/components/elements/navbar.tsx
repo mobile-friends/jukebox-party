@@ -37,15 +37,6 @@ const Navbar = (): JSX.Element => {
         isActive={route === '/party/queue' ? true : false}
         directTo={`/party/queue`}
       />
-      {/*  
-      // structure for query path, just delete comment     
-      <NavItem
-        icon={<BiLibrary />}
-        text='Queue'
-        isActive={route === '/#' ? true : false}
-        directTo={`/#`}
-      />  
-      */}
     </div>
   );
 };
