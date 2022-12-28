@@ -166,7 +166,7 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    */
   export async function getQueue(partyCode: PartyCode): Promise<Track[]> {
-    const url = 'queue';
+    const url = `parties/${partyCode}/queue`;
     const response = await get<GetQueueResult>(url);
     if (isSuccess(response)) {
       return response.data.tracks;
