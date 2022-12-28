@@ -1,4 +1,3 @@
-import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
@@ -9,10 +8,12 @@ import { PartyCode } from '@common/types/partyCode';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import ErrorList from '../components/elements/ErrorList';
+import { GetServerSideProps } from 'next/types';
+import { signIn } from 'next-auth/react';
 
-type Props = {};
+type Props = { spotifyToken: string | null };
 
-function CreateParty({}: Props) {
+function CreateParty({ spotifyToken }: Props) {
   const router = useRouter();
   const {
     partyName,
@@ -26,10 +27,18 @@ function CreateParty({}: Props) {
     partyUserNameErrors,
     validateAndSetPartyUserNameInput,
   } = useValidatePartyUserNameInput();
-  const { data: session } = useSession();
+
+  function goBackToStart() {
+    router.push('/').catch(console.error);
+  }
+
+  if (spotifyToken === null) {
+    goBackToStart();
+    return <div>No token</div>;
+  }
 
   function onBackClicked() {
-    signOut({ callbackUrl: '/' }).catch(console.log);
+    goBackToStart();
   }
 
   function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
@@ -40,15 +49,23 @@ function CreateParty({}: Props) {
     validateAndSetPartyUserNameInput(e.target.value);
   }
 
-  async function goToPartyPage(partyCode: PartyCode) {
-    await router.push(`/party/${encodeURIComponent(partyCode)}`);
+  async function goToPartyPage(partyCode: PartyCode, userId: string) {
+    const partyUrl = `/party/${encodeURIComponent(partyCode)}`;
+    await signIn('Juke', {
+      callbackUrl: partyUrl,
+      partyCode,
+      userId,
+    });
   }
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const partyCode = await createParty(partyName, partyUserName);
-      sessionStorage.setItem('partyCode', partyCode);
-      await goToPartyPage(partyCode);
+      const { partyCode, hostId } = await createParty(
+        partyName,
+        partyUserName,
+        spotifyToken!
+      );
+      await goToPartyPage(partyCode, hostId);
     } else {
       validateAndSetPartyNameInput(partyName);
       validateAndSetPartyUserNameInput(partyUserName);
@@ -85,5 +102,13 @@ function CreateParty({}: Props) {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  query,
+}) => {
+  const { token: spotifyToken } = query;
+  if (typeof spotifyToken === 'string') return { props: { spotifyToken } };
+  else return { props: { spotifyToken: null } };
+};
 
 export default CreateParty;

@@ -8,9 +8,9 @@ import { Respond } from '@common/infrastructure/respond';
 
 export default requestHandler<CreatePartyBody, CreatePartyResult>(
   async (req) => {
-    const { partyName, hostName } = req.body;
+    const { partyName, hostName, spotifyToken } = req.body;
     const host = User.makeHost(hostName);
-    const party = Party.startNew(partyName, host);
+    const party = Party.startNew(partyName, spotifyToken, host);
 
     await PartyDb.store(firebaseDb, party);
     return Respond.withCreated({

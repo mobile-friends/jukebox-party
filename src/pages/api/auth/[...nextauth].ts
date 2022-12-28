@@ -1,43 +1,49 @@
-import NextAuth from 'next-auth';
-import SpotifyProvider from 'next-auth/providers/spotify';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { PartyDb } from '@common/partyDb';
+import { PartyCode } from '@common/types/partyCode';
+import firebaseDb from '@common/firebaseDb';
+import { Party } from '@common/types/party';
+import { Guid } from 'guid-typescript';
 
-const Scope =
-  'user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
+const jukeCredentialProvider = CredentialsProvider({
+  id: 'Juke',
+  name: 'Juke',
+  credentials: {
+    partyCode: { label: 'Party-code', type: 'text' },
+    userId: { label: 'User-id', type: 'text' },
+  },
+  async authorize(credentials, req) {
+    if (credentials === undefined) return null;
+    const partyCode = PartyCode.tryMake(credentials.partyCode);
+    if (partyCode === null) return null;
 
-function tryGetSpotifyClientId(): string {
-  const id = process.env.SPOTIFY_CLIENT_ID;
-  if (id !== undefined) return id;
-  else throw new Error('SPOTIFY_CLIENT_ID env not defined');
-}
+    const userId = Guid.isGuid(credentials.userId) ? credentials.userId : null;
+    if (userId === null) return null;
 
-function tryGetSpotifySecret(): string {
-  const secret = process.env.SPOTIFY_CLIENT_SECRET;
-  if (secret !== undefined) return secret;
-  else throw new Error('SPOTIFY_CLIENT_SECRET env not defined');
-}
+    const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
+    if (PartyDb.isError(party)) return null;
 
-export default NextAuth({
-  providers: [
-    SpotifyProvider({
-      clientId: tryGetSpotifyClientId(),
-      clientSecret: tryGetSpotifySecret(),
-      authorization: {
-        params: { scope: Scope },
-      },
-    }),
-  ],
+    if (!Party.hasUserWithId(party, userId)) return null;
+    return { partyCode, id: userId.toString() };
+  },
+});
+
+export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXT_AUTH_SECRET,
+  providers: [jukeCredentialProvider],
   callbacks: {
-    async jwt({ token, account }) {
-      if (account) {
-        token.id = account.id;
-        token.expires_at = account.expires_at;
-        token.accessToken = account.access_token;
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user = token;
+      session.user = token.user;
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

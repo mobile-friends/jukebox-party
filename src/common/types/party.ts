@@ -1,6 +1,5 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
-import { Guid } from 'guid-typescript';
 
 declare const tag: unique symbol;
 
@@ -10,6 +9,7 @@ declare const tag: unique symbol;
 export interface Party {
   readonly code: PartyCode;
   readonly name: string;
+  spotifyToken: string;
   readonly host: Host;
   readonly guests: Guest[];
   readonly [tag]: 'Party';
@@ -23,26 +23,29 @@ export namespace Party {
    * Constructor function for parties
    * @param code The parties code
    * @param name The parties name
+   * @param spotifyToken The spotify-token the party uses
    * @param host The parties host
    * @param guests The parties guests
    */
   export function make(
     code: string,
     name: string,
+    spotifyToken: string,
     host: Host,
     guests: Guest[]
   ): Party {
-    return Object.freeze({ code, name, host, guests: guests || [] } as Party);
+    return Object.freeze({ code, name, spotifyToken, host, guests } as Party);
   }
 
   /**
    * Starts a new party
    * @param name The parties name
+   * @param spotifyToken The spotify-token the party uses
    * @param host The parties host-user
    */
-  export function startNew(name: string, host: Host) {
+  export function startNew(name: string, spotifyToken: string, host: Host) {
     const partyCode = PartyCode.generate();
-    return make(partyCode, name, host, []);
+    return make(partyCode, name, spotifyToken, host, []);
   }
 
   /**
@@ -70,13 +73,27 @@ export namespace Party {
   }
 
   /**
+   * Gets the name of a party
+   * @param party The party
+   */
+  export function nameOf(party: Party): string {
+    return party.name;
+  }
+
+  /**
    * Adds a guest to the party and returns the updated party
    * @param party The party
    * @param guest The guest
    */
   export function addGuestTo(party: Party, guest: Guest): Party {
     let newGuests = [...party.guests, guest];
-    return make(party.code, party.name, party.host, newGuests);
+    return make(
+      party.code,
+      party.name,
+      party.spotifyToken,
+      party.host,
+      newGuests
+    );
   }
 
   /**
@@ -92,7 +109,7 @@ export namespace Party {
    * @param party The party
    * @param id The id
    */
-  export function hasUserWithId(party: Party, id: Guid): boolean {
+  export function hasUserWithId(party: Party, id: string): boolean {
     return usersIn(party).map(User.idOf).includes(id);
   }
 }

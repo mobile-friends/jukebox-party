@@ -1,4 +1,3 @@
-import { ClientSafeProvider, getProviders, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../components/elements/input';
@@ -8,12 +7,18 @@ import { Track } from '@common/types/track';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
 import Navbar from '../components/elements/navbar';
+import { PartyCode } from '@common/types/partyCode';
+import { unstable_getServerSession } from 'next-auth';
+import { authOptions } from '@api/auth/[...nextauth]';
+import { PartyDb } from '@common/partyDb';
+import firebaseDb from '@common/firebaseDb';
+import { Party } from '@common/types/party';
 
 interface Props {
-  provider: ClientSafeProvider;
+  partyCode: PartyCode;
 }
 
-type QueryString = string;
+type QueryString = string & { _tag: 'QueryString' };
 
 const MinQueryLength = 4;
 
@@ -21,11 +26,10 @@ function isValidQueryString(s: string): s is QueryString {
   return s.length >= MinQueryLength;
 }
 
-export default function SearchTrack() {
+export default function SearchTrack({ partyCode }: Props) {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   useRouter();
-  let { data: session } = useSession() as any;
 
   const onQueryInputChanged = async (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
@@ -36,7 +40,7 @@ export default function SearchTrack() {
   useEffect(() => {
     if (queryString === null) return;
 
-    search(queryString, 'track', session.user.accessToken)
+    search(queryString, 'track')
       .then(setTracks)
       .catch((e) => {
         console.error(e);
@@ -63,14 +67,30 @@ export default function SearchTrack() {
         </div>
       </div>
 
-      <Navbar />
+      <Navbar partyCode={partyCode} />
     </div>
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const providers = await getProviders();
-  if (providers === null) throw new Error('Could not get spotify providers');
+export const getServerSideProps: GetServerSideProps<Props> = async ({
+  req,
+  res,
+}) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  const user = session?.user ?? null;
+  const party = user
+    ? await PartyDb.tryGetByCode(firebaseDb, user.partyCode)
+    : null;
 
-  return { props: { provider: providers.spotify } };
+  if (!(party && !PartyDb.isError(party))) {
+    return {
+      redirect: { destination: '/' }, // TODO: Add better non-auth page
+      props: {} as Props,
+    };
+  }
+  return {
+    props: {
+      partyCode: Party.codeOf(party),
+    },
+  };
 };

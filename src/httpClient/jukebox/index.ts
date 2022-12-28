@@ -1,22 +1,17 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 import { ApiResponse, ApiResult } from '@common/infrastructure/types';
 
 interface JukeboxClient {
-  get<TResult extends ApiResult>(
-    url: string,
-    token?: string
-  ): Promise<ApiResponse<TResult>>;
+  get<TResult extends ApiResult>(url: string): Promise<ApiResponse<TResult>>;
 
   post<TData, TResult extends ApiResult>(
     url: string,
-    data: TData,
-    token?: string
+    data: TData
   ): Promise<ApiResponse<TResult>>;
 
   put<TData, TResult extends ApiResult>(
     url: string,
-    data: TData,
-    token?: string
+    data: TData
   ): Promise<ApiResponse<TResult>>;
 }
 
@@ -30,44 +25,24 @@ const axiosClient = axios.create({
   validateStatus: () => true,
 });
 
-function makeConfig(token?: string): AxiosRequestConfig | undefined {
-  return token === undefined
-    ? undefined
-    : {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-}
-
 const jukeboxClient: JukeboxClient = {
-  get<TResult extends ApiResult>(
-    url: string,
-    token?: string
-  ): Promise<ApiResponse<TResult>> {
-    const config = makeConfig(token);
-    return axiosClient
-      .get<ApiResponse<TResult>>(url, config)
-      .then((it) => it.data);
+  get<TResult extends ApiResult>(url: string): Promise<ApiResponse<TResult>> {
+    return axiosClient.get<ApiResponse<TResult>>(url).then((it) => it.data);
   },
   post<TData, TResult extends ApiResult>(
     url: string,
-    data: TData,
-    token?: string
+    data: TData
   ): Promise<ApiResponse<TResult>> {
-    const config = makeConfig(token);
     return axiosClient
-      .post<ApiResponse<TResult>>(url, data, config)
+      .post<ApiResponse<TResult>>(url, data)
       .then((it) => it.data);
   },
   put<TData, TResult extends ApiResult>(
     url: string,
-    data: TData,
-    token?: string
+    data: TData
   ): Promise<ApiResponse<TResult>> {
-    const config = makeConfig(token);
     return axiosClient
-      .put<ApiResponse<TResult>>(url, data, config)
+      .put<ApiResponse<TResult>>(url, data)
       .then((it) => it.data);
   },
 };

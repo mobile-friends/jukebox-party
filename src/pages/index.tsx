@@ -1,4 +1,4 @@
-import { ClientSafeProvider, getProviders, signIn } from 'next-auth/react';
+import { ClientSafeProvider, getProviders } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { ChangeEvent } from 'react';
@@ -10,11 +10,9 @@ import styles from '../styles/pages/main.module.scss';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
 
-interface Props {
-  provider: ClientSafeProvider;
-}
+interface Props {}
 
-export default function Home({ provider }: Props) {
+export default function Home({}: Props) {
   const router = useRouter();
   const {
     partyUserName,
@@ -32,7 +30,7 @@ export default function Home({ provider }: Props) {
   );
 
   function goToLogin() {
-    signIn(provider.id, { callbackUrl: '/create-party' }).catch(console.log);
+    router.push('/spotify-login').catch(console.error);
   }
 
   async function goToPartyPage() {
@@ -46,7 +44,6 @@ export default function Home({ provider }: Props) {
   async function joinParty() {
     const success = await sendJoinPartyRequest(partyCode, partyUserName);
     if (success) {
-      sessionStorage.setItem('partyCode', partyCode);
       await goToPartyPage();
     } else await goTo404();
   }
@@ -110,7 +107,5 @@ export default function Home({ provider }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  const providers = await getProviders();
-  if (providers === null) throw new Error('Could not get spotify providers');
-  return { props: { provider: providers.spotify } };
+  return { props: {} };
 };

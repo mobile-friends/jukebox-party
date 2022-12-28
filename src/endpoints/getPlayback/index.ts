@@ -1,27 +1,40 @@
-import { GetPlaybackResult } from '../getPlayback/dto';
-import { spotifyClient } from '@httpClient/spotify';
+import { GetPlaybackResult, GetPlaybackSuccess } from '../getPlayback/dto';
+import { spotifyClient, SpotifyResponse } from '@httpClient/spotify';
 import { isSpotifyError } from '@common/util/typeGuards';
-import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
 import { PlaybackState } from '@common/types/playbackState';
+import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
 import { Duration } from '@common/types/duration';
 
-export default requestHandler<NoBody, GetPlaybackResult>(async (req) => {
-  if (req.spotifyToken === null) {
-    return Respond.withNoSpotifyError();
-  }
-  let response = await spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
+function requestPlaybackState(
+  spotifyToken: string
+): Promise<SpotifyResponse<SpotifyApi.CurrentPlaybackResponse>> {
+  return spotifyClient.get<SpotifyApi.CurrentPlaybackResponse>(
     'me/player/',
-    req.spotifyToken
+    spotifyToken
   );
-  if (!isSpotifyError(response)) {
-    return Respond.withOk({
-      playbackState: PlaybackState.make(
-        Duration.makeFromMillis(response.progress_ms ?? 0),
-        response.is_playing
-      ),
+}
+
+function parsePlaybackState(
+  response: SpotifyApi.CurrentPlaybackResponse
+): PlaybackState {
+  return PlaybackState.make(
+    Duration.makeFromMillis(response.progress_ms ?? 0),
+    response.is_playing
+  );
+}
+
+export default requestHandler<NoBody, GetPlaybackResult>(
+  async ({ spotifyToken, body }) => {
+    if (!spotifyToken) return Respond.withNoSpotifyError();
+    let response = await requestPlaybackState(spotifyToken);
+
+    // TODO: Handle errors
+    if (isSpotifyError(response)) return Respond.withNotImplementedError();
+
+    const playbackState = parsePlaybackState(response);
+    return Respond.withOk<GetPlaybackSuccess>({
+      playbackState,
     });
-  } else {
-    return Respond.withNotImplementedError();
   }
-});
+);

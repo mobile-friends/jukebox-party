@@ -24,7 +24,8 @@
       "@component/*": ["components/*"],
       "@hook/*": ["hooks/*"],
       "@httpClient/*": ["httpClient/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/common/types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
