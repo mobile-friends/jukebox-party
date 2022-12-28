@@ -205,7 +205,7 @@ export namespace JukeClient {
     partyCode: PartyCode,
     direction: SkipDirection
   ): Promise<void> {
-    const url = `/skip?${querystring.stringify({
+    const url = `parties/${partyCode}/player/skip?${querystring.stringify({
       direction,
     })}`;
     const response = await get<SkipResult>(url);
