@@ -9,7 +9,7 @@ declare const tag: unique symbol;
 export interface Party {
   readonly code: PartyCode;
   readonly name: string;
-  spotifyToken: string;
+  readonly spotifyToken: string;
   readonly host: Host;
   readonly guests: Guest[];
   readonly [tag]: 'Party';
