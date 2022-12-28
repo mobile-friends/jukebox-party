@@ -1,10 +1,11 @@
 import { Party } from '@common/types/party';
 import { User } from '@common/types/user';
+import { SpotifyToken } from '@common/types/global';
 
 const testName = 'The best party';
 const testHost = User.makeHost('User McHost');
 const testGuest = User.makeGuest('Mr. Guest');
-const testToken = '';
+const testToken = '' as SpotifyToken;
 
 test('A new party has no guests', () => {
   const party = Party.startNew(testName, testToken, testHost);

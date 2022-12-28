@@ -1,5 +1,6 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
+import { SpotifyToken } from '@common/types/global';
 
 declare const tag: unique symbol;
 
@@ -9,7 +10,7 @@ declare const tag: unique symbol;
 export interface Party {
   readonly code: PartyCode;
   readonly name: string;
-  readonly spotifyToken: string;
+  readonly spotifyToken: SpotifyToken;
   readonly host: Host;
   readonly guests: Guest[];
   readonly [tag]: 'Party';
@@ -30,7 +31,7 @@ export namespace Party {
   export function make(
     code: string,
     name: string,
-    spotifyToken: string,
+    spotifyToken: SpotifyToken,
     host: Host,
     guests: Guest[]
   ): Party {
@@ -43,7 +44,7 @@ export namespace Party {
    * @param spotifyToken The spotify-token the party uses
    * @param host The parties host-user
    */
-  export function startNew(name: string, spotifyToken: string, host: Host) {
+  export function startNew(name: string, spotifyToken: SpotifyToken, host: Host) {
     const partyCode = PartyCode.generate();
     return make(partyCode, name, spotifyToken, host, []);
   }

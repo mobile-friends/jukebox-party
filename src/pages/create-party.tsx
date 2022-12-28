@@ -10,8 +10,9 @@ import ErrorList from '../components/elements/ErrorList';
 import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
+import { SpotifyToken } from '@common/types/global';
 
-type Props = { spotifyToken: string | null };
+type Props = { spotifyToken: SpotifyToken | null };
 
 function CreateParty({ spotifyToken }: Props) {
   const router = useRouter();
@@ -107,7 +108,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
   const { token: spotifyToken } = query;
-  if (typeof spotifyToken === 'string') return { props: { spotifyToken } };
+  if (typeof spotifyToken === 'string')
+    return { props: { spotifyToken: spotifyToken as SpotifyToken } };
   else return { props: { spotifyToken: null } };
 };
 

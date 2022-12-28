@@ -17,7 +17,7 @@ import { PauseResult } from '@endpoint/pause/dto';
 import { GetQueueResult } from '@endpoint/getQueue/dto';
 import { SearchTracksResult } from '@endpoint/searchTracks/dto';
 import * as querystring from 'querystring';
-import { SkipDirection } from '@common/types/global';
+import { SkipDirection, SpotifyToken } from '@common/types/global';
 import { SkipResult } from '@endpoint/skip/dto';
 
 // TODO: Move port into env and load dynamically
@@ -66,7 +66,7 @@ export namespace JukeClient {
   export async function createParty(
     partyName: string,
     hostName: string,
-    spotifyToken: string
+    spotifyToken: SpotifyToken
   ): Promise<CreatePartySuccess> {
     const url = 'parties';
     const body = {

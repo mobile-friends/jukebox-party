@@ -4,6 +4,7 @@ import { parseTrack } from '@common/spotifyParsing';
 import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
+import { SpotifyToken } from '@common/types/global';
 
 export type SpotifyResponse<T> = T | SpotifyApi.ErrorObject;
 
@@ -23,11 +24,11 @@ export function isSpotifyError<T extends {}>(
   return typeof response == 'object' && 'error' in response;
 }
 
-async function get<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
+async function get<T>(url: string, spotifyToken: SpotifyToken): Promise<SpotifyResponse<T>> {
   return axiosClient
     .get<T>(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${spotifyToken}`,
       },
     })
     .then((it) => it.data);
@@ -35,25 +36,25 @@ async function get<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
 
 async function post<T>(
   url: string,
-  token: string
+  spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
   return axiosClient
     .post<T>(url, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${spotifyToken}`,
       },
     })
     .then((it) => it.data);
 }
 
-async function put<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
+async function put<T>(url: string, spotifyToken: SpotifyToken): Promise<SpotifyResponse<T>> {
   return axiosClient
     .put<T>(
       url,
       {},
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${spotifyToken}`,
         },
       }
     )
@@ -70,7 +71,7 @@ export namespace SpotifyClient {
    * @param seedTrackIds A list of track-ids to base the recommendations on
    */
   export async function getRecommendations(
-    spotifyToken: string,
+    spotifyToken: SpotifyToken,
     seedTrackIds: string[]
   ): Promise<Track[]> {
     // TODO: Seed tracks, seed artists and seed genres are required
@@ -96,7 +97,7 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getCurrentTrack(
-    spotifyToken: string
+    spotifyToken: SpotifyToken
   ): Promise<Track | null> {
     const url = `me/player/currently-playing`;
     const response = await get<SpotifyApi.CurrentlyPlayingResponse | ''>(
@@ -125,7 +126,7 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getRecentlyPlayedTrackIds(
-    spotifyToken: string
+    spotifyToken: SpotifyToken
   ): Promise<string[]> {
     const url = `me/player/recently-played?${querystring.stringify({
       limit: 5,
@@ -147,7 +148,7 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    * @param isPlaying Whether to be playing or not
    */
-  export async function setPlayback(spotifyToken: string, isPlaying: boolean) {
+  export async function setPlayback(spotifyToken: SpotifyToken, isPlaying: boolean) {
     const url = `me/player/pause`;
     const response = await put<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
@@ -160,7 +161,7 @@ export namespace SpotifyClient {
    * Skips to the next track
    * @param spotifyToken An active spotify token
    */
-  export async function skipToNextTrack(spotifyToken: string) {
+  export async function skipToNextTrack(spotifyToken: SpotifyToken) {
     const url = `me/player/next`;
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
@@ -173,7 +174,7 @@ export namespace SpotifyClient {
    * Returns to the previous track
    * @param spotifyToken An active spotify token
    */
-  export async function backToPreviousTrack(spotifyToken: string) {
+  export async function backToPreviousTrack(spotifyToken: SpotifyToken) {
     const url = `me/player/previous`;
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
@@ -188,7 +189,7 @@ export namespace SpotifyClient {
    * @param query The query
    */
   export async function searchTracks(
-    spotifyToken: string,
+    spotifyToken: SpotifyToken,
     query: string
   ): Promise<Track[]> {
     function parseTracksIn(response: SpotifyApi.SearchResponse): Track[] {
@@ -220,7 +221,7 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getPlaybackState(
-    spotifyToken: string
+    spotifyToken: SpotifyToken
   ): Promise<PlaybackState> {
     function parsePlaybackState(
       response: SpotifyApi.CurrentPlaybackResponse
@@ -250,7 +251,7 @@ export namespace SpotifyClient {
    * Gets the tracks that are currently in queue
    * @param spotifyToken An active spotify token
    */
-  export async function getQueue(spotifyToken: string): Promise<Track[]> {
+  export async function getQueue(spotifyToken: SpotifyToken): Promise<Track[]> {
     function isTrackItem(
       item: SpotifyApi.TrackObjectFull | SpotifyApi.EpisodeObjectFull
     ): item is SpotifyApi.TrackObjectFull {
