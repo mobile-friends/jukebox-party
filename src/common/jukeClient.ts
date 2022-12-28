@@ -124,7 +124,7 @@ export namespace JukeClient {
   export async function getPlayback(
     partyCode: PartyCode
   ): Promise<PlaybackState> {
-    const url = '/player/';
+    const url = `parties/${partyCode}/player/`;
     const response = await get<GetPlaybackResult>(url);
     if (isSuccess(response)) return response.data.playbackState;
     else {
@@ -138,7 +138,7 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    */
   export async function pausePlayback(partyCode: PartyCode): Promise<void> {
-    const url = '/player/pause';
+    const url = `parties/${partyCode}/player/pause`;
     const response = await put<NoBody, PauseResult>(url, {});
     if (isSuccess(response)) return;
     else {
@@ -152,7 +152,7 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    */
   export async function startPlayback(partyCode: PartyCode): Promise<void> {
-    const url = '/player/play';
+    const url = `parties/${partyCode}/player/play`;
     const response = await put<NoBody, PauseResult>(url, {});
     if (isSuccess(response)) return;
     else {
