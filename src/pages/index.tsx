@@ -58,7 +58,7 @@ export default function Home({}: Props) {
     if (!validatedPartyCode.isValidated || !validatedPartyCode.isValid)
       return setPartyCodeInput(validatedPartyCode.input);
 
-    joinParty(validatedPartyCode.partyCode).catch(console.log);
+    joinParty(validatedPartyCode.partyCode).catch(console.error);
   }
 
   function onCreatePartyClicked() {

@@ -25,7 +25,6 @@ export default function TrackView({
     .join(', ');
 
   useEffect(() => {
-    console.log('setting show marquee blur');
     setShowMarqueeBlur(
       (marqueeTextRef.current?.clientWidth ?? 0) >
         (marqueeWrapperRef.current?.clientWidth ?? 0)

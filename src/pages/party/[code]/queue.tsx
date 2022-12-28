@@ -25,7 +25,7 @@ export default function Queue({ partyCode, partyName }: Props) {
   useEffect(() => {
     JukeClient.getQueue(partyCode)
       .then(setCurrentQueueTracks)
-      .catch((e) => console.error(e));
+      .catch(console.error);
   });
 
   const trackNames = currentQueueTracks.map((track: Track) => (
