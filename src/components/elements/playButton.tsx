@@ -11,11 +11,11 @@ export default function playButton({ isPlaying }: PlayButtonProps) {
   let { data: session } = useSession() as any;
 
   async function trySendPlayRequest() {
-    await play(session.user.accessToken);
+    await play();
   }
 
   async function trySendPauseRequest() {
-    await pause(session.user.accessToken);
+    await pause();
   }
 
   return (

@@ -9,6 +9,7 @@ import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInpu
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import ErrorList from '../components/elements/ErrorList';
 import { GetServerSideProps } from 'next/types';
+import { signIn } from 'next-auth/react';
 
 type Props = { spotifyToken: string | null };
 
@@ -48,18 +49,23 @@ function CreateParty({ spotifyToken }: Props) {
     validateAndSetPartyUserNameInput(e.target.value);
   }
 
-  async function goToPartyPage(partyCode: PartyCode) {
-    await router.push(`/party/${encodeURIComponent(partyCode)}`);
+  async function goToPartyPage(partyCode: PartyCode, userId: string) {
+    const partyUrl = `/party/${encodeURIComponent(partyCode)}`;
+    await signIn('Juke', {
+      callbackUrl: partyUrl,
+      partyCode,
+      userId,
+    });
   }
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const partyCode = await createParty(
+      const { partyCode, hostId } = await createParty(
         partyName,
         partyUserName,
         spotifyToken!
       );
-      await goToPartyPage(partyCode);
+      await goToPartyPage(partyCode, hostId);
     } else {
       validateAndSetPartyNameInput(partyName);
       validateAndSetPartyUserNameInput(partyUserName);

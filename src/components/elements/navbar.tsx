@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import NavItem from './navItem';
 
 import { BsSearch } from 'react-icons/bs';
@@ -6,39 +6,35 @@ import { AiFillHome } from 'react-icons/ai';
 import { MdOutlineQueueMusic } from 'react-icons/md';
 
 import { useRouter } from 'next/router';
+import { PartyCode } from '@common/types/partyCode';
 
-const Navbar = (): JSX.Element => {
-  const [partyCode, setPartyCode] = useState<string>('');
+interface Props {
+  partyCode: PartyCode;
+}
+
+export default function Navbar({ partyCode }: Props) {
   const route = useRouter().pathname;
-
-  useEffect(() => {
-    let partyCode = sessionStorage.getItem('partyCode');
-    if (partyCode === null) partyCode = '404';
-    setPartyCode(partyCode);
-  });
 
   return (
     <div className='navbar'>
       <NavItem
         icon={<AiFillHome />}
         text='Home'
-        isActive={route === '/party/[code]' ? true : false}
+        isActive={route === '/party/[code]'}
         directTo={`/party/${partyCode}`}
       />
       <NavItem
         icon={<BsSearch />}
         text='Add'
-        isActive={route === '/search-track' ? true : false}
+        isActive={route === '/search-track'}
         directTo={`/search-track`}
       />
       <NavItem
         icon={<MdOutlineQueueMusic />}
         text='Queue'
-        isActive={route === '/party/queue' ? true : false}
+        isActive={route === '/party/queue'}
         directTo={`/party/queue`}
       />
     </div>
   );
-};
-
-export default Navbar;
+}

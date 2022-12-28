@@ -5,13 +5,8 @@ import { isSuccess } from '@common/infrastructure/response';
 import { PauseResult } from '@endpoint/pause/dto';
 import { NoBody } from '@common/infrastructure/requestHandler';
 
-export async function getPlayback(
-  spotifyToken: string
-): Promise<PlaybackState> {
-  const response = await jukeboxClient.get<GetPlaybackResult>(
-    '/player/',
-    spotifyToken
-  );
+export async function getPlayback(): Promise<PlaybackState> {
+  const response = await jukeboxClient.get<GetPlaybackResult>('/player/');
   if (isSuccess(response)) return response.data.playbackState;
   else {
     console.error(response); // TODO: Handle errors
@@ -19,11 +14,10 @@ export async function getPlayback(
   }
 }
 
-export async function pause(spotifyToken: string): Promise<void> {
+export async function pause(): Promise<void> {
   const response = await jukeboxClient.put<NoBody, PauseResult>(
     '/player/pause',
-    {},
-    spotifyToken
+    {}
   );
   if (isSuccess(response)) return;
   else {
@@ -32,11 +26,10 @@ export async function pause(spotifyToken: string): Promise<void> {
   }
 }
 
-export async function play(spotifyToken: string): Promise<void> {
+export async function play(): Promise<void> {
   const response = await jukeboxClient.put<NoBody, PauseResult>(
     '/player/play',
-    {},
-    spotifyToken
+    {}
   );
   if (isSuccess(response)) return;
   else {

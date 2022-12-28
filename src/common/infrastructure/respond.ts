@@ -132,10 +132,12 @@ export namespace Respond {
     return withError(error, StatusCodes.UNAUTHORIZED);
   }
 
-  export function withNotImplementedError(): CodedResult<NotImplementedError> {
+  export function withNotImplementedError(
+    message: string = 'An operation is not yet implemented.'
+  ): CodedResult<NotImplementedError> {
     const error: NotImplementedError = {
       kind: 'NotImplementedError',
-      message: 'An operation is not yet implemented.',
+      message,
     };
     return withError(error, StatusCodes.NOT_IMPLEMENTED);
   }

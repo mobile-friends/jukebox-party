@@ -20,7 +20,7 @@ enum UserRole {
  */
 export interface Guest {
   readonly name: string;
-  readonly id: Guid;
+  readonly id: string;
   readonly role: UserRole.Guest;
   readonly [tag]: 'Guest';
 }
@@ -30,7 +30,7 @@ export interface Guest {
  */
 export interface Host {
   readonly name: string;
-  readonly id: Guid;
+  readonly id: string;
   readonly role: UserRole.Host;
   readonly [tag]: 'Host';
 }
@@ -49,12 +49,12 @@ export namespace User {
    * @param name The hosts name
    */
   export function makeHost(name: string): Host {
-    const id = Guid.create();
+    const id = Guid.create().toString();
     return Object.freeze({
       name,
       role: UserRole.Host,
-      id
-    } as  Host);
+      id,
+    } as Host);
   }
 
   /**
@@ -62,12 +62,20 @@ export namespace User {
    * @param name The guests name
    */
   export function makeGuest(name: string): Guest {
-    const id = Guid.create();
+    const id = Guid.create().toString();
     return Object.freeze({
       name,
       role: UserRole.Guest,
       id,
     } as Guest);
+  }
+
+  /**
+   * Gets the name of a user
+   * @param user The user
+   */
+  export function nameOf(user: User): string {
+    return user.name;
   }
 
   /**
@@ -83,7 +91,7 @@ export namespace User {
    * Gets the id of a user
    * @param user The user
    */
-  export function idOf(user: User): Guid {
+  export function idOf(user: User): string {
     return user.id;
   }
 

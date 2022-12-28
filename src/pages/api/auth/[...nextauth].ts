@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth';
+import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PartyDb } from '@common/partyDb';
 import { PartyCode } from '@common/types/partyCode';
@@ -15,23 +15,35 @@ const jukeCredentialProvider = CredentialsProvider({
   },
   async authorize(credentials, req) {
     if (credentials === undefined) return null;
-
     const partyCode = PartyCode.tryMake(credentials.partyCode);
     if (partyCode === null) return null;
 
-    const userId = Guid.isGuid(credentials.userId)
-      ? Guid.parse(credentials.userId)
-      : null;
+    const userId = Guid.isGuid(credentials.userId) ? credentials.userId : null;
     if (userId === null) return null;
 
     const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
     if (PartyDb.isError(party)) return null;
 
     if (!Party.hasUserWithId(party, userId)) return null;
-    return { id: userId.toString() };
+    return { partyCode, id: userId.toString() };
   },
 });
 
-export default NextAuth({
-  providers: [],
-});
+export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXT_AUTH_SECRET,
+  providers: [jukeCredentialProvider],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      session.user = token.user;
+      return session;
+    },
+  },
+};
+
+export default NextAuth(authOptions);

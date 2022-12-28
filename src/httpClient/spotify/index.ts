@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-type SpotifyResponse<T> = T | SpotifyApi.ErrorObject;
+export type SpotifyResponse<T> = T | SpotifyApi.ErrorObject;
 
 interface SpotifyClient {
   get<T>(url: string, token: string): Promise<SpotifyResponse<T>>;

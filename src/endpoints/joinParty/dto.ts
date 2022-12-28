@@ -12,7 +12,7 @@ export interface JoinPartyBody {
 }
 
 export interface JoinPartySuccess extends SuccessResult {
-  userId: Guid
+  userId: string
 }
 
 export type JoinPartyError =

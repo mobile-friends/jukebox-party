@@ -1,6 +1,5 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
-import { Guid } from 'guid-typescript';
 
 declare const tag: unique symbol;
 
@@ -74,6 +73,14 @@ export namespace Party {
   }
 
   /**
+   * Gets the name of a party
+   * @param party The party
+   */
+  export function nameOf(party: Party): string {
+    return party.name;
+  }
+
+  /**
    * Adds a guest to the party and returns the updated party
    * @param party The party
    * @param guest The guest
@@ -102,7 +109,7 @@ export namespace Party {
    * @param party The party
    * @param id The id
    */
-  export function hasUserWithId(party: Party, id: Guid): boolean {
+  export function hasUserWithId(party: Party, id: string): boolean {
     return usersIn(party).map(User.idOf).includes(id);
   }
 }

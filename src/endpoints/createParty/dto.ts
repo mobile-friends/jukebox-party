@@ -10,7 +10,7 @@ export interface CreatePartyBody {
 
 export interface CreatePartySuccess extends SuccessResult {
   partyCode: PartyCode;
-  hostId: Guid;
+  hostId: string;
 }
 
 export type CreatePartyResult = CreatePartySuccess;

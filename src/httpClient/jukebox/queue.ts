@@ -3,8 +3,8 @@ import { Track } from '@common/types/track';
 import { GetQueueResult } from '@endpoint/getQueue/dto';
 import { isSuccess } from '@common/infrastructure/response';
 
-const queue = async (token: string): Promise<Track[]> => {
-  const response = await jukeboxClient.get<GetQueueResult>('queue', token);
+export const queue = async (): Promise<Track[]> => {
+  const response = await jukeboxClient.get<GetQueueResult>('queue');
   if (isSuccess(response)) {
     return response.data.tracks;
   } else {
@@ -12,5 +12,3 @@ const queue = async (token: string): Promise<Track[]> => {
     throw new Error('Error not handled');
   }
 };
-
-export { queue };
