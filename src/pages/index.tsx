@@ -1,4 +1,3 @@
-import { ClientSafeProvider, getProviders } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { ChangeEvent } from 'react';
@@ -9,6 +8,8 @@ import { sendJoinPartyRequest } from '@httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
+import { tryQueryParam } from '@common/util/query';
+import { PartyCode } from '@common/types/partyCode';
 
 interface Props {}
 
@@ -20,20 +21,15 @@ export default function Home({}: Props) {
     partyUserNameErrors,
     validateAndSetPartyUserNameInput,
   } = useValidatePartyUserNameInput();
-  const {
-    partyCode,
-    isPartyCodeValid,
-    partyCodeErrors,
-    validateAndSetPartyCodeInput,
-  } = useValidatePartyCodeInput(
-    router.query.partyCode ? router.query.partyCode.toString() : undefined
+  const [validatedPartyCode, setPartyCodeInput] = useValidatePartyCodeInput(
+    tryQueryParam(router.query, 'partyCode') ?? ''
   );
 
   function goToLogin() {
     router.push('/spotify-login').catch(console.error);
   }
 
-  async function goToPartyPage() {
+  async function goToPartyPage(partyCode: PartyCode) {
     await router.push(`/party/${partyCode}`);
   }
 
@@ -41,10 +37,10 @@ export default function Home({}: Props) {
     await router.push(`/party/404`);
   }
 
-  async function joinParty() {
+  async function joinParty(partyCode: PartyCode) {
     const success = await sendJoinPartyRequest(partyCode, partyUserName);
     if (success) {
-      await goToPartyPage();
+      await goToPartyPage(partyCode);
     } else await goTo404();
   }
 
@@ -53,16 +49,16 @@ export default function Home({}: Props) {
   }
 
   function onPartyCodeInput(e: ChangeEvent<HTMLInputElement>) {
-    validateAndSetPartyCodeInput(e.target.value);
+    setPartyCodeInput(e.target.value);
   }
 
   function onJoinPartyClicked() {
-    if (isPartyUserNameValid && isPartyCodeValid) {
-      joinParty().catch(console.log);
-    } else {
-      validateAndSetPartyCodeInput(partyCode);
-      validateAndSetPartyUserNameInput(partyUserName);
-    }
+    if (!isPartyUserNameValid)
+      return validateAndSetPartyUserNameInput(partyUserName);
+    if (!validatedPartyCode.isValidated || !validatedPartyCode.isValid)
+      return setPartyCodeInput(validatedPartyCode.input);
+
+    joinParty(validatedPartyCode.partyCode).catch(console.log);
   }
 
   function onCreatePartyClicked() {
@@ -85,11 +81,19 @@ export default function Home({}: Props) {
           <Input
             type='number'
             placeholder='Party code'
-            value={partyCode}
+            value={validatedPartyCode.input}
             onChange={onPartyCodeInput}
-            hasError={partyCodeErrors.length > 0}
+            hasError={
+              validatedPartyCode.isValidated && !validatedPartyCode.isValid
+            }
           />
-          <ErrorList errors={partyCodeErrors} />
+          <ErrorList
+            errors={
+              validatedPartyCode.isValidated && !validatedPartyCode.isValid
+                ? validatedPartyCode.errors
+                : []
+            }
+          />
           <Button
             text='Join party'
             type='primary block'
