@@ -185,7 +185,7 @@ export namespace JukeClient {
     partyCode: PartyCode,
     query: string
   ): Promise<Track[]> {
-    const url = `/search?${querystring.stringify({
+    const url = `parties/${partyCode}/search?${querystring.stringify({
       q: query,
     })}`;
     const response = await get<SearchTracksResult>(url);
