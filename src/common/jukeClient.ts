@@ -17,6 +17,8 @@ import { PauseResult } from '@endpoint/pause/dto';
 import { GetQueueResult } from '@endpoint/getQueue/dto';
 import { SearchTracksResult } from '@endpoint/searchTracks/dto';
 import * as querystring from 'querystring';
+import { SkipDirection } from '@common/types/global';
+import { SkipResult } from '@endpoint/skip/dto';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({
@@ -185,11 +187,29 @@ export namespace JukeClient {
   ): Promise<Track[]> {
     const url = `/search?${querystring.stringify({
       q: query,
-      type: 'track',
     })}`;
     const response = await get<SearchTracksResult>(url);
     if (isSuccess(response)) return response.data.tracks;
     else {
+      console.error(response); // TODO: Handle errors
+      throw new Error('Error not handled');
+    }
+  }
+
+  /**
+   * Skips a parties playback forward or backward
+   * @param partyCode The code of the party
+   * @param direction The skip direction
+   */
+  export async function skip(
+    partyCode: PartyCode,
+    direction: SkipDirection
+  ): Promise<void> {
+    const url = `/skip?${querystring.stringify({
+      direction,
+    })}`;
+    const response = await get<SkipResult>(url);
+    if (!isSuccess(response)) {
       console.error(response); // TODO: Handle errors
       throw new Error('Error not handled');
     }

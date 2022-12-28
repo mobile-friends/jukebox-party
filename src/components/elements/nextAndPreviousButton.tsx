@@ -1,33 +1,28 @@
 import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
-import { useSession } from 'next-auth/react';
 import Button from './button';
-import { nextTrack, previousTrack } from '@httpClient/spotify/player';
+import { JukeClient } from '@common/jukeClient';
+import { PartyCode } from '@common/types/partyCode';
+import { SkipDirection } from '@common/types/global';
 
 export interface NextAndPreviousProps {
-  next: boolean;
+  isNextButton: boolean;
+  partyCode: PartyCode;
 }
 
-export default function nextAndPreviousButton({ next }: NextAndPreviousProps) {
-  let { data: session } = useSession() as any;
-
+export default function nextAndPreviousButton({
+  isNextButton,
+  partyCode,
+}: NextAndPreviousProps) {
   async function tryNextTrackRequest() {
-    try {
-      await nextTrack(session?.user.accessToken);
-    } catch (e) {
-      console.log(e);
-    }
+    await JukeClient.skip(partyCode, SkipDirection.Forward);
   }
 
   async function tryPreviousTrackRequest() {
-    try {
-      await previousTrack(session?.user.accessToken);
-    } catch (e) {
-      console.log(e);
-    }
+    await JukeClient.skip(partyCode, SkipDirection.Backward);
   }
 
   return (
-    <div style={next ? { marginRight: '3em' } : { marginLeft: '3em' }}>
+    <div style={isNextButton ? { marginRight: '3em' } : { marginLeft: '3em' }}>
       <style jsx>{`
         div {
           margin: auto 0;
@@ -35,8 +30,8 @@ export default function nextAndPreviousButton({ next }: NextAndPreviousProps) {
       `}</style>
       <Button
         type='icon-only small'
-        icon={next ? <GiNextButton /> : <GiPreviousButton />}
-        onClick={next ? tryNextTrackRequest : tryPreviousTrackRequest}
+        icon={isNextButton ? <GiNextButton /> : <GiPreviousButton />}
+        onClick={isNextButton ? tryNextTrackRequest : tryPreviousTrackRequest}
       />
     </div>
   );

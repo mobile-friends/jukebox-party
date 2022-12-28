@@ -4,12 +4,12 @@ import {
   GetPartyTrackSuccess,
 } from '@endpoint/getPartyTrack/dto';
 import { Respond } from '@common/infrastructure/respond';
-import { currentlyPlaying } from '@httpClient/spotify/player';
+import { SpotifyClient } from '@common/spotifyClient';
 
 export default requestHandler<NoBody, GetPartyTrackResult>(
   async ({ spotifyToken, query }) => {
     if (!spotifyToken) return Respond.withNoSpotifyError();
-    const track = await currentlyPlaying(spotifyToken);
+    const track = await SpotifyClient.getCurrentTrack(spotifyToken);
     return Respond.withOk<GetPartyTrackSuccess>({ track });
   }
 );

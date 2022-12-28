@@ -35,12 +35,18 @@ export default function PlaybackView({
           <label>{trackDurationText}</label>
         </div>
         <div className={styles.buttonContainer}>
-          <NextAndPreviousButton next={false}></NextAndPreviousButton>
+          <NextAndPreviousButton
+            partyCode={partyCode}
+            isNextButton={false}
+          ></NextAndPreviousButton>
           <PlayButton
             isPlaying={playbackState.isPlaying}
             partyCode={partyCode}
           />
-          <NextAndPreviousButton next={true}></NextAndPreviousButton>
+          <NextAndPreviousButton
+            partyCode={partyCode}
+            isNextButton={true}
+          ></NextAndPreviousButton>
         </div>
       </div>
     </div>

@@ -1,17 +1,12 @@
-import { PauseResult } from './/dto';
-import { spotifyClient } from '@httpClient/spotify';
+import { PauseResult, PauseSuccess } from './/dto';
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
-import { isSpotifyError } from '@common/util/typeGuards';
+import { SpotifyClient } from '@common/spotifyClient';
 
-export default requestHandler<NoBody, PauseResult>(async (req) => {
-  if (req.spotifyToken === null) {
+export default requestHandler<NoBody, PauseResult>(async ({ spotifyToken }) => {
+  if (spotifyToken === null) {
     return Respond.withNoSpotifyError();
   }
-  const response = await spotifyClient.put<string>(
-    `me/player/pause`,
-    req.spotifyToken
-  );
-  if (!isSpotifyError(response)) return Respond.withOk({});
-  else return Respond.withNotImplementedError();
+  await SpotifyClient.setPlayback(spotifyToken, false);
+  return Respond.withOk<PauseSuccess>({});
 });
