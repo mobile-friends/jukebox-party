@@ -2,7 +2,7 @@ import {
   DtoError,
   NotImplementedError,
   PartyNotFoundError,
-} from '@common/types/errors';
+} from '@common/infrastructure/errors';
 import { SuccessResult } from '@common/infrastructure/types';
 
 export interface JoinPartyBody {

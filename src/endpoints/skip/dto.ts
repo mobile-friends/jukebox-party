@@ -1,5 +1,5 @@
 import { SuccessResult } from '@common/infrastructure/types';
-import { DtoError, NoSpotifyError } from '@common/types/errors';
+import { DtoError, NoSpotifyError } from '@common/infrastructure/errors';
 
 export interface SkipSuccess extends SuccessResult {}
 

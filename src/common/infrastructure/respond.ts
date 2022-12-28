@@ -12,7 +12,7 @@ import {
   NoSpotifyError,
   NotImplementedError,
   PartyNotFoundError,
-} from '@common/types/errors';
+} from '@common/infrastructure/errors';
 import { PartyCode } from '@common/types/partyCode';
 
 export type SuccessStatusCode = StatusCodes.OK | StatusCodes.CREATED;

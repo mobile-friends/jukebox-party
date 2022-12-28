@@ -4,7 +4,7 @@ import {
   DtoError,
   NoSpotifyError,
   NotImplementedError,
-} from '@common/types/errors';
+} from '@common/infrastructure/errors';
 
 export interface GetPartyTrackSuccess extends SuccessResult {
   track: Track | null;

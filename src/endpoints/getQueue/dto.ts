@@ -1,5 +1,5 @@
 import { Track } from '@common/types/track';
-import { NoSpotifyError, NotImplementedError } from '@common/types/errors';
+import { NoSpotifyError, NotImplementedError } from '@common/infrastructure/errors';
 import { SuccessResult } from '@common/infrastructure/types';
 
 export interface GetQueueSuccess extends SuccessResult {

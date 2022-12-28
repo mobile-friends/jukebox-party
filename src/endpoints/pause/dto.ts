@@ -1,4 +1,4 @@
-import { NoSpotifyError, NotImplementedError } from '@common/types/errors';
+import { NoSpotifyError, NotImplementedError } from '@common/infrastructure/errors';
 import { SuccessResult } from '@common/infrastructure/types';
 
 export interface PauseSuccess extends SuccessResult {}

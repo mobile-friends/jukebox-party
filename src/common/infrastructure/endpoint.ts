@@ -4,7 +4,7 @@ import { ApiResponse, ApiResult } from '@common/infrastructure/types';
 import { methodOf } from '@common/util/reqUtil';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
-import { MethodNotAllowedError } from '@common/types/errors';
+import { MethodNotAllowedError } from '@common/infrastructure/errors';
 
 type MethodHandlers = {
   [key in HTTPMethod]?: NextApiHandler<ApiResponse<ApiResult>>;

@@ -1,4 +1,4 @@
-import { DtoError, PartyNotFoundError } from '@common/types/errors';
+import { DtoError, PartyNotFoundError } from '@common/infrastructure/errors';
 import { Party } from '@common/types/party';
 import { SuccessResult } from '@common/infrastructure/types';
 
