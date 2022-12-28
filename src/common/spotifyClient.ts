@@ -18,7 +18,7 @@ const axiosClient = axios.create({
 });
 
 export function isSpotifyError<T extends {}>(
-  response: T | SpotifyApi.ErrorObject,
+  response: T | SpotifyApi.ErrorObject
 ): response is SpotifyApi.ErrorObject {
   return typeof response == 'object' && 'error' in response;
 }
@@ -35,7 +35,7 @@ async function get<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
 
 async function post<T>(
   url: string,
-  token: string,
+  token: string
 ): Promise<SpotifyResponse<T>> {
   return axiosClient
     .post<T>(url, {
@@ -55,7 +55,7 @@ async function put<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      },
+      }
     )
     .then((it) => it.data);
 }
@@ -64,7 +64,6 @@ async function put<T>(url: string, token: string): Promise<SpotifyResponse<T>> {
  * Contains functions for interacting with the spotify-api
  */
 export namespace SpotifyClient {
-
   /**
    * Gets a list of recommended tracks
    * @param spotifyToken An active spotify token
@@ -72,7 +71,7 @@ export namespace SpotifyClient {
    */
   export async function getRecommendations(
     spotifyToken: string,
-    seedTrackIds: string[],
+    seedTrackIds: string[]
   ): Promise<Track[]> {
     // TODO: Seed tracks, seed artists and seed genres are required
     // TODO: Handle no seed tracks
@@ -81,7 +80,7 @@ export namespace SpotifyClient {
     })}`;
     const response = await get<SpotifyApi.RecommendationsFromSeedsResponse>(
       url,
-      spotifyToken,
+      spotifyToken
     );
     if (isSpotifyError(response)) {
       // If anything went wrong we just return no recommendations
@@ -97,12 +96,12 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getCurrentTrack(
-    spotifyToken: string,
+    spotifyToken: string
   ): Promise<Track | null> {
     const url = `me/player/currently-playing`;
     const response = await get<SpotifyApi.CurrentlyPlayingResponse | ''>(
       url,
-      spotifyToken,
+      spotifyToken
     );
     if (isSpotifyError(response)) {
       // TODO: Handle errors
@@ -126,7 +125,7 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getRecentlyPlayedTrackIds(
-    spotifyToken: string,
+    spotifyToken: string
   ): Promise<string[]> {
     const url = `me/player/recently-played?${querystring.stringify({
       limit: 5,
@@ -134,7 +133,7 @@ export namespace SpotifyClient {
     })}`;
     const response = await get<SpotifyApi.UsersRecentlyPlayedTracksResponse>(
       url,
-      spotifyToken,
+      spotifyToken
     );
     if (isSpotifyError(response)) {
       // TODO: Handle error
@@ -190,7 +189,7 @@ export namespace SpotifyClient {
    */
   export async function searchTracks(
     spotifyToken: string,
-    query: string,
+    query: string
   ): Promise<Track[]> {
     function parseTracksIn(response: SpotifyApi.SearchResponse): Track[] {
       /*
@@ -221,21 +220,21 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    */
   export async function getPlaybackState(
-    spotifyToken: string,
+    spotifyToken: string
   ): Promise<PlaybackState> {
     function parsePlaybackState(
-      response: SpotifyApi.CurrentPlaybackResponse,
+      response: SpotifyApi.CurrentPlaybackResponse
     ): PlaybackState {
       return PlaybackState.make(
         Duration.makeFromMillis(response.progress_ms ?? 0),
-        response.is_playing,
+        response.is_playing
       );
     }
 
     const url = 'me/player/';
     const response = await get<SpotifyApi.CurrentPlaybackResponse>(
       url,
-      spotifyToken,
+      spotifyToken
     );
 
     // TODO: Handle errors
@@ -253,7 +252,7 @@ export namespace SpotifyClient {
    */
   export async function getQueue(spotifyToken: string): Promise<Track[]> {
     function isTrackItem(
-      item: SpotifyApi.TrackObjectFull | SpotifyApi.EpisodeObjectFull,
+      item: SpotifyApi.TrackObjectFull | SpotifyApi.EpisodeObjectFull
     ): item is SpotifyApi.TrackObjectFull {
       return item.type === 'track';
     }
@@ -269,7 +268,7 @@ export namespace SpotifyClient {
     const url = '/me/player/queue';
     const response = await get<SpotifyApi.UsersQueueResponse>(
       url,
-      spotifyToken,
+      spotifyToken
     );
 
     if (isSpotifyError(response)) {
