@@ -87,7 +87,7 @@ export namespace JukeClient {
     partyCode: PartyCode,
     guestName: string
   ): Promise<string | null> {
-    const url = 'parties/join';
+    const url = `parties/${partyCode}/join`;
     const body = {
       partyCode,
       guestName,
