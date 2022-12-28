@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import QueueTracks from '../../components/elements/queueTracks';
+import QueueTracks from '@component/elements/queueTracks';
 import { useRouter } from 'next/router';
-import Navbar from '../../components/elements/navbar';
-import QueueHeader from '../../components/elements/queueHeader';
+import Navbar from '@component/elements/navbar';
+import QueueHeader from '@component/elements/queueHeader';
 import { Track } from '@common/types/track';
 import { GetServerSideProps } from 'next/types';
 import { PartyCode } from '@common/types/partyCode';

@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Input from '../components/elements/input';
-import TrackListItemView from '../components/elements/trackListItemView';
+import Input from '@component/elements/input';
+import TrackListItemView from '@component/elements/trackListItemView';
 import { Track } from '@common/types/track';
-import styles from '../styles/pages/main.module.scss';
+import styles from '../../../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
-import Navbar from '../components/elements/navbar';
+import Navbar from '@component/elements/navbar';
 import { PartyCode } from '@common/types/partyCode';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
@@ -26,7 +26,7 @@ function isValidQueryString(s: string): s is QueryString {
   return s.length >= MinQueryLength;
 }
 
-export default function SearchTrack({ partyCode }: Props) {
+export default function AddTracks({ partyCode }: Props) {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   useRouter();

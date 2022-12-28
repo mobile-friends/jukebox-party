@@ -26,14 +26,14 @@ export default function Navbar({ partyCode }: Props) {
       <NavItem
         icon={<BsSearch />}
         text='Add'
-        isActive={route === '/search-track'}
-        directTo={`/search-track`}
+        isActive={route === '/party/[code]/add'}
+        directTo={`/party/${partyCode}/add`}
       />
       <NavItem
         icon={<MdOutlineQueueMusic />}
         text='Queue'
-        isActive={route === '/party/queue'}
-        directTo={`/party/queue`}
+        isActive={route === '/party/[code]/queue'}
+        directTo={`/party/${partyCode}/queue`}
       />
     </div>
   );
