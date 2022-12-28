@@ -179,7 +179,7 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    * @param query The search query
    */
-  export async function search(
+  export async function searchTracks(
     partyCode: PartyCode,
     query: string
   ): Promise<Track[]> {

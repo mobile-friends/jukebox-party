@@ -40,7 +40,7 @@ export default function SearchTrack({ partyCode }: Props) {
   useEffect(() => {
     if (queryString === null) return;
 
-    JukeClient.search(partyCode, queryString)
+    JukeClient.searchTracks(partyCode, queryString)
       .then(setTracks)
       .catch((e) => {
         console.error(e);
