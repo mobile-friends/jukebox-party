@@ -9,7 +9,6 @@ import Navbar from '../../components/elements/navbar';
 import QRCodeModal from '../../components/elements/qrCodeModal';
 import Button from '../../components/elements/button';
 import { useModalVisibility } from '@hook/modals/useModalVisibility';
-import { getPlayback } from '@httpClient/jukebox/playback';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
@@ -17,7 +16,7 @@ import { User } from '@common/types/user';
 import useFetchParty from '@hook/parties/useFetchParty';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
-import { getCurrentTrack } from '@httpClient/jukebox/parties';
+import { JukeClient } from '@common/jukeClient';
 
 type Props = { partyCode: PartyCode };
 
@@ -33,7 +32,7 @@ export default function PartyRoom({ partyCode }: Props) {
 
   const getCurrentlyPlaying = async () => {
     try {
-      const track = await getCurrentTrack(partyCode);
+      const track = await JukeClient.getCurrentTrack(partyCode);
       if (track) {
         setCurrentTrack(track);
       } else {
@@ -55,7 +54,7 @@ export default function PartyRoom({ partyCode }: Props) {
   };
 
   const getPlaybackState = async () => {
-    const playbackState = await getPlayback();
+    const playbackState = await JukeClient.getPlayback(partyCode);
     setIsPlaying(PlaybackState.isPlaying(playbackState));
     setPlaybackProgress(PlaybackState.playTimeOf(playbackState));
   };
@@ -93,6 +92,7 @@ export default function PartyRoom({ partyCode }: Props) {
         <TrackView
           track={currentTrack}
           playbackState={PlaybackState.make(playbackProgress, isPlaying)}
+          partyCode={partyCode}
         />
       ) : (
         <div>

@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
-import { createParty } from '@common/../httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
@@ -10,6 +9,7 @@ import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUser
 import ErrorList from '../components/elements/ErrorList';
 import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
+import { JukeClient } from '@common/jukeClient';
 
 type Props = { spotifyToken: string | null };
 
@@ -60,7 +60,7 @@ function CreateParty({ spotifyToken }: Props) {
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const { partyCode, hostId } = await createParty(
+      const { partyCode, hostId } = await JukeClient.createParty(
         partyName,
         partyUserName,
         spotifyToken!

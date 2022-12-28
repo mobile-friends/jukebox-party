@@ -4,15 +4,18 @@ import NextAndPreviousButton from './nextAndPreviousButton';
 import styles from '../../styles/components/playbackView.module.scss';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
+import { PartyCode } from '@common/types/partyCode';
 
 export interface PlaybackViewProps {
   playbackState: PlaybackState;
   trackDuration: Duration;
+  partyCode: PartyCode;
 }
 
 export default function PlaybackView({
   playbackState,
   trackDuration,
+  partyCode,
 }: PlaybackViewProps) {
   const progressText = Duration.formatted(
     PlaybackState.playTimeOf(playbackState)
@@ -33,7 +36,10 @@ export default function PlaybackView({
         </div>
         <div className={styles.buttonContainer}>
           <NextAndPreviousButton next={false}></NextAndPreviousButton>
-          <PlayButton isPlaying={playbackState.isPlaying} />
+          <PlayButton
+            isPlaying={playbackState.isPlaying}
+            partyCode={partyCode}
+          />
           <NextAndPreviousButton next={true}></NextAndPreviousButton>
         </div>
       </div>

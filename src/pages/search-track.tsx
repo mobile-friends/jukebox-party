@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useState } from 'react';
 import Input from '../components/elements/input';
 import TrackListItemView from '../components/elements/trackListItemView';
-import { search } from '@httpClient/jukebox/search';
 import { Track } from '@common/types/track';
 import styles from '../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
@@ -13,6 +12,7 @@ import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { Party } from '@common/types/party';
+import { JukeClient } from '@common/jukeClient';
 
 interface Props {
   partyCode: PartyCode;
@@ -40,7 +40,7 @@ export default function SearchTrack({ partyCode }: Props) {
   useEffect(() => {
     if (queryString === null) return;
 
-    search(queryString, 'track')
+    JukeClient.search(partyCode, queryString)
       .then(setTracks)
       .catch((e) => {
         console.error(e);
@@ -73,9 +73,9 @@ export default function SearchTrack({ partyCode }: Props) {
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-  res,
-}) => {
+                                                                      req,
+                                                                      res,
+                                                                    }) => {
   const session = await unstable_getServerSession(req, res, authOptions);
   const user = session?.user ?? null;
   const party = user

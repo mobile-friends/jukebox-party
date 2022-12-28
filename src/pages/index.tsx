@@ -4,12 +4,12 @@ import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import ErrorList from '../components/elements/ErrorList';
 import Input from '../components/elements/input';
-import { sendJoinPartyRequest } from '@httpClient/jukebox/parties';
 import styles from '../styles/pages/main.module.scss';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
 import { tryQueryParam } from '@common/util/query';
 import { PartyCode } from '@common/types/partyCode';
+import { JukeClient } from '@common/jukeClient';
 
 interface Props {}
 
@@ -38,7 +38,7 @@ export default function Home({}: Props) {
   }
 
   async function joinParty(partyCode: PartyCode) {
-    const success = await sendJoinPartyRequest(partyCode, partyUserName);
+    const success = await JukeClient.joinParty(partyCode, partyUserName);
     if (success) {
       await goToPartyPage(partyCode);
     } else await goTo404();

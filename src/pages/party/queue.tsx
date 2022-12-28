@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import QueueTracks from '../../components/elements/queueTracks';
-import { queue } from '@httpClient/jukebox/queue';
 import { useRouter } from 'next/router';
 import Navbar from '../../components/elements/navbar';
 import QueueHeader from '../../components/elements/queueHeader';
@@ -12,6 +11,7 @@ import { authOptions } from '@api/auth/[...nextauth]';
 import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
+import { JukeClient } from '@common/jukeClient';
 
 interface Props {
   partyCode: PartyCode;
@@ -23,7 +23,7 @@ export default function Queue({ partyCode, partyName }: Props) {
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   useEffect(() => {
-    queue()
+    JukeClient.getQueue(partyCode)
       .then(setCurrentQueueTracks)
       .catch((e) => console.error(e));
   });
