@@ -12,6 +12,9 @@ import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { JukeClient } from '@common/jukeClient';
+import { GetQueueResult } from '@endpoint/getQueue';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
 
 interface Props {
   partyCode: PartyCode;
@@ -22,10 +25,21 @@ export default function Queue({ partyCode, partyName }: Props) {
   const router = useRouter();
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
+  function onQueueResult(result: GetQueueResult) {
+    switch (result.code) {
+      case StatusCodes.OK:
+        return setCurrentQueueTracks(result.content.tracks);
+      case StatusCodes.UNAUTHORIZED:
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors
+        break;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
   useEffect(() => {
-    JukeClient.getQueue(partyCode)
-      .then(setCurrentQueueTracks)
-      .catch(console.error);
+    JukeClient.getQueue(partyCode).then(onQueueResult).catch(console.error);
   });
 
   const trackNames = currentQueueTracks.map((track: Track) => (

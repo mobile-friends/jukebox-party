@@ -12,6 +12,7 @@ import {
   Ok,
   PartyNotFoundError,
 } from '@common/infrastructure/types';
+import { assertNeverReached } from '@common/util/assertions';
 
 export interface JoinPartyBody {
   partyCode: string;
@@ -44,6 +45,8 @@ export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
         return Response.partyNotFound(partyCode);
       case PartyDb.ErrorType.InvalidEntry:
         return Response.notImplemented(); // TODO: Handle better
+      default:
+        return assertNeverReached(result);
     }
   }
 

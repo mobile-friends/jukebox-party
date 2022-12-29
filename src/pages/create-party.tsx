@@ -11,6 +11,7 @@ import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
 import { SpotifyToken } from '@common/types/global';
+import { StatusCodes } from 'http-status-codes';
 
 type Props = { spotifyToken: SpotifyToken | null };
 
@@ -59,14 +60,21 @@ function CreateParty({ spotifyToken }: Props) {
     });
   }
 
+  async function tryCreateParty() {
+    const result = await JukeClient.createParty({
+      partyName: partyName,
+      hostName: partyUserName,
+      spotifyToken: spotifyToken!,
+    });
+    if (result.code === StatusCodes.CREATED) {
+      const { partyCode, userId: hostId } = result.content;
+      await goToPartyPage(partyCode, hostId);
+    }
+  }
+
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const { partyCode, userId: hostId } = await JukeClient.createParty(
-        partyName,
-        partyUserName,
-        spotifyToken!
-      );
-      await goToPartyPage(partyCode, hostId);
+      await tryCreateParty();
     } else {
       validateAndSetPartyNameInput(partyName);
       validateAndSetPartyUserNameInput(partyUserName);

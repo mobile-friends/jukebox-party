@@ -10,6 +10,8 @@ import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
 import { tryQueryParam } from '@common/util/query';
 import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
 
 interface Props {}
 
@@ -38,10 +40,23 @@ export default function Home({}: Props) {
   }
 
   async function joinParty(partyCode: PartyCode) {
-    const success = await JukeClient.joinParty(partyCode, partyUserName);
-    if (success) {
-      await goToPartyPage(partyCode);
-    } else await goTo404();
+    const result = await JukeClient.joinParty({
+      partyCode,
+      guestName: partyUserName,
+    });
+    switch (result.code) {
+      case StatusCodes.OK:
+        // TODO: Sign-in guest
+        return await goToPartyPage(partyCode);
+      case StatusCodes.NOT_FOUND:
+        return await goToPartyPage(partyCode);
+      case StatusCodes.BAD_REQUEST:
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors
+        return;
+      default:
+        return assertNeverReached(result);
+    }
   }
 
   function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {

@@ -17,6 +17,8 @@ import useFetchParty from '@hook/parties/useFetchParty';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
 
 type Props = { partyCode: PartyCode };
 
@@ -30,16 +32,26 @@ export default function PartyRoom({ partyCode }: Props) {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const party = useFetchParty(partyCode);
 
+  async function onTrackReceived(track: Track | null) {
+    if (track) {
+      setCurrentTrack(track);
+    } else {
+      await getRecentlyPlayedRecommendation();
+    }
+  }
+
   const getCurrentlyPlaying = async () => {
-    try {
-      const track = await JukeClient.getCurrentTrack(partyCode);
-      if (track) {
-        setCurrentTrack(track);
-      } else {
-        await getRecentlyPlayedRecommendation();
-      }
-    } catch (error) {
-      console.error(error);
+    const result = await JukeClient.getCurrentTrack(partyCode);
+    switch (result.code) {
+      case StatusCodes.OK:
+        return await onTrackReceived(result.content.track);
+      case StatusCodes.UNAUTHORIZED:
+      case StatusCodes.BAD_REQUEST:
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors
+        break;
+      default:
+        return assertNeverReached(result);
     }
   };
 
@@ -54,9 +66,20 @@ export default function PartyRoom({ partyCode }: Props) {
   };
 
   const getPlaybackState = async () => {
-    const playbackState = await JukeClient.getPlayback(partyCode);
-    setIsPlaying(PlaybackState.isPlaying(playbackState));
-    setPlaybackProgress(PlaybackState.playTimeOf(playbackState));
+    const result = await JukeClient.getPlayback(partyCode);
+    switch (result.code) {
+      case StatusCodes.OK:
+        const playbackState = result.content.playbackState;
+        setIsPlaying(PlaybackState.isPlaying(playbackState));
+        setPlaybackProgress(PlaybackState.playTimeOf(playbackState));
+        return;
+      case StatusCodes.UNAUTHORIZED:
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors
+        break;
+      default:
+        return assertNeverReached(result);
+    }
   };
 
   useEffect(() => {

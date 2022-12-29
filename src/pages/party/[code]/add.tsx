@@ -13,6 +13,9 @@ import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { Party } from '@common/types/party';
 import { JukeClient } from '@common/jukeClient';
+import { SearchTracksResult } from '@endpoint/searchTracks';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
 
 interface Props {
   partyCode: PartyCode;
@@ -37,15 +40,26 @@ export default function AddTracks({ partyCode }: Props) {
     setQueryString(newQueryString);
   };
 
+  function onSearchResult(result: SearchTracksResult) {
+    switch (result.code) {
+      case StatusCodes.OK:
+        return setTracks(result.content.tracks);
+      case StatusCodes.BAD_REQUEST:
+      case StatusCodes.UNAUTHORIZED:
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors
+        break;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
   useEffect(() => {
     if (queryString === null) return;
 
     JukeClient.searchTracks(partyCode, queryString)
-      .then(setTracks)
-      .catch((e) => {
-        console.error(e);
-        setTracks([]);
-      });
+      .then(onSearchResult)
+      .catch(console.error);
   }, [queryString]);
 
   return (
