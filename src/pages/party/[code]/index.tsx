@@ -125,8 +125,8 @@ export default function PartyRoom({ partyCode }: Props) {
       )}
 
       <Button
-        text='Show QR Code'
-        type='primary'
+        content='Show QR Code'
+        styleType='primary'
         onClick={() => {
           handleModalVisibility();
         }}

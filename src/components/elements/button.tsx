@@ -1,28 +1,47 @@
 import React from 'react';
 
+/**
+ * Custom type for click listeners
+ */
 type ClickListener = (
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 ) => void | Promise<void>;
 
+/**
+ * Props for a button
+ */
 interface Props {
-  text?: string;
-  type: string;
-  icon?: any;
-  onClick: ClickListener;
+  /**
+   * Button style type
+   */
+  readonly styleType: string;
+  /**
+   * The buttons content.
+   * Can be anything that React can render, like text, icon, ect
+   */
+  readonly content: React.ReactNode;
+  /**
+   * A click listener
+   */
+  readonly onClick: ClickListener;
 }
 
-export default function Button({ text, type, icon, onClick }: Props) {
+/**
+ * A basic button
+ * @param props
+ * @constructor
+ */
+export default function Button(props: Props) {
+  const { styleType, onClick, content } = props;
+
   async function onClicked(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
     await onClick(e);
   }
 
   return (
-    <div>
-      <button className={`btn ${type}`} onClick={onClicked}>
-        {icon ? <div>{icon}</div> : ''}
-        {text ? <div>{text}</div> : ''}
-      </button>
-    </div>
+    <button className={`btn ${styleType}`} onClick={onClicked}>
+      {content}
+    </button>
   );
 }

@@ -11,6 +11,7 @@ button {
 
     display: flex;
     justify-content: center;
+    align-items: center;
 
     &.primary {
       color: $dark-color;
@@ -29,19 +30,6 @@ button {
       background: none;
       border: none;
     }
-
-    div {
-      margin: auto 0;
-    }
-
-    div:first-of-type {
-      display: flex;
-      justify-content: center;
-
-      svg {
-        font-size: 20px;
-      }
-    }
   }
 
   &.icon-only {
@@ -51,30 +39,24 @@ button {
     &.small {
       background-color: $dark-color;
       color: $light-color;
+      height: 44px;
+      width: 44px;
+      display: flex;
 
-      div {
-        height: 44px;
-        width: 44px;
-        display: flex;
-
-        svg {
-          font-size: 30px;
-        }
+      svg {
+        font-size: 30px;
       }
     }
 
     &.big {
       background-color: $light-color;
       color: $dark-color;
+      height: 60px;
+      width: 60px;
+      display: flex;
 
-      div {
-        height: 60px;
-        width: 60px;
-        display: flex;
-
-        svg {
-          font-size: 40px;
-        }
+      svg {
+        font-size: 40px;
       }
     }
 

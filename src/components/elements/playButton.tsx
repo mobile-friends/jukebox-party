@@ -22,14 +22,14 @@ export default function playButton({ isPlaying, partyCode }: PlayButtonProps) {
     <div>
       {isPlaying ? (
         <Button
-          type='icon-only big'
-          icon={<BsFillPauseFill />}
+          styleType='icon-only big'
+          content={<BsFillPauseFill />}
           onClick={trySendPauseRequest}
         />
       ) : (
         <Button
-          type='icon-only big'
-          icon={<BsFillPlayFill />}
+          styleType='icon-only big'
+          content={<BsFillPlayFill />}
           onClick={trySendPlayRequest}
         />
       )}

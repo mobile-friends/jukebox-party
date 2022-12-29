@@ -29,8 +29,8 @@ export default function nextAndPreviousButton({
         }
       `}</style>
       <Button
-        type='icon-only small'
-        icon={isNextButton ? <GiNextButton /> : <GiPreviousButton />}
+        styleType='icon-only small'
+        content={isNextButton ? <GiNextButton /> : <GiPreviousButton />}
         onClick={isNextButton ? tryNextTrackRequest : tryPreviousTrackRequest}
       />
     </div>

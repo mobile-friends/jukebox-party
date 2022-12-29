@@ -22,8 +22,8 @@ function PartyNotFound({}: Props) {
           </h2>
           <div className={styles.btnWidth}>
             <Button
-              text='Join another party'
-              type='primary'
+              content='Join another party'
+              styleType='primary'
               onClick={goToJoinPage}
             />
           </div>

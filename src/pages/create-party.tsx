@@ -101,12 +101,16 @@ function CreateParty({ spotifyToken }: Props) {
           />
           <ErrorList errors={partyUserNameErrors} />
           <Button
-            text='Create party'
-            type='primary block'
+            content='Create party'
+            styleType='primary block'
             onClick={onCreatePartyClicked}
           />
         </form>
-        <Button text='Back' type='tertiary block' onClick={onBackClicked} />
+        <Button
+          content='Back'
+          styleType='tertiary block'
+          onClick={onBackClicked}
+        />
       </div>
     </div>
   );

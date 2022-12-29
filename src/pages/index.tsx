@@ -110,14 +110,14 @@ export default function Home({}: Props) {
             }
           />
           <Button
-            text='Join party'
-            type='primary block'
+            content='Join party'
+            styleType='primary block'
             onClick={onJoinPartyClicked}
           />
         </form>
         <Button
-          text='Create party'
-          type='tertiary block'
+          content='Create party'
+          styleType='tertiary block'
           onClick={onCreatePartyClicked}
         />
       </div>
