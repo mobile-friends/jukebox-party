@@ -24,7 +24,10 @@ export function isSpotifyError<T extends {}>(
   return typeof response == 'object' && 'error' in response;
 }
 
-async function get<T>(url: string, spotifyToken: SpotifyToken): Promise<SpotifyResponse<T>> {
+async function get<T>(
+  url: string,
+  spotifyToken: SpotifyToken
+): Promise<SpotifyResponse<T>> {
   return axiosClient
     .get<T>(url, {
       headers: {
@@ -47,7 +50,10 @@ async function post<T>(
     .then((it) => it.data);
 }
 
-async function put<T>(url: string, spotifyToken: SpotifyToken): Promise<SpotifyResponse<T>> {
+async function put<T>(
+  url: string,
+  spotifyToken: SpotifyToken
+): Promise<SpotifyResponse<T>> {
   return axiosClient
     .put<T>(
       url,
@@ -148,7 +154,10 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    * @param isPlaying Whether to be playing or not
    */
-  export async function setPlayback(spotifyToken: SpotifyToken, isPlaying: boolean) {
+  export async function setPlayback(
+    spotifyToken: SpotifyToken,
+    isPlaying: boolean
+  ) {
     const url = `me/player/pause`;
     const response = await put<string>(url, spotifyToken);
     if (isSpotifyError(response)) {

@@ -1,4 +1,3 @@
-import { JoinPartyBody, JoinPartyResult } from '../joinParty/dto';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
@@ -6,6 +5,28 @@ import { User } from '@common/types/user';
 import { Party } from '@common/types/party';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
+import { SuccessResult } from '@common/infrastructure/types';
+import {
+  DtoError,
+  NotImplementedError,
+  PartyNotFoundError,
+} from '@common/infrastructure/errors';
+
+export interface JoinPartyBody {
+  partyCode: string;
+  guestName: string;
+}
+
+export interface JoinPartySuccess extends SuccessResult {
+  userId: string;
+}
+
+export type JoinPartyError =
+  | DtoError
+  | PartyNotFoundError
+  | NotImplementedError;
+
+export type JoinPartyResult = JoinPartySuccess | JoinPartyError;
 
 export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
   const { partyCode: partyCodeParam, guestName } = req.body;

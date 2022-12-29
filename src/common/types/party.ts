@@ -44,7 +44,11 @@ export namespace Party {
    * @param spotifyToken The spotify-token the party uses
    * @param host The parties host-user
    */
-  export function startNew(name: string, spotifyToken: SpotifyToken, host: Host) {
+  export function startNew(
+    name: string,
+    spotifyToken: SpotifyToken,
+    host: Host
+  ) {
     const partyCode = PartyCode.generate();
     return make(partyCode, name, spotifyToken, host, []);
   }

@@ -1,9 +1,16 @@
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
-import { SkipResult, SkipSuccess } from '@endpoint/skip/dto';
 import { Respond } from '@common/infrastructure/respond';
 import { tryQueryParam } from '@common/util/query';
 import { SkipDirection } from '@common/types/global';
 import { SpotifyClient } from '@common/spotifyClient';
+import { SuccessResult } from '@common/infrastructure/types';
+import { DtoError, NoSpotifyError } from '@common/infrastructure/errors';
+
+export interface SkipSuccess extends SuccessResult {}
+
+export type SkipError = NoSpotifyError | DtoError;
+
+export type SkipResult = SkipSuccess | SkipError;
 
 function tryParseSkipDirection(s: string): SkipDirection | null {
   const i = parseInt(s);

@@ -1,24 +1,24 @@
 import axios from 'axios';
 import { ApiResponse, ApiResult } from '@common/infrastructure/types';
+import { isSuccess } from '@common/infrastructure/response';
+import { PartyCode } from '@common/types/partyCode';
+import { Track } from '@common/types/track';
+import { PlaybackState } from '@common/types/playbackState';
+import { NoBody } from '@common/infrastructure/requestHandler';
+import * as querystring from 'querystring';
+import { SkipDirection, SpotifyToken } from '@common/types/global';
 import {
   CreatePartyBody,
   CreatePartyResult,
   CreatePartySuccess,
-} from '@endpoint/createParty/dto';
-import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty/dto';
-import { isSuccess } from '@common/infrastructure/response';
-import { PartyCode } from '@common/types/partyCode';
-import { Track } from '@common/types/track';
-import { GetPartyTrackResult } from '@endpoint/getPartyTrack/dto';
-import { PlaybackState } from '@common/types/playbackState';
-import { GetPlaybackResult } from '@endpoint/getPlayback/dto';
-import { NoBody } from '@common/infrastructure/requestHandler';
-import { PauseResult } from '@endpoint/pause/dto';
-import { GetQueueResult } from '@endpoint/getQueue/dto';
-import { SearchTracksResult } from '@endpoint/searchTracks/dto';
-import * as querystring from 'querystring';
-import { SkipDirection, SpotifyToken } from '@common/types/global';
-import { SkipResult } from '@endpoint/skip/dto';
+} from '@endpoint/createParty';
+import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty';
+import { GetPartyTrackResult } from '@endpoint/getPartyTrack';
+import { PauseResult } from '@endpoint/pause';
+import { GetQueueResult } from '@endpoint/getQueue';
+import { SearchTracksResult } from '@endpoint/searchTracks';
+import { SkipResult } from '@endpoint/skip';
+import { GetPlaybackResult } from '@endpoint/getPlayback';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({

@@ -1,10 +1,25 @@
 import { User } from '@common/types/user';
 import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
-import { CreatePartyBody, CreatePartyResult } from '../createParty/dto';
 import firebaseDb from '@common/firebaseDb';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
+import { SpotifyToken } from '@common/types/global';
+import { SuccessResult } from '@common/infrastructure/types';
+import { PartyCode } from '@common/types/partyCode';
+
+export interface CreatePartyBody {
+  partyName: string;
+  hostName: string;
+  spotifyToken: SpotifyToken;
+}
+
+export interface CreatePartySuccess extends SuccessResult {
+  partyCode: PartyCode;
+  hostId: string;
+}
+
+export type CreatePartyResult = CreatePartySuccess;
 
 export default requestHandler<CreatePartyBody, CreatePartyResult>(
   async (req) => {

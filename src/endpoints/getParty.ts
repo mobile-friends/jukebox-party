@@ -2,11 +2,21 @@ import { tryQueryParam } from '@common/util/query';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
-import { GetPartyResult } from '../getParty/dto';
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
 import { Respond } from '@common/infrastructure/respond';
+import { DtoError, PartyNotFoundError } from '@common/infrastructure/errors';
+import { SuccessResult } from '@common/infrastructure/types';
+import { Party } from '@common/types/party';
 
 const ParamName = 'partyCode';
+
+export type GetPartyError = DtoError | PartyNotFoundError;
+
+export interface GetPartySuccess extends SuccessResult {
+  party: Party;
+}
+
+export type GetPartyResult = GetPartySuccess | GetPartyError;
 
 export default requestHandler<NoBody, GetPartyResult>(async (req) => {
   const partyCodeParam = tryQueryParam(req.query, ParamName);
