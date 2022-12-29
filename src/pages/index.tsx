@@ -48,7 +48,7 @@ export default function Home({}: Props) {
         // TODO: Sign-in guest
         return await goToPartyPage(partyCode);
       case StatusCodes.NOT_FOUND:
-        return await goToPartyPage(partyCode);
+        return await goTo404();
       case StatusCodes.BAD_REQUEST:
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors
