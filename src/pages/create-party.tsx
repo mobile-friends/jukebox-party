@@ -6,7 +6,7 @@ import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import { useValidatePartyNameInput } from '@hook/inputs/useValidatePartyNameInput';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
-import ErrorList from '../components/elements/ErrorList';
+import ErrorList from '@component/elements/errorList';
 import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';

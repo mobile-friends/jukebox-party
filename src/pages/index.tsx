@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
-import ErrorList from '../components/elements/ErrorList';
+import ErrorList from '@component/elements/errorList';
 import Input from '../components/elements/input';
 import styles from '../styles/pages/main.module.scss';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
