@@ -10,8 +10,6 @@ export interface PlayButtonProps {
 }
 
 export default function playButton({ isPlaying, partyCode }: PlayButtonProps) {
-  let { data: session } = useSession() as any;
-
   async function trySendPlayRequest() {
     await JukeClient.startPlayback(partyCode);
   }
