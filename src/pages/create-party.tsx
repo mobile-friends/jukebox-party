@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import Input from '../components/elements/input';
 import styles from '../styles/pages/main.module.scss';
@@ -42,14 +41,6 @@ function CreateParty({ spotifyToken }: Props) {
     goBackToStart();
   }
 
-  function onPartyNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    validateAndSetPartyNameInput(e.target.value);
-  }
-
-  function onHostNameChanged(e: ChangeEvent<HTMLInputElement>) {
-    validateAndSetPartyUserNameInput(e.target.value);
-  }
-
   async function goToPartyPage(partyCode: PartyCode, userId: string) {
     const partyUrl = `/party/${encodeURIComponent(partyCode)}`;
     await signIn('Juke', {
@@ -88,14 +79,16 @@ function CreateParty({ spotifyToken }: Props) {
         </h1>
         <form>
           <Input
+            type={'text'}
             placeholder='Party Name'
-            onChange={onPartyNameChanged}
+            onChange={validateAndSetPartyNameInput}
             hasError={partyNameErrors.length > 0}
           />
           <ErrorList errors={partyNameErrors} />
           <Input
+            type={'text'}
             placeholder='Host Name'
-            onChange={onHostNameChanged}
+            onChange={validateAndSetPartyUserNameInput}
             hasError={partyUserNameErrors.length > 0}
           />
           <ErrorList errors={partyUserNameErrors} />

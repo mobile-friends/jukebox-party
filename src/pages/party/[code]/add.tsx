@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@component/elements/input';
 import TrackListItemView from '@component/elements/trackListItemView';
 import { Track } from '@common/types/track';
@@ -34,8 +34,7 @@ export default function AddTracks({ partyCode }: Props) {
   const [tracks, setTracks] = useState<Track[]>([]);
   useRouter();
 
-  const onQueryInputChanged = async (e: ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
+  const onQueryInputChanged = async (input: string) => {
     const newQueryString = isValidQueryString(input) ? input : null;
     setQueryString(newQueryString);
   };
@@ -70,6 +69,7 @@ export default function AddTracks({ partyCode }: Props) {
         </h1>
         <div className={styles.container} style={{ padding: 0 }}>
           <Input
+            type={'text'}
             placeholder='What do you want to listen to?'
             onChange={onQueryInputChanged}
           />

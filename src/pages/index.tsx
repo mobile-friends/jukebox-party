@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
-import { ChangeEvent } from 'react';
 import Button from '../components/elements/button';
 import ErrorList from '@component/elements/errorList';
 import Input from '../components/elements/input';
@@ -59,14 +58,6 @@ export default function Home({}: Props) {
     }
   }
 
-  function onUsernameInput(e: ChangeEvent<HTMLInputElement>) {
-    validateAndSetPartyUserNameInput(e.target.value);
-  }
-
-  function onPartyCodeInput(e: ChangeEvent<HTMLInputElement>) {
-    setPartyCodeInput(e.target.value);
-  }
-
   function onJoinPartyClicked() {
     if (!isPartyUserNameValid)
       return validateAndSetPartyUserNameInput(partyUserName);
@@ -88,8 +79,9 @@ export default function Home({}: Props) {
         </h1>
         <form>
           <Input
+            type='text'
             placeholder='Name'
-            onChange={onUsernameInput}
+            onChange={validateAndSetPartyUserNameInput}
             hasError={partyUserNameErrors.length > 0}
           />
           <ErrorList errors={partyUserNameErrors} />
@@ -97,7 +89,7 @@ export default function Home({}: Props) {
             type='number'
             placeholder='Party code'
             value={validatedPartyCode.input}
-            onChange={onPartyCodeInput}
+            onChange={setPartyCodeInput}
             hasError={
               validatedPartyCode.isValidated && !validatedPartyCode.isValid
             }
