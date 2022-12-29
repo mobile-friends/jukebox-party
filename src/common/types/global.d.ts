@@ -16,4 +16,6 @@ declare global {
   }
 
   type ErrorMessage = string;
+
+  type SyncOrAsync<T> = T | Promise<T>;
 }

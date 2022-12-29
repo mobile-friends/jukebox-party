@@ -5,7 +5,7 @@ import React from 'react';
  */
 type ClickListener = (
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-) => void | Promise<void>;
+) => SyncOrAsync<void>;
 
 /**
  * Props for a button

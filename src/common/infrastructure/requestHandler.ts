@@ -5,8 +5,6 @@ import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 
-type SyncOrAsync<T> = T | Promise<T>;
-
 export type Query = { [key: string]: string | string[] | undefined };
 
 export type NoBody = {};
