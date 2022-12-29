@@ -10,7 +10,6 @@ import ErrorList from '@component/elements/errorList';
 import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
-import { SpotifyToken } from '@common/types/global';
 import { StatusCodes } from 'http-status-codes';
 
 type Props = { spotifyToken: SpotifyToken | null };

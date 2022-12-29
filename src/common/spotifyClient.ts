@@ -4,7 +4,6 @@ import { parseTrack } from '@common/spotifyParsing';
 import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
-import { SpotifyToken } from '@common/types/global';
 
 export type SpotifyResponse<T> = T | SpotifyApi.ErrorObject;
 

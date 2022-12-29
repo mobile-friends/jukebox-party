@@ -1,7 +1,6 @@
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
 import { Response } from '@common/infrastructure/response';
 import { tryQueryParam } from '@common/util/query';
-import { SkipDirection } from '@common/types/global';
 import { SpotifyClient } from '@common/spotifyClient';
 import {
   DtoError,

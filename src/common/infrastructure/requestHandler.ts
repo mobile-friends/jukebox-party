@@ -4,7 +4,6 @@ import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
-import { SpotifyToken } from '@common/types/global';
 
 type SyncOrAsync<T> = T | Promise<T>;
 

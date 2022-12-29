@@ -1,6 +1,5 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
-import { SpotifyToken } from '@common/types/global';
 
 declare const tag: unique symbol;
 

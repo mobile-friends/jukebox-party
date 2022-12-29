@@ -4,7 +4,6 @@ import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import { Response } from '@common/infrastructure/response';
-import { PartyCredentials, SpotifyToken } from '@common/types/global';
 import { Created } from '@common/infrastructure/types';
 
 export interface CreatePartyBody {

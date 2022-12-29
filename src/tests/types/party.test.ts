@@ -1,6 +1,5 @@
 import { Party } from '@common/types/party';
 import { User } from '@common/types/user';
-import { SpotifyToken } from '@common/types/global';
 
 const testName = 'The best party';
 const testHost = User.makeHost('User McHost');

@@ -3,7 +3,6 @@ import { ApiResult, ErrorResult } from '@common/infrastructure/types';
 import { PartyCode } from '@common/types/partyCode';
 import { NoBody } from '@common/infrastructure/requestHandler';
 import * as querystring from 'querystring';
-import { SkipDirection } from '@common/types/global';
 import { CreatePartyBody, CreatePartyResult } from '@endpoint/createParty';
 import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty';
 import { GetPartyTrackResult } from '@endpoint/getPartyTrack';

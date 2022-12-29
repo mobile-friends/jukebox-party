@@ -5,7 +5,6 @@ import { User } from '@common/types/user';
 import { Party } from '@common/types/party';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import { Response } from '@common/infrastructure/response';
-import { UserId } from '@common/types/global';
 import {
   DtoError,
   NotImplementedError,
