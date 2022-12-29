@@ -1,10 +1,14 @@
 import React from 'react';
 
+type ClickListener = (
+  e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+) => void | Promise<void>;
+
 interface Props {
   text?: string;
   type: string;
   icon?: any;
-  onClick: (e: any) => void;
+  onClick: ClickListener;
 }
 
 export default function Button({ text, type, icon, onClick }: Props) {
