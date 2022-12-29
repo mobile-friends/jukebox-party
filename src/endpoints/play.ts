@@ -1,22 +1,20 @@
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
+import { Response } from '@common/infrastructure/response';
 import { SpotifyClient } from '@common/spotifyClient';
-import { SuccessResult } from '@common/infrastructure/types';
 import {
+  NoContent,
   NoSpotifyError,
   NotImplementedError,
-} from '@common/infrastructure/errors';
-
-export interface PlaySuccess extends SuccessResult {}
+} from '@common/infrastructure/types';
 
 export type PlayError = NoSpotifyError | NotImplementedError;
 
-export type PlayResult = PlaySuccess | PlayError;
+export type PlayResult = NoContent | PlayError;
 
 export default requestHandler<NoBody, PlayResult>(async ({ spotifyToken }) => {
   if (spotifyToken === null) {
-    return Respond.withNoSpotifyError();
+    return Response.noSpotify();
   }
   await SpotifyClient.setPlayback(spotifyToken, true);
-  return Respond.withOk<PlaySuccess>({});
+  return Response.noContent();
 });

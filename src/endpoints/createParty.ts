@@ -3,10 +3,9 @@ import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
-import { SpotifyToken } from '@common/types/global';
-import { SuccessResult } from '@common/infrastructure/types';
-import { PartyCode } from '@common/types/partyCode';
+import { Response } from '@common/infrastructure/response';
+import { PartyCredentials, SpotifyToken } from '@common/types/global';
+import { Created } from '@common/infrastructure/types';
 
 export interface CreatePartyBody {
   partyName: string;
@@ -14,12 +13,7 @@ export interface CreatePartyBody {
   spotifyToken: SpotifyToken;
 }
 
-export interface CreatePartySuccess extends SuccessResult {
-  partyCode: PartyCode;
-  hostId: string;
-}
-
-export type CreatePartyResult = CreatePartySuccess;
+export type CreatePartyResult = Created<PartyCredentials>;
 
 export default requestHandler<CreatePartyBody, CreatePartyResult>(
   async (req) => {
@@ -28,9 +22,9 @@ export default requestHandler<CreatePartyBody, CreatePartyResult>(
     const party = Party.startNew(partyName, spotifyToken, host);
 
     await PartyDb.store(firebaseDb, party);
-    return Respond.withCreated({
+    return Response.created<PartyCredentials>({
       partyCode: Party.codeOf(party),
-      hostId: User.idOf(host),
+      userId: User.idOf(host),
     });
   }
 );

@@ -1,16 +1,17 @@
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
+import { Response } from '@common/infrastructure/response';
 import { tryQueryParam } from '@common/util/query';
 import { SkipDirection } from '@common/types/global';
 import { SpotifyClient } from '@common/spotifyClient';
-import { SuccessResult } from '@common/infrastructure/types';
-import { DtoError, NoSpotifyError } from '@common/infrastructure/errors';
-
-export interface SkipSuccess extends SuccessResult {}
+import {
+  DtoError,
+  NoContent,
+  NoSpotifyError,
+} from '@common/infrastructure/types';
 
 export type SkipError = NoSpotifyError | DtoError;
 
-export type SkipResult = SkipSuccess | SkipError;
+export type SkipResult = NoContent | SkipError;
 
 function tryParseSkipDirection(s: string): SkipDirection | null {
   const i = parseInt(s);
@@ -20,17 +21,17 @@ function tryParseSkipDirection(s: string): SkipDirection | null {
 export default requestHandler<NoBody, SkipResult>(
   async ({ spotifyToken, query }) => {
     if (spotifyToken === null) {
-      return Respond.withNoSpotifyError();
+      return Response.noSpotify();
     }
 
     const directionParam = tryQueryParam(query, 'direction');
     if (directionParam === null) {
-      return Respond.withMissingQueryParamError('direction');
+      return Response.missingQueryParam('direction');
     }
 
     const direction = tryParseSkipDirection(directionParam);
     if (direction === null) {
-      return Respond.withInvalidQueryParamError('direction');
+      return Response.invalidQueryParam('direction');
     }
 
     const response =
@@ -38,6 +39,6 @@ export default requestHandler<NoBody, SkipResult>(
         ? await SpotifyClient.skipToNextTrack(spotifyToken)
         : await SpotifyClient.backToPreviousTrack(spotifyToken);
 
-    return Respond.withOk<SkipSuccess>({});
+    return Response.noContent();
   }
 );

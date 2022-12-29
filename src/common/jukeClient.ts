@@ -1,17 +1,16 @@
-import axios from 'axios';
-import { ApiResponse, ApiResult } from '@common/infrastructure/types';
-import { isSuccess } from '@common/infrastructure/response';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { ApiResult, ErrorResult } from '@common/infrastructure/types';
 import { PartyCode } from '@common/types/partyCode';
 import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';
 import { NoBody } from '@common/infrastructure/requestHandler';
 import * as querystring from 'querystring';
-import { SkipDirection, SpotifyToken } from '@common/types/global';
 import {
-  CreatePartyBody,
-  CreatePartyResult,
-  CreatePartySuccess,
-} from '@endpoint/createParty';
+  PartyCredentials,
+  SkipDirection,
+  SpotifyToken,
+} from '@common/types/global';
+import { CreatePartyBody, CreatePartyResult } from '@endpoint/createParty';
 import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty';
 import { GetPartyTrackResult } from '@endpoint/getPartyTrack';
 import { PauseResult } from '@endpoint/pause';
@@ -19,6 +18,8 @@ import { GetQueueResult } from '@endpoint/getQueue';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { SkipResult } from '@endpoint/skip';
 import { GetPlaybackResult } from '@endpoint/getPlayback';
+import { StatusCodes } from 'http-status-codes';
+import HTTPMethod from 'http-method-enum';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({
@@ -31,26 +32,48 @@ const axiosClient = axios.create({
   validateStatus: () => true,
 });
 
-async function get<TResult extends ApiResult>(
-  url: string
-): Promise<ApiResponse<TResult>> {
-  return axiosClient.get<ApiResponse<TResult>>(url).then((it) => it.data);
+function unhandledResultError(
+  url: string,
+  method: HTTPMethod,
+  code: StatusCodes
+) {
+  return new Error(`Unhandled result-code ${code} from ${method} on ${url}.`);
 }
 
-async function post<TBody, TResult extends ApiResult>(
+function reportError(response: AxiosResponse) {
+  const error = response.data as ErrorResult;
+  console.error('The Juke-api returned an error', {
+    requestUrl: response.config.url,
+    requestBody: response.config.data,
+    requestMethod: response.config.method,
+    error,
+  });
+}
+
+async function makeRequest<TResult extends ApiResult>(
+  config: AxiosRequestConfig
+): Promise<TResult> {
+  const response = await axiosClient.request<TResult>(config);
+  if (response.status >= 400) reportError(response);
+  return response.data;
+}
+
+function get<TResult extends ApiResult>(url: string): Promise<TResult> {
+  return makeRequest<TResult>({ url, method: 'GET' });
+}
+
+function post<TBody, TResult extends ApiResult>(
   url: string,
   body: TBody
-): Promise<ApiResponse<TResult>> {
-  return axiosClient
-    .post<ApiResponse<TResult>>(url, body)
-    .then((it) => it.data);
+): Promise<TResult> {
+  return makeRequest<TResult>({ url, method: 'POST', data: body });
 }
 
 async function put<TBody, TResult extends ApiResult>(
   url: string,
   body: TBody
-): Promise<ApiResponse<TResult>> {
-  return axiosClient.put<ApiResponse<TResult>>(url, body).then((it) => it.data);
+): Promise<TResult> {
+  return makeRequest<TResult>({ url, method: 'PUT', data: body });
 }
 
 /**
@@ -67,15 +90,18 @@ export namespace JukeClient {
     partyName: string,
     hostName: string,
     spotifyToken: SpotifyToken
-  ): Promise<CreatePartySuccess> {
+  ): Promise<PartyCredentials> {
     const url = 'parties';
     const body = {
       partyName,
       hostName,
       spotifyToken,
     };
-    const response = await post<CreatePartyBody, CreatePartyResult>(url, body);
-    return response.data;
+    const result = await post<CreatePartyBody, CreatePartyResult>(url, body);
+    if (result.code === StatusCodes.CREATED) {
+      return result.content;
+    }
+    throw unhandledResultError(url, HTTPMethod.POST, result.code);
   }
 
   /**
@@ -92,12 +118,11 @@ export namespace JukeClient {
       partyCode,
       guestName,
     };
-    const response = await post<JoinPartyBody, JoinPartyResult>(url, body);
-    if (!isSuccess(response)) {
-      console.error(response);
-      return null;
+    const result = await post<JoinPartyBody, JoinPartyResult>(url, body);
+    if (result.code === StatusCodes.OK) {
+      return result.content.userId;
     }
-    return response.data.userId;
+    throw unhandledResultError(url, HTTPMethod.POST, result.code);
   }
 
   /**
@@ -108,13 +133,11 @@ export namespace JukeClient {
     partyCode: PartyCode
   ): Promise<Track | null> {
     const url = `parties/${partyCode}/track`;
-    const response = await get<GetPartyTrackResult>(url);
-    if (isSuccess(response)) {
-      return response.data.track;
-    } else {
-      console.error(response); // TODO: Handle errors
-      return null;
+    const result = await get<GetPartyTrackResult>(url);
+    if (result.code === StatusCodes.OK) {
+      return result.content.track;
     }
+    throw unhandledResultError(url, HTTPMethod.GET, result.code);
   }
 
   /**
@@ -125,12 +148,11 @@ export namespace JukeClient {
     partyCode: PartyCode
   ): Promise<PlaybackState> {
     const url = `parties/${partyCode}/player/`;
-    const response = await get<GetPlaybackResult>(url);
-    if (isSuccess(response)) return response.data.playbackState;
-    else {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await get<GetPlaybackResult>(url);
+    if (result.code === StatusCodes.OK) {
+      return result.content.playbackState;
     }
+    throw unhandledResultError(url, HTTPMethod.GET, result.code);
   }
 
   /**
@@ -139,12 +161,11 @@ export namespace JukeClient {
    */
   export async function pausePlayback(partyCode: PartyCode): Promise<void> {
     const url = `parties/${partyCode}/player/pause`;
-    const response = await put<NoBody, PauseResult>(url, {});
-    if (isSuccess(response)) return;
-    else {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await put<NoBody, PauseResult>(url, {});
+    if (result.code === StatusCodes.NO_CONTENT) {
+      return;
     }
+    throw unhandledResultError(url, HTTPMethod.PUT, result.code);
   }
 
   /**
@@ -153,12 +174,11 @@ export namespace JukeClient {
    */
   export async function startPlayback(partyCode: PartyCode): Promise<void> {
     const url = `parties/${partyCode}/player/play`;
-    const response = await put<NoBody, PauseResult>(url, {});
-    if (isSuccess(response)) return;
-    else {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await put<NoBody, PauseResult>(url, {});
+    if (result.code === StatusCodes.NO_CONTENT) {
+      return;
     }
+    throw unhandledResultError(url, HTTPMethod.PUT, result.code);
   }
 
   /**
@@ -167,13 +187,11 @@ export namespace JukeClient {
    */
   export async function getQueue(partyCode: PartyCode): Promise<Track[]> {
     const url = `parties/${partyCode}/queue`;
-    const response = await get<GetQueueResult>(url);
-    if (isSuccess(response)) {
-      return response.data.tracks;
-    } else {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await get<GetQueueResult>(url);
+    if (result.code === StatusCodes.OK) {
+      return result.content.tracks;
     }
+    throw unhandledResultError(url, HTTPMethod.GET, result.code);
   }
 
   /**
@@ -188,12 +206,11 @@ export namespace JukeClient {
     const url = `parties/${partyCode}/search?${querystring.stringify({
       q: query,
     })}`;
-    const response = await get<SearchTracksResult>(url);
-    if (isSuccess(response)) return response.data.tracks;
-    else {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await get<SearchTracksResult>(url);
+    if (result.code === StatusCodes.OK) {
+      return result.content.tracks;
     }
+    throw unhandledResultError(url, HTTPMethod.GET, result.code);
   }
 
   /**
@@ -208,10 +225,10 @@ export namespace JukeClient {
     const url = `parties/${partyCode}/player/skip?${querystring.stringify({
       direction,
     })}`;
-    const response = await get<SkipResult>(url);
-    if (!isSuccess(response)) {
-      console.error(response); // TODO: Handle errors
-      throw new Error('Error not handled');
+    const result = await get<SkipResult>(url);
+    if (result.code === StatusCodes.NO_CONTENT) {
+      return;
     }
+    throw unhandledResultError(url, HTTPMethod.PUT, result.code);
   }
 }

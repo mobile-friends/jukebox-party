@@ -1,10 +1,5 @@
 import { NextApiHandler } from 'next';
-import {
-  ApiResponse,
-  ApiResult,
-  CodedResult,
-} from '@common/infrastructure/types';
-import { methodOf, urlOf } from '@common/util/reqUtil';
+import { ApiResult } from '@common/infrastructure/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
@@ -25,11 +20,11 @@ interface Request<TBody> {
 
 type HandlerFunc<TBody, TResult extends ApiResult> = (
   req: Request<TBody>
-) => SyncOrAsync<CodedResult<TResult>>;
+) => SyncOrAsync<TResult>;
 
 export function requestHandler<TBody, TResult extends ApiResult>(
   handler: HandlerFunc<TBody, TResult>
-): NextApiHandler<ApiResponse<TResult>> {
+): NextApiHandler {
   return async (req, res) => {
     const session = await unstable_getServerSession(req, res, authOptions);
     const partyCode = session ? session.user.partyCode : null;
@@ -38,17 +33,11 @@ export function requestHandler<TBody, TResult extends ApiResult>(
       : null;
     const spotifyToken =
       party !== null && !PartyDb.isError(party) ? party.spotifyToken : null;
-    const [result, statusCode] = await handler({
+    const result = await handler({
       body: req.body,
       query: req.query,
       spotifyToken,
     });
-    const responseBody = {
-      endpoint: urlOf(req),
-      method: methodOf(req) ?? 'Unknown method',
-      statusCode,
-      data: result,
-    } as ApiResponse<TResult>; // TODO: Potentially bad cast, but idk how to fix error
-    res.status(statusCode).json(responseBody);
+    res.status(result.code).json(result);
   };
 }

@@ -61,7 +61,7 @@ function CreateParty({ spotifyToken }: Props) {
 
   async function onCreatePartyClicked() {
     if (isPartyNameValid && isPartyUserNameValid) {
-      const { partyCode, hostId } = await JukeClient.createParty(
+      const { partyCode, userId: hostId } = await JukeClient.createParty(
         partyName,
         partyUserName,
         spotifyToken!

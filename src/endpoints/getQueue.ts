@@ -1,27 +1,27 @@
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
+import { Response } from '@common/infrastructure/response';
 import { SpotifyClient } from '@common/spotifyClient';
-import { SuccessResult } from '@common/infrastructure/types';
-import { Track } from '@common/types/track';
 import {
   NoSpotifyError,
   NotImplementedError,
-} from '@common/infrastructure/errors';
+  Ok,
+} from '@common/infrastructure/types';
+import { Track } from '@common/types/track';
 
-export interface GetQueueSuccess extends SuccessResult {
+export interface GetQueueSuccess {
   tracks: Track[];
 }
 
 export type GetQueueError = NoSpotifyError | NotImplementedError;
 
-export type GetQueueResult = GetQueueSuccess | GetQueueError;
+export type GetQueueResult = Ok<GetQueueSuccess> | GetQueueError;
 
 export default requestHandler<NoBody, GetQueueResult>(
   async ({ spotifyToken }) => {
     if (spotifyToken === null) {
-      return Respond.withNoSpotifyError();
+      return Response.noSpotify();
     }
     const tracks = await SpotifyClient.getQueue(spotifyToken);
-    return Respond.withOk<GetQueueSuccess>({ tracks });
+    return Response.ok<GetQueueSuccess>({ tracks });
   }
 );

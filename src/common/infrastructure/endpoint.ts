@@ -1,24 +1,21 @@
 import HTTPMethod from 'http-method-enum';
 import { NextApiHandler } from 'next';
-import { ApiResponse, ApiResult } from '@common/infrastructure/types';
+import { ApiResult, MethodNotAllowedError } from '@common/infrastructure/types';
 import { methodOf } from '@common/util/reqUtil';
 import { requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
-import { MethodNotAllowedError } from '@common/infrastructure/errors';
+import { Response } from '@common/infrastructure/response';
 
 type MethodHandlers = {
-  [key in HTTPMethod]?: NextApiHandler<ApiResponse<ApiResult>>;
+  [key in HTTPMethod]?: NextApiHandler<ApiResult>;
 };
 
 function notAllowedMethodHandler(allowedMethods: HTTPMethod[]) {
   return requestHandler<any, MethodNotAllowedError>((req) => {
-    return Respond.withMethodNotAllowedError(allowedMethods);
+    return Response.methodNotAllowed(allowedMethods);
   });
 }
 
-export function endpoint(
-  handlers: MethodHandlers
-): NextApiHandler<ApiResponse<ApiResult>> {
+export function endpoint(handlers: MethodHandlers): NextApiHandler<ApiResult> {
   return async (req, res) => {
     const method = methodOf(req);
     const allowedMethods = Object.keys(handlers) as HTTPMethod[];

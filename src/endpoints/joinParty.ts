@@ -4,21 +4,22 @@ import firebaseDb from '@common/firebaseDb';
 import { User } from '@common/types/user';
 import { Party } from '@common/types/party';
 import { requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
-import { SuccessResult } from '@common/infrastructure/types';
+import { Response } from '@common/infrastructure/response';
+import { UserId } from '@common/types/global';
 import {
   DtoError,
   NotImplementedError,
+  Ok,
   PartyNotFoundError,
-} from '@common/infrastructure/errors';
+} from '@common/infrastructure/types';
 
 export interface JoinPartyBody {
   partyCode: string;
   guestName: string;
 }
 
-export interface JoinPartySuccess extends SuccessResult {
-  userId: string;
+export interface JoinPartySuccess {
+  userId: UserId;
 }
 
 export type JoinPartyError =
@@ -26,23 +27,23 @@ export type JoinPartyError =
   | PartyNotFoundError
   | NotImplementedError;
 
-export type JoinPartyResult = JoinPartySuccess | JoinPartyError;
+export type JoinPartyResult = Ok<JoinPartySuccess> | JoinPartyError;
 
 export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
   const { partyCode: partyCodeParam, guestName } = req.body;
 
   const partyCode = PartyCode.tryMake(partyCodeParam);
   if (partyCode === null) {
-    return Respond.withInvalidBodyError('partyCode');
+    return Response.invalidBody('partyCode');
   }
 
   const result = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(result)) {
     switch (result.kind) {
       case PartyDb.ErrorType.PartyNotFound:
-        return Respond.withPartyNotFoundError(partyCode);
+        return Response.partyNotFound(partyCode);
       case PartyDb.ErrorType.InvalidEntry:
-        return Respond.withNotImplementedError(); // TODO: Handle better
+        return Response.notImplemented(); // TODO: Handle better
     }
   }
 
@@ -50,5 +51,5 @@ export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
   const partyWithGuest = Party.addGuestTo(result, guest);
 
   await PartyDb.store(firebaseDb, partyWithGuest);
-  return Respond.withOk({ userId: User.idOf(guest) });
+  return Response.ok<JoinPartySuccess>({ userId: User.idOf(guest) });
 });

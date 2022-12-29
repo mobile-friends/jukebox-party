@@ -1,35 +1,35 @@
 import { tryQueryParam } from '@common/util/query';
 import { NoBody, requestHandler } from '@common/infrastructure/requestHandler';
-import { Respond } from '@common/infrastructure/respond';
+import { Response } from '@common/infrastructure/response';
 import { SpotifyClient } from '@common/spotifyClient';
-import { SuccessResult } from '@common/infrastructure/types';
-import { Track } from '@common/types/track';
 import {
   DtoError,
   NoSpotifyError,
   NotImplementedError,
-} from '@common/infrastructure/errors';
+  Ok,
+} from '@common/infrastructure/types';
+import { Track } from '@common/types/track';
 
-export interface SearchTracksSuccess extends SuccessResult {
+export interface SearchTracksSuccess {
   tracks: Track[];
 }
 
 export type SearchTracksError = DtoError | NoSpotifyError | NotImplementedError;
 
-export type SearchTracksResult = SearchTracksSuccess | SearchTracksError;
+export type SearchTracksResult = Ok<SearchTracksSuccess> | SearchTracksError;
 
 export default requestHandler<NoBody, SearchTracksResult>(
   async ({ spotifyToken, query }) => {
     if (spotifyToken === null) {
-      return Respond.withNoSpotifyError();
+      return Response.noSpotify();
     }
 
     const searchQuery = tryQueryParam(query, 'q');
     if (searchQuery === null) {
-      return Respond.withMissingQueryParamError('q');
+      return Response.missingQueryParam('q');
     }
 
     const tracks = await SpotifyClient.searchTracks(spotifyToken, searchQuery);
-    return Respond.withOk<SearchTracksSuccess>({ tracks });
+    return Response.ok<SearchTracksSuccess>({ tracks });
   }
 );
