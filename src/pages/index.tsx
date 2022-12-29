@@ -11,6 +11,7 @@ import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import { signIn } from 'next-auth/react';
 
 interface Props {}
 
@@ -30,10 +31,6 @@ export default function Home({}: Props) {
     router.push('/spotify-login').catch(console.error);
   }
 
-  async function goToPartyPage(partyCode: PartyCode) {
-    await router.push(`/party/${partyCode}`);
-  }
-
   async function goTo404() {
     await router.push(`/party/404`);
   }
@@ -45,8 +42,12 @@ export default function Home({}: Props) {
     });
     switch (result.code) {
       case StatusCodes.OK:
-        // TODO: Sign-in guest
-        return await goToPartyPage(partyCode);
+        const partyUrl = `/party/${partyCode}`;
+        await signIn('Juke', {
+          callbackUrl: partyUrl,
+          partyCode,
+          userId: result.content.userId,
+        });
       case StatusCodes.NOT_FOUND:
         return await goTo404();
       case StatusCodes.BAD_REQUEST:
