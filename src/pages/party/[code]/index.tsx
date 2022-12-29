@@ -139,7 +139,7 @@ export default function PartyRoom({ partyCode }: Props) {
           code={Party.codeOf(party)}
         />
       )}
-      <Navbar partyCode={Party.codeOf(party)} />
+      <Navbar />
     </div>
   );
 }

@@ -50,7 +50,7 @@ export default function Queue({ partyCode, partyName }: Props) {
     <div>
       <QueueHeader partyName={partyName} partyCode={partyCode} />
       <div>{trackNames}</div>
-      <Navbar partyCode={partyCode} />
+      <Navbar />
     </div>
   );
 }

@@ -81,7 +81,7 @@ export default function AddTracks({ partyCode }: Props) {
         </div>
       </div>
 
-      <Navbar partyCode={partyCode} />
+      <Navbar />
     </div>
   );
 }
