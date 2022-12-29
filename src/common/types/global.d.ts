@@ -14,4 +14,6 @@ declare global {
     partyCode: PartyCode;
     userId: UserId;
   }
+
+  type ErrorMessage = string;
 }
