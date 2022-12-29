@@ -1,6 +1,5 @@
 import Button from './button';
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
-import { useSession } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
 
