@@ -1,13 +1,13 @@
 import React from 'react';
 
-interface ButtonProps {
+interface Props {
   text?: string;
   type: string;
   icon?: any;
   onClick: (e: any) => void;
 }
 
-const Button = ({ text, type, icon, onClick }: ButtonProps): JSX.Element => {
+export default function Button({ text, type, icon, onClick }: Props) {
   return (
     <div>
       <button
@@ -22,6 +22,4 @@ const Button = ({ text, type, icon, onClick }: ButtonProps): JSX.Element => {
       </button>
     </div>
   );
-};
-
-export default Button;
+}
