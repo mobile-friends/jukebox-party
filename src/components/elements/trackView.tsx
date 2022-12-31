@@ -6,11 +6,24 @@ import { PlaybackState } from '@common/types/playbackState';
 import { PartyCode } from '@common/types/partyCode';
 
 interface Props {
+  /**
+   * The track to display
+   */
   track: Track;
+  /**
+   * The current playback-state
+   */
   playbackState: PlaybackState;
+  /**
+   * The parties code
+   */
   partyCode: PartyCode;
 }
 
+/**
+ * Displays the currently played track
+ * @constructor
+ */
 export default function TrackView({ track, playbackState, partyCode }: Props) {
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
