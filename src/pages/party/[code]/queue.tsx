@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import QueueTrack from '@component/elements/queueTrack';
 import { useRouter } from 'next/router';
 import Navbar from '@component/elements/navbar';
 import QueueHeader from '@component/elements/queueHeader';
@@ -15,6 +14,7 @@ import { JukeClient } from '@common/jukeClient';
 import { GetQueueResult } from '@endpoint/getQueue';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import TrackItem from '@component/elements/TrackItem';
 
 interface Props {
   partyCode: PartyCode;
@@ -43,7 +43,7 @@ export default function Queue({ partyCode, partyName }: Props) {
   });
 
   const tracks = currentQueueTracks.map((track: Track) => (
-    <QueueTrack track={track} />
+    <TrackItem track={track} />
   ));
 
   return (

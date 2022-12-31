@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Input from '@component/elements/input';
-import TrackListItemView from '@component/elements/trackListItemView';
 import { Track } from '@common/types/track';
 import styles from '../../../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
@@ -16,6 +15,7 @@ import { JukeClient } from '@common/jukeClient';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import TrackItem from '@component/elements/TrackItem';
 
 interface Props {
   partyCode: PartyCode;
@@ -75,7 +75,7 @@ export default function AddTracks({ partyCode }: Props) {
           />
           <ul style={{ overflow: 'scroll' }}>
             {tracks?.map((track) => (
-              <TrackListItemView track={track} />
+              <TrackItem track={track} />
             ))}
           </ul>
         </div>

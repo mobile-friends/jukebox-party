@@ -19,7 +19,7 @@ function ArtistView(artist: Artist) {
  * An entry in the queue track-list
  * @constructor
  */
-export default function QueueTrack({ track }: Props) {
+export default function TrackItem({ track }: Props) {
   const artists = Track.artistsOf(track).map(ArtistView);
   return (
     // TODO: Use unique track id for key
