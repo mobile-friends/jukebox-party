@@ -23,6 +23,7 @@
       "@api/*": ["pages/api/*"],
       "@component/*": ["components/*"],
       "@hook/*": ["hooks/*"],
+      "@style/*": ["styles/*"],
       "@httpClient/*": ["httpClient/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/common/types"]

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/components/errorList.module.scss';
+import styles from '@style/components/errorList.module.scss';
 
 /**
  * Props for the error-list

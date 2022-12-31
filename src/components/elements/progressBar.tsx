@@ -1,4 +1,4 @@
-import styles from '../../styles/components/progressBar.module.scss';
+import styles from '@style/components/progressBar.module.scss';
 import { Duration } from '@common/types/duration';
 
 interface Props {

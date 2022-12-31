@@ -1,5 +1,5 @@
 import QRCode from 'react-qr-code';
-import styles from '../styles/components/qrCodeModal.module.scss';
+import styles from '@style/components/qrCodeModal.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import { useLocation } from '@hook/useLocation';
 

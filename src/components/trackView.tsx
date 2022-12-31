@@ -1,5 +1,5 @@
 import PlaybackView from './playbackView';
-import styles from '../styles/components/trackView.module.scss';
+import styles from '@style/components/trackView.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';

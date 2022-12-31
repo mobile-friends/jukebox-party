@@ -1,4 +1,4 @@
-import styles from '../../styles/components/trackListItemView.module.scss';
+import styles from '@style/components/trackListItemView.module.scss';
 import { Track } from '@common/types/track';
 import { Artist } from '@common/types/artist';
 
