@@ -3,7 +3,7 @@ import NavItem from './navItem';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillHome } from 'react-icons/ai';
 import { MdOutlineQueueMusic } from 'react-icons/md';
-import { useSession } from 'next-auth/react';
+import { usePartyCode } from '@hook/usePartyCode';
 
 interface Props {}
 
@@ -12,12 +12,7 @@ interface Props {}
  * @constructor
  */
 export default function Navbar({}: Props) {
-  /*
-   Since this component is used on a protected page we can assume,
-   that the user is logged in, and we have a session
-  */
-  const { data, status } = useSession();
-  const partyCode = data!.user.partyCode;
+  const partyCode = usePartyCode();
 
   // Points to the home-page of the current party
   const partyUrl = `/party/${partyCode}`;
