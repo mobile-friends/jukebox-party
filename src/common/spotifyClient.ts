@@ -161,7 +161,7 @@ export namespace SpotifyClient {
     spotifyToken: SpotifyToken,
     isPlaying: boolean
   ) {
-    const url = `me/player/pause`;
+    const url = isPlaying ? `me/player/play` : `me/player/pause`;
     const response = await put<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
