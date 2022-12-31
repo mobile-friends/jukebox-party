@@ -7,9 +7,8 @@ interface Props {
 }
 
 export default function ProgressBar({ progress, duration }: Props) {
-  const fillerWidth = {
-    width: `${(progress / duration) * 100}%`,
-  };
+  const playPercent = (progress / duration) * 100;
+  const fillerWidth = { width: `${playPercent}%` };
 
   return (
     <div className={styles.containerStyles}>
