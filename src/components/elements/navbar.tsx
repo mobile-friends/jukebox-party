@@ -4,6 +4,7 @@ import { BsSearch } from 'react-icons/bs';
 import { AiFillHome } from 'react-icons/ai';
 import { MdOutlineQueueMusic } from 'react-icons/md';
 import { usePartyCode } from '@hook/usePartyCode';
+import styles from '../../styles/components/navbar.module.scss';
 
 interface Props {}
 
@@ -18,7 +19,7 @@ export default function Navbar({}: Props) {
   const partyUrl = `/party/${partyCode}`;
 
   return (
-    <div className='navbar'>
+    <div className={styles.navbar}>
       <NavItem icon={<AiFillHome />} text='Home' linkTarget={partyUrl} />
       <NavItem icon={<BsSearch />} text='Add' linkTarget={`${partyUrl}/add`} />
       <NavItem
