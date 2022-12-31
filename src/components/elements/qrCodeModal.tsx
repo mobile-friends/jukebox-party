@@ -1,14 +1,15 @@
 import QRCode from 'react-qr-code';
 import styles from '../../styles/components/qrCodeModal.module.scss';
+import { PartyCode } from '@common/types/partyCode';
 
 type ModalCloseListener = () => void;
 
 interface Props {
-  code: string;
+  partyCode: PartyCode;
   onModalClosed: ModalCloseListener;
 }
 
-const createRoomLink = (code: string) => {
+const createRoomLink = (partyCode: PartyCode) => {
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
@@ -16,17 +17,17 @@ const createRoomLink = (code: string) => {
 
   const URL = `${origin}`;
   //TODO checken, ob der link mit der live url dann auch noch passt (auf localhost funktioniert es)
-  return `${URL}/?partyCode=${code}`;
+  return `${URL}/?partyCode=${partyCode}`;
 };
 
 export default function QRCodeModal({
-  code,
+  partyCode,
   onModalClosed,
 }: Props): JSX.Element {
   return (
     <div className={styles.modal} onClick={onModalClosed}>
       <div className={styles.QRCodeContainer}>
-        <QRCode value={createRoomLink(code)} />
+        <QRCode value={createRoomLink(partyCode)} />
       </div>
     </div>
   );

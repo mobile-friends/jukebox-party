@@ -133,7 +133,7 @@ export default function PartyRoom({ partyCode }: Props) {
           onModalClosed={() => {
             handleModalVisibility();
           }}
-          code={Party.codeOf(party)}
+          partyCode={Party.codeOf(party)}
         />
       )}
       <Navbar />
