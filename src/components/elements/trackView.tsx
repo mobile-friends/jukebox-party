@@ -69,7 +69,6 @@ export default function TrackView({ track, playbackState, partyCode }: Props) {
       <PlaybackView
         playbackState={playbackState}
         trackDuration={Track.durationOf(track)}
-        partyCode={partyCode}
       />
     </div>
   );
