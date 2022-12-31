@@ -101,7 +101,7 @@ export namespace JukeClient {
   export function getPlayback(
     partyCode: PartyCode
   ): Promise<GetPlaybackResult> {
-    const url = `parties/${partyCode}/player/`;
+    const url = `parties/${partyCode}/player`;
     return get<GetPlaybackResult>(url);
   }
 
@@ -114,7 +114,7 @@ export namespace JukeClient {
     partyCode: PartyCode,
     isPlaying: boolean
   ): Promise<SetPlaybackResult> {
-    const url = `parties/${partyCode}/player/`;
+    const url = `parties/${partyCode}/player`;
     return put<SetPlaybackBody, SetPlaybackResult>(url, { isPlaying });
   }
 
