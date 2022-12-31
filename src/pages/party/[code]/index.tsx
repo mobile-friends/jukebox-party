@@ -138,6 +138,8 @@ export default function PartyRoom({ partyCode }: Props) {
   );
 }
 
+PartyRoom.auth = true;
+
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
   res,

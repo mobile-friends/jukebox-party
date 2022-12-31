@@ -86,6 +86,8 @@ export default function AddTracks({ partyCode }: Props) {
   );
 }
 
+AddTracks.auth = true;
+
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
   res,

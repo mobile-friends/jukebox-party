@@ -55,6 +55,8 @@ export default function Queue({ partyCode, partyName }: Props) {
   );
 }
 
+Queue.auth = true;
+
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   req,
   res,
