@@ -18,6 +18,7 @@ import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import styles from '../../../styles/pages/party/home.module.scss';
 
 type Props = { partyCode: PartyCode };
 
@@ -102,7 +103,7 @@ export default function PartyRoom({ partyCode }: Props) {
       .map((guest) => guest.name)
       .join(', ') || 'No guests have joined the party yet';
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Party Room</h1>
       <p>Party Code: {Party.codeOf(party)}</p>
       <p>Party Name: {Party.nameOf(party)}</p>

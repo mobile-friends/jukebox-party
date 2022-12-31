@@ -31,18 +31,19 @@ export default function TrackView({
     );
   }, [track.name]);
 
+  // TODO: Extract style to scss
   return (
     <div
       style={{
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.25rem',
         padding: '0 20px',
       }}
     >
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ flexGrow: 1, textAlign: 'center' }}>
         <img
-          style={{ maxWidth: '100%' }}
+          style={{ height: 0, minHeight: '100%', objectFit: 'cover' }}
           src={Track.albumArtUrlOf(track)}
           alt='Album art'
         />
@@ -55,9 +56,7 @@ export default function TrackView({
         {showMarqueeBlur && <div className={styles.shadow}></div>}
         <span ref={marqueeTextRef}>{Track.nameOf(track)}</span>
       </p>
-      <p style={{ display: 'flex', gap: '0.25rem', marginBottom: '0.75rem' }}>
-        {artistViews}
-      </p>
+      <p style={{ display: 'flex', marginBottom: '0.75rem' }}>{artistViews}</p>
       <PlaybackView
         playbackState={playbackState}
         trackDuration={Track.durationOf(track)}
