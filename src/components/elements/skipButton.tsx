@@ -4,34 +4,37 @@ import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
 
 interface Props {
-  isNextButton: boolean;
+  /**
+   * The direction to skip into
+   */
+  skipDirection: SkipDirection;
+  /**
+   * Get code of the current party
+   */
   partyCode: PartyCode;
 }
 
-export default function SkipButton({
-  isNextButton,
-  partyCode,
-}: Props) {
-  async function tryNextTrackRequest() {
-    await JukeClient.skip(partyCode, SkipDirection.Forward);
+/**
+ * A button for skipping forwards or backwards in playback
+ * @constructor
+ */
+export default function SkipButton({ skipDirection, partyCode }: Props) {
+  async function skip() {
+    await JukeClient.skip(partyCode, skipDirection);
   }
 
-  async function tryPreviousTrackRequest() {
-    await JukeClient.skip(partyCode, SkipDirection.Backward);
-  }
+  const isForwardSkip = skipDirection === SkipDirection.Forward;
+  const margin = isForwardSkip ? { marginRight: '3em' } : { marginLeft: '3em' };
+  const icon = isForwardSkip ? <GiNextButton /> : <GiPreviousButton />;
 
   return (
-    <div style={isNextButton ? { marginRight: '3em' } : { marginLeft: '3em' }}>
+    <div style={margin}>
       <style jsx>{`
         div {
-          margin: auto 0;
+          margin: auto 0; // TODO: Extract style to scss file
         }
       `}</style>
-      <Button
-        styleType='icon-only small'
-        content={isNextButton ? <GiNextButton /> : <GiPreviousButton />}
-        onClick={isNextButton ? tryNextTrackRequest : tryPreviousTrackRequest}
-      />
+      <Button styleType='icon-only small' content={icon} onClick={skip} />
     </div>
   );
 }
