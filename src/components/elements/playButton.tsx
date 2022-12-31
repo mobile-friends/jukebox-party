@@ -4,9 +4,16 @@ import { JukeClient } from '@common/jukeClient';
 import { usePartyCode } from '@hook/usePartyCode';
 
 interface Props {
+  /**
+   * Whether the playback is currently playing
+   */
   isPlaying: boolean;
 }
 
+/**
+ * A button to display and change the current playback state
+ * @constructor
+ */
 export default function PlayButton({ isPlaying }: Props) {
   const partyCode = usePartyCode();
   const icon = isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />;
