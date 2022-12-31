@@ -6,15 +6,12 @@ import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import { SkipDirection } from '@common/types/constants';
 
-export interface PlaybackViewProps {
+interface Props {
   playbackState: PlaybackState;
   trackDuration: Duration;
 }
 
-export default function PlaybackView({
-  playbackState,
-  trackDuration,
-}: PlaybackViewProps) {
+export default function PlaybackView({ playbackState, trackDuration }: Props) {
   const progressText = Duration.formatted(
     PlaybackState.playTimeOf(playbackState)
   );
