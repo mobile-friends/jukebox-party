@@ -5,17 +5,13 @@ import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';
 import { PartyCode } from '@common/types/partyCode';
 
-export interface TrackViewProps {
+interface Props {
   track: Track;
   playbackState: PlaybackState;
   partyCode: PartyCode;
 }
 
-export default function TrackView({
-  track,
-  playbackState,
-  partyCode,
-}: TrackViewProps) {
+export default function TrackView({ track, playbackState, partyCode }: Props) {
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
