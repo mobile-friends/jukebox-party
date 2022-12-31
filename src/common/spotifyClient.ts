@@ -91,6 +91,7 @@ export namespace SpotifyClient {
     if (isSpotifyError(response)) {
       // If anything went wrong we just return no recommendations
       // TODO: Handle errors
+      console.error(response);
       return [];
     }
 
@@ -143,6 +144,7 @@ export namespace SpotifyClient {
     );
     if (isSpotifyError(response)) {
       // TODO: Handle error
+      console.error(response);
       return [];
     }
     return response.items.map((it) => it.track.id);
@@ -161,6 +163,7 @@ export namespace SpotifyClient {
     const response = await put<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
+      console.error(response);
       throw new Error();
     }
   }
@@ -174,6 +177,7 @@ export namespace SpotifyClient {
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
+      console.error(response);
       throw new Error();
     }
   }
@@ -187,6 +191,7 @@ export namespace SpotifyClient {
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
+      console.error(response);
       throw new Error();
     }
   }
