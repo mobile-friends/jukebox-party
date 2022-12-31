@@ -9,30 +9,17 @@ interface Props {
 
 export default function PlayButton({ isPlaying }: Props) {
   const partyCode = usePartyCode();
+  const icon = isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />;
 
-  async function trySendPlayRequest() {
-    await JukeClient.setPlayback(partyCode, true);
-  }
-
-  async function trySendPauseRequest() {
-    await JukeClient.setPlayback(partyCode, false);
+  async function onButtonClicked() {
+    await JukeClient.setPlayback(partyCode, isPlaying);
   }
 
   return (
-    <div>
-      {isPlaying ? (
-        <Button
-          styleType='icon-only big'
-          content={<BsFillPauseFill />}
-          onClick={trySendPauseRequest}
-        />
-      ) : (
-        <Button
-          styleType='icon-only big'
-          content={<BsFillPlayFill />}
-          onClick={trySendPlayRequest}
-        />
-      )}
-    </div>
+    <Button
+      styleType='icon-only big'
+      content={icon}
+      onClick={onButtonClicked}
+    />
   );
 }
