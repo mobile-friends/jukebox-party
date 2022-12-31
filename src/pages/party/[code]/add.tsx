@@ -15,7 +15,7 @@ import { JukeClient } from '@common/jukeClient';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import TrackItem from '@component/elements/TrackItem';
+import TrackItem from '@component/elements/trackItem';
 
 interface Props {
   partyCode: PartyCode;
