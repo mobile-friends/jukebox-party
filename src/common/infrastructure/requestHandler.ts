@@ -37,7 +37,7 @@ export function requestHandler<TBody, TResult extends ApiResult>(
       spotifyToken,
     });
     res.status(result.code);
-    if (result.code !== StatusCodes.NO_CONTENT)
-      res.json(result);
+    if (result.code !== StatusCodes.NO_CONTENT) res.json(result);
+    else res.send(null);
   };
 }
