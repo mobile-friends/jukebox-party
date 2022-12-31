@@ -1,7 +1,7 @@
 import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
 import Button from './button';
 import { JukeClient } from '@common/jukeClient';
-import { PartyCode } from '@common/types/partyCode';
+import { usePartyCode } from '@hook/usePartyCode';
 import { SkipDirection } from '@common/types/constants';
 
 interface Props {
@@ -9,17 +9,15 @@ interface Props {
    * The direction to skip into
    */
   skipDirection: SkipDirection;
-  /**
-   * Get code of the current party
-   */
-  partyCode: PartyCode;
 }
 
 /**
  * A button for skipping forwards or backwards in playback
  * @constructor
  */
-export default function SkipButton({ skipDirection, partyCode }: Props) {
+export default function SkipButton({ skipDirection }: Props) {
+  const partyCode = usePartyCode();
+
   async function skip() {
     await JukeClient.skip(partyCode, skipDirection);
   }

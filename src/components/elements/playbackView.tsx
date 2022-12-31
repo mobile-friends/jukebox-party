@@ -37,7 +37,6 @@ export default function PlaybackView({
         </div>
         <div className={styles.buttonContainer}>
           <NextAndPreviousButton
-            partyCode={partyCode}
             skipDirection={SkipDirection.Backward}
           ></NextAndPreviousButton>
           <PlayButton
@@ -45,7 +44,6 @@ export default function PlaybackView({
             partyCode={partyCode}
           />
           <NextAndPreviousButton
-            partyCode={partyCode}
             skipDirection={SkipDirection.Forward}
           ></NextAndPreviousButton>
         </div>
