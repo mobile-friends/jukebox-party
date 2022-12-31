@@ -8,7 +8,7 @@ export interface PlayButtonProps {
   isPlaying: boolean;
 }
 
-export default function playButton({ isPlaying }: PlayButtonProps) {
+export default function PlayButton({ isPlaying }: PlayButtonProps) {
   const partyCode = usePartyCode();
 
   async function trySendPlayRequest() {
