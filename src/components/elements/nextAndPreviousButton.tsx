@@ -3,7 +3,7 @@ import Button from './button';
 import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
 
-export interface NextAndPreviousProps {
+interface Props {
   isNextButton: boolean;
   partyCode: PartyCode;
 }
@@ -11,7 +11,7 @@ export interface NextAndPreviousProps {
 export default function nextAndPreviousButton({
   isNextButton,
   partyCode,
-}: NextAndPreviousProps) {
+}: Props) {
   async function tryNextTrackRequest() {
     await JukeClient.skip(partyCode, SkipDirection.Forward);
   }
