@@ -5,6 +5,7 @@ import { PartyCode } from '@common/types/partyCode';
 import firebaseDb from '@common/firebaseDb';
 import { Party } from '@common/types/party';
 import { Guid } from 'guid-typescript';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 const jukeCredentialProvider = CredentialsProvider({
   id: 'Juke',
@@ -46,4 +47,8 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+export default function (req: NextApiRequest, res: NextApiResponse) {
+  if(!process.env.NEXT_AUTH_SECRET)
+    throw Error("NEXT_AUTH_SECRET env with any value is required!")
+  return NextAuth(req, res, authOptions);
+}
