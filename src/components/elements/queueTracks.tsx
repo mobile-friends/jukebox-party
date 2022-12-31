@@ -2,11 +2,11 @@ import styles from '../../styles/components/trackListItemView.module.scss';
 import { Track } from '@common/types/track';
 import { Artist } from '@common/types/artist';
 
-export interface queueTracks {
+interface Props {
   track: Track;
 }
 
-export default function QueueTracks({ track }: queueTracks) {
+export default function QueueTracks({ track }: Props) {
   const albumArt = <img src={Track.albumArtUrlOf(track)} alt='Album art' />;
 
   const nameView = <p>{Track.nameOf(track)}</p>;
