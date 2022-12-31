@@ -110,11 +110,7 @@ export default function PartyRoom({ partyCode }: Props) {
       <p>Party Host: {User.nameOf(Party.hostOf(party))}</p>
       <p>Party Guests: {guestList}</p>
       {currentTrack && playbackState ? (
-        <TrackView
-          track={currentTrack}
-          playbackState={playbackState}
-          partyCode={partyCode}
-        />
+        <TrackView track={currentTrack} playbackState={playbackState} />
       ) : (
         <div>
           <p>NO TRACK IS CURRENTLY PLAYING!</p>
