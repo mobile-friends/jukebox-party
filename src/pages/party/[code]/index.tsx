@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import TrackView from '@component/elements/trackView';
 import { Track } from '@common/types/track';
-import { Duration } from '@common/types/duration';
 import { PlaybackState } from '@common/types/playbackState';
 import { Party } from '@common/types/party';
 import Navbar from '@component/elements/navbar';
@@ -26,10 +25,9 @@ export default function PartyRoom({ partyCode }: Props) {
   const router = useRouter();
   const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
-  const [playbackProgress, setPlaybackProgress] = useState<Duration>(
-    Duration.Zero
+  const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
+    null
   );
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const party = useFetchParty(partyCode);
 
   async function onTrackReceived(track: Track | null) {
@@ -70,8 +68,7 @@ export default function PartyRoom({ partyCode }: Props) {
     switch (result.code) {
       case StatusCodes.OK:
         const playbackState = result.content.playbackState;
-        setIsPlaying(PlaybackState.isPlaying(playbackState));
-        setPlaybackProgress(PlaybackState.playTimeOf(playbackState));
+        setPlaybackState(playbackState);
         return;
       case StatusCodes.UNAUTHORIZED:
       case StatusCodes.NOT_IMPLEMENTED:
@@ -83,8 +80,8 @@ export default function PartyRoom({ partyCode }: Props) {
   };
 
   useEffect(() => {
-    getCurrentlyPlaying().catch(console.error);
-    getPlaybackState().catch(console.error);
+    if (currentTrack === null) getCurrentlyPlaying().catch(console.error);
+    if (playbackState === null) getPlaybackState().catch(console.error);
     const interval = setInterval(getCurrentlyPlaying, 5000);
     const intervalPlayback = setInterval(getPlaybackState, 1000);
 
@@ -111,10 +108,10 @@ export default function PartyRoom({ partyCode }: Props) {
       <p>Party Name: {Party.nameOf(party)}</p>
       <p>Party Host: {User.nameOf(Party.hostOf(party))}</p>
       <p>Party Guests: {guestList}</p>
-      {currentTrack ? (
+      {currentTrack && playbackState ? (
         <TrackView
           track={currentTrack}
-          playbackState={PlaybackState.make(playbackProgress, isPlaying)}
+          playbackState={playbackState}
           partyCode={partyCode}
         />
       ) : (
