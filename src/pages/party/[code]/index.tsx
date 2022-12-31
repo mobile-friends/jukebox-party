@@ -130,7 +130,7 @@ export default function PartyRoom({ partyCode }: Props) {
       ></Button>
       {isModalVisible && (
         <QRCodeModal
-          closeModal={() => {
+          onModalClosed={() => {
             handleModalVisibility();
           }}
           code={Party.codeOf(party)}

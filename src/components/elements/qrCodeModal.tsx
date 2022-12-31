@@ -1,9 +1,11 @@
 import QRCode from 'react-qr-code';
 import styles from '../../styles/components/qrCodeModal.module.scss';
 
+type ModalCloseListener = () => void;
+
 interface Props {
   code: string;
-  closeModal: () => void;
+  onModalClosed: ModalCloseListener;
 }
 
 const createRoomLink = (code: string) => {
@@ -17,14 +19,12 @@ const createRoomLink = (code: string) => {
   return `${URL}/?partyCode=${code}`;
 };
 
-export default function QRCodeModal({ code, closeModal }: Props): JSX.Element {
+export default function QRCodeModal({
+  code,
+  onModalClosed,
+}: Props): JSX.Element {
   return (
-    <div
-      className={styles.modal}
-      onClick={() => {
-        closeModal();
-      }}
-    >
+    <div className={styles.modal} onClick={onModalClosed}>
       <div className={styles.QRCodeContainer}>
         <QRCode value={createRoomLink(code)} />
       </div>
