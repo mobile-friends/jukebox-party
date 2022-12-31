@@ -41,11 +41,15 @@ async function post<T>(
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
   return axiosClient
-    .post<T>(url, {
-      headers: {
-        Authorization: `Bearer ${spotifyToken}`,
-      },
-    })
+    .post<T>(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${spotifyToken}`,
+        },
+      }
+    )
     .then((it) => it.data);
 }
 
