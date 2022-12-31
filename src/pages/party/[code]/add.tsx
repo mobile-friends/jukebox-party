@@ -4,7 +4,7 @@ import Input from '@component/elements/input';
 import { Track } from '@common/types/track';
 import styles from '../../../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
-import Navbar from '@component/elements/navbar';
+import Navbar from '@component/navbar';
 import { PartyCode } from '@common/types/partyCode';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';

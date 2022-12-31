@@ -1,10 +1,10 @@
 import React from 'react';
-import NavItem from './navItem';
+import NavItem from './elements/navItem';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillHome } from 'react-icons/ai';
 import { MdOutlineQueueMusic } from 'react-icons/md';
 import { usePartyCode } from '@hook/usePartyCode';
-import styles from '../../styles/components/navbar.module.scss';
+import styles from '../styles/components/navbar.module.scss';
 
 interface Props {}
 

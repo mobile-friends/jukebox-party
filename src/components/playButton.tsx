@@ -1,4 +1,4 @@
-import Button from './button';
+import Button from './elements/button';
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { JukeClient } from '@common/jukeClient';
 import { usePartyCode } from '@hook/usePartyCode';

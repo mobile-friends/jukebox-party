@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Navbar from '@component/elements/navbar';
+import Navbar from '@component/navbar';
 import QueueHeader from '@component/elements/queueHeader';
 import { Track } from '@common/types/track';
 import { GetServerSideProps } from 'next/types';

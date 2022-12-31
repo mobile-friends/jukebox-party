@@ -1,5 +1,5 @@
 import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
-import Button from './button';
+import Button from './elements/button';
 import { JukeClient } from '@common/jukeClient';
 import { usePartyCode } from '@hook/usePartyCode';
 import { SkipDirection } from '@common/types/constants';

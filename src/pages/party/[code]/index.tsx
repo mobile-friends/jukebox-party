@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import TrackView from '@component/elements/trackView';
+import TrackView from '@component/trackView';
 import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';
 import { Party } from '@common/types/party';
-import Navbar from '@component/elements/navbar';
-import QRCodeModal from '@component/elements/qrCodeModal';
+import Navbar from '@component/navbar';
+import QRCodeModal from '@component/qrCodeModal';
 import Button from '@component/elements/button';
 import { useModalVisibility } from '@hook/modals/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
