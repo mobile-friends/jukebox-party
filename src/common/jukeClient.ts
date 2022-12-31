@@ -11,6 +11,7 @@ import { GetQueueResult } from '@endpoint/getQueue';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { SkipResult } from '@endpoint/skip';
 import { GetPlaybackResult } from '@endpoint/getPlayback';
+import { SkipDirection } from '@common/types/constants';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({

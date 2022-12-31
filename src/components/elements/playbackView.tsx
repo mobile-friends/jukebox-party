@@ -5,6 +5,7 @@ import styles from '../../styles/components/playbackView.module.scss';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import { PartyCode } from '@common/types/partyCode';
+import { SkipDirection } from '@common/types/constants';
 
 export interface PlaybackViewProps {
   playbackState: PlaybackState;

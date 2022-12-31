@@ -7,6 +7,7 @@ import {
   NoContent,
   NoSpotifyError,
 } from '@common/infrastructure/types';
+import { SkipDirection } from '@common/types/constants';
 
 export type SkipError = NoSpotifyError | DtoError;
 

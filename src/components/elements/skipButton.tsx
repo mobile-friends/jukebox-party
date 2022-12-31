@@ -2,6 +2,7 @@ import { GiNextButton, GiPreviousButton } from 'react-icons/gi';
 import Button from './button';
 import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
+import { SkipDirection } from '@common/types/constants';
 
 interface Props {
   /**
