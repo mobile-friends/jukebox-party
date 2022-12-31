@@ -4,8 +4,11 @@ import { parseTrack } from '@common/spotifyParsing';
 import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
+import HTTPMethod from 'http-method-enum';
 
-export type SpotifyResponse<T> = T | SpotifyApi.ErrorObject;
+type ErrorResponse = { error: SpotifyApi.ErrorObject };
+
+type SpotifyResponse<T> = T | ErrorResponse;
 
 const axiosClient = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
@@ -18,56 +21,54 @@ const axiosClient = axios.create({
 });
 
 function isSpotifyError<T extends {}>(
-  response: T | SpotifyApi.ErrorObject
-): response is SpotifyApi.ErrorObject {
+  response: SpotifyResponse<T>
+): response is ErrorResponse {
   return typeof response == 'object' && 'error' in response;
 }
 
-async function get<T>(
+async function makeRequest<T extends {}>(
   url: string,
-  spotifyToken: SpotifyToken
+  method: HTTPMethod,
+  spotifyToken: string
 ): Promise<SpotifyResponse<T>> {
-  return axiosClient
-    .get<T>(url, {
+  const response = await axiosClient
+    .request<SpotifyResponse<T>>({
+      url,
+      method,
       headers: {
         Authorization: `Bearer ${spotifyToken}`,
       },
     })
-    .then((it) => it.data);
+    .then((res) => res.data);
+  if (isSpotifyError(response)) {
+    console.error('Request to spotify caused an error', {
+      url,
+      method,
+      error: response.error,
+    });
+  }
+  return response;
 }
 
-async function post<T>(
+function get<T extends {}>(
   url: string,
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
-  return axiosClient
-    .post<T>(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${spotifyToken}`,
-        },
-      }
-    )
-    .then((it) => it.data);
+  return makeRequest(url, HTTPMethod.GET, spotifyToken);
 }
 
-async function put<T>(
+function post<T extends {}>(
   url: string,
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
-  return axiosClient
-    .put<T>(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${spotifyToken}`,
-        },
-      }
-    )
-    .then((it) => it.data);
+  return makeRequest(url, HTTPMethod.POST, spotifyToken);
+}
+
+function put<T extends {}>(
+  url: string,
+  spotifyToken: SpotifyToken
+): Promise<SpotifyResponse<T>> {
+  return makeRequest(url, HTTPMethod.PUT, spotifyToken);
 }
 
 /**
@@ -95,7 +96,6 @@ export namespace SpotifyClient {
     if (isSpotifyError(response)) {
       // If anything went wrong we just return no recommendations
       // TODO: Handle errors
-      console.error(response);
       return [];
     }
 
@@ -116,7 +116,6 @@ export namespace SpotifyClient {
     );
     if (isSpotifyError(response)) {
       // TODO: Handle errors
-      console.error(response);
       return null;
     }
 
@@ -148,7 +147,6 @@ export namespace SpotifyClient {
     );
     if (isSpotifyError(response)) {
       // TODO: Handle error
-      console.error(response);
       return [];
     }
     return response.items.map((it) => it.track.id);
@@ -167,7 +165,6 @@ export namespace SpotifyClient {
     const response = await put<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
-      console.error(response);
       throw new Error();
     }
   }
@@ -181,7 +178,6 @@ export namespace SpotifyClient {
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
-      console.error(response);
       throw new Error();
     }
   }
@@ -195,7 +191,6 @@ export namespace SpotifyClient {
     const response = await post<string>(url, spotifyToken);
     if (isSpotifyError(response)) {
       // TODO: Handle error
-      console.error(response);
       throw new Error();
     }
   }
@@ -227,7 +222,6 @@ export namespace SpotifyClient {
 
     if (isSpotifyError(response)) {
       // TODO: Handle error
-      console.error(response);
       return [];
     }
     return parseTracksIn(response);
@@ -257,7 +251,6 @@ export namespace SpotifyClient {
 
     // TODO: Handle errors
     if (isSpotifyError(response)) {
-      console.error(response);
       return PlaybackState.make(Duration.Zero, false);
     }
 
@@ -292,7 +285,6 @@ export namespace SpotifyClient {
     if (isSpotifyError(response)) {
       // TODO: We get a 403 from spotify here. Idk why
       // TODO: Handle errors
-      console.error(response);
       return [];
     }
 
