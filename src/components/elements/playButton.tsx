@@ -2,13 +2,15 @@ import Button from './button';
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
+import { usePartyCode } from '@hook/usePartyCode';
 
 export interface PlayButtonProps {
   isPlaying: boolean;
-  partyCode: PartyCode;
 }
 
-export default function playButton({ isPlaying, partyCode }: PlayButtonProps) {
+export default function playButton({ isPlaying }: PlayButtonProps) {
+  const partyCode = usePartyCode();
+
   async function trySendPlayRequest() {
     await JukeClient.startPlayback(partyCode);
   }

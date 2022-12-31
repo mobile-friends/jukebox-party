@@ -39,10 +39,7 @@ export default function PlaybackView({
           <NextAndPreviousButton
             skipDirection={SkipDirection.Backward}
           ></NextAndPreviousButton>
-          <PlayButton
-            isPlaying={playbackState.isPlaying}
-            partyCode={partyCode}
-          />
+          <PlayButton isPlaying={playbackState.isPlaying} />
           <NextAndPreviousButton
             skipDirection={SkipDirection.Forward}
           ></NextAndPreviousButton>
