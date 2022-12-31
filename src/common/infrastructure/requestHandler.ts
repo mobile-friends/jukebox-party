@@ -4,6 +4,7 @@ import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
+import { StatusCodes } from 'http-status-codes';
 
 export type Query = { [key: string]: string | string[] | undefined };
 
@@ -35,6 +36,8 @@ export function requestHandler<TBody, TResult extends ApiResult>(
       query: req.query,
       spotifyToken,
     });
-    res.status(result.code).json(result);
+    res.status(result.code);
+    if (result.code !== StatusCodes.NO_CONTENT)
+      res.json(result);
   };
 }
