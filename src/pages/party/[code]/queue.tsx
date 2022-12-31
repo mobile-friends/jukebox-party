@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import QueueTracks from '@component/elements/queueTracks';
+import QueueTrack from '@component/elements/queueTrack';
 import { useRouter } from 'next/router';
 import Navbar from '@component/elements/navbar';
 import QueueHeader from '@component/elements/queueHeader';
@@ -42,14 +42,14 @@ export default function Queue({ partyCode, partyName }: Props) {
     JukeClient.getQueue(partyCode).then(onQueueResult).catch(console.error);
   });
 
-  const trackNames = currentQueueTracks.map((track: Track) => (
-    <QueueTracks track={track} />
+  const tracks = currentQueueTracks.map((track: Track) => (
+    <QueueTrack track={track} />
   ));
 
   return (
     <div>
       <QueueHeader partyName={partyName} partyCode={partyCode} />
-      <div>{trackNames}</div>
+      <div>{tracks}</div>
       <Navbar />
     </div>
   );

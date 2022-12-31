@@ -6,7 +6,7 @@ interface Props {
   track: Track;
 }
 
-export default function QueueTracks({ track }: Props) {
+export default function QueueTrack({ track }: Props) {
   const albumArt = <img src={Track.albumArtUrlOf(track)} alt='Album art' />;
 
   const nameView = <p>{Track.nameOf(track)}</p>;
