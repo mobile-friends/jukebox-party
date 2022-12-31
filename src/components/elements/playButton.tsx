@@ -1,7 +1,6 @@
 import Button from './button';
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { JukeClient } from '@common/jukeClient';
-import { PartyCode } from '@common/types/partyCode';
 import { usePartyCode } from '@hook/usePartyCode';
 
 interface Props {
@@ -12,11 +11,11 @@ export default function PlayButton({ isPlaying }: Props) {
   const partyCode = usePartyCode();
 
   async function trySendPlayRequest() {
-    await JukeClient.startPlayback(partyCode);
+    await JukeClient.setPlayback(partyCode, true);
   }
 
   async function trySendPauseRequest() {
-    await JukeClient.pausePlayback(partyCode);
+    await JukeClient.setPlayback(partyCode, false);
   }
 
   return (

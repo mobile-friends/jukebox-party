@@ -6,7 +6,7 @@ import * as querystring from 'querystring';
 import { CreatePartyBody, CreatePartyResult } from '@endpoint/createParty';
 import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty';
 import { GetPartyTrackResult } from '@endpoint/getPartyTrack';
-import { PauseResult } from '@endpoint/pause';
+import { SetPlaybackBody, SetPlaybackResult } from '@endpoint/setPlayback';
 import { GetQueueResult } from '@endpoint/getQueue';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { SkipResult } from '@endpoint/skip';
@@ -109,19 +109,14 @@ export namespace JukeClient {
   /**
    * Pauses playback on a party
    * @param partyCode The code of the party
+   * @param isPlaying Whether playback should be playing or paused
    */
-  export function pausePlayback(partyCode: PartyCode): Promise<PauseResult> {
-    const url = `parties/${partyCode}/player/pause`;
-    return put<NoBody, PauseResult>(url, {});
-  }
-
-  /**
-   * Starts playback on a party
-   * @param partyCode The code of the party
-   */
-  export function startPlayback(partyCode: PartyCode): Promise<PauseResult> {
-    const url = `parties/${partyCode}/player/play`;
-    return put<NoBody, PauseResult>(url, {});
+  export function setPlayback(
+    partyCode: PartyCode,
+    isPlaying: boolean
+  ): Promise<SetPlaybackResult> {
+    const url = `parties/${partyCode}/player/`;
+    return put<SetPlaybackBody, SetPlaybackResult>(url, { isPlaying });
   }
 
   /**
