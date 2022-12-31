@@ -12,7 +12,8 @@ export default function PlayButton({ isPlaying }: Props) {
   const icon = isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />;
 
   async function onButtonClicked() {
-    await JukeClient.setPlayback(partyCode, isPlaying);
+    // Flip the playback state to the opposite of what it is currently
+    await JukeClient.setPlayback(partyCode, !isPlaying);
   }
 
   return (
