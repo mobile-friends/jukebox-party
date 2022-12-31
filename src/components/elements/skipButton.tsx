@@ -8,7 +8,7 @@ interface Props {
   partyCode: PartyCode;
 }
 
-export default function nextAndPreviousButton({
+export default function SkipButton({
   isNextButton,
   partyCode,
 }: Props) {

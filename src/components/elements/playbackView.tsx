@@ -1,6 +1,6 @@
 import ProgressBar from './progressBar';
 import PlayButton from './playButton';
-import NextAndPreviousButton from './nextAndPreviousButton';
+import NextAndPreviousButton from './skipButton';
 import styles from '../../styles/components/playbackView.module.scss';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
