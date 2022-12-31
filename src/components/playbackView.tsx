@@ -24,19 +24,15 @@ export default function PlaybackView({ playbackState, trackDuration }: Props) {
         <ProgressBar
           progress={playbackState.playTime}
           duration={trackDuration}
-        ></ProgressBar>
+        />
         <div className={styles.row}>
           <label>{progressText}</label>
           <label>{trackDurationText}</label>
         </div>
         <div className={styles.buttonContainer}>
-          <NextAndPreviousButton
-            skipDirection={SkipDirection.Backward}
-          ></NextAndPreviousButton>
+          <NextAndPreviousButton skipDirection={SkipDirection.Backward} />
           <PlayButton isPlaying={playbackState.isPlaying} />
-          <NextAndPreviousButton
-            skipDirection={SkipDirection.Forward}
-          ></NextAndPreviousButton>
+          <NextAndPreviousButton skipDirection={SkipDirection.Forward} />
         </div>
       </div>
     </div>
