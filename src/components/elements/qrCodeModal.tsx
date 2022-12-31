@@ -9,7 +9,7 @@ interface Props {
   onModalClosed: ModalCloseListener;
 }
 
-const createRoomLink = (partyCode: PartyCode) => {
+function createRoomLink(partyCode: PartyCode) {
   const origin =
     typeof window !== 'undefined' && window.location.origin
       ? window.location.origin
@@ -18,7 +18,7 @@ const createRoomLink = (partyCode: PartyCode) => {
   const URL = `${origin}`;
   //TODO checken, ob der link mit der live url dann auch noch passt (auf localhost funktioniert es)
   return `${URL}/?partyCode=${partyCode}`;
-};
+}
 
 export default function QRCodeModal({
   partyCode,
