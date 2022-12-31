@@ -4,11 +4,11 @@ import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
 import { usePartyCode } from '@hook/usePartyCode';
 
-export interface PlayButtonProps {
+interface Props {
   isPlaying: boolean;
 }
 
-export default function PlayButton({ isPlaying }: PlayButtonProps) {
+export default function PlayButton({ isPlaying }: Props) {
   const partyCode = usePartyCode();
 
   async function trySendPlayRequest() {
