@@ -20,10 +20,7 @@ function createRoomLink(partyCode: PartyCode) {
   return `${URL}/?partyCode=${partyCode}`;
 }
 
-export default function QRCodeModal({
-  partyCode,
-  onModalClosed,
-}: Props): JSX.Element {
+export default function QRCodeModal({ partyCode, onModalClosed }: Props) {
   return (
     <div className={styles.modal} onClick={onModalClosed}>
       <div className={styles.QRCodeContainer}>
