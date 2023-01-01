@@ -5,13 +5,19 @@ import styles from '@style/components/playbackView.module.scss';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import { SkipDirection } from '@common/types/constants';
+import { PartyCode } from '@common/types/partyCode';
 
 interface Props {
   playbackState: PlaybackState;
   trackDuration: Duration;
+  partyCode: PartyCode;
 }
 
-export default function PlaybackView({ playbackState, trackDuration }: Props) {
+export default function PlaybackView({
+  playbackState,
+  trackDuration,
+  partyCode,
+}: Props) {
   const progressText = Duration.formatted(
     PlaybackState.playTimeOf(playbackState)
   );
@@ -30,9 +36,18 @@ export default function PlaybackView({ playbackState, trackDuration }: Props) {
           <label>{trackDurationText}</label>
         </div>
         <div className={styles.buttonContainer}>
-          <NextAndPreviousButton skipDirection={SkipDirection.Backward} />
-          <PlayButton isPlaying={playbackState.isPlaying} />
-          <NextAndPreviousButton skipDirection={SkipDirection.Forward} />
+          <NextAndPreviousButton
+            skipDirection={SkipDirection.Backward}
+            partyCode={partyCode}
+          />
+          <PlayButton
+            isPlaying={playbackState.isPlaying}
+            partyCode={partyCode}
+          />
+          <NextAndPreviousButton
+            skipDirection={SkipDirection.Forward}
+            partyCode={partyCode}
+          />
         </div>
       </div>
     </div>

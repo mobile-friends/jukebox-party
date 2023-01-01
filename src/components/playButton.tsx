@@ -1,21 +1,24 @@
 import Button from './elements/button';
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import { JukeClient } from '@common/jukeClient';
-import { usePartyCode } from '@hook/usePartyCode';
+import { PartyCode } from '@common/types/partyCode';
 
 interface Props {
   /**
    * Whether the playback is currently playing
    */
   isPlaying: boolean;
+  /**
+   * The current party-code
+   */
+  partyCode: PartyCode;
 }
 
 /**
  * A button to display and change the current playback state
  * @constructor
  */
-export default function PlayButton({ isPlaying }: Props) {
-  const partyCode = usePartyCode();
+export default function PlayButton({ isPlaying, partyCode }: Props) {
   const icon = isPlaying ? <BsFillPauseFill /> : <BsFillPlayFill />;
 
   async function onButtonClicked() {

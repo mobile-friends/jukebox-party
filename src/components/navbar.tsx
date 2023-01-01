@@ -3,16 +3,18 @@ import NavItem from './elements/navItem';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillHome } from 'react-icons/ai';
 import { MdOutlineQueueMusic } from 'react-icons/md';
-import { usePartyCode } from '@hook/usePartyCode';
 import styles from '@style/components/navbar.module.scss';
+import { PartyCode } from '@common/types/partyCode';
+
+interface Props {
+  partyCode: PartyCode;
+}
 
 /**
  * A party-intern navigation bar
  * @constructor
  */
-export default function Navbar() {
-  const partyCode = usePartyCode();
-
+export default function Navbar({ partyCode }: Props) {
   // Points to the home-page of the current party
   const partyUrl = `/party/${partyCode}`;
 

@@ -3,6 +3,7 @@ import styles from '@style/components/trackView.module.scss';
 import { useEffect, useRef, useState } from 'react';
 import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';
+import { PartyCode } from '@common/types/partyCode';
 
 interface Props {
   /**
@@ -13,13 +14,14 @@ interface Props {
    * The current playback-state
    */
   playbackState: PlaybackState;
+  partyCode: PartyCode;
 }
 
 /**
  * Displays the currently played track
  * @constructor
  */
-export default function TrackView({ track, playbackState }: Props) {
+export default function TrackView({ track, playbackState, partyCode }: Props) {
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
@@ -63,6 +65,7 @@ export default function TrackView({ track, playbackState }: Props) {
       <p style={{ display: 'flex', marginBottom: '0.75rem' }}>{artistViews}</p>
       <PlaybackView
         playbackState={playbackState}
+        partyCode={partyCode}
         trackDuration={Track.durationOf(track)}
       />
     </div>
