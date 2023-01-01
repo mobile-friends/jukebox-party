@@ -71,8 +71,6 @@ export default function Home({}: Props) {
     goToLogin();
   }
 
-  function onPartyCodeInput() {}
-
   return (
     <div>
       <div className={styles.container}>
@@ -89,7 +87,7 @@ export default function Home({}: Props) {
           <ErrorList errors={partyUserNameErrors} />
           <PartyCodeInput
             initialValue={partyCodeParam}
-            onValueChanged={onPartyCodeInput}
+            onValueChanged={setPartyCode}
           />
           <Button
             content='Join party'
