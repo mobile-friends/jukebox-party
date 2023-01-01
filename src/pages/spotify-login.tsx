@@ -27,15 +27,19 @@ type Props = ErrorProps | WaitForPlayingProps;
 const Scope =
   'user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
 
+function makePartyUrl(spotifyToken: SpotifyToken) {
+  return `/create-party?${querystring.stringify({
+    token: spotifyToken,
+  })}`;
+}
+
 export default function SpotifyLogin(props: Props) {
   const router = useRouter();
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
     if (isPlaying) {
-      const partyUrl = `/create-party?${querystring.stringify({
-        token: spotifyToken,
-      })}`;
+      const partyUrl = makePartyUrl(spotifyToken);
       await router.push(partyUrl);
     }
   }
@@ -123,9 +127,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
     if (isPlaying) {
-      const redirectUrl = `/create-party?${querystring.stringify({
-        token: spotifyToken,
-      })}`;
+      const redirectUrl = makePartyUrl(spotifyToken);
       return {
         props: {} as Props,
         redirect: {
