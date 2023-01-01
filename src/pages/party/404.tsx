@@ -3,9 +3,7 @@ import React from 'react';
 import Button from '../../components/elements/button';
 import styles from '../../styles/pages/404.module.scss';
 
-type Props = {};
-
-function PartyNotFound({}: Props) {
+function PartyNotFound() {
   async function goToJoinPage() {
     await router.push('/');
   }

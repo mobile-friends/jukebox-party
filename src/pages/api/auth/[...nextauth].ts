@@ -5,7 +5,6 @@ import { PartyCode } from '@common/types/partyCode';
 import firebaseDb from '@common/firebaseDb';
 import { Party } from '@common/types/party';
 import { Guid } from 'guid-typescript';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { Env } from '@common/env';
 
 const jukeCredentialProvider = CredentialsProvider({
@@ -15,7 +14,7 @@ const jukeCredentialProvider = CredentialsProvider({
     partyCode: { label: 'Party-code', type: 'text' },
     userId: { label: 'User-id', type: 'text' },
   },
-  async authorize(credentials, req) {
+  async authorize(credentials) {
     if (credentials === undefined) return null;
     const partyCode = PartyCode.tryMake(credentials.partyCode);
     if (partyCode === null) return null;

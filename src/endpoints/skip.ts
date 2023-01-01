@@ -34,10 +34,11 @@ export default requestHandler<NoBody, SkipResult>(
       return Response.invalidQueryParam('direction');
     }
 
-    const response =
-      direction === SkipDirection.Forward
-        ? await SpotifyClient.skipToNextTrack(spotifyToken)
-        : await SpotifyClient.backToPreviousTrack(spotifyToken);
+    if (direction === SkipDirection.Forward) {
+      await SpotifyClient.skipToNextTrack(spotifyToken);
+    } else {
+      await SpotifyClient.backToPreviousTrack(spotifyToken);
+    }
 
     return Response.noContent();
   }

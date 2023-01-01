@@ -6,13 +6,11 @@ import { MdOutlineQueueMusic } from 'react-icons/md';
 import { usePartyCode } from '@hook/usePartyCode';
 import styles from '@style/components/navbar.module.scss';
 
-interface Props {}
-
 /**
  * A party-intern navigation bar
  * @constructor
  */
-export default function Navbar({}: Props) {
+export default function Navbar() {
   const partyCode = usePartyCode();
 
   // Points to the home-page of the current party

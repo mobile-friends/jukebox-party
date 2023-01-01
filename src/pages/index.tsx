@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next/types';
 import Button from '../components/elements/button';
 import ErrorList from '@component/elements/errorList';
 import Input from '../components/elements/input';
@@ -14,9 +13,7 @@ import PartyCodeInput from '@component/partyCodeInput';
 import { useState } from 'react';
 import { tryQueryParam } from '@common/util/query';
 
-interface Props {}
-
-export default function Home({}: Props) {
+export default function Home() {
   const router = useRouter();
   const partyCodeParam = tryQueryParam(router.query, 'partyCode');
   const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
@@ -42,17 +39,18 @@ export default function Home({}: Props) {
     });
     switch (result.code) {
       case StatusCodes.OK:
-        const partyUrl = `/party/${partyCode}`;
-        await signIn('Juke', {
-          callbackUrl: partyUrl,
+        return await signIn('Juke', {
+          callbackUrl: `/party/${partyCode}`,
           partyCode,
           userId: result.content.userId,
         });
       case StatusCodes.NOT_FOUND:
         return await goTo404();
       case StatusCodes.BAD_REQUEST:
+        // TODO: Handle error
+        return;
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle errors
+        // TODO: Handle error
         return;
       default:
         return assertNeverReached(result);
@@ -104,7 +102,3 @@ export default function Home({}: Props) {
     </div>
   );
 }
-
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
-  return { props: {} };
-};

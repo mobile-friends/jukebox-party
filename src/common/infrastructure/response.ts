@@ -101,7 +101,7 @@ export namespace Response {
   }
 
   export function notImplemented(
-    message: string = 'An operation is not yet implemented.'
+    message = 'An operation is not yet implemented.'
   ): NotImplementedError {
     return {
       code: StatusCodes.NOT_IMPLEMENTED,

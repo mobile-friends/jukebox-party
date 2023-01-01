@@ -41,6 +41,15 @@ export interface Host {
 export type User = Guest | Host;
 
 /**
+ * Checks if this user has the specified role
+ * @param user The user
+ * @param role The rule
+ */
+function hasRole(user: User, role: UserRole): boolean {
+  return user.role === role;
+}
+
+/**
  * Contains functions for working with users
  */
 export namespace User {
@@ -76,15 +85,6 @@ export namespace User {
    */
   export function nameOf(user: User): string {
     return user.name;
-  }
-
-  /**
-   * Checks if this user has the specified role
-   * @param user The user
-   * @param role The rule
-   */
-  function hasRole(user: User, role: UserRole): boolean {
-    return user.role === role;
   }
 
   /**

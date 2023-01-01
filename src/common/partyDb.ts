@@ -2,6 +2,49 @@ import { PartyCode } from './types/partyCode';
 import { Party } from './types/party';
 import firebase from 'firebase/app';
 import { FirebaseDatabase } from '@firebase/database-types';
+import { Guest, Host } from '@common/types/user';
+
+interface PartyEntry {
+  code: PartyCode;
+  name: string;
+  spotifyToken: SpotifyToken;
+  host: Host;
+  guests?: Guest[];
+}
+
+function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {
+  return { kind: PartyDb.ErrorType.PartyNotFound, partyCode };
+}
+
+function invalidEntryError(entry: unknown): PartyDb.Error {
+  return { kind: PartyDb.ErrorType.InvalidEntry, entry };
+}
+
+function tryParseEntry(entry: PartyEntry): Party | PartyDb.Error {
+  try {
+    return Party.make(
+      entry.code,
+      entry.name,
+      entry.spotifyToken,
+      entry.host,
+      entry.guests ?? []
+    );
+  } catch {
+    return invalidEntryError(entry);
+  }
+}
+
+function documentPathFor(partyCode: PartyCode): string {
+  return `parties/${partyCode}`;
+}
+
+function documentFor(
+  db: FirebaseDatabase,
+  partyCode: PartyCode
+): firebase.database.Reference {
+  const path = documentPathFor(partyCode);
+  return db.ref(path);
+}
 
 /**
  * Contains functions for interacting with parties in the database
@@ -25,7 +68,7 @@ export namespace PartyDb {
    */
   export interface InvalidEntryError {
     readonly kind: ErrorType.InvalidEntry;
-    readonly entry: any;
+    readonly entry: unknown;
   }
 
   /**
@@ -43,40 +86,6 @@ export namespace PartyDb {
     return result instanceof Object && 'kind' in result;
   }
 
-  function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {
-    return { kind: ErrorType.PartyNotFound, partyCode };
-  }
-
-  function invalidEntryError(entry: any): PartyDb.Error {
-    return { kind: ErrorType.InvalidEntry, entry };
-  }
-
-  function tryParseEntry(entry: any): Party | PartyDb.Error {
-    try {
-      return Party.make(
-        entry.code,
-        entry.name,
-        entry.spotifyToken,
-        entry.host,
-        entry.guests ?? []
-      );
-    } catch {
-      return invalidEntryError(entry);
-    }
-  }
-
-  function documentPathFor(partyCode: PartyCode): string {
-    return `parties/${partyCode}`;
-  }
-
-  function documentFor(
-    db: FirebaseDatabase,
-    partyCode: PartyCode
-  ): firebase.database.Reference {
-    const path = documentPathFor(partyCode);
-    return db.ref(path);
-  }
-
   /**
    * Attempts to load a party form the database.
    * Returns null if something went wrong
@@ -90,7 +99,7 @@ export namespace PartyDb {
     const doc = documentFor(db, partyCode);
     return doc.once('value').then((snapshot) => {
       if (!snapshot.exists()) return partyNotFoundError(partyCode);
-      const entry = snapshot.val();
+      const entry = snapshot.val() as PartyEntry;
       return tryParseEntry(entry);
     });
   }

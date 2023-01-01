@@ -7,17 +7,19 @@ import { useRouter } from 'next/router';
  * **Only use this on protected pages**
  */
 export function usePartyCode(): PartyCode {
+  const router = useRouter();
   /*
-   Since this component is used on a protected page we can assume,
-   that the user is logged in, and we have a session.
-   If they don't for some reason, just bring them home
-   */
-  const { data, status } = useSession({
+ Since this hook is used only on protected pages we can assume,
+ that the user is logged in, and we have a session.
+ If they don't for some reason, just bring them home
+ */
+  const { data } = useSession({
     required: true,
     async onUnauthenticated() {
-      const router = useRouter();
       await router.push('/');
     },
   });
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return data!.user.partyCode;
 }

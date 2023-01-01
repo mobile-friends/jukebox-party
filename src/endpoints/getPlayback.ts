@@ -17,7 +17,7 @@ export type GetPlaybackError = NoSpotifyError | NotImplementedError;
 export type GetPlaybackResult = Ok<GetPlaybackSuccess> | GetPlaybackError;
 
 export default requestHandler<NoBody, GetPlaybackResult>(
-  async ({ spotifyToken, body }) => {
+  async ({ spotifyToken }) => {
     if (!spotifyToken) return Response.noSpotify();
 
     const playbackState = await SpotifyClient.getPlaybackState(spotifyToken);

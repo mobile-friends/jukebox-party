@@ -45,10 +45,10 @@ function makeStateFrom(input: string): State {
   const parsed = partyCodeSchema.safeParse(input);
   return parsed.success
     ? {
-      kind: 'Success',
-      value: input,
-      partyCode: PartyCode.tryMake(parsed.data)!,
-    }
+        kind: 'Success',
+        value: input,
+        partyCode: PartyCode.makeOrThrow(parsed.data),
+      }
     : {
         kind: 'Error',
         value: input,

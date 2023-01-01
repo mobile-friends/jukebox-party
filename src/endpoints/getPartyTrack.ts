@@ -21,7 +21,7 @@ export type GetPartyTrackError =
 export type GetPartyTrackResult = Ok<GetPartyTrackSuccess> | GetPartyTrackError;
 
 export default requestHandler<NoBody, GetPartyTrackResult>(
-  async ({ spotifyToken, query }) => {
+  async ({ spotifyToken }) => {
     if (!spotifyToken) return Response.noSpotify();
     const track = await SpotifyClient.getCurrentTrack(spotifyToken);
     return Response.ok<GetPartyTrackSuccess>({ track });

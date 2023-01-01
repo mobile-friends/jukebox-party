@@ -90,7 +90,7 @@ export namespace Party {
    * @param guest The guest
    */
   export function addGuestTo(party: Party, guest: Guest): Party {
-    let newGuests = [...party.guests, guest];
+    const newGuests = [...party.guests, guest];
     return make(
       party.code,
       party.name,

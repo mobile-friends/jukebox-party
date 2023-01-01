@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import TrackView from '@component/trackView';
 import { Track } from '@common/types/track';
@@ -23,7 +22,6 @@ import styles from '../../../styles/pages/party/home.module.scss';
 type Props = { partyCode: PartyCode };
 
 export default function PartyRoom({ partyCode }: Props) {
-  const router = useRouter();
   const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
@@ -68,12 +66,13 @@ export default function PartyRoom({ partyCode }: Props) {
     const result = await JukeClient.getPlayback(partyCode);
     switch (result.code) {
       case StatusCodes.OK:
-        const playbackState = result.content.playbackState;
-        setPlaybackState(playbackState);
+        setPlaybackState(result.content.playbackState);
         return;
       case StatusCodes.UNAUTHORIZED:
+        // TODO: Handle error
+        break;
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle errors
+        // TODO: Handle error
         break;
       default:
         return assertNeverReached(result);

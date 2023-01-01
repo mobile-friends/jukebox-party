@@ -2,12 +2,12 @@ import { StatusCodes } from 'http-status-codes';
 import HTTPMethod from 'http-method-enum';
 import { PartyCode } from '@common/types/partyCode';
 
-export type ResponseData = Record<string, any>;
+export type ResponseData = object;
 
 type MakeError<
   TCode extends StatusCodes,
   TKind extends string,
-  TData extends ResponseData = {}
+  TData extends ResponseData = object
 > = {
   code: TCode;
   error: { kind: TKind; message: string } & TData;
@@ -61,9 +61,10 @@ export type PartyNotFoundError = MakeError<
   { partyCode: PartyCode }
 >;
 
-export type SuccessResult = Ok<any> | Created<any> | NoContent;
-
-export type SuccessCodes = SuccessResult['code'];
+export type SuccessResult =
+  | Ok<ResponseData>
+  | Created<ResponseData>
+  | NoContent;
 
 export type ErrorResult =
   | MethodNotAllowedError
@@ -71,7 +72,5 @@ export type ErrorResult =
   | NotImplementedError
   | DtoError
   | PartyNotFoundError;
-
-export type ErrorCodes = ErrorResult['code'];
 
 export type ApiResult = SuccessResult | ErrorResult;

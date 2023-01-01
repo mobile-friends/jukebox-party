@@ -10,7 +10,7 @@ type MethodHandlers = {
 };
 
 function notAllowedMethodHandler(allowedMethods: HTTPMethod[]) {
-  return requestHandler<any, MethodNotAllowedError>((req) => {
+  return requestHandler<never, MethodNotAllowedError>(() => {
     return Response.methodNotAllowed(allowedMethods);
   });
 }
@@ -20,9 +20,8 @@ export function endpoint(handlers: MethodHandlers): NextApiHandler<ApiResult> {
     const method = methodOf(req);
     const allowedMethods = Object.keys(handlers) as HTTPMethod[];
     const handler =
-      method !== null && allowedMethods.includes(method)
-        ? handlers[method]!
-        : notAllowedMethodHandler(allowedMethods);
+      (method !== null && handlers[method]) ||
+      notAllowedMethodHandler(allowedMethods);
     await handler(req, res);
   };
 }

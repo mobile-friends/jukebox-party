@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import Navbar from '@component/navbar';
 import QueueHeader from '@component/elements/queueHeader';
 import { Track } from '@common/types/track';
@@ -22,7 +21,6 @@ interface Props {
 }
 
 export default function Queue({ partyCode, partyName }: Props) {
-  const router = useRouter();
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   function onQueueResult(result: GetQueueResult) {
@@ -43,7 +41,7 @@ export default function Queue({ partyCode, partyName }: Props) {
   });
 
   const tracks = currentQueueTracks.map((track: Track) => (
-    <TrackItem track={track} />
+    <TrackItem key={Track.nameOf(track)} track={track} />
   ));
 
   return (

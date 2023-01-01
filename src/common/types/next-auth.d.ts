@@ -1,3 +1,5 @@
+// noinspection JSUnusedGlobalSymbols
+
 import { PartyCode } from '@common/types/partyCode';
 import { User } from 'next-auth';
 

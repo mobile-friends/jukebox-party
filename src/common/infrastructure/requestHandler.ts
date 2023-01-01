@@ -8,7 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 
 export type Query = { [key: string]: string | string[] | undefined };
 
-export type NoBody = {};
+export type NoBody = Record<string, never>;
 
 interface Request<TBody> {
   spotifyToken: SpotifyToken | null;

@@ -20,5 +20,6 @@ const firebaseOptions: FirebaseOptions = {
 };
 
 const firebaseApp = firebase.apps[0] || firebase.initializeApp(firebaseOptions);
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const firebaseDb = firebaseApp.database!(); // TODO: Handle missing database
 export default firebaseDb;

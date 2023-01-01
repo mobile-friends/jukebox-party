@@ -16,18 +16,15 @@ interface Props {
   onModalClosed: ModalCloseListener;
 }
 
-function createPartyLink(partyCode: PartyCode): string {
-  const origin = useLocation().origin;
-  //TODO checken, ob der link mit der live url dann auch noch passt (auf localhost funktioniert es)
-  return `${origin}/?partyCode=${partyCode}`;
-}
-
 /**
  * A QR-code modal with a link to a party
  * @constructor
  */
 export default function QRCodeModal({ partyCode, onModalClosed }: Props) {
-  const link = createPartyLink(partyCode);
+  const origin = useLocation().origin;
+  // TODO: checken, ob der link mit der live url dann auch noch passt
+  // (auf localhost funktioniert es)
+  const link = `${origin}/?partyCode=${partyCode}`;
   return (
     <div className={styles.modal} onClick={onModalClosed}>
       <div className={styles.QRCodeContainer}>

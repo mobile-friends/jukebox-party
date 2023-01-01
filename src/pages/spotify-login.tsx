@@ -77,7 +77,6 @@ export default function SpotifyLogin(props: Props) {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
-
   function base64(s: string): string {
     return new Buffer(s).toString('base64');
   }
@@ -107,7 +106,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       redirect_uri: redirectUrl(),
     });
     const authorization = `Basic ${base64(
-      `${Env.spotifyClientId()}:${Env.spotifyClientSecret()}`,
+      `${Env.spotifyClientId()}:${Env.spotifyClientSecret()}`
     )}`;
     const res = await axios.post<SpotifyTokenData>(url, data, {
       headers: {

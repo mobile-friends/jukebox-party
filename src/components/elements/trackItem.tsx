@@ -10,7 +10,7 @@ interface Props {
 }
 
 function ArtistView(artist: Artist) {
-  let artistName = Artist.nameOf(artist);
+  const artistName = Artist.nameOf(artist);
   // TODO: Use unique artist id for key
   return <div key={artistName}>{artistName}</div>;
 }

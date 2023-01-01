@@ -46,7 +46,7 @@ export default function CreateParty({ spotifyToken }: Props) {
   }
 
   async function goToPartyPage(partyCode: PartyCode, userId: string) {
-    const partyUrl = `/party/${encodeURIComponent(partyCode)}`;
+    const partyUrl = `/party/${partyCode}`;
     await signIn('Juke', {
       callbackUrl: partyUrl,
       partyCode,
@@ -54,11 +54,11 @@ export default function CreateParty({ spotifyToken }: Props) {
     });
   }
 
-  async function tryCreateParty() {
+  async function tryCreateParty(spotifyToken: SpotifyToken) {
     const result = await JukeClient.createParty({
       partyName: partyName,
       hostName: partyUserName,
-      spotifyToken: spotifyToken!,
+      spotifyToken,
     });
     if (result.code === StatusCodes.CREATED) {
       const { partyCode, userId: hostId } = result.content;
@@ -67,8 +67,8 @@ export default function CreateParty({ spotifyToken }: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (isPartyNameValid && isPartyUserNameValid) {
-      await tryCreateParty();
+    if (isPartyNameValid && isPartyUserNameValid && spotifyToken) {
+      await tryCreateParty(spotifyToken);
     } else {
       validateAndSetPartyNameInput(partyName);
       validateAndSetPartyUserNameInput(partyUserName);

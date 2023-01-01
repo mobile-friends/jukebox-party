@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Party } from '@common/types/party';
-import firebaseDb from '@common/firebaseDb';
 import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
+import { FirebaseDatabase } from '@firebase/database-types';
 
-function useFetchParty(partyCode: PartyCode): Party | null | PartyDb.Error {
+function useFetchParty(
+  db: FirebaseDatabase,
+  partyCode: PartyCode
+): Party | null | PartyDb.Error {
   const [result, setResult] = useState<Party | null | PartyDb.Error>(null);
 
   useEffect(
-    () => PartyDb.subscribeToPartyByCode(firebaseDb, partyCode, setResult),
+    () => PartyDb.subscribeToPartyByCode(db, partyCode, setResult),
     [partyCode]
   );
 

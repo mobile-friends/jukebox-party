@@ -59,7 +59,7 @@ export default function AddTracks({ partyCode }: Props) {
     JukeClient.searchTracks(partyCode, queryString)
       .then(onSearchResult)
       .catch(console.error);
-  }, [queryString]);
+  }, [partyCode, queryString]);
 
   return (
     <div>
@@ -75,7 +75,7 @@ export default function AddTracks({ partyCode }: Props) {
           />
           <ul style={{ overflow: 'scroll' }}>
             {tracks?.map((track) => (
-              <TrackItem track={track} />
+              <TrackItem key={Track.nameOf(track)} track={track} />
             ))}
           </ul>
         </div>

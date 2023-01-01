@@ -17,16 +17,18 @@ const axiosClient = axios.create({
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
-  validateStatus: (_) => true,
+  validateStatus: () => true,
 });
 
-function isSpotifyError<T extends {}>(
+function isSpotifyError<T>(
   response: SpotifyResponse<T>
 ): response is ErrorResponse {
-  return typeof response == 'object' && 'error' in response;
+  return (
+    typeof response == 'object' && response !== null && 'error' in response
+  );
 }
 
-async function makeRequest<T extends {}>(
+async function makeRequest<T>(
   url: string,
   method: HTTPMethod,
   spotifyToken: string
@@ -50,21 +52,21 @@ async function makeRequest<T extends {}>(
   return response;
 }
 
-function get<T extends {}>(
+function get<T>(
   url: string,
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
   return makeRequest(url, HTTPMethod.GET, spotifyToken);
 }
 
-function post<T extends {}>(
+function post<T>(
   url: string,
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
   return makeRequest(url, HTTPMethod.POST, spotifyToken);
 }
 
-function put<T extends {}>(
+function put<T>(
   url: string,
   spotifyToken: SpotifyToken
 ): Promise<SpotifyResponse<T>> {
