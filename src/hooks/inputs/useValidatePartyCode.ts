@@ -35,8 +35,7 @@ export const useValidatePartyCodeInput = (
   initial: string
 ): UseValidatedPartyCode => {
   function validate(s: string): ValidatedPartyCode {
-    const validated: z.SafeParseReturnType<string, string> =
-      partyCodeSchema.safeParse(s);
+    const validated = partyCodeSchema.safeParse(s);
     if (validated.success) {
       const partyCode = PartyCode.tryMake(validated.data)!;
       return { isValidated: true, isValid: true, input: s, partyCode };
