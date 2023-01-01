@@ -33,6 +33,14 @@ function makePartyUrl(spotifyToken: SpotifyToken) {
   })}`;
 }
 
+function isWaitingForPlaying(props: Props): props is WaitForPlayingProps {
+  return props.kind === 'WaitForPlaying';
+}
+
+function isError(props: Props): props is ErrorProps {
+  return props.kind === 'Error';
+}
+
 export default function SpotifyLogin(props: Props) {
   const router = useRouter();
 
@@ -45,7 +53,7 @@ export default function SpotifyLogin(props: Props) {
   }
 
   useEffect(() => {
-    if (props.kind === 'WaitForPlaying') {
+    if (isWaitingForPlaying(props)) {
       const interval = setInterval(
         () => checkIfPlaying(props.spotifyToken),
         1000
@@ -54,8 +62,8 @@ export default function SpotifyLogin(props: Props) {
     }
   });
 
-  if (props.kind === 'Error') return <div>{props.error}</div>;
-  else if (props.kind === 'WaitForPlaying') {
+  if (isError(props)) return <div>{props.error}</div>;
+  else if (isWaitingForPlaying(props)) {
     return (
       <div>
         To start, please make sure you are currently playing a song on your
