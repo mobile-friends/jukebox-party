@@ -290,4 +290,24 @@ export namespace SpotifyClient {
 
     return parseTracksIn(response);
   }
+
+  /**
+   * Checks if the client with the given id is currently playing
+   * @param spotifyToken An active spotify token
+   */
+  export async function isCurrentlyPlaying(
+    spotifyToken: SpotifyToken
+  ): Promise<boolean> {
+    const url = 'me/player/';
+    const response = await get<SpotifyApi.CurrentPlaybackResponse>(
+      url,
+      spotifyToken
+    );
+    // TODO: Handle errors
+    if (isSpotifyError(response)) {
+      return false;
+    }
+
+    return response.is_playing;
+  }
 }

@@ -1,24 +1,64 @@
 import { GetServerSideProps } from 'next/types';
 import * as querystring from 'querystring';
 import axios from 'axios';
+import { SpotifyClient } from '@common/spotifyClient';
+import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 interface SpotifyTokenData {
-  access_token: string;
+  access_token: SpotifyToken;
   token_type: 'Bearer';
   expires_in: number;
   refresh_token: string;
 }
 
-interface Props {
-  error: string | null;
+interface ErrorProps {
+  kind: 'Error';
+  error: string;
 }
+
+interface WaitForPlayingProps {
+  kind: 'WaitForPlaying';
+  spotifyToken: SpotifyToken;
+}
+
+type Props = ErrorProps | WaitForPlayingProps;
 
 const Scope =
   'user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
 
 export default function SpotifyLogin(props: Props) {
-  if (props.error) return <div>{props.error}</div>;
-  else return <div>Connecting to spotify...</div>;
+  const router = useRouter();
+
+  async function checkIfPlaying(spotifyToken: SpotifyToken) {
+    const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
+    if (isPlaying) {
+      const partyUrl = `/create-party?${querystring.stringify({
+        token: spotifyToken,
+      })}`;
+      await router.push(partyUrl);
+    }
+  }
+
+  useEffect(() => {
+    if (props.kind === 'WaitForPlaying') {
+      const interval = setInterval(
+        () => checkIfPlaying(props.spotifyToken),
+        1000
+      );
+      return () => clearInterval(interval);
+    }
+  });
+
+  if (props.kind === 'Error') return <div>{props.error}</div>;
+  else if (props.kind === 'WaitForPlaying') {
+    return (
+      <div>
+        To start, please make sure you are currently playing a song on your
+        device.
+      </div>
+    );
+  } else return <div>Connecting to spotify...</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
@@ -79,24 +119,32 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     // The request succeeded
     const code = query.code as string;
     const tokenData = await requestAccessToken(code);
-    const redirectUrl = `/create-party?${querystring.stringify({
-      token: tokenData.access_token,
-      refresh: tokenData.refresh_token,
-    })}`;
-    return {
-      props: { error: null },
-      redirect: {
-        destination: redirectUrl,
-      },
-    };
+    const spotifyToken = tokenData.access_token;
+
+    const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
+    if (isPlaying) {
+      const redirectUrl = `/create-party?${querystring.stringify({
+        token: spotifyToken,
+      })}`;
+      return {
+        props: {} as Props,
+        redirect: {
+          destination: redirectUrl,
+        },
+      };
+    } else {
+      return {
+        props: { kind: 'WaitForPlaying', spotifyToken },
+      };
+    }
   } else if ('error' in query) {
     // The request failed
     const error = query.error as string;
-    return { props: { error } };
+    return { props: { kind: 'Error', error } };
   } else {
     // Send first auth request
     return {
-      props: { error: null },
+      props: {} as Props,
       redirect: {
         destination: spotifyUserAuthUrl(),
       },
