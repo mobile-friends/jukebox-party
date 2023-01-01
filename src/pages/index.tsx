@@ -5,27 +5,27 @@ import ErrorList from '@component/elements/errorList';
 import Input from '../components/elements/input';
 import styles from '../styles/pages/main.module.scss';
 import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
-import { useValidatePartyCodeInput } from '@hook/inputs/useValidatePartyCode';
-import { tryQueryParam } from '@common/util/query';
 import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import { signIn } from 'next-auth/react';
+import PartyCodeInput from '@component/partyCodeInput';
+import { useState } from 'react';
+import { tryQueryParam } from '@common/util/query';
 
 interface Props {}
 
 export default function Home({}: Props) {
   const router = useRouter();
+  const partyCodeParam = tryQueryParam(router.query, 'partyCode');
+  const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
   const {
     partyUserName,
     isPartyUserNameValid,
     partyUserNameErrors,
     validateAndSetPartyUserNameInput,
   } = useValidatePartyUserNameInput();
-  const [validatedPartyCode, setPartyCodeInput] = useValidatePartyCodeInput(
-    tryQueryParam(router.query, 'partyCode') ?? ''
-  );
 
   function goToLogin() {
     router.push('/spotify-login').catch(console.error);
@@ -62,15 +62,16 @@ export default function Home({}: Props) {
   function onJoinPartyClicked() {
     if (!isPartyUserNameValid)
       return validateAndSetPartyUserNameInput(partyUserName);
-    if (!validatedPartyCode.isValidated || !validatedPartyCode.isValid)
-      return setPartyCodeInput(validatedPartyCode.input);
+    if (!partyCode) return;
 
-    joinParty(validatedPartyCode.partyCode).catch(console.error);
+    joinParty(partyCode).catch(console.error);
   }
 
   function onCreatePartyClicked() {
     goToLogin();
   }
+
+  function onPartyCodeInput() {}
 
   return (
     <div>
@@ -86,21 +87,9 @@ export default function Home({}: Props) {
             hasError={partyUserNameErrors.length > 0}
           />
           <ErrorList errors={partyUserNameErrors} />
-          <Input
-            type='number'
-            placeholder='Party code'
-            value={validatedPartyCode.input}
-            onChange={setPartyCodeInput}
-            hasError={
-              validatedPartyCode.isValidated && !validatedPartyCode.isValid
-            }
-          />
-          <ErrorList
-            errors={
-              validatedPartyCode.isValidated && !validatedPartyCode.isValid
-                ? validatedPartyCode.errors
-                : []
-            }
+          <PartyCodeInput
+            initialValue={partyCodeParam}
+            onValueChanged={onPartyCodeInput}
           />
           <Button
             content='Join party'
