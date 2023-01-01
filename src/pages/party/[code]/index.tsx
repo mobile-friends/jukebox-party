@@ -11,23 +11,21 @@ import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { User } from '@common/types/user';
-import useFetchParty from '@hook/parties/useFetchParty';
-import { PartyCode } from '@common/types/partyCode';
 import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import styles from '../../../styles/pages/party/home.module.scss';
+import firebaseDb from '@common/firebaseDb';
 
-type Props = { partyCode: PartyCode };
+type Props = { party: Party };
 
-export default function PartyRoom({ partyCode }: Props) {
+export default function PartyRoom({ party }: Props) {
   const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
     null
   );
-  const party = useFetchParty(partyCode);
 
   async function onTrackReceived(track: Track | null) {
     if (track) {
@@ -38,7 +36,7 @@ export default function PartyRoom({ partyCode }: Props) {
   }
 
   const getCurrentlyPlaying = async () => {
-    const result = await JukeClient.getCurrentTrack(partyCode);
+    const result = await JukeClient.getCurrentTrack(Party.codeOf(party));
     switch (result.code) {
       case StatusCodes.OK:
         return await onTrackReceived(result.content.track);
@@ -63,7 +61,7 @@ export default function PartyRoom({ partyCode }: Props) {
   };
 
   const getPlaybackState = async () => {
-    const result = await JukeClient.getPlayback(partyCode);
+    const result = await JukeClient.getPlayback(Party.codeOf(party));
     switch (result.code) {
       case StatusCodes.OK:
         setPlaybackState(result.content.playbackState);
@@ -147,5 +145,11 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   if (!session) {
     return { redirect: { destination: '/' }, props: {} as Props };
   }
-  return { props: { partyCode: session.user.partyCode } };
+  const party = await PartyDb.tryGetByCode(firebaseDb, session.user.partyCode);
+  if (PartyDb.isError(party))
+    return {
+      redirect: { destination: '/party/404' },
+      props: {} as Props,
+    };
+  return { props: { party } };
 };
