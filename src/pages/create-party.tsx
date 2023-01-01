@@ -13,7 +13,7 @@ import { StatusCodes } from 'http-status-codes';
 
 type Props = { spotifyToken: SpotifyToken | null };
 
-function CreateParty({ spotifyToken }: Props) {
+export default function CreateParty({ spotifyToken }: Props) {
   const router = useRouter();
   const {
     partyName,
@@ -116,5 +116,3 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return { props: { spotifyToken: spotifyToken as SpotifyToken } };
   else return { props: { spotifyToken: null } };
 };
-
-export default CreateParty;
