@@ -10,6 +10,7 @@ import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
+import { useEffect } from 'react';
 
 type Props = { spotifyToken: SpotifyToken | null };
 
@@ -32,8 +33,11 @@ export default function CreateParty({ spotifyToken }: Props) {
     router.push('/').catch(console.error);
   }
 
+  useEffect(() => {
+    if (spotifyToken === null) goBackToStart();
+  });
+
   if (spotifyToken === null) {
-    goBackToStart();
     return <div>No token</div>;
   }
 
