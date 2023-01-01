@@ -2,7 +2,7 @@ import { PartyCode } from '@common/types/partyCode';
 import React, { useState } from 'react';
 import Input from '@component/elements/input';
 import ErrorList from '@component/elements/errorList';
-import partyCodeSchema from '../schemas/partyCodeSchema';
+import * as z from 'zod';
 
 type ValueChangedListener = (value: PartyCode | null) => SyncOrAsync<void>;
 
@@ -34,14 +34,21 @@ type State = NoInputState | SuccessState | ErrorState;
 
 const noInputState: NoInputState = { kind: 'NoInput', value: '' };
 
+const partyCodeSchema = z
+  .string()
+  .length(6, { message: 'Partycode muss 6 Zeichen lang sein' })
+  .regex(/^[0-9]*$/, {
+    message: 'Nur Zahlen erlaubt',
+  });
+
 function makeStateFrom(input: string): State {
   const parsed = partyCodeSchema.safeParse(input);
   return parsed.success
     ? {
-        kind: 'Success',
-        value: input,
-        partyCode: PartyCode.tryMake(parsed.data)!,
-      }
+      kind: 'Success',
+      value: input,
+      partyCode: PartyCode.tryMake(parsed.data)!,
+    }
     : {
         kind: 'Error',
         value: input,
