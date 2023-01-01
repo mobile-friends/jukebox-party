@@ -4,6 +4,7 @@ import axios from 'axios';
 import { SpotifyClient } from '@common/spotifyClient';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { Env } from '@common/env';
 
 interface SpotifyTokenData {
   access_token: SpotifyToken;
@@ -76,17 +77,6 @@ export default function SpotifyLogin(props: Props) {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
-  function clientId(): string {
-    const id = process.env.SPOTIFY_CLIENT_ID;
-    if (id !== undefined) return id;
-    else throw new Error('SPOTIFY_CLIENT_ID env not defined');
-  }
-
-  function clientSecret(): string {
-    const secret = process.env.SPOTIFY_CLIENT_SECRET;
-    if (secret !== undefined) return secret;
-    else throw new Error('SPOTIFY_CLIENT_SECRET env not defined');
-  }
 
   function base64(s: string): string {
     return new Buffer(s).toString('base64');
@@ -101,7 +91,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     // developer.spotify.com/documentation/general/guides/authorization/code-flow#request-user-authorization
     const query = querystring.stringify({
       response_type: 'code',
-      client_id: clientId(),
+      client_id: Env.spotifyClientId(),
       scope: Scope,
       redirect_uri: redirectUrl(),
     });
@@ -116,7 +106,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       grant_type: 'authorization_code',
       redirect_uri: redirectUrl(),
     });
-    const authorization = `Basic ${base64(`${clientId()}:${clientSecret()}`)}`;
+    const authorization = `Basic ${base64(
+      `${Env.spotifyClientId()}:${Env.spotifyClientSecret()}`,
+    )}`;
     const res = await axios.post<SpotifyTokenData>(url, data, {
       headers: {
         Authorization: authorization,
