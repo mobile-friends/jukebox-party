@@ -5,10 +5,13 @@ import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
+import { StatusCodes } from 'http-status-codes';
 
-type ErrorResponse = { error: SpotifyApi.ErrorObject };
+type SpotifyError = { error: SpotifyApi.ErrorObject };
 
-type SpotifyResponse<T> = T | ErrorResponse;
+type ResponseData<T> = T | SpotifyError;
+
+type SpotifyResponse<T> = [ResponseData<T>, StatusCodes];
 
 const axiosClient = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
@@ -20,12 +23,8 @@ const axiosClient = axios.create({
   validateStatus: () => true,
 });
 
-function isSpotifyError<T>(
-  response: SpotifyResponse<T>
-): response is ErrorResponse {
-  return (
-    typeof response == 'object' && response !== null && 'error' in response
-  );
+function isError<T>(data: ResponseData<T>): data is SpotifyError {
+  return typeof data == 'object' && data !== null && 'error' in data;
 }
 
 async function makeRequest<T>(
@@ -33,23 +32,21 @@ async function makeRequest<T>(
   method: HTTPMethod,
   spotifyToken: string
 ): Promise<SpotifyResponse<T>> {
-  const response = await axiosClient
-    .request<SpotifyResponse<T>>({
-      url,
-      method,
-      headers: {
-        Authorization: `Bearer ${spotifyToken}`,
-      },
-    })
-    .then((res) => res.data);
-  if (isSpotifyError(response)) {
+  const response = await axiosClient.request<ResponseData<T>>({
+    url,
+    method,
+    headers: {
+      Authorization: `Bearer ${spotifyToken}`,
+    },
+  });
+  if (isError(response.data)) {
     console.error('Request to spotify caused an error', {
       url,
       method,
-      error: response.error,
+      error: response.data.error,
     });
   }
-  return response;
+  return [response.data, response.status];
 }
 
 function get<T>(
@@ -91,17 +88,17 @@ export namespace SpotifyClient {
     const url = `/recommendations?limit=1?${querystring.stringify({
       seed_tracks: seedTrackIds.join(','),
     })}`;
-    const response = await get<SpotifyApi.RecommendationsFromSeedsResponse>(
+    const [data] = await get<SpotifyApi.RecommendationsFromSeedsResponse>(
       url,
       spotifyToken
     );
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       // If anything went wrong we just return no recommendations
       // TODO: Handle errors
       return [];
     }
 
-    return response.tracks.map(parseTrack);
+    return data.tracks.map(parseTrack);
   }
 
   /**
@@ -112,11 +109,11 @@ export namespace SpotifyClient {
     spotifyToken: SpotifyToken
   ): Promise<Track | null> {
     const url = `me/player/currently-playing`;
-    const response = await get<SpotifyApi.CurrentlyPlayingResponse | ''>(
+    const [data] = await get<SpotifyApi.CurrentlyPlayingResponse | ''>(
       url,
       spotifyToken
     );
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       // TODO: Handle errors
       return null;
     }
@@ -124,9 +121,9 @@ export namespace SpotifyClient {
     // Sometimes spotify returns a 204 (no content) when trying to get the track
     // In that case, data will be empty. Return null for now
     // TODO: Think of a better solution
-    if (response === '') return null;
+    if (data === '') return null;
 
-    const playingItem = response.item;
+    const playingItem = data.item;
     if (playingItem === null || playingItem === undefined) return null;
     else if (playingItem.type === 'track') return parseTrack(playingItem);
     else return null;
@@ -143,15 +140,15 @@ export namespace SpotifyClient {
       limit: 5,
       before: Date.now(),
     })}`;
-    const response = await get<SpotifyApi.UsersRecentlyPlayedTracksResponse>(
+    const [data] = await get<SpotifyApi.UsersRecentlyPlayedTracksResponse>(
       url,
       spotifyToken
     );
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       // TODO: Handle error
       return [];
     }
-    return response.items.map((it) => it.track.id);
+    return data.items.map((it) => it.track.id);
   }
 
   /**
@@ -164,8 +161,8 @@ export namespace SpotifyClient {
     isPlaying: boolean
   ) {
     const url = isPlaying ? `me/player/play` : `me/player/pause`;
-    const response = await put<string>(url, spotifyToken);
-    if (isSpotifyError(response)) {
+    const [data] = await put<string>(url, spotifyToken);
+    if (isError(data)) {
       // TODO: Handle error
       throw new Error();
     }
@@ -177,8 +174,8 @@ export namespace SpotifyClient {
    */
   export async function skipToNextTrack(spotifyToken: SpotifyToken) {
     const url = `me/player/next`;
-    const response = await post<string>(url, spotifyToken);
-    if (isSpotifyError(response)) {
+    const [data] = await post<string>(url, spotifyToken);
+    if (isError(data)) {
       // TODO: Handle error
       throw new Error();
     }
@@ -190,8 +187,8 @@ export namespace SpotifyClient {
    */
   export async function backToPreviousTrack(spotifyToken: SpotifyToken) {
     const url = `me/player/previous`;
-    const response = await post<string>(url, spotifyToken);
-    if (isSpotifyError(response)) {
+    const [data] = await post<string>(url, spotifyToken);
+    if (isError(data)) {
       // TODO: Handle error
       throw new Error();
     }
@@ -220,13 +217,13 @@ export namespace SpotifyClient {
       q: query,
       type: 'track',
     })}`;
-    const response = await get<SpotifyApi.SearchResponse>(url, spotifyToken);
+    const [data] = await get<SpotifyApi.SearchResponse>(url, spotifyToken);
 
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       // TODO: Handle error
       return [];
     }
-    return parseTracksIn(response);
+    return parseTracksIn(data);
   }
 
   /**
@@ -253,17 +250,17 @@ export namespace SpotifyClient {
     }
 
     const url = 'me/player/';
-    const response = await get<SpotifyApi.CurrentPlaybackResponse>(
+    const [data] = await get<SpotifyApi.CurrentPlaybackResponse>(
       url,
       spotifyToken
     );
 
     // TODO: Handle errors
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       throw new Error();
     }
 
-    return parsePlaybackState(response);
+    return parsePlaybackState(data);
   }
 
   /**
@@ -286,18 +283,15 @@ export namespace SpotifyClient {
     }
 
     const url = '/me/player/queue';
-    const response = await get<SpotifyApi.UsersQueueResponse>(
-      url,
-      spotifyToken
-    );
+    const [data] = await get<SpotifyApi.UsersQueueResponse>(url, spotifyToken);
 
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       // TODO: We get a 403 from spotify here. Idk why
       // TODO: Handle errors
       return [];
     }
 
-    return parseTracksIn(response);
+    return parseTracksIn(data);
   }
 
   /**
@@ -308,15 +302,15 @@ export namespace SpotifyClient {
     spotifyToken: SpotifyToken
   ): Promise<boolean> {
     const url = 'me/player/';
-    const response = await get<SpotifyApi.CurrentPlaybackResponse>(
+    const [data] = await get<SpotifyApi.CurrentPlaybackResponse>(
       url,
       spotifyToken
     );
     // TODO: Handle errors
-    if (isSpotifyError(response)) {
+    if (isError(data)) {
       return false;
     }
 
-    return response.is_playing;
+    return data.is_playing;
   }
 }
