@@ -18,10 +18,21 @@ import { assertNeverReached } from '@common/util/assertions';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
 import JukeHeader from '@component/elements/jukeHeader';
+import { PartyCode } from '@common/types/partyCode';
 
-type Props = { party: Party };
+type Props = {
+  partyName: string;
+  partyCode: PartyCode;
+  hostName: string;
+  guestNames: string[];
+};
 
-export default function PartyRoom({ party }: Props) {
+export default function PartyRoom({
+  partyName,
+  partyCode,
+  hostName,
+  guestNames,
+}: Props) {
   const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
@@ -37,7 +48,7 @@ export default function PartyRoom({ party }: Props) {
   }
 
   const getCurrentlyPlaying = async () => {
-    const result = await JukeClient.getCurrentTrack(Party.codeOf(party));
+    const result = await JukeClient.getCurrentTrack(partyCode);
     switch (result.code) {
       case StatusCodes.OK:
         return await onTrackReceived(result.content.track);
@@ -62,7 +73,7 @@ export default function PartyRoom({ party }: Props) {
   };
 
   const getPlaybackState = async () => {
-    const result = await JukeClient.getPlayback(Party.codeOf(party));
+    const result = await JukeClient.getPlayback(partyCode);
     switch (result.code) {
       case StatusCodes.OK:
         setPlaybackState(result.content.playbackState);
@@ -90,28 +101,22 @@ export default function PartyRoom({ party }: Props) {
     };
   });
 
-  if (party === null) return <div>Loading party</div>;
-
-  if (PartyDb.isError(party)) return <div>An error occurred</div>;
-
   // TODO: Extract component
 
   const guestList =
-    Party.guestsOf(party)
-      .map((guest) => guest.name)
-      .join(', ') || 'No guests have joined the party yet';
+    guestNames.join(', ') || 'No guests have joined the party yet';
   return (
     <div className={styles.container}>
       <JukeHeader first={'jukebox'} second={'party'} />
-      <p>Party Code: {Party.codeOf(party)}</p>
-      <p>Party Name: {Party.nameOf(party)}</p>
-      <p>Party Host: {User.nameOf(Party.hostOf(party))}</p>
+      <p>Party Code: {partyCode}</p>
+      <p>Party Name: {partyName}</p>
+      <p>Party Host: {hostName}</p>
       <p>Party Guests: {guestList}</p>
       {currentTrack && playbackState ? (
         <TrackView
           track={currentTrack}
           playbackState={playbackState}
-          partyCode={Party.codeOf(party)}
+          partyCode={partyCode}
         />
       ) : (
         <div>
@@ -132,10 +137,10 @@ export default function PartyRoom({ party }: Props) {
           onModalClosed={() => {
             handleModalVisibility();
           }}
-          partyCode={Party.codeOf(party)}
+          partyCode={partyCode}
         />
       )}
-      <Navbar partyCode={Party.codeOf(party)} />
+      <Navbar partyCode={partyCode} />
     </div>
   );
 }
@@ -156,5 +161,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       redirect: { destination: '/party/404' },
       props: {} as Props,
     };
-  return { props: { party } };
+  return {
+    props: {
+      partyName: Party.nameOf(party),
+      partyCode: Party.codeOf(party),
+      hostName: User.nameOf(Party.hostOf(party)),
+      guestNames: Party.guestsOf(party).map(User.nameOf),
+    },
+  };
 };
