@@ -1,28 +1,21 @@
 import { useRouter } from 'next/router';
 import Button from '../components/elements/button';
-import Input from '../components/elements/input';
 import styles from '../styles/pages/main.module.scss';
 import { PartyCode } from '@common/types/partyCode';
-import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
-import ErrorList from '@component/elements/errorList';
 import { GetServerSideProps } from 'next/types';
 import { signIn } from 'next-auth/react';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { useEffect, useState } from 'react';
 import PartyNameInput from '@component/partyNameInput';
+import UserNameInput from '@component/userNameInput';
 
 type Props = { spotifyToken: SpotifyToken | null };
 
 export default function CreateParty({ spotifyToken }: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string | null>(null);
-  const {
-    partyUserName,
-    isPartyUserNameValid,
-    partyUserNameErrors,
-    validateAndSetPartyUserNameInput,
-  } = useValidatePartyUserNameInput();
+  const [hostName, setHostName] = useState<string | null>(null);
 
   function goBackToStart() {
     router.push('/').catch(console.error);
@@ -49,10 +42,14 @@ export default function CreateParty({ spotifyToken }: Props) {
     });
   }
 
-  async function tryCreateParty(partyName: string, spotifyToken: SpotifyToken) {
+  async function tryCreateParty(
+    partyName: string,
+    hostName: string,
+    spotifyToken: SpotifyToken
+  ) {
     const result = await JukeClient.createParty({
-      partyName: partyName,
-      hostName: partyUserName,
+      partyName,
+      hostName,
       spotifyToken,
     });
     if (result.code === StatusCodes.CREATED) {
@@ -62,10 +59,8 @@ export default function CreateParty({ spotifyToken }: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (partyName !== null && isPartyUserNameValid && spotifyToken) {
-      await tryCreateParty(partyName, spotifyToken);
-    } else {
-      validateAndSetPartyUserNameInput(partyUserName);
+    if (partyName !== null && hostName !== null && spotifyToken) {
+      await tryCreateParty(partyName, hostName, spotifyToken);
     }
   }
 
@@ -77,13 +72,7 @@ export default function CreateParty({ spotifyToken }: Props) {
         </h1>
         <form>
           <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
-          <Input
-            type={'text'}
-            placeholder='Host Name'
-            onChange={validateAndSetPartyUserNameInput}
-            hasError={partyUserNameErrors.length > 0}
-          />
-          <ErrorList errors={partyUserNameErrors} />
+          <UserNameInput initialValue={null} onValueChanged={setHostName} />
           <Button
             content='Create party'
             styleType='primary block'

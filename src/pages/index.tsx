@@ -1,9 +1,6 @@
 import { useRouter } from 'next/router';
 import Button from '../components/elements/button';
-import ErrorList from '@component/elements/errorList';
-import Input from '../components/elements/input';
 import styles from '../styles/pages/main.module.scss';
-import { useValidatePartyUserNameInput } from '@hook/inputs/useValidatePartyUserNameInput';
 import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
@@ -12,17 +9,13 @@ import { signIn } from 'next-auth/react';
 import PartyCodeInput from '@component/partyCodeInput';
 import { useState } from 'react';
 import { tryQueryParam } from '@common/util/query';
+import UserNameInput from '@component/userNameInput';
 
 export default function Home() {
   const router = useRouter();
   const partyCodeParam = tryQueryParam(router.query, 'partyCode');
   const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
-  const {
-    partyUserName,
-    isPartyUserNameValid,
-    partyUserNameErrors,
-    validateAndSetPartyUserNameInput,
-  } = useValidatePartyUserNameInput();
+  const [guestName, setGuestName] = useState<string | null>(null);
 
   if (!router.isReady) return <div></div>;
 
@@ -34,10 +27,10 @@ export default function Home() {
     await router.push(`/party/404`);
   }
 
-  async function joinParty(partyCode: PartyCode) {
+  async function joinParty(partyCode: PartyCode, guestName: string) {
     const result = await JukeClient.joinParty({
       partyCode,
-      guestName: partyUserName,
+      guestName,
     });
     switch (result.code) {
       case StatusCodes.OK:
@@ -60,11 +53,8 @@ export default function Home() {
   }
 
   function onJoinPartyClicked() {
-    if (!isPartyUserNameValid)
-      return validateAndSetPartyUserNameInput(partyUserName);
-    if (!partyCode) return;
-
-    joinParty(partyCode).catch(console.error);
+    if (partyCode !== null && guestName !== null)
+      joinParty(partyCode, guestName).catch(console.error);
   }
 
   function onCreatePartyClicked() {
@@ -78,13 +68,7 @@ export default function Home() {
           jukebox.<span className='text-primary text-italic'>party</span>
         </h1>
         <form>
-          <Input
-            type='text'
-            placeholder='Name'
-            onChange={validateAndSetPartyUserNameInput}
-            hasError={partyUserNameErrors.length > 0}
-          />
-          <ErrorList errors={partyUserNameErrors} />
+          <UserNameInput initialValue={null} onValueChanged={setGuestName} />
           <PartyCodeInput
             initialValue={partyCodeParam}
             onValueChanged={setPartyCode}
