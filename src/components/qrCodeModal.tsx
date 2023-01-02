@@ -13,20 +13,20 @@ interface Props {
   /**
    * A listener for when the modal closed
    */
-  onModalClosed: ModalCloseListener;
+  onClosed: ModalCloseListener;
 }
 
 /**
  * A QR-code modal with a link to a party
  * @constructor
  */
-export default function QRCodeModal({ partyCode, onModalClosed }: Props) {
+export default function QRCodeModal({ partyCode, onClosed }: Props) {
   const origin = useLocation().origin;
   // TODO: checken, ob der link mit der live url dann auch noch passt
   // (auf localhost funktioniert es)
   const link = `${origin}/?partyCode=${partyCode}`;
   return (
-    <div className={styles.modal} onClick={onModalClosed}>
+    <div className={styles.modal} onClick={onClosed}>
       <div className={styles.QRCodeContainer}>
         <QRCode value={link} />
       </div>

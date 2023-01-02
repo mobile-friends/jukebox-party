@@ -123,12 +123,7 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
         }}
       ></Button>
       {isModalVisible && (
-        <QRCodeModal
-          onModalClosed={() => {
-            handleModalVisibility();
-          }}
-          partyCode={partyCode}
-        />
+        <QRCodeModal onClosed={handleModalVisibility} partyCode={partyCode} />
       )}
       <Navbar partyCode={partyCode} />
     </div>
