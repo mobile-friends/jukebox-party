@@ -250,10 +250,14 @@ export namespace SpotifyClient {
     }
 
     const url = 'me/player/';
-    const [data] = await get<SpotifyApi.CurrentPlaybackResponse>(
+    const [data, status] = await get<SpotifyApi.CurrentPlaybackResponse>(
       url,
       spotifyToken
     );
+
+    // This means that spotify is not currently playing
+    if (status === StatusCodes.NO_CONTENT)
+      return null
 
     // TODO: Handle errors
     if (isError(data)) {

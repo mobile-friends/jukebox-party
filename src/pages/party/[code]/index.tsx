@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PlaybackView from '@component/playbackView';
-import { PlaybackState } from '@common/types/playbackState';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
 import QRCodeModal from '@component/qrCodeModal';
@@ -9,15 +8,13 @@ import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
-import { JukeClient } from '@common/jukeClient';
-import { StatusCodes } from 'http-status-codes';
-import { assertNeverReached } from '@common/util/assertions';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
 import JukeHeader from '@component/elements/jukeHeader';
 import { PartyCode } from '@common/types/partyCode';
 import PartyUserView from '@component/partyUserView';
 import useToggle from '@hook/useToggle';
+import useLivePlaybackState from '@hook/useLivePlaybackState';
 
 interface Props {
   partyName: string;
@@ -26,35 +23,7 @@ interface Props {
 
 export default function PartyRoom({ partyName, partyCode }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
-  const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
-    null
-  );
-
-  const getPlaybackState = async () => {
-    const result = await JukeClient.getPlayback(partyCode);
-    switch (result.code) {
-      case StatusCodes.OK:
-        setPlaybackState(result.content);
-        return;
-      case StatusCodes.UNAUTHORIZED:
-        // TODO: Handle error
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  };
-
-  useEffect(() => {
-    if (playbackState === null) getPlaybackState().catch(console.error);
-    const interval = setInterval(getPlaybackState, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  const playbackState = useLivePlaybackState(partyCode);
 
   // TODO: Extract component
 
