@@ -17,7 +17,6 @@ interface Props {
  * @constructor
  */
 export default function SkipButton({ skipDirection, partyCode }: Props) {
-
   async function skip() {
     await JukeClient.skip(partyCode, skipDirection);
   }
