@@ -10,6 +10,7 @@ import PartyCodeInput from '@component/partyCodeInput';
 import { useState } from 'react';
 import { tryQueryParam } from '@common/util/query';
 import UserNameInput from '@component/userNameInput';
+import JukeHeader from '@component/elements/jukeHeader';
 
 export default function Home() {
   const router = useRouter();
@@ -64,9 +65,7 @@ export default function Home() {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className='text-center'>
-          jukebox.<span className='text-primary text-italic'>party</span>
-        </h1>
+        <JukeHeader first={'jukebox'} second={'party'} />
         <form>
           <UserNameInput initialValue={null} onValueChanged={setGuestName} />
           <PartyCodeInput

@@ -9,6 +9,7 @@ import { StatusCodes } from 'http-status-codes';
 import { useEffect, useState } from 'react';
 import PartyNameInput from '@component/partyNameInput';
 import UserNameInput from '@component/userNameInput';
+import JukeHeader from '@component/elements/jukeHeader';
 
 type Props = { spotifyToken: SpotifyToken | null };
 
@@ -67,9 +68,7 @@ export default function CreateParty({ spotifyToken }: Props) {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className='text-center'>
-          create.<span className='text-primary text-italic'>party</span>
-        </h1>
+        <JukeHeader first={'create'} second={'party'} />
         <form>
           <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
           <UserNameInput initialValue={null} onValueChanged={setHostName} />

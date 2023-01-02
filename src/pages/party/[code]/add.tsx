@@ -16,6 +16,7 @@ import { SearchTracksResult } from '@endpoint/searchTracks';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
+import JukeHeader from '@component/elements/jukeHeader';
 
 interface Props {
   partyCode: PartyCode;
@@ -64,9 +65,7 @@ export default function AddTracks({ partyCode }: Props) {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className='text-center'>
-          search.<span className='text-primary text-italic'>track</span>
-        </h1>
+        <JukeHeader first={'search'} second={'track'} />
         <div className={styles.container} style={{ padding: 0 }}>
           <Input
             type={'text'}
