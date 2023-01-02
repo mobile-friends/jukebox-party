@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '@component/navbar';
-import QueueHeader from '@component/elements/queueHeader';
 import { Track } from '@common/types/track';
 import { GetServerSideProps } from 'next/types';
 import { PartyCode } from '@common/types/partyCode';
@@ -14,6 +13,7 @@ import { GetQueueResult } from '@endpoint/getQueue';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
+import JukeHeader from '@component/elements/jukeHeader';
 
 interface Props {
   partyCode: PartyCode;
@@ -46,7 +46,7 @@ export default function Queue({ partyCode, partyName }: Props) {
 
   return (
     <div>
-      <QueueHeader partyName={partyName} partyCode={partyCode} />
+      <JukeHeader first={'party'} second={'tracks'} />
       <div>{tracks}</div>
       <Navbar partyCode={partyCode} />
     </div>

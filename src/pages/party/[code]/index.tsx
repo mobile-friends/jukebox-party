@@ -17,6 +17,7 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
+import JukeHeader from '@component/elements/jukeHeader';
 
 type Props = { party: Party };
 
@@ -101,7 +102,7 @@ export default function PartyRoom({ party }: Props) {
       .join(', ') || 'No guests have joined the party yet';
   return (
     <div className={styles.container}>
-      <h1>Party Room</h1>
+      <JukeHeader first={'jukebox'} second={'party'} />
       <p>Party Code: {Party.codeOf(party)}</p>
       <p>Party Name: {Party.nameOf(party)}</p>
       <p>Party Host: {User.nameOf(Party.hostOf(party))}</p>

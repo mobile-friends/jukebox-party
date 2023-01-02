@@ -2,6 +2,7 @@ import router from 'next/router';
 import React from 'react';
 import Button from '../../components/elements/button';
 import styles from '../../styles/pages/404.module.scss';
+import JukeHeader from '@component/elements/jukeHeader';
 
 function PartyNotFound() {
   async function goToJoinPage() {
@@ -11,9 +12,7 @@ function PartyNotFound() {
   return (
     <div>
       <div className={styles.container}>
-        <h1 className='text-center'>
-          not-found.<span className='text-primary text-italic'>party</span>
-        </h1>
+        <JukeHeader first={'no'} second={'party'} />
         <div className={styles.backLink}>
           <h2 className='text-light text-center'>
             Your party code is not valid.
