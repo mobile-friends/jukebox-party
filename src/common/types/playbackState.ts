@@ -1,4 +1,5 @@
 import { Duration } from './duration';
+import { Track } from '@common/types/track';
 
 declare const tag: unique symbol;
 
@@ -6,6 +7,7 @@ declare const tag: unique symbol;
  * Contains information about the playback state of a track
  */
 export interface PlaybackState {
+  readonly track: Track;
   readonly playTime: Duration;
   readonly isPlaying: boolean;
   readonly [tag]: 'PlaybackState';
@@ -17,27 +19,34 @@ export interface PlaybackState {
 export namespace PlaybackState {
   /**
    * Makes a playback-state
+   * @param track The track that is playing
    * @param playTime How long the track has been playing for
    * @param isPlaying Whether the track is playing
    */
-  export function make(playTime: Duration, isPlaying: boolean): PlaybackState {
-    return { playTime, isPlaying } as PlaybackState;
+  export function make(
+    track: Track,
+    playTime: Duration,
+    isPlaying: boolean
+  ): PlaybackState {
+    return Object.freeze({ track, playTime, isPlaying }) as PlaybackState;
   }
 
   /**
    * Makes a playing playback-state
+   * @param track The track that is playing
    * @param playTime How long the track has been playing for
    */
-  export function makePlaying(playTime: Duration): PlaybackState {
-    return make(playTime, true);
+  export function makePlaying(track: Track, playTime: Duration): PlaybackState {
+    return make(track, playTime, true);
   }
 
   /**
    * Makes a paused playback-state
+   * @param track The track that is playing
    * @param playTime How long the track has been playing for
    */
-  export function makePaused(playTime: Duration): PlaybackState {
-    return make(playTime, false);
+  export function makePaused(track: Track, playTime: Duration): PlaybackState {
+    return make(track, playTime, false);
   }
 
   /**
@@ -64,11 +73,7 @@ export namespace PlaybackState {
     return state.playTime;
   }
 
-  /**
-   * Toggles the state from playing to paused and the other way around
-   * @param state The current state
-   */
-  export function togglePlaying(state: PlaybackState): PlaybackState {
-    return make(playTimeOf(state), !isPlaying(state));
+  export function trackOf(state: PlaybackState): Track {
+    return state.track;
   }
 }

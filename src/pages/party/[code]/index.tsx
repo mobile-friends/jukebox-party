@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import TrackView from '@component/trackView';
-import { Track } from '@common/types/track';
+import PlaybackView from '@component/playbackView';
 import { PlaybackState } from '@common/types/playbackState';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
@@ -27,49 +26,15 @@ interface Props {
 
 export default function PartyRoom({ partyName, partyCode }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
-  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
     null
   );
-
-  async function onTrackReceived(track: Track | null) {
-    if (track) {
-      setCurrentTrack(track);
-    } else {
-      await getRecentlyPlayedRecommendation();
-    }
-  }
-
-  const getCurrentlyPlaying = async () => {
-    const result = await JukeClient.getCurrentTrack(partyCode);
-    switch (result.code) {
-      case StatusCodes.OK:
-        return await onTrackReceived(result.content.track);
-      case StatusCodes.UNAUTHORIZED:
-      case StatusCodes.BAD_REQUEST:
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle errors
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  };
-
-  const getRecentlyPlayedRecommendation = async () => {
-    try {
-      // const recentTrackIds = await recentlyPlayed();
-      // const recommendedTracks = await recommendations(recentTrackIds);
-      //TODO: This should probably happen in the backend
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const getPlaybackState = async () => {
     const result = await JukeClient.getPlayback(partyCode);
     switch (result.code) {
       case StatusCodes.OK:
-        setPlaybackState(result.content.playbackState);
+        setPlaybackState(result.content);
         return;
       case StatusCodes.UNAUTHORIZED:
         // TODO: Handle error
@@ -83,14 +48,11 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
   };
 
   useEffect(() => {
-    if (currentTrack === null) getCurrentlyPlaying().catch(console.error);
     if (playbackState === null) getPlaybackState().catch(console.error);
-    const interval = setInterval(getCurrentlyPlaying, 5000);
-    const intervalPlayback = setInterval(getPlaybackState, 1000);
+    const interval = setInterval(getPlaybackState, 1000);
 
     return () => {
       clearInterval(interval);
-      clearInterval(intervalPlayback);
     };
   });
 
@@ -102,12 +64,8 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
       <p>Party Code: {partyCode}</p>
       <p>Party Name: {partyName}</p>
       <PartyUserView partyCode={partyCode} />
-      {currentTrack && playbackState ? (
-        <TrackView
-          track={currentTrack}
-          playbackState={playbackState}
-          partyCode={partyCode}
-        />
+      {playbackState ? (
+        <PlaybackView playbackState={playbackState} partyCode={partyCode} />
       ) : (
         <div>
           <p>NO TRACK IS CURRENTLY PLAYING!</p>

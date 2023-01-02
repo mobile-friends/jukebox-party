@@ -5,6 +5,7 @@ import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
+import { parse } from 'acorn';
 
 type ErrorResponse = { error: SpotifyApi.ErrorObject };
 
@@ -235,14 +236,21 @@ export namespace SpotifyClient {
    */
   export async function getPlaybackState(
     spotifyToken: SpotifyToken
-  ): Promise<PlaybackState> {
+  ): Promise<PlaybackState | null> {
     function parsePlaybackState(
       response: SpotifyApi.CurrentPlaybackResponse
-    ): PlaybackState {
-      return PlaybackState.make(
-        Duration.makeFromMillis(response.progress_ms ?? 0),
-        response.is_playing
-      );
+    ): PlaybackState | null {
+      const track =
+        response.item !== null && response.item.type === 'track'
+          ? parseTrack(response.item)
+          : null;
+      return track !== null
+        ? PlaybackState.make(
+            track,
+            Duration.makeFromMillis(response.progress_ms ?? 0),
+            response.is_playing
+          )
+        : null;
     }
 
     const url = 'me/player/';
@@ -253,7 +261,7 @@ export namespace SpotifyClient {
 
     // TODO: Handle errors
     if (isSpotifyError(response)) {
-      return PlaybackState.make(Duration.Zero, false);
+      throw new Error();
     }
 
     return parsePlaybackState(response);
