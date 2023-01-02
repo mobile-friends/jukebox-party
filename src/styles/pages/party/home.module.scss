@@ -1,5 +1,14 @@
-.container {
-  > div {
-    padding: 20px;
+.partyPage {
+  padding: 20px;
+
+  height: calc(100vh - 84.5px);
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
+  .partyContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: scroll;
   }
 }
