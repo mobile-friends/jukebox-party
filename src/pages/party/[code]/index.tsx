@@ -24,7 +24,7 @@ interface Props {
 export default function PartyRoom({ partyName, partyCode }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
-  
+
   return (
     <div className={styles.container}>
       <JukeHeader first={'jukebox'} second={'party'} />

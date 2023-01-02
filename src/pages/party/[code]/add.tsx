@@ -45,7 +45,11 @@ export default function AddTracks({ partyCode }: Props) {
       case StatusCodes.OK:
         return setTracks(result.content.tracks);
       case StatusCodes.BAD_REQUEST:
+        // TODO: Handle errors
+        break;
       case StatusCodes.UNAUTHORIZED:
+        // TODO: Handle errors
+        break;
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors
         break;
