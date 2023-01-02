@@ -14,7 +14,7 @@
   right: 0;
   bottom: 0;
   z-index: 100;
-  box-shadow: 0 9px 0px 0px $dark-color, 0 -9px 0px 0px $dark-color,
+  box-shadow: 0 9px 0 0 $dark-color, 0 -9px 0px 0px $dark-color,
     12px 0 15px -4px rgba(25, 25, 25, 0.8) inset,
     -12px 0 15px -4px rgba(25, 25, 25, 0.8) inset;
 }
