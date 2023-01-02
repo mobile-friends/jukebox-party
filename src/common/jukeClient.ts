@@ -11,6 +11,7 @@ import { SearchTracksResult } from '@endpoint/searchTracks';
 import { SkipResult } from '@endpoint/skip';
 import { GetPlaybackResult } from '@endpoint/getPlayback';
 import { SkipDirection } from '@common/types/constants';
+import { GetPartyUsersResult } from '@endpoint/getPartyUsers';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({
@@ -92,6 +93,17 @@ export namespace JukeClient {
   ): Promise<GetPartyTrackResult> {
     const url = `parties/${partyCode}/track`;
     return get<GetPartyTrackResult>(url);
+  }
+
+  /**
+   * Gets the users of a party
+   * @param partyCode The code of the party
+   */
+  export function getPartyUsers(
+    partyCode: PartyCode
+  ): Promise<GetPartyUsersResult> {
+    const url = `parties/${partyCode}/users`;
+    return get<GetPartyUsersResult>(url);
   }
 
   /**

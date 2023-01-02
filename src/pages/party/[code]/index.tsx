@@ -10,7 +10,7 @@ import { useModalVisibility } from '@hook/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
-import { User } from '@common/types/user';
+import { Guest, Host, User } from '@common/types/user';
 import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
@@ -19,25 +19,20 @@ import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
 import JukeHeader from '@component/elements/jukeHeader';
 import { PartyCode } from '@common/types/partyCode';
+import useLivePartyUsers from '@hook/useLivePartyUsers';
 
-type Props = {
+interface Props {
   partyName: string;
   partyCode: PartyCode;
-  hostName: string;
-  guestNames: string[];
-};
+}
 
-export default function PartyRoom({
-  partyName,
-  partyCode,
-  hostName,
-  guestNames,
-}: Props) {
+export default function PartyRoom({ partyName, partyCode }: Props) {
   const { isModalVisible, handleModalVisibility } = useModalVisibility();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
     null
   );
+  const users = useLivePartyUsers(partyCode);
 
   async function onTrackReceived(track: Track | null) {
     if (track) {
@@ -103,15 +98,23 @@ export default function PartyRoom({
 
   // TODO: Extract component
 
-  const guestList =
-    guestNames.join(', ') || 'No guests have joined the party yet';
   return (
     <div className={styles.container}>
       <JukeHeader first={'jukebox'} second={'party'} />
       <p>Party Code: {partyCode}</p>
       <p>Party Name: {partyName}</p>
-      <p>Party Host: {hostName}</p>
-      <p>Party Guests: {guestList}</p>
+      {users !== null ? (
+        <>
+          <p>Party Host: {User.nameOf(users.host)}</p>
+          <p>
+            {users.guests.length > 0
+              ? `Guests: ${users.guests.map(User.nameOf).join(', ')}`
+              : 'No guests have joined the party yet'}
+          </p>
+        </>
+      ) : (
+        <></>
+      )}
       {currentTrack && playbackState ? (
         <TrackView
           track={currentTrack}
@@ -165,8 +168,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     props: {
       partyName: Party.nameOf(party),
       partyCode: Party.codeOf(party),
-      hostName: User.nameOf(Party.hostOf(party)),
-      guestNames: Party.guestsOf(party).map(User.nameOf),
     },
   };
 };
