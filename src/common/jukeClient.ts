@@ -4,7 +4,6 @@ import { PartyCode } from '@common/types/partyCode';
 import * as querystring from 'querystring';
 import { CreatePartyBody, CreatePartyResult } from '@endpoint/createParty';
 import { JoinPartyBody, JoinPartyResult } from '@endpoint/joinParty';
-import { GetPartyTrackResult } from '@endpoint/getPartyTrack';
 import { SetPlaybackBody, SetPlaybackResult } from '@endpoint/setPlayback';
 import { GetQueueResult } from '@endpoint/getQueue';
 import { SearchTracksResult } from '@endpoint/searchTracks';
@@ -82,17 +81,6 @@ export namespace JukeClient {
   export function joinParty(body: JoinPartyBody): Promise<JoinPartyResult> {
     const url = `parties/${body.partyCode}/join`;
     return post<JoinPartyBody, JoinPartyResult>(url, body);
-  }
-
-  /**
-   * Gets the current track of a party
-   * @param partyCode The code of the party
-   */
-  export function getCurrentTrack(
-    partyCode: PartyCode
-  ): Promise<GetPartyTrackResult> {
-    const url = `parties/${partyCode}/track`;
-    return get<GetPartyTrackResult>(url);
   }
 
   /**
