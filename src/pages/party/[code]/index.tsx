@@ -6,7 +6,7 @@ import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
 import QRCodeModal from '@component/qrCodeModal';
 import Button from '@component/elements/button';
-import { useModalVisibility } from '@hook/modals/useModalVisibility';
+import { useModalVisibility } from '@hook/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
