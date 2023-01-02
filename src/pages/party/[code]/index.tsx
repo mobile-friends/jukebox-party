@@ -22,18 +22,18 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
 
   return (
     <div className={styles.container}>
-      <PartyHeader partyName={partyName} partyCode={partyCode} />
+      <div>
+        <PartyHeader partyName={partyName} partyCode={partyCode} />
 
-      {/* <PartyUserView partyCode={partyCode} /> */}
-
-      {playbackState ? (
-        <PlaybackView playbackState={playbackState} partyCode={partyCode} />
-      ) : (
-        <div>
-          <p>NO TRACK IS CURRENTLY PLAYING!</p>
-          <p>Please press on the play button in Spotify!</p>
-        </div>
-      )}
+        {playbackState ? (
+          <PlaybackView playbackState={playbackState} partyCode={partyCode} />
+        ) : (
+          <div>
+            <p>NO TRACK IS CURRENTLY PLAYING!</p>
+            <p>Please press on the play button in Spotify!</p>
+          </div>
+        )}
+      </div>
 
       <Navbar partyCode={partyCode} />
     </div>
