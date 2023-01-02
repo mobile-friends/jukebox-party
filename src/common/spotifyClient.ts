@@ -256,8 +256,7 @@ export namespace SpotifyClient {
     );
 
     // This means that spotify is not currently playing
-    if (status === StatusCodes.NO_CONTENT)
-      return null
+    if (status === StatusCodes.NO_CONTENT) return null;
 
     // TODO: Handle errors
     if (isError(data)) {
