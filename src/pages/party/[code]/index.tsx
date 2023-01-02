@@ -10,7 +10,7 @@ import { useModalVisibility } from '@hook/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
-import { Guest, Host, User } from '@common/types/user';
+import { User } from '@common/types/user';
 import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
