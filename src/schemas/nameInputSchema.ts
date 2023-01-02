@@ -7,6 +7,5 @@ const nameInputSchema = z
   .regex(/^[\w\s-]*$/, {
     message: 'Alphanumerisch + Lehrzeichen/Bindestrich/etc',
   });
-//TODO regex für emojis erweitern
 
 export default nameInputSchema;
