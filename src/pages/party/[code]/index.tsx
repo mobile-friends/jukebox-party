@@ -10,7 +10,6 @@ import { useModalVisibility } from '@hook/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
-import { User } from '@common/types/user';
 import { PartyDb } from '@common/partyDb';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
@@ -19,7 +18,7 @@ import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
 import JukeHeader from '@component/elements/jukeHeader';
 import { PartyCode } from '@common/types/partyCode';
-import useLivePartyUsers from '@hook/useLivePartyUsers';
+import PartyUserView from '@component/partyUserView';
 
 interface Props {
   partyName: string;
@@ -32,7 +31,6 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
     null
   );
-  const users = useLivePartyUsers(partyCode);
 
   async function onTrackReceived(track: Track | null) {
     if (track) {
@@ -103,18 +101,7 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
       <JukeHeader first={'jukebox'} second={'party'} />
       <p>Party Code: {partyCode}</p>
       <p>Party Name: {partyName}</p>
-      {users !== null ? (
-        <>
-          <p>Party Host: {User.nameOf(users.host)}</p>
-          <p>
-            {users.guests.length > 0
-              ? `Guests: ${users.guests.map(User.nameOf).join(', ')}`
-              : 'No guests have joined the party yet'}
-          </p>
-        </>
-      ) : (
-        <></>
-      )}
+      <PartyUserView partyCode={partyCode} />
       {currentTrack && playbackState ? (
         <TrackView
           track={currentTrack}
