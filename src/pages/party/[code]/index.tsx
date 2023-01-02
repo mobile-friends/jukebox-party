@@ -6,7 +6,6 @@ import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
 import QRCodeModal from '@component/qrCodeModal';
 import Button from '@component/elements/button';
-import { useModalVisibility } from '@hook/useModalVisibility';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
@@ -19,6 +18,7 @@ import firebaseDb from '@common/firebaseDb';
 import JukeHeader from '@component/elements/jukeHeader';
 import { PartyCode } from '@common/types/partyCode';
 import PartyUserView from '@component/partyUserView';
+import useToggle from '@hook/useToggle';
 
 interface Props {
   partyName: string;
@@ -26,7 +26,7 @@ interface Props {
 }
 
 export default function PartyRoom({ partyName, partyCode }: Props) {
-  const { isModalVisible, handleModalVisibility } = useModalVisibility();
+  const [isModalVisible, toggleModalVisibility] = useToggle();
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
     null
@@ -118,12 +118,10 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
       <Button
         content='Show QR Code'
         styleType='primary'
-        onClick={() => {
-          handleModalVisibility();
-        }}
+        onClick={toggleModalVisibility}
       ></Button>
       {isModalVisible && (
-        <QRCodeModal onClosed={handleModalVisibility} partyCode={partyCode} />
+        <QRCodeModal onClosed={toggleModalVisibility} partyCode={partyCode} />
       )}
       <Navbar partyCode={partyCode} />
     </div>
