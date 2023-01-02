@@ -5,7 +5,6 @@ import * as querystring from 'querystring';
 import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
-import { parse } from 'acorn';
 
 type ErrorResponse = { error: SpotifyApi.ErrorObject };
 
