@@ -2,19 +2,15 @@ import React from 'react';
 import PlaybackView from '@component/playbackView';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
-import QRCodeModal from '@component/qrCodeModal';
-import Button from '@component/elements/button';
 import { GetServerSideProps } from 'next/types';
 import { unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
-import JukeHeader from '@component/elements/jukeHeader';
 import { PartyCode } from '@common/types/partyCode';
-import PartyUserView from '@component/partyUserView';
-import useToggle from '@hook/useToggle';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
+import PartyHeader from '@component/elements/partyHeader';
 
 interface Props {
   partyName: string;
@@ -22,15 +18,14 @@ interface Props {
 }
 
 export default function PartyRoom({ partyName, partyCode }: Props) {
-  const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
 
   return (
     <div className={styles.container}>
-      <JukeHeader first={'jukebox'} second={'party'} />
-      <p>Party Code: {partyCode}</p>
-      <p>Party Name: {partyName}</p>
-      <PartyUserView partyCode={partyCode} />
+      <PartyHeader partyName={partyName} partyCode={partyCode} />
+
+      {/* <PartyUserView partyCode={partyCode} /> */}
+
       {playbackState ? (
         <PlaybackView playbackState={playbackState} partyCode={partyCode} />
       ) : (
@@ -40,14 +35,6 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
         </div>
       )}
 
-      <Button
-        content='Show QR Code'
-        styleType='primary'
-        onClick={toggleModalVisibility}
-      ></Button>
-      {isModalVisible && (
-        <QRCodeModal onClosed={toggleModalVisibility} partyCode={partyCode} />
-      )}
       <Navbar partyCode={partyCode} />
     </div>
   );
