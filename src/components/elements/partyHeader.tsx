@@ -14,8 +14,10 @@ export default function PartyHeader({ partyName, partyCode }: Props) {
         <QrButton partyCode={partyCode} />
       </div>
       <div>
-        <p className='text-center'>Pin: {partyCode}</p>
-        <h1 className='text-center'>{partyName}</h1>
+        <div>
+          <p className='text-center'>Pin: {partyCode}</p>
+          <h1 className='text-center'>{partyName}</h1>
+        </div>
       </div>
       <div></div>
     </div>
