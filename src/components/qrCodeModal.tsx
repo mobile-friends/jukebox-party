@@ -25,10 +25,15 @@ export default function QRCodeModal({ partyCode, onClosed }: Props) {
   // TODO: checken, ob der link mit der live url dann auch noch passt
   // (auf localhost funktioniert es)
   const link = `${origin}/?partyCode=${partyCode}`;
+
   return (
-    <div className={styles.modal} onClick={onClosed}>
-      <div className={styles.QRCodeContainer}>
-        <QRCode value={link} />
+    <div className={styles.background} onClick={onClosed}>
+      <div className={styles.modal}>
+        <h2 className='text-center'>Scan the party code</h2>
+        <div className={styles.QRCodeContainer}>
+          <QRCode value={link} />
+        </div>
+        <p className='text-center'>Direct code to the party, you only have to enter your name then</p>
       </div>
     </div>
   );
