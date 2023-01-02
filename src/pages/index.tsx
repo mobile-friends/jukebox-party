@@ -24,6 +24,8 @@ export default function Home() {
     validateAndSetPartyUserNameInput,
   } = useValidatePartyUserNameInput();
 
+  if (!router.isReady) return <div></div>;
+
   function goToLogin() {
     router.push('/spotify-login').catch(console.error);
   }
