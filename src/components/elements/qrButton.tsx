@@ -10,7 +10,7 @@ interface Props {
 
 export default function QrButton({ partyCode }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
-  
+
   return (
     <div>
       <Button

@@ -33,7 +33,9 @@ export default function QRCodeModal({ partyCode, onClosed }: Props) {
         <div className={styles.QRCodeContainer}>
           <QRCode value={link} />
         </div>
-        <p className='text-center'>Direct code to the party, you only have to enter your name then</p>
+        <p className='text-center'>
+          Direct code to the party, you only have to enter your name then
+        </p>
       </div>
     </div>
   );
