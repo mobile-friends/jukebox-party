@@ -132,4 +132,13 @@ export namespace Party {
       newGuests
     );
   }
+
+  /**
+   * Checks if the host of a party has a specific id
+   * @param party The party
+   * @param id The id
+   */
+  export function hasHostWithId(party: Party, id: UserId): boolean {
+    return User.idOf(hostOf(party)) === id;
+  }
 }

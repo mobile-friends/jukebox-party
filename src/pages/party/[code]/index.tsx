@@ -18,9 +18,10 @@ import { ServersideSession } from '@common/serversideSession';
 interface Props {
   partyName: string;
   partyCode: PartyCode;
+  isHost: boolean;
 }
 
-export default function PartyRoom({ partyName, partyCode }: Props) {
+export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
 
@@ -55,11 +56,11 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
 PartyRoom.auth = true;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const partyCode = await ServersideSession.tryGetPartyCode(ctx);
-  if (!partyCode) {
+  const user = await ServersideSession.tryGetAuthUser(ctx);
+  if (!user) {
     return { redirect: { destination: '/' }, props: {} as Props };
   }
-  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
+  const party = await PartyDb.tryGetByCode(firebaseDb, user.partyCode);
   if (PartyDb.isError(party))
     return {
       redirect: { destination: '/party/404' },
@@ -69,6 +70,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     props: {
       partyName: Party.nameOf(party),
       partyCode: Party.codeOf(party),
+      isHost: Party.hasHostWithId(party, user.id),
     },
   };
 };

@@ -22,5 +22,3 @@ declare module 'next-auth/jwt' {
     user: User;
   }
 }
-
-export type AuthUser = User;

@@ -2,7 +2,11 @@ import { GetServerSidePropsContext } from 'next';
 import { Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyCode } from '@common/types/partyCode';
-import { AuthUser } from '@common/types/next-auth';
+
+export type AuthUser = {
+  partyCode: PartyCode;
+  id: UserId;
+};
 
 /**
  * Functions for interacting with the session **SERVER-SIDE**
