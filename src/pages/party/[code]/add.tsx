@@ -6,8 +6,6 @@ import styles from '../../../styles/pages/main.module.scss';
 import { GetServerSideProps } from 'next/types';
 import Navbar from '@component/navbar';
 import { PartyCode } from '@common/types/partyCode';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { Party } from '@common/types/party';
@@ -17,6 +15,8 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
 import JukeHeader from '@component/elements/jukeHeader';
+import { ServersideSession } from '@common/serversideSession';
+import { signOut } from 'next-auth/react';
 
 interface Props {
   partyCode: PartyCode;
@@ -48,8 +48,8 @@ export default function AddTracks({ partyCode }: Props) {
         // TODO: Handle errors
         break;
       case StatusCodes.UNAUTHORIZED:
-        // TODO: Handle errors
-        break;
+        // TODO: Redirect to better unauthorized page
+        return signOut({ callbackUrl: '/' }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors
         break;
@@ -91,17 +91,14 @@ export default function AddTracks({ partyCode }: Props) {
 
 AddTracks.auth = true;
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-  res,
-}) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  const user = session?.user ?? null;
-  const party = user
-    ? await PartyDb.tryGetByCode(firebaseDb, user.partyCode)
-    : null;
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const partyCode = await ServersideSession.tryGetPartyCode(ctx);
+  if (!partyCode) {
+    return { redirect: { destination: '/' }, props: {} as Props };
+  }
+  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
 
-  if (!(party && !PartyDb.isError(party))) {
+  if (PartyDb.isError(party)) {
     return {
       redirect: { destination: '/' }, // TODO: Add better non-auth page
       props: {} as Props,

@@ -3,28 +3,54 @@ import PlaybackView from '@component/playbackView';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
 import { GetServerSideProps } from 'next/types';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
 import { PartyCode } from '@common/types/partyCode';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import PartyHeader from '@component/elements/partyHeader';
+import { ServersideSession } from '@common/serversideSession';
+import { Guest, User } from '@common/types/user';
+import { JukeClient } from '@common/jukeClient';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
+import useToggle from '@hook/useToggle';
 
 interface Props {
   partyName: string;
   partyCode: PartyCode;
+  isHost: boolean;
 }
 
-export default function PartyRoom({ partyName, partyCode }: Props) {
+export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
+  const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
+
+  async function removeGuest(guest: Guest) {
+    const result = await JukeClient.removeGuest(partyCode, {
+      guestId: User.idOf(guest),
+    });
+    switch (result.code) {
+      case StatusCodes.BAD_REQUEST:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NOT_FOUND:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NO_CONTENT: // Everything worked out
+        return;
+      default:
+        return assertNeverReached(result);
+    }
+  }
 
   return (
     <div>
       <div className={styles.partyPage}>
         <PartyHeader partyName={partyName} partyCode={partyCode} />
-
         <div className={styles.partyContent}>
           {playbackState ? (
             <PlaybackView playbackState={playbackState} partyCode={partyCode} />
@@ -36,7 +62,6 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
           )}
         </div>
       </div>
-
       <Navbar partyCode={partyCode} />
     </div>
   );
@@ -44,15 +69,12 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
 
 PartyRoom.auth = true;
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-  res,
-}) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  if (!session) {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const user = await ServersideSession.tryGetAuthUser(ctx);
+  if (!user) {
     return { redirect: { destination: '/' }, props: {} as Props };
   }
-  const party = await PartyDb.tryGetByCode(firebaseDb, session.user.partyCode);
+  const party = await PartyDb.tryGetByCode(firebaseDb, user.partyCode);
   if (PartyDb.isError(party))
     return {
       redirect: { destination: '/party/404' },
@@ -62,6 +84,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     props: {
       partyName: Party.nameOf(party),
       partyCode: Party.codeOf(party),
+      isHost: Party.hasHostWithId(party, user.id),
     },
   };
 };

@@ -7,6 +7,19 @@ type ClickListener = (
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>
 ) => SyncOrAsync<void>;
 
+type Selector =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'icon-only'
+  | 'small'
+  | 'big';
+
+type Style =
+  | Selector
+  | `${Selector} ${Selector}`
+  | `${Selector} ${Selector} ${Selector}`;
+
 /**
  * Props for a button
  */
@@ -14,7 +27,7 @@ interface Props {
   /**
    * Button style type
    */
-  readonly styleType: string;
+  readonly styleType: Style;
   /**
    * The buttons content.
    * Can be anything that React can render, like text, icon, ect

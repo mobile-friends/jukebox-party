@@ -13,7 +13,7 @@ declare module 'next-auth' {
 
   interface User {
     partyCode: PartyCode;
-    id: string;
+    id: UserId;
   }
 }
 

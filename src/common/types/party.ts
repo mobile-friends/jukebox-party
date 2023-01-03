@@ -116,4 +116,29 @@ export namespace Party {
   export function hasUserWithId(party: Party, id: string): boolean {
     return usersIn(party).map(User.idOf).includes(id);
   }
+
+  /**
+   * Removes a guest with the given id from a party
+   * @param party The party
+   * @param id The id
+   */
+  export function removeGuest(party: Party, id: UserId): Party {
+    const newGuests = guestsOf(party).filter((it) => User.idOf(it) !== id);
+    return make(
+      party.code,
+      party.name,
+      party.spotifyToken,
+      party.host,
+      newGuests
+    );
+  }
+
+  /**
+   * Checks if the host of a party has a specific id
+   * @param party The party
+   * @param id The id
+   */
+  export function hasHostWithId(party: Party, id: UserId): boolean {
+    return User.idOf(hostOf(party)) === id;
+  }
 }

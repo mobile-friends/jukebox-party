@@ -11,6 +11,7 @@ import { SkipResult } from '@endpoint/skip';
 import { GetPlaybackResult } from '@endpoint/getPlayback';
 import { SkipDirection } from '@common/types/constants';
 import { GetPartyUsersResult } from '@endpoint/getPartyUsers';
+import { RemoveGuestBody, RemoveGuestResult } from '@endpoint/removeGuest';
 
 // TODO: Move port into env and load dynamically
 const axiosClient = axios.create({
@@ -36,9 +37,9 @@ function reportError(response: AxiosResponse) {
 async function makeRequest<TResult extends ApiResult>(
   config: AxiosRequestConfig
 ): Promise<TResult> {
-  const response = await axiosClient.request<TResult>(config);
+  const response = await axiosClient.request<Omit<TResult, 'code'>>(config);
   if (response.status >= 400) reportError(response);
-  return response.data;
+  return { code: response.status, ...response.data } as TResult;
 }
 
 function get<TResult extends ApiResult>(url: string): Promise<TResult> {
@@ -155,5 +156,18 @@ export namespace JukeClient {
       direction,
     })}`;
     return get<SkipResult>(url);
+  }
+
+  /**
+   * Removes a guest from a party
+   * @param partyCode The code of the party
+   * @param body The request body
+   */
+  export function removeGuest(
+    partyCode: PartyCode,
+    body: RemoveGuestBody
+  ): Promise<RemoveGuestResult> {
+    const url = `parties/${partyCode}/remove`;
+    return post<RemoveGuestBody, RemoveGuestResult>(url, body);
   }
 }
