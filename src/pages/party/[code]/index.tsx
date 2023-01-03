@@ -5,8 +5,6 @@ import Navbar from '@component/navbar';
 import QRCodeModal from '@component/qrCodeModal';
 import Button from '@component/elements/button';
 import { GetServerSideProps } from 'next/types';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyDb } from '@common/partyDb';
 import styles from '../../../styles/pages/party/home.module.scss';
 import firebaseDb from '@common/firebaseDb';
@@ -15,6 +13,7 @@ import { PartyCode } from '@common/types/partyCode';
 import PartyUserView from '@component/partyUserView';
 import useToggle from '@hook/useToggle';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
+import { ServersideSession } from '@common/serversideSession';
 
 interface Props {
   partyName: string;
@@ -55,15 +54,12 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
 
 PartyRoom.auth = true;
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-  res,
-}) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  if (!session) {
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const partyCode = await ServersideSession.tryGetPartyCode(ctx);
+  if (!partyCode) {
     return { redirect: { destination: '/' }, props: {} as Props };
   }
-  const party = await PartyDb.tryGetByCode(firebaseDb, session.user.partyCode);
+  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
   if (PartyDb.isError(party))
     return {
       redirect: { destination: '/party/404' },

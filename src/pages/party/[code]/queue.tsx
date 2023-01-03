@@ -3,8 +3,6 @@ import Navbar from '@component/navbar';
 import { Track } from '@common/types/track';
 import { GetServerSideProps } from 'next/types';
 import { PartyCode } from '@common/types/partyCode';
-import { unstable_getServerSession } from 'next-auth';
-import { authOptions } from '@api/auth/[...nextauth]';
 import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
@@ -14,6 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
 import JukeHeader from '@component/elements/jukeHeader';
+import { ServersideSession } from '@common/serversideSession';
 
 interface Props {
   partyCode: PartyCode;
@@ -55,15 +54,12 @@ export default function Queue({ partyCode, partyName }: Props) {
 
 Queue.auth = true;
 
-export const getServerSideProps: GetServerSideProps<Props> = async ({
-  req,
-  res,
-}) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
-  const user = session?.user ?? null;
-  const party = user
-    ? await PartyDb.tryGetByCode(firebaseDb, user.partyCode)
-    : null;
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  const partyCode = await ServersideSession.tryGetPartyCode(ctx);
+  if (!partyCode) {
+    return { redirect: { destination: '/' }, props: {} as Props };
+  }
+  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
 
   if (!(party && !PartyDb.isError(party))) {
     return {
