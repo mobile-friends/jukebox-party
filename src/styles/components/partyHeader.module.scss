@@ -1,12 +1,15 @@
 .container {
-    display: grid;
     margin-bottom: 20px;
+  > div {
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 
-    >div {
-        padding: 0 10px;
+    > div {
+      padding: 0 10px;
 
-        display: flex;
-        flex-direction: row;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
+  }
 }

@@ -11,15 +11,15 @@ export default function PartyHeader({ partyName, partyCode }: Props) {
   return (
     <div className={styles.container}>
       <div>
-        <QrButton partyCode={partyCode} />
-      </div>
-      <div>
+        <div>
+          <QrButton partyCode={partyCode} />
+        </div>
         <div>
           <p className='text-center'>Pin: {partyCode}</p>
-          <h1 className='text-center'>{partyName}</h1>
         </div>
+        <div></div>
       </div>
-      <div></div>
+      <h1 className='text-center'>{partyName}</h1>
     </div>
   );
 }
