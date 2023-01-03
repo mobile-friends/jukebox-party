@@ -31,13 +31,14 @@ export function requestHandler<TBody, TResult extends ApiResult>(
       : null;
     const spotifyToken =
       party !== null && !PartyDb.isError(party) ? party.spotifyToken : null;
-    const result = await handler({
+    const { code, ...body } = await handler({
       body: req.body,
       query: req.query,
       spotifyToken,
     });
-    res.status(result.code);
-    if (result.code !== StatusCodes.NO_CONTENT) res.json(result);
-    else res.send(null);
+    res.status(code);
+    if (code !== StatusCodes.NO_CONTENT) {
+      res.json(body);
+    } else res.send(null);
   };
 }

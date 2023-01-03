@@ -37,9 +37,9 @@ function reportError(response: AxiosResponse) {
 async function makeRequest<TResult extends ApiResult>(
   config: AxiosRequestConfig
 ): Promise<TResult> {
-  const response = await axiosClient.request<TResult>(config);
+  const response = await axiosClient.request<Omit<TResult, 'code'>>(config);
   if (response.status >= 400) reportError(response);
-  return response.data;
+  return { code: response.status, ...response.data } as TResult;
 }
 
 function get<TResult extends ApiResult>(url: string): Promise<TResult> {
