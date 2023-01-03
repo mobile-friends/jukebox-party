@@ -63,7 +63,11 @@ export default function Home() {
   return (
     <div>
       <div className={styles.container}>
-        <JukeHeader first={'jukebox'} second={'party'} />
+        <JukeHeader
+          first={'jukebox'}
+          second={'party'}
+          pageTitle={'Join a jukebox.party'}
+        />
         <form>
           <UserNameInput initialValue={null} onValueChanged={setGuestName} />
           {partyCodeParam !== routerNotReady && (

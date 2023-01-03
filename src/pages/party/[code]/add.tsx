@@ -69,7 +69,11 @@ export default function AddTracks({ partyCode }: Props) {
   return (
     <div>
       <div className={styles.container}>
-        <JukeHeader first={'search'} second={'track'} />
+        <JukeHeader
+          first={'search'}
+          second={'track'}
+          pageTitle={'Add | jukebox.party'}
+        />
         <div className={styles.container} style={{ padding: 0 }}>
           <Input
             type={'text'}

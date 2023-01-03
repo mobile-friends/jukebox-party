@@ -68,7 +68,11 @@ export default function CreateParty({ spotifyToken }: Props) {
   return (
     <div>
       <div className={styles.container}>
-        <JukeHeader first={'create'} second={'party'} />
+        <JukeHeader
+          first={'create'}
+          second={'party'}
+          pageTitle={'Create a jukebox.party'}
+        />
         <form>
           <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
           <UserNameInput initialValue={null} onValueChanged={setHostName} />

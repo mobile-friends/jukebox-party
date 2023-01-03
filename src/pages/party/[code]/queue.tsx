@@ -47,7 +47,11 @@ export default function Queue({ partyCode }: Props) {
 
   return (
     <div>
-      <JukeHeader first={'party'} second={'tracks'} />
+      <JukeHeader
+        first={'party'}
+        second={'tracks'}
+        pageTitle={'Queue | jukebox.party'}
+      />
       <div>{tracks}</div>
       <Navbar partyCode={partyCode} />
     </div>
