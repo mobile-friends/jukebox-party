@@ -8,6 +8,8 @@ import NextAndPreviousButton from '@component/skipButton';
 import { SkipDirection } from '@common/types/constants';
 import PlayButton from '@component/playButton';
 import { Duration } from '@common/types/duration';
+import { useSession } from 'next-auth/react';
+import useLivePartyUsers from '@hook/useLivePartyUsers';
 
 interface Props {
   /**
@@ -22,6 +24,11 @@ interface Props {
  * @constructor
  */
 export default function PlaybackView({ playbackState, partyCode }: Props) {
+  const { data } = useSession();
+  const users = useLivePartyUsers(partyCode);
+  const partyHostId = users?.host.id;
+  const userId = data?.user.id;
+
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
   const artistRef = useRef<HTMLParagraphElement>(null);
@@ -83,23 +90,29 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       </div>
 
       <ProgressBar progress={playbackState.playTime} duration={trackDuration} />
-
       <div className={styles.row}>
         <label>{progressText}</label>
         <label>{trackDurationText}</label>
       </div>
 
-      <div className={styles.buttonContainer}>
-        <NextAndPreviousButton
-          skipDirection={SkipDirection.Backward}
-          partyCode={partyCode}
-        />
-        <PlayButton isPlaying={playbackState.isPlaying} partyCode={partyCode} />
-        <NextAndPreviousButton
-          skipDirection={SkipDirection.Forward}
-          partyCode={partyCode}
-        />
-      </div>
+      {userId === partyHostId ? (
+        <div className={styles.buttonContainer}>
+          <NextAndPreviousButton
+            skipDirection={SkipDirection.Backward}
+            partyCode={partyCode}
+          />
+          <PlayButton
+            isPlaying={playbackState.isPlaying}
+            partyCode={partyCode}
+          />
+          <NextAndPreviousButton
+            skipDirection={SkipDirection.Forward}
+            partyCode={partyCode}
+          />
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 }
