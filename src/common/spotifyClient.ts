@@ -6,6 +6,7 @@ import { PlaybackState } from '@common/types/playbackState';
 import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
 import { StatusCodes } from 'http-status-codes';
+import { SpotifyUser } from './types/user';
 
 type SpotifyError = { error: SpotifyApi.ErrorObject };
 
@@ -74,6 +75,25 @@ function put<T>(
  * Contains functions for interacting with the spotify-api
  */
 export namespace SpotifyClient {
+  /**
+   * Returns information of spotif user
+   * @param spotifyToken An active spotify token
+   * @returns Promise<SpotifyUser>
+   */
+  export async function getSpotifyUserInfo(
+    spotifyToken: SpotifyToken
+  ): Promise<SpotifyUser> {
+    const [data] = await get<SpotifyApi.CurrentUsersProfileResponse>(
+      'me',
+      spotifyToken
+    );
+    return {
+      nickname: data.display_name !== undefined ? data.display_name : null,
+      email: data.email !== undefined ? data.email : null,
+      account_type: data.product !== undefined ? data.product : null,
+    };
+  }
+
   /**
    * Gets a list of recommended tracks
    * @param spotifyToken An active spotify token

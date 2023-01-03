@@ -2,9 +2,13 @@ import { GetServerSideProps } from 'next/types';
 import * as querystring from 'querystring';
 import axios from 'axios';
 import { SpotifyClient } from '@common/spotifyClient';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Env } from '@common/env';
+import { SpotifyUser } from '@common/types/user';
+import React from 'react';
+import styles from '../styles/pages/spotifyLogin.module.scss';
+import Button from '@component/elements/button';
 
 interface SpotifyTokenData {
   access_token: SpotifyToken;
@@ -21,6 +25,7 @@ interface ErrorProps {
 interface WaitForPlayingProps {
   kind: 'WaitForPlaying';
   spotifyToken: SpotifyToken;
+  spotifyUser: SpotifyUser;
 }
 
 type Props = ErrorProps | WaitForPlayingProps;
@@ -44,6 +49,15 @@ function isError(props: Props): props is ErrorProps {
 
 export default function SpotifyLogin(props: Props) {
   const router = useRouter();
+  const [isPremium, setIsPremium] = useState('');
+
+  function goBackToStart() {
+    router.push('/').catch(console.error);
+  }
+
+  function goToLogin() {
+    router.push('/spotify-login').catch(console.error);
+  }
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
@@ -55,23 +69,48 @@ export default function SpotifyLogin(props: Props) {
 
   useEffect(() => {
     if (isWaitingForPlaying(props)) {
-      const interval = setInterval(
-        () => checkIfPlaying(props.spotifyToken),
-        1000
-      );
+      const interval = setInterval(() => {
+        setIsPremium(props.spotifyUser.account_type);
+        if (isPremium) checkIfPlaying(props.spotifyToken);
+      }, 1000);
       return () => clearInterval(interval);
     }
   });
 
-  if (isError(props)) return <div>{props.error}</div>;
-  else if (isWaitingForPlaying(props)) {
-    return (
-      <div>
-        To start, please make sure you are currently playing a song on your
-        device.
-      </div>
-    );
-  } else return <div>Connecting to spotify...</div>;
+  if (isError(props)) return <div>Fehler: {props.error}</div>;
+  else if (isPremium !== '') {
+    if (isPremium !== 'premium') {
+      return (
+        <div className={`text-center ${styles.container}`}>
+          <h2 className='text-primary'>
+            It looks like this is no premium account
+          </h2>
+          <span>To use jukebox.party you must have a premium account.</span>
+
+          <Button
+            content={'Log in with premium account'}
+            styleType={'primary'}
+            onClick={goToLogin}
+          />
+          <Button
+            content={'Be part of a party'}
+            styleType={'tertiary'}
+            onClick={goBackToStart}
+          />
+        </div>
+      );
+    } else if (isPremium === 'premium' && isWaitingForPlaying(props)) {
+      return (
+        <div className={`text-center ${styles.container}`}>
+          <h2 className='text-primary'>Press play in the Spotify app</h2>
+          <span>
+            Click play on the output device of your choice (laptop, smartphone,
+            ...), so we know which output device we may use.
+          </span>
+        </div>
+      );
+    }
+  } else return <div className={`${styles.container}`}>Connecting to spotify...</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({
@@ -125,6 +164,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     const spotifyToken = tokenData.access_token;
 
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
+    const spotifyUser: SpotifyUser = await SpotifyClient.getSpotifyUserInfo(
+      spotifyToken
+    );
+
     if (isPlaying) {
       const redirectUrl = makePartyUrl(spotifyToken);
       return {
@@ -135,7 +178,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       };
     } else {
       return {
-        props: { kind: 'WaitForPlaying', spotifyToken },
+        props: { kind: 'WaitForPlaying', spotifyToken, spotifyUser },
       };
     }
   } else if ('error' in query) {

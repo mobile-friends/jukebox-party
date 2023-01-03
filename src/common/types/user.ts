@@ -16,6 +16,15 @@ enum UserRole {
 }
 
 /**
+ * Spotify user
+ */
+export interface SpotifyUser {
+  readonly nickname: string;
+  readonly email: string;
+  readonly account_type: string;
+}
+
+/**
  * A user that joined a party
  */
 export interface Guest {

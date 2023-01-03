@@ -15,6 +15,7 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import PartyUserView from '@component/partyUserView';
+import Queue from './queue';
 
 interface Props {
   partyName: string;
@@ -57,11 +58,26 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
         />
         <div className={styles.partyContent}>
           {playbackState ? (
-            <PlaybackView playbackState={playbackState} partyCode={partyCode} />
+            <div className={`${styles.playbackDesign}`}>
+              <div className={`${styles.trackView}`}>
+                <PlaybackView
+                  playbackState={playbackState}
+                  partyCode={partyCode}
+                />
+              </div>
+              <div className={`${styles.queueView}`}>
+                <Queue partyCode={partyCode} />
+              </div>
+            </div>
           ) : (
-            <div className='text-center'>
-              <p>NO TRACK IS CURRENTLY PLAYING!</p>
-              <p>Please press on the play button in Spotify!</p>
+            <div className='text-center smaller_box'>
+              <h2 className='text-primary'>
+                Are you still listening on the same output device?
+              </h2>
+              <span>
+                Press play on the output device of your choice (laptop,
+                smartphone, ...), so we know which output device we may use.
+              </span>
             </div>
           )}
         </div>
