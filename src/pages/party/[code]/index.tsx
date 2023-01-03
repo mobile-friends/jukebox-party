@@ -15,6 +15,7 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import useToggle from '@hook/useToggle';
+import PartyUserView from '@component/partyUserView';
 
 interface Props {
   partyName: string;
@@ -51,6 +52,11 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
     <div>
       <div className={styles.partyPage}>
         <PartyHeader partyName={partyName} partyCode={partyCode} />
+        <PartyUserView
+          partyCode={partyCode}
+          isHost={isHost}
+          onGuestRemove={removeGuest}
+        />
         <div className={styles.partyContent}>
           {playbackState ? (
             <PlaybackView playbackState={playbackState} partyCode={partyCode} />
