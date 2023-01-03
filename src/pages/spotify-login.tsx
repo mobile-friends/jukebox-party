@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { Env } from '@common/env';
 import { SpotifyUser } from '@common/types/user';
 import React from 'react';
+import styles from '../styles/pages/spotifyLogin.module.scss';
+import Button from '@component/elements/button';
 
 interface SpotifyTokenData {
   access_token: SpotifyToken;
@@ -49,6 +51,14 @@ export default function SpotifyLogin(props: Props) {
   const router = useRouter();
   const [isPremium, setIsPremium] = useState('');
 
+  function goBackToStart() {
+    router.push('/').catch(console.error);
+  }
+
+  function goToLogin() {
+    router.push('/spotify-login').catch(console.error);
+  }
+
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
     if (isPlaying) {
@@ -70,16 +80,37 @@ export default function SpotifyLogin(props: Props) {
   if (isError(props)) return <div>Fehler: {props.error}</div>;
   else if (isPremium !== '') {
     if (isPremium !== 'premium') {
-      return <div>No premium Account :\</div>;
+      return (
+        <div className={`text-center ${styles.container}`}>
+          <h2 className='text-primary'>
+            It looks like this is no premium account
+          </h2>
+          <span>To use jukebox.party you must have a premium account.</span>
+
+          <Button
+            content={'Log in with premium account'}
+            styleType={'primary'}
+            onClick={goToLogin}
+          />
+          <Button
+            content={'Be part of a party'}
+            styleType={'tertiary'}
+            onClick={goBackToStart}
+          />
+        </div>
+      );
     } else if (isPremium === 'premium' && isWaitingForPlaying(props)) {
       return (
-        <div>
-          To start, please make sure you are currently playing a song on your
-          device.
+        <div className={`text-center ${styles.container}`}>
+          <h2 className='text-primary'>Press play in the Spotify app</h2>
+          <span>
+            Click play on the output device of your choice (laptop, smartphone,
+            ...), so we know which output device we may use.
+          </span>
         </div>
       );
     }
-  } else return <div>Connecting to spotify...</div>;
+  } else return <div className={`${styles.container}`}>Connecting to spotify...</div>;
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({

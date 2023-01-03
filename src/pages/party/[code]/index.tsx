@@ -29,9 +29,14 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
           {playbackState ? (
             <PlaybackView playbackState={playbackState} partyCode={partyCode} />
           ) : (
-            <div className='text-center'>
-              <p>NO TRACK IS CURRENTLY PLAYING!</p>
-              <p>Please press on the play button in Spotify!</p>
+            <div className='text-center smaller_box'>
+              <h2 className='text-primary'>
+                Are you still listening on the same output device?
+              </h2>
+              <span>
+                Press play on the output device of your choice (laptop,
+                smartphone, ...), so we know which output device we may use.
+              </span>
             </div>
           )}
         </div>

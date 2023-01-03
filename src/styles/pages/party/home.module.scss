@@ -10,5 +10,13 @@
     flex-direction: column;
     justify-content: center;
     overflow: scroll;
+
+    .smaller_box {
+      padding: 0 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
   }
 }
