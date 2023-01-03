@@ -13,7 +13,8 @@ type Selector =
   | 'tertiary'
   | 'icon-only'
   | 'small'
-  | 'big';
+  | 'big'
+  | 'block';
 
 type Style =
   | Selector
