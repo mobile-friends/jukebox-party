@@ -18,7 +18,7 @@ export default function useQueryParam(key: string): UseQueryParamState {
   const [param, setParam] = useState<UseQueryParamState>(routerNotReady);
   useEffect(() => {
     if (router.isReady) setParam(tryQueryParam(router.query, key));
-  }, [router.isReady, key]);
+  }, [router.isReady, router.query, key]);
 
   return param;
 }

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
 
 export default function useLivePlaybackState(
@@ -12,7 +11,6 @@ export default function useLivePlaybackState(
   updateFrequency = 1000
 ): PlaybackState | null {
   const [state, setState] = useState<PlaybackState | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     async function refresh() {

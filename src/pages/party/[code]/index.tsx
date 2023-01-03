@@ -14,7 +14,6 @@ import { Guest, User } from '@common/types/user';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import useToggle from '@hook/useToggle';
 import PartyUserView from '@component/partyUserView';
 
 interface Props {
@@ -24,7 +23,6 @@ interface Props {
 }
 
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
-  const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
 
   async function removeGuest(guest: Guest) {
