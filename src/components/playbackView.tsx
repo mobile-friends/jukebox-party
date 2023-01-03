@@ -43,37 +43,30 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     );
   }, [track.name]);
 
-  // TODO: Extract style to scss
   return (
-    <div
-      style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '0 20px',
-      }}
-    >
-      <div style={{ flexGrow: 1, textAlign: 'center' }}>
-        <img
-          style={{ height: 0, minHeight: '100%', objectFit: 'cover' }}
-          src={Track.albumArtUrlOf(track)}
-          alt='Album art'
-        />
+    <div>
+      <div className={styles.trackImg}>
+        <img src={Track.albumArtUrlOf(track)} alt='Album art' />
       </div>
-      <p
-        ref={marqueeWrapperRef}
-        className={styles.marquee}
-        style={{ fontSize: '1.5em', fontWeight: 'bold' }}
-      >
-        {showMarqueeBlur && <div className={styles.shadow}></div>}
-        <span ref={marqueeTextRef}>{Track.nameOf(track)}</span>
-      </p>
-      <p style={{ display: 'flex', marginBottom: '0.75rem' }}>{artistViews}</p>
+
+      <div className={styles.trackInfo}>
+        <div
+          ref={marqueeWrapperRef}
+          className={`text-bold text-big ${styles.marquee}`}
+        >
+          {showMarqueeBlur && <div className={styles.shadow}></div>}
+          <span ref={marqueeTextRef}>{Track.nameOf(track)}</span>
+        </div>
+        <p>{artistViews}</p>
+      </div>
+
       <ProgressBar progress={playbackState.playTime} duration={trackDuration} />
+
       <div className={styles.row}>
         <label>{progressText}</label>
         <label>{trackDurationText}</label>
       </div>
+      
       <div className={styles.buttonContainer}>
         <NextAndPreviousButton
           skipDirection={SkipDirection.Backward}
