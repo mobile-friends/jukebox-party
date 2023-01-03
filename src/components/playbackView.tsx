@@ -1,5 +1,5 @@
 import styles from '@style/components/playbackView.module.scss';
-import { useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef, useState } from 'react';
 import { Track } from '@common/types/track';
 import { PlaybackState } from '@common/types/playbackState';
 import { PartyCode } from '@common/types/partyCode';
@@ -24,6 +24,7 @@ interface Props {
 export default function PlaybackView({ playbackState, partyCode }: Props) {
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
+  const artistRef = useRef<HTMLParagraphElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
 
   const track = PlaybackState.trackOf(playbackState);
@@ -43,6 +44,13 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     );
   }, [track.name]);
 
+  function getAnimationDuration(
+    spanElem: RefObject<HTMLSpanElement>
+  ): number | undefined {
+    if (spanElem.current === null) return;
+    return spanElem.current.offsetWidth / 30;
+  }
+
   return (
     <div>
       <div className={styles.trackImg}>
@@ -55,9 +63,23 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
           className={`text-bold text-big ${styles.marquee}`}
         >
           {showMarqueeBlur && <div className={styles.shadow}></div>}
-          <span ref={marqueeTextRef}>{Track.nameOf(track)}</span>
+          <span
+            ref={marqueeTextRef}
+            style={{
+              animationDuration: `${getAnimationDuration(marqueeTextRef)}s`,
+            }}
+          >
+            {Track.nameOf(track)}
+          </span>
         </div>
-        <p>{artistViews}</p>
+        <div className={styles.artists}>
+          <span
+            ref={artistRef}
+            style={{ animationDuration: `${getAnimationDuration(artistRef)}s` }}
+          >
+            {artistViews}
+          </span>
+        </div>
       </div>
 
       <ProgressBar progress={playbackState.playTime} duration={trackDuration} />
@@ -66,7 +88,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         <label>{progressText}</label>
         <label>{trackDurationText}</label>
       </div>
-      
+
       <div className={styles.buttonContainer}>
         <NextAndPreviousButton
           skipDirection={SkipDirection.Backward}
