@@ -13,6 +13,7 @@ import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
 import JukeHeader from '@component/elements/jukeHeader';
 import { ServersideSession } from '@common/serversideSession';
+import { signOut } from 'next-auth/react';
 
 interface Props {
   partyCode: PartyCode;
@@ -27,6 +28,8 @@ export default function Queue({ partyCode, partyName }: Props) {
       case StatusCodes.OK:
         return setCurrentQueueTracks(result.content.tracks);
       case StatusCodes.UNAUTHORIZED:
+        // TODO: Redirect to better unauthorized page
+        return signOut({ callbackUrl: '/' }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors
         break;

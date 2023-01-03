@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
 
 export default function useLivePlaybackState(
   partyCode: PartyCode,
   updateFrequency = 1000
 ): PlaybackState | null {
   const [state, setState] = useState<PlaybackState | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     async function refresh() {
@@ -20,8 +23,8 @@ export default function useLivePlaybackState(
           else setState(result.content.playbackState);
           break;
         case StatusCodes.UNAUTHORIZED:
-          // TODO: Handle errors
-          break;
+          // TODO: Redirect to better unauthorized page
+          return signOut({ callbackUrl: '/' }).catch(console.error);
         default:
           return assertNeverReached(result);
       }
