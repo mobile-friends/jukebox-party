@@ -11,6 +11,7 @@ import firebaseDb from '@common/firebaseDb';
 import { PartyCode } from '@common/types/partyCode';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import PartyHeader from '@component/elements/partyHeader';
+import Queue from './queue';
 
 interface Props {
   partyName: string;
@@ -27,7 +28,17 @@ export default function PartyRoom({ partyName, partyCode }: Props) {
 
         <div className={styles.partyContent}>
           {playbackState ? (
-            <PlaybackView playbackState={playbackState} partyCode={partyCode} />
+            <div className={`${styles.playbackDesign}`}>
+              <div className={`${styles.trackView}`}>
+                <PlaybackView
+                  playbackState={playbackState}
+                  partyCode={partyCode}
+                />
+              </div>
+              <div className={`${styles.queueView}`}>
+                <Queue partyName={partyName} partyCode={partyCode} />
+              </div>
+            </div>
           ) : (
             <div className='text-center smaller_box'>
               <h2 className='text-primary'>
