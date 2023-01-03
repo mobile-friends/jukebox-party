@@ -88,9 +88,9 @@ export namespace SpotifyClient {
       spotifyToken
     );
     return {
-      nickname: data.display_name,
-      email: data.email,
-      account_type: data.product,
+      nickname: data.display_name !== undefined ? data.display_name : null,
+      email: data.email !== undefined ? data.email : null,
+      account_type: data.product !== undefined ? data.product : null,
     };
   }
 
