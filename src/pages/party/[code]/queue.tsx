@@ -17,10 +17,9 @@ import { signOut } from 'next-auth/react';
 
 interface Props {
   partyCode: PartyCode;
-  partyName: string;
 }
 
-export default function Queue({ partyCode, partyName }: Props) {
+export default function Queue({ partyCode }: Props) {
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   function onQueueResult(result: GetQueueResult) {
@@ -73,7 +72,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   return {
     props: {
       partyCode: Party.codeOf(party),
-      partyName: Party.nameOf(party),
     },
   };
 };
