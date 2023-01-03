@@ -8,17 +8,15 @@ import { assertNeverReached } from '@common/util/assertions';
 import { signIn } from 'next-auth/react';
 import PartyCodeInput from '@component/partyCodeInput';
 import { useState } from 'react';
-import { tryQueryParam } from '@common/util/query';
 import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
+import useQueryParam, { routerNotReady } from '@hook/useQueryParam';
 
 export default function Home() {
   const router = useRouter();
-  const partyCodeParam = tryQueryParam(router.query, 'partyCode');
+  const partyCodeParam = useQueryParam('partyCode');
   const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
   const [guestName, setGuestName] = useState<string | null>(null);
-
-  if (!router.isReady) return <div></div>;
 
   function goToLogin() {
     router.push('/spotify-login').catch(console.error);
@@ -68,10 +66,12 @@ export default function Home() {
         <JukeHeader first={'jukebox'} second={'party'} />
         <form>
           <UserNameInput initialValue={null} onValueChanged={setGuestName} />
-          <PartyCodeInput
-            initialValue={partyCodeParam}
-            onValueChanged={setPartyCode}
-          />
+          {partyCodeParam !== routerNotReady && (
+            <PartyCodeInput
+              initialValue={partyCodeParam}
+              onValueChanged={setPartyCode}
+            />
+          )}
           <Button
             content='Join party'
             styleType='primary block'
