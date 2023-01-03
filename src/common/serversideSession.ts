@@ -1,12 +1,17 @@
-import { GetServerSidePropsContext } from 'next';
 import { Session, unstable_getServerSession } from 'next-auth';
 import { authOptions } from '@api/auth/[...nextauth]';
 import { PartyCode } from '@common/types/partyCode';
+import http from 'http';
 
 export type AuthUser = {
   partyCode: PartyCode;
   id: UserId;
 };
+
+interface ReqRes {
+  req: http.IncomingMessage & { cookies: Partial<{ [p: string]: string }> };
+  res: http.ServerResponse<http.IncomingMessage>;
+}
 
 /**
  * Functions for interacting with the session **SERVER-SIDE**
@@ -14,33 +19,31 @@ export type AuthUser = {
 export namespace ServersideSession {
   /**
    * Gets the current session. Null if not logged in
-   * @param ctx The context. Available in _getServerSideProps_
+   * @param reqRes Request and response objects
    */
-  export function tryGet(
-    ctx: GetServerSidePropsContext
-  ): Promise<Session | null> {
-    return unstable_getServerSession(ctx.req, ctx.res, authOptions);
+  export function tryGet(reqRes: ReqRes): Promise<Session | null> {
+    return unstable_getServerSession(reqRes.req, reqRes.res, authOptions);
   }
 
   /**
    * Gets the current auth-user. Null if not logged in
-   * @param ctx The context. Available in _getServerSideProps_
+   * @param reqRes Request and response objects
    */
   export async function tryGetAuthUser(
-    ctx: GetServerSidePropsContext
+    reqRes: ReqRes
   ): Promise<AuthUser | null> {
-    const session = await tryGet(ctx);
+    const session = await tryGet(reqRes);
     return session?.user ?? null;
   }
 
   /**
    * Gets the current party-code. Null if not logged in
-   * @param ctx The context. Available in _getServerSideProps_
+   * @param reqRes Request and response objects
    */
   export async function tryGetPartyCode(
-    ctx: GetServerSidePropsContext
+    reqRes: ReqRes
   ): Promise<PartyCode | null> {
-    const user = await tryGetAuthUser(ctx);
+    const user = await tryGetAuthUser(reqRes);
     return user?.partyCode ?? null;
   }
 }
