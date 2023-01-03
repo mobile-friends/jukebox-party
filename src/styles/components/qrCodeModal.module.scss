@@ -3,6 +3,9 @@
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.8);
 
+  display: flex;
+  justify-content: center;
+
   position: fixed;
   top: 0;
   left: 0;
@@ -14,11 +17,19 @@
 
   .modal {
     width: 80vw;
+    height: fit-content;
+
+    margin: auto;
+    padding: 20px;
+
+    background-color: rgb(30, 30, 30);
+    border-radius: 10px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
     z-index: 100;
     animation: fadeIn 0.5s;
 
@@ -27,8 +38,14 @@
     }
 
     .QRCodeContainer {
+      width: 100%;
+      height: fit-content;
       animation: scaleUp 0.5s;
-      margin: 20px 0;
+      margin: 10px 0;
+
+      svg {
+        width: 100%;
+      }
     }
   }
 }
