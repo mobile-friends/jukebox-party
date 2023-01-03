@@ -14,6 +14,10 @@ import PartyUserView from '@component/partyUserView';
 import useToggle from '@hook/useToggle';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import { ServersideSession } from '@common/serversideSession';
+import { Guest, User } from '@common/types/user';
+import { JukeClient } from '@common/jukeClient';
+import { StatusCodes } from 'http-status-codes';
+import { assertNeverReached } from '@common/util/assertions';
 
 interface Props {
   partyName: string;
@@ -25,12 +29,37 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   const [isModalVisible, toggleModalVisibility] = useToggle();
   const playbackState = useLivePlaybackState(partyCode);
 
+  async function removeGuest(guest: Guest) {
+    const result = await JukeClient.removeGuest(partyCode, {
+      guestId: User.idOf(guest),
+    });
+    switch (result.code) {
+      case StatusCodes.BAD_REQUEST:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NOT_FOUND:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle error
+        break;
+      case StatusCodes.NO_CONTENT: // Everything worked out
+        return;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
   return (
     <div className={styles.container}>
       <JukeHeader first={'jukebox'} second={'party'} />
       <p>Party Code: {partyCode}</p>
       <p>Party Name: {partyName}</p>
-      <PartyUserView partyCode={partyCode} />
+      <PartyUserView
+        partyCode={partyCode}
+        isHost={isHost}
+        onGuestRemove={removeGuest}
+      />
       {playbackState ? (
         <PlaybackView playbackState={playbackState} partyCode={partyCode} />
       ) : (
@@ -42,7 +71,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
 
       <Button
         content='Show QR Code'
-        styleType='primary'
+        styleType='primary small'
         onClick={toggleModalVisibility}
       ></Button>
       {isModalVisible && (
