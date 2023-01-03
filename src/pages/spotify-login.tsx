@@ -2,9 +2,11 @@ import { GetServerSideProps } from 'next/types';
 import * as querystring from 'querystring';
 import axios from 'axios';
 import { SpotifyClient } from '@common/spotifyClient';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Env } from '@common/env';
+import { SpotifyUser } from '@common/types/user';
+import React from 'react';
 
 interface SpotifyTokenData {
   access_token: SpotifyToken;
@@ -21,6 +23,7 @@ interface ErrorProps {
 interface WaitForPlayingProps {
   kind: 'WaitForPlaying';
   spotifyToken: SpotifyToken;
+  spotifyUser: SpotifyUser;
 }
 
 type Props = ErrorProps | WaitForPlayingProps;
@@ -44,6 +47,7 @@ function isError(props: Props): props is ErrorProps {
 
 export default function SpotifyLogin(props: Props) {
   const router = useRouter();
+  const [isPremium, setIsPremium] = useState('');
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
@@ -55,22 +59,26 @@ export default function SpotifyLogin(props: Props) {
 
   useEffect(() => {
     if (isWaitingForPlaying(props)) {
-      const interval = setInterval(
-        () => checkIfPlaying(props.spotifyToken),
-        1000
-      );
+      const interval = setInterval(() => {
+        setIsPremium(props.spotifyUser.account_type);
+        if (isPremium) checkIfPlaying(props.spotifyToken);
+      }, 1000);
       return () => clearInterval(interval);
     }
   });
 
-  if (isError(props)) return <div>{props.error}</div>;
-  else if (isWaitingForPlaying(props)) {
-    return (
-      <div>
-        To start, please make sure you are currently playing a song on your
-        device.
-      </div>
-    );
+  if (isError(props)) return <div>Fehler: {props.error}</div>;
+  else if (isPremium !== '') {
+    if (isPremium !== 'premium') {
+      return <div>No premium Account :\</div>;
+    } else if (isPremium === 'premium' && isWaitingForPlaying(props)) {
+      return (
+        <div>
+          To start, please make sure you are currently playing a song on your
+          device.
+        </div>
+      );
+    }
   } else return <div>Connecting to spotify...</div>;
 }
 
@@ -125,6 +133,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     const spotifyToken = tokenData.access_token;
 
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
+    const spotifyUser: SpotifyUser = await SpotifyClient.getSpotifyUserInfo(
+      spotifyToken
+    );
+
     if (isPlaying) {
       const redirectUrl = makePartyUrl(spotifyToken);
       return {
@@ -135,7 +147,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       };
     } else {
       return {
-        props: { kind: 'WaitForPlaying', spotifyToken },
+        props: { kind: 'WaitForPlaying', spotifyToken, spotifyUser },
       };
     }
   } else if ('error' in query) {
