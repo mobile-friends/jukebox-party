@@ -31,7 +31,7 @@ export default function useLivePlaybackState(
     if (state === null) refresh().catch(console.error);
     const interval = setInterval(refresh, updateFrequency);
     return () => clearInterval(interval);
-  }, [partyCode, updateFrequency]);
+  }, [state, partyCode, updateFrequency]);
 
   return state;
 }
