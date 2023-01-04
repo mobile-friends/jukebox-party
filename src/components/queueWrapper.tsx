@@ -23,10 +23,10 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
       case StatusCodes.OK:
         return setCurrentQueueTracks(result.content.tracks);
       case StatusCodes.UNAUTHORIZED:
-        // TODO: Redirect to better unauthorized page
+        // TODO: Redirect to better unauthorized page [JUKE-143]
         return signOut({ callbackUrl: '/' }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle errors
+        // TODO: Handle errors [JUKE-142]
         break;
       default:
         return assertNeverReached(result);
