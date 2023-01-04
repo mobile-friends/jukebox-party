@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlaybackView from '@component/playbackView';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
@@ -25,6 +25,25 @@ interface Props {
 
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   const playbackState = useLivePlaybackState(partyCode);
+
+  // Get the screen size to show/hide the queue box in the dome when a certain size
+  //    is reached. This way unnecessary requests can be avoided.
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   async function removeGuest(guest: Guest) {
     const result = await JukeClient.removeGuest(partyCode, {
@@ -65,9 +84,11 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                   partyCode={partyCode}
                 />
               </div>
+              {windowSize.width > 750 ? (
                 <div className={`${styles.queueView}`}>
                   <QueueWrapper partyCode={partyCode} minified={true} />
                 </div>
+              )}
             </div>
           ) : (
             <div className='text-center smaller_box'>
