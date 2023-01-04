@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlaybackView from '@component/playbackView';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
@@ -15,7 +15,9 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import PartyUserView from '@component/partyUserView';
-import Queue from './queue';
+import QueueWrapper from '@component/queueWrapper';
+import Button from '@component/elements/button';
+import { useRouter } from 'next/router';
 
 interface Props {
   partyName: string;
@@ -24,7 +26,31 @@ interface Props {
 }
 
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
+  const router = useRouter();
   const playbackState = useLivePlaybackState(partyCode);
+
+  // Get the screen size to show/hide the queue box in the dome when a certain size
+  //    is reached. This way unnecessary requests can be avoided.
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  function goToQueue() {
+    router.push(`/party/${partyCode}/queue`).catch(console.error);
+  }
 
   async function removeGuest(guest: Guest) {
     const result = await JukeClient.removeGuest(partyCode, {
@@ -65,9 +91,21 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                   partyCode={partyCode}
                 />
               </div>
-              <div className={`${styles.queueView}`}>
-                <Queue partyCode={partyCode} />
-              </div>
+              {windowSize.width > 750 ? (
+                <div className={`${styles.queueView}`}>
+                  <h2>Next is</h2>
+                  <QueueWrapper partyCode={partyCode} minified={true} />
+                  <div className={styles.queueInfo}>
+                    <Button
+                      styleType='tertiary'
+                      content='see full queue'
+                      onClick={goToQueue}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
             </div>
           ) : (
             <div className='text-center smaller_box'>

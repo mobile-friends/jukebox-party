@@ -50,11 +50,18 @@
       }
 
       .queueView {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         overflow: scroll;
 
-        h1 {
-          display: none;
+        .queueInfo {
+          margin-top: 15px;
+          padding: 0 20px; 
+
+          Button {
+            margin: auto;
+          }
         }
       }
     }
