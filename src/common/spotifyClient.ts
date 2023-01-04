@@ -87,10 +87,14 @@ export namespace SpotifyClient {
       'me',
       spotifyToken
     );
+    if (isError(data)) {
+      // TODO: Handle errors
+      throw new Error();
+    }
     return {
-      nickname: data.display_name !== undefined ? data.display_name : null,
-      email: data.email !== undefined ? data.email : null,
-      account_type: data.product !== undefined ? data.product : null,
+      nickname: data.display_name !== undefined ? data.display_name : '',
+      email: data.email !== undefined ? data.email : '',
+      account_type: data.product !== undefined ? data.product : '',
     };
   }
 
