@@ -41,10 +41,10 @@ export default function Home() {
       case StatusCodes.NOT_FOUND:
         return await goTo404();
       case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error
+        // TODO: Handle error [JUKE-142]
         return;
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error
+        // TODO: Handle error [JUKE-142]
         return;
       default:
         return assertNeverReached(result);

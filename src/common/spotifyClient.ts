@@ -88,7 +88,7 @@ export namespace SpotifyClient {
       spotifyToken
     );
     if (isError(data)) {
-      // TODO: Handle errors
+      // TODO: Handle errors [JUKE-139]
       throw new Error();
     }
     return {
@@ -118,7 +118,7 @@ export namespace SpotifyClient {
     );
     if (isError(data)) {
       // If anything went wrong we just return no recommendations
-      // TODO: Handle errors
+      // TODO: Handle errors [JUKE-139]
       return [];
     }
 
@@ -138,7 +138,7 @@ export namespace SpotifyClient {
       spotifyToken
     );
     if (isError(data)) {
-      // TODO: Handle errors
+      // TODO: Handle errors [JUKE-139]
       return null;
     }
 
@@ -169,7 +169,7 @@ export namespace SpotifyClient {
       spotifyToken
     );
     if (isError(data)) {
-      // TODO: Handle error
+      // TODO: Handle error [JUKE-139]
       return [];
     }
     return data.items.map((it) => it.track.id);
@@ -187,7 +187,7 @@ export namespace SpotifyClient {
     const url = isPlaying ? `me/player/play` : `me/player/pause`;
     const [data] = await put<string>(url, spotifyToken);
     if (isError(data)) {
-      // TODO: Handle error
+      // TODO: Handle error [JUKE-139]
       throw new Error();
     }
   }
@@ -200,7 +200,7 @@ export namespace SpotifyClient {
     const url = `me/player/next`;
     const [data] = await post<string>(url, spotifyToken);
     if (isError(data)) {
-      // TODO: Handle error
+      // TODO: Handle error [JUKE-139]
       throw new Error();
     }
   }
@@ -213,7 +213,7 @@ export namespace SpotifyClient {
     const url = `me/player/previous`;
     const [data] = await post<string>(url, spotifyToken);
     if (isError(data)) {
-      // TODO: Handle error
+      // TODO: Handle error [JUKE-139]
       throw new Error();
     }
   }
@@ -231,7 +231,7 @@ export namespace SpotifyClient {
       /*
     Currently, if the request returns undefined somewhere, we just use default
     values to compensate, like [] if tracks is undefined.
-    TODO: Handle these errors better
+    TODO: Handle these errors better [JUKE-139]
     */
       const unparsedTracks = response.tracks?.items ?? [];
       return unparsedTracks.map(parseTrack);
@@ -244,7 +244,7 @@ export namespace SpotifyClient {
     const [data] = await get<SpotifyApi.SearchResponse>(url, spotifyToken);
 
     if (isError(data)) {
-      // TODO: Handle error
+      // TODO: Handle error [JUKE-139]
       return [];
     }
     return parseTracksIn(data);
@@ -282,7 +282,7 @@ export namespace SpotifyClient {
     // This means that spotify is not currently playing
     if (status === StatusCodes.NO_CONTENT) return null;
 
-    // TODO: Handle errors
+    // TODO: Handle errors [JUKE-139]
     if (isError(data)) {
       throw new Error();
     }
@@ -313,8 +313,7 @@ export namespace SpotifyClient {
     const [data] = await get<SpotifyApi.UsersQueueResponse>(url, spotifyToken);
 
     if (isError(data)) {
-      // TODO: We get a 403 from spotify here. Idk why
-      // TODO: Handle errors
+      // TODO: Handle errors [JUKE-139]
       return [];
     }
 
@@ -333,7 +332,7 @@ export namespace SpotifyClient {
       url,
       spotifyToken
     );
-    // TODO: Handle errors
+    // TODO: Handle errors [JUKE-139]
     if (isError(data)) {
       return false;
     }

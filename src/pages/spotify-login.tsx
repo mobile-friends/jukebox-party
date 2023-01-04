@@ -121,7 +121,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   }
 
   function redirectUrl(): string {
-    // TODO: Use dynamic ip/port
+    // TODO: Use dynamic port [JUKE-138]
     return `http://localhost:3000/spotify-login`;
   }
 
@@ -153,7 +153,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     });
-    // TODO: Handle errors
+    // TODO: Handle errors [JUKE-139]
     return res.data;
   }
 

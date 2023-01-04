@@ -32,13 +32,13 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
     });
     switch (result.code) {
       case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error
+        // TODO: Handle error [JUKE-142]
         break;
       case StatusCodes.NOT_FOUND:
-        // TODO: Handle error
+        // TODO: Handle error [JUKE-142]
         break;
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error
+        // TODO: Handle error [JUKE-142]
         break;
       case StatusCodes.NO_CONTENT: // Everything worked out
         return;

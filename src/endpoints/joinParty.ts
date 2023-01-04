@@ -43,7 +43,7 @@ export default requestHandler<JoinPartyBody, JoinPartyResult>(async (req) => {
       case PartyDb.ErrorType.PartyNotFound:
         return Response.partyNotFound(partyCode);
       case PartyDb.ErrorType.InvalidEntry:
-        return Response.notImplemented(); // TODO: Handle better
+        return Response.notImplemented(); // TODO: Handle better [JUKE-141]
       default:
         return assertNeverReached(result);
     }

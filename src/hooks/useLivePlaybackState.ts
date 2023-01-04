@@ -21,7 +21,7 @@ export default function useLivePlaybackState(
           else setState(result.content.playbackState);
           break;
         case StatusCodes.UNAUTHORIZED:
-          // TODO: Redirect to better unauthorized page
+          // TODO: Redirect to better unauthorized page [JUKE-143]
           return signOut({ callbackUrl: '/' }).catch(console.error);
         default:
           return assertNeverReached(result);

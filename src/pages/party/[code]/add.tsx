@@ -45,13 +45,13 @@ export default function AddTracks({ partyCode }: Props) {
       case StatusCodes.OK:
         return setTracks(result.content.tracks);
       case StatusCodes.BAD_REQUEST:
-        // TODO: Handle errors
+        // TODO: Handle errors [JUKE-142]
         break;
       case StatusCodes.UNAUTHORIZED:
-        // TODO: Redirect to better unauthorized page
+        // TODO: Redirect to better unauthorized page [JUKE-143]
         return signOut({ callbackUrl: '/' }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle errors
+        // TODO: Handle errors [JUKE-142]
         break;
       default:
         return assertNeverReached(result);
@@ -104,7 +104,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
   if (PartyDb.isError(party)) {
     return {
-      redirect: { destination: '/' }, // TODO: Add better non-auth page
+      redirect: { destination: '/' }, // TODO: Add better non-auth page [JUKE-143]
       props: {} as Props,
     };
   }

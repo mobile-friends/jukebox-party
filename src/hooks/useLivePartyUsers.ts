@@ -18,7 +18,7 @@ export default function useLivePartyUsers(
   useEffect(() => {
     async function refreshParty() {
       const result = await JukeClient.getPartyUsers(partyCode);
-      // TODO: Handle errors better
+      // TODO: Handle errors better [JUKE-142]
       if (result.code !== StatusCodes.OK) return setUsers(null);
       setUsers(result.content);
     }

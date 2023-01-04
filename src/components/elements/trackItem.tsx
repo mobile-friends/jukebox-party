@@ -11,7 +11,7 @@ interface Props {
 
 function ArtistView(artist: Artist) {
   const artistName = Artist.nameOf(artist);
-  // TODO: Use unique artist id for key
+  // TODO: Use unique artist id for key [JUKE-140]
   return <div key={artistName}>{artistName}</div>;
 }
 
@@ -22,7 +22,7 @@ function ArtistView(artist: Artist) {
 export default function TrackItem({ track }: Props) {
   const artists = Track.artistsOf(track).map(ArtistView);
   return (
-    // TODO: Use unique track id for key
+    // TODO: Use unique track id for key [JUKE-140]
     <li className={styles.row} key={track.name}>
       <img src={Track.albumArtUrlOf(track)} alt='Album art' />
       <div className='textInfo'>

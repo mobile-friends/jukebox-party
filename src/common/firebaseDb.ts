@@ -3,7 +3,6 @@ import firebase from '@firebase/app';
 import '@firebase/database';
 import { FirebaseOptions } from '@firebase/app-types';
 import { Env } from '@common/env';
-// TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
@@ -21,5 +20,5 @@ const firebaseOptions: FirebaseOptions = {
 
 const firebaseApp = firebase.apps[0] || firebase.initializeApp(firebaseOptions);
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const firebaseDb = firebaseApp.database!(); // TODO: Handle missing database
+const firebaseDb = firebaseApp.database!(); // TODO: Handle missing database [JUKE-137]
 export default firebaseDb;

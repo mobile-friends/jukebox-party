@@ -9,7 +9,7 @@ interface Props {
   onValueChanged: ValueChangedListener;
 }
 
-//TODO regex für emojis erweitern
+//TODO regex für emojis erweitern [JUKE-119]
 const nameInputSchema = z
   .string()
   .min(3, 'Mindestens 3 Zeichen')
