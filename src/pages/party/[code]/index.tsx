@@ -65,9 +65,9 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                   partyCode={partyCode}
                 />
               </div>
-              <div className={`${styles.queueView}`}>
-                <QueueWrapper partyCode={partyCode} />
-              </div>
+                <div className={`${styles.queueView}`}>
+                  <QueueWrapper partyCode={partyCode} minified={true} />
+                </div>
             </div>
           ) : (
             <div className='text-center smaller_box'>

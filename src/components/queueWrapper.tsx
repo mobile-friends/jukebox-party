@@ -10,9 +10,10 @@ import { signOut } from 'next-auth/react';
 
 interface Props {
   partyCode: PartyCode;
+  minified: boolean;
 }
 
-export default function QueueWrapper({ partyCode }: Props) {
+export default function QueueWrapper({ partyCode, minified }: Props) {
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   function onQueueResult(result: GetQueueResult) {
@@ -38,5 +39,5 @@ export default function QueueWrapper({ partyCode }: Props) {
     <TrackItem key={Track.nameOf(track)} track={track} />
   ));
 
-  return <div>{tracks}</div>;
+  return <div>{minified ? tracks.slice(0,5) : tracks}</div>;
 }
