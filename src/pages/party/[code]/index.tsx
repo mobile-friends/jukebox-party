@@ -16,6 +16,8 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import PartyUserView from '@component/partyUserView';
 import QueueWrapper from '@component/queueWrapper';
+import Button from '@component/elements/button';
+import { useRouter } from 'next/router';
 
 interface Props {
   partyName: string;
@@ -24,6 +26,7 @@ interface Props {
 }
 
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
+  const router = useRouter();
   const playbackState = useLivePlaybackState(partyCode);
 
   // Get the screen size to show/hide the queue box in the dome when a certain size
@@ -44,6 +47,10 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  function goToQueue() {
+    router.push(`/party/${partyCode}/queue`).catch(console.error);
+  }
 
   async function removeGuest(guest: Guest) {
     const result = await JukeClient.removeGuest(partyCode, {
@@ -86,8 +93,18 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
               </div>
               {windowSize.width > 750 ? (
                 <div className={`${styles.queueView}`}>
+                  <h2>Next is</h2>
                   <QueueWrapper partyCode={partyCode} minified={true} />
+                  <div className={styles.queueInfo}>
+                    <Button
+                      styleType='tertiary'
+                      content='see full queue'
+                      onClick={goToQueue}
+                    />
+                  </div>
                 </div>
+              ) : (
+                <div></div>
               )}
             </div>
           ) : (
