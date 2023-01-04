@@ -15,7 +15,7 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import PartyUserView from '@component/partyUserView';
-import Queue from './queue';
+import QueueWrapper from '@component/queueWrapper';
 
 interface Props {
   partyName: string;
@@ -66,7 +66,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                 />
               </div>
               <div className={`${styles.queueView}`}>
-                <Queue partyCode={partyCode} />
+                <QueueWrapper partyCode={partyCode} />
               </div>
             </div>
           ) : (
