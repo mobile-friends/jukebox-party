@@ -10,10 +10,17 @@ import { useEffect, useState } from 'react';
 import PartyNameInput from '@component/partyNameInput';
 import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
+import { SpotifyUser } from '@common/types/user';
+import { SpotifyClient } from '@common/spotifyClient';
 
-type Props = { spotifyToken: SpotifyToken | null };
+interface SpotifyProps {
+  spotifyToken: SpotifyToken | null;
+  spotifyUser: SpotifyUser | null;
+}
 
-export default function CreateParty({ spotifyToken }: Props) {
+type Props = SpotifyProps;
+
+export default function CreateParty({ spotifyToken, spotifyUser }: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string | null>(null);
   const [hostName, setHostName] = useState<string | null>(null);
@@ -73,15 +80,31 @@ export default function CreateParty({ spotifyToken }: Props) {
           second={'party'}
           pageTitle={'Create a jukebox.party'}
         />
-        <form>
-          <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
-          <UserNameInput initialValue={null} onValueChanged={setHostName} />
-          <Button
-            content='Create party'
-            styleType='primary block'
-            onClick={onCreatePartyClicked}
-          />
-        </form>
+
+        <div>
+          {spotifyUser === null ? (
+            <></>
+          ) : (
+            <div className={styles.greeting}>
+              <h2 className='text-center'>
+                Hi <span className='text-italic'>{spotifyUser.nickname}</span>!
+              </h2>
+              <p className='text-muted text-center'>
+                Account from {spotifyUser.email}
+              </p>
+            </div>
+          )}
+          <form>
+            <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
+            <UserNameInput initialValue={null} onValueChanged={setHostName} />
+            <Button
+              content='Create party'
+              styleType='primary block'
+              onClick={onCreatePartyClicked}
+            />
+          </form>
+        </div>
+
         <Button
           content='Back'
           styleType='tertiary block'
@@ -96,7 +119,12 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
   const { token: spotifyToken } = query;
-  if (typeof spotifyToken === 'string')
-    return { props: { spotifyToken: spotifyToken as SpotifyToken } };
-  else return { props: { spotifyToken: null } };
+  if (typeof spotifyToken === 'string') {
+    const spotifyUser: SpotifyUser = await SpotifyClient.getSpotifyUserInfo(
+      spotifyToken as SpotifyToken
+    );
+    return {
+      props: { spotifyToken: spotifyToken as SpotifyToken, spotifyUser },
+    };
+  } else return { props: { spotifyToken: null, spotifyUser: null } };
 };
