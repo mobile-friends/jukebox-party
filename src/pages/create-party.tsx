@@ -66,6 +66,13 @@ export default function CreateParty({ spotifyToken, spotifyUser }: Props) {
     }
   }
 
+  function goToLogin() {
+    router.push({
+      pathname: '/spotify-login',
+      query: { newLogin: 'true' },
+    });
+  }
+
   async function onCreatePartyClicked() {
     if (partyName !== null && hostName !== null && spotifyToken) {
       await tryCreateParty(partyName, hostName, spotifyToken);
@@ -103,6 +110,16 @@ export default function CreateParty({ spotifyToken, spotifyUser }: Props) {
               onClick={onCreatePartyClicked}
             />
           </form>
+          <div className={styles.anotherAccount}>
+            <p className='text-muted text-center'>
+              Not you? Log out and use another account
+            </p>
+            <Button
+              content='Use another account'
+              styleType='secondary block'
+              onClick={goToLogin}
+            />
+          </div>
         </div>
 
         <Button
