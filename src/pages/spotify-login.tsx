@@ -87,19 +87,37 @@ export default function SpotifyLogin(props: Props) {
     if (spotifyAccountType !== 'premium') {
       return (
         <div className={`text-center ${styles.container}`}>
+          <h3>
+            Hi{' '}
+            <span className='text-italic'>
+              {props.spotifyUser.nickname === 'undefined'
+                ? ''
+                : props.spotifyUser.nickname}
+            </span>
+            !
+          </h3>
+          {props.spotifyUser.email === 'undefined' ? (
+            <></>
+          ) : (
+            <span className='text-muted'>
+              Account of {props.spotifyUser.email}
+            </span>
+          )}
+
           <h2 className='text-primary'>
             It looks like this is no premium account
           </h2>
-          <span>To use jukebox.party you must have a premium account.</span>
 
+          <p>Choose &apos;Not you?&apos; and log in with premium account</p>
           <Button
             content={'Log in with premium account'}
-            styleType={'primary'}
+            styleType={'primary block'}
             onClick={goToLogin}
           />
+          <p>or</p>
           <Button
             content={'Be part of a party'}
-            styleType={'tertiary'}
+            styleType={'secondary block'}
             onClick={goBackToStart}
           />
         </div>
@@ -107,6 +125,23 @@ export default function SpotifyLogin(props: Props) {
     } else if (spotifyAccountType === 'premium' && isWaitingForPlaying(props)) {
       return (
         <div className={`text-center ${styles.container}`}>
+          <h3>
+            Hi{' '}
+            <span className='text-italic'>
+              {props.spotifyUser.nickname === 'undefined'
+                ? ''
+                : props.spotifyUser.nickname}
+            </span>
+            !
+          </h3>
+          {props.spotifyUser.email === 'undefined' ? (
+            <></>
+          ) : (
+            <span className='text-muted'>
+              Account of {props.spotifyUser.email}
+            </span>
+          )}
+
           <h2 className='text-primary'>Press play in the Spotify app</h2>
           <span>
             Click play on the output device of your choice (laptop, smartphone,
