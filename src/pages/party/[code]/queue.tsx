@@ -9,19 +9,22 @@ import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { ServersideSession } from '@common/serversideSession';
 
+
 interface Props {
   partyCode: PartyCode;
 }
 
 export default function Queue({ partyCode }: Props) {
   return (
-    <div>
-      <JukeHeader
-        first={'party'}
-        second={'tracks'}
-        pageTitle={'Queue | jukebox.party'}
-      />
-        <QueueWrapper partyCode={partyCode} minified={false} />
+    <div className='queueContainer'>
+      <div className='queueHeader'>
+        <JukeHeader
+          first={'party'}
+          second={'tracks'}
+          pageTitle={'Queue | jukebox.party'}
+        />
+      </div>
+      <QueueWrapper partyCode={partyCode} minified={false} />
       <Navbar partyCode={partyCode} />
     </div>
   );
