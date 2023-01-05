@@ -43,6 +43,12 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     PlaybackState.playTimeOf(playbackState)
   );
   const trackDurationText = Duration.formatted(trackDuration);
+  const durationLeftText = Duration.formatted(
+    Duration.makeFromSeconds(
+      Duration.secondsIn(trackDuration) -
+        Duration.secondsIn(PlaybackState.playTimeOf(playbackState))
+    )
+  );
 
   useEffect(() => {
     setShowMarqueeBlur(
@@ -92,7 +98,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       <ProgressBar progress={playbackState.playTime} duration={trackDuration} />
       <div className={styles.row}>
         <label>{progressText}</label>
-        <label>{trackDurationText}</label>
+        <label>{durationLeftText}</label>
       </div>
 
       {userId === partyHostId ? (
