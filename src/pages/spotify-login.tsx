@@ -72,7 +72,8 @@ export default function SpotifyLogin(props: Props) {
       const interval = setInterval(() => {
         setSpotifyAccountType(props.spotifyUser.account_type);
 
-        if (spotifyAccountType === 'premium') checkIfPlaying(props.spotifyToken);
+        if (spotifyAccountType === 'premium')
+          checkIfPlaying(props.spotifyToken);
       }, 1000);
       return () => clearInterval(interval);
     }
@@ -126,7 +127,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 
   function redirectUrl(): string {
     // TODO: Use dynamic port [JUKE-138]
-    return `http://localhost:3000/spotify-login`;
+    return Env.isProduction()
+      ? `https://jukebox.herokuapp.com/spotify-login`
+      : `http://localhost:3000/spotify-login`;
   }
 
   function spotifyUserAuthUrl() {

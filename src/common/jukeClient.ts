@@ -12,10 +12,13 @@ import { GetPlaybackResult } from '@endpoint/getPlayback';
 import { SkipDirection } from '@common/types/constants';
 import { GetPartyUsersResult } from '@endpoint/getPartyUsers';
 import { RemoveGuestBody, RemoveGuestResult } from '@endpoint/removeGuest';
+import { Env } from '@common/env';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: Env.isProduction()
+    ? `https://jukebox.herokuapp.com/api/`
+    : 'http://localhost:3000/api/',
   timeout: 3000,
   headers: {
     'Content-Type': 'application/json',

@@ -55,7 +55,11 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   return (
     <div>
       <div className={styles.partyPage}>
-        <PartyHeader partyName={partyName} partyCode={partyCode} isHost={isHost} />
+        <PartyHeader
+          partyName={partyName}
+          partyCode={partyCode}
+          isHost={isHost}
+        />
         <div className={styles.partyContent}>
           {playbackState ? (
             <div className={`${styles.playbackDesign}`}>
