@@ -1,6 +1,6 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
-
+import { History } from './history';
 declare const tag: unique symbol;
 
 /**
@@ -12,6 +12,7 @@ export interface Party {
   readonly spotifyToken: SpotifyToken;
   readonly host: Host;
   readonly guests: Guest[];
+  readonly history: History;
   readonly [tag]: 'Party';
 }
 
@@ -26,15 +27,24 @@ export namespace Party {
    * @param spotifyToken The spotify-token the party uses
    * @param host The parties host
    * @param guests The parties guests
+   * @param history The parties history
    */
   export function make(
     code: string,
     name: string,
     spotifyToken: SpotifyToken,
     host: Host,
-    guests: Guest[]
+    guests: Guest[],
+    history: History
   ): Party {
-    return Object.freeze({ code, name, spotifyToken, host, guests } as Party);
+    return Object.freeze({
+      code,
+      name,
+      spotifyToken,
+      host,
+      guests,
+      history,
+    } as Party);
   }
 
   /**
@@ -49,7 +59,7 @@ export namespace Party {
     host: Host
   ) {
     const partyCode = PartyCode.generate();
-    return make(partyCode, name, spotifyToken, host, []);
+    return make(partyCode, name, spotifyToken, host, [], History.make([]));
   }
 
   /**
@@ -85,6 +95,14 @@ export namespace Party {
   }
 
   /**
+   * Gets the history of a party
+   * @param party The party
+   */
+  export function historyOf(party: Party): History {
+    return party.history;
+  }
+
+  /**
    * Adds a guest to the party and returns the updated party
    * @param party The party
    * @param guest The guest
@@ -96,7 +114,8 @@ export namespace Party {
       party.name,
       party.spotifyToken,
       party.host,
-      newGuests
+      newGuests,
+      party.history
     );
   }
 
@@ -129,7 +148,8 @@ export namespace Party {
       party.name,
       party.spotifyToken,
       party.host,
-      newGuests
+      newGuests,
+      party.history
     );
   }
 
@@ -140,5 +160,21 @@ export namespace Party {
    */
   export function hasHostWithId(party: Party, id: UserId): boolean {
     return User.idOf(hostOf(party)) === id;
+  }
+
+  /**
+   * Saves the give history to the party
+   * @param party The party
+   * @param history The history
+   */
+  export function saveHistory(party: Party, history: History): Party {
+    return make(
+      party.code,
+      party.name,
+      party.spotifyToken,
+      party.host,
+      party.guests,
+      history
+    );
   }
 }

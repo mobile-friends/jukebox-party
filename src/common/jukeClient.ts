@@ -13,6 +13,11 @@ import { SkipDirection } from '@common/types/constants';
 import { GetPartyUsersResult } from '@endpoint/getPartyUsers';
 import { RemoveGuestBody, RemoveGuestResult } from '@endpoint/removeGuest';
 import { Env } from '@common/env';
+import {
+  SaveTrackToHistoryBody,
+  SaveTrackToHistoryResult,
+} from '@endpoint/saveTrackToHistory';
+import { GetHistoryResult } from '@endpoint/getHistory';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -172,5 +177,27 @@ export namespace JukeClient {
   ): Promise<RemoveGuestResult> {
     const url = `parties/${partyCode}/remove`;
     return post<RemoveGuestBody, RemoveGuestResult>(url, body);
+  }
+
+  /**
+   * Saves the track to the history of the Party
+   * @param partyCode The code of the party
+   * @param body The request body
+   */
+  export function saveTrackToHistory(
+    partyCode: PartyCode,
+    body: SaveTrackToHistoryBody
+  ): Promise<SaveTrackToHistoryResult> {
+    const url = `parties/${partyCode}/history/save`;
+    return post<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(url, body);
+  }
+
+  /**
+   * Gets the track-queue on a party
+   * @param partyCode The code of the party
+   */
+  export function getHistory(partyCode: PartyCode): Promise<GetHistoryResult> {
+    const url = `parties/${partyCode}/history/get`;
+    return get<GetHistoryResult>(url);
   }
 }

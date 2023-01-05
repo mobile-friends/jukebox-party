@@ -3,6 +3,7 @@ import { Party } from './types/party';
 import firebase from 'firebase/app';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { Guest, Host } from '@common/types/user';
+import { History } from './types/history';
 
 interface PartyEntry {
   code: PartyCode;
@@ -10,6 +11,7 @@ interface PartyEntry {
   spotifyToken: SpotifyToken;
   host: Host;
   guests?: Guest[];
+  history?: History;
 }
 
 function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {
@@ -27,7 +29,8 @@ function tryParseEntry(entry: PartyEntry): Party | PartyDb.Error {
       entry.name,
       entry.spotifyToken,
       entry.host,
-      entry.guests ?? []
+      entry.guests ?? [],
+      entry.history ?? History.make([])
     );
   } catch {
     return invalidEntryError(entry);

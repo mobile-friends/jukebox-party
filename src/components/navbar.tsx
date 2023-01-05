@@ -2,7 +2,7 @@ import React from 'react';
 import NavItem from './elements/navItem';
 import { BsSearch } from 'react-icons/bs';
 import { AiFillHome } from 'react-icons/ai';
-import { MdOutlineQueueMusic } from 'react-icons/md';
+import { MdOutlineHistory, MdOutlineQueueMusic } from 'react-icons/md';
 import styles from '@style/components/navbar.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 
@@ -26,6 +26,11 @@ export default function Navbar({ partyCode }: Props) {
         icon={<MdOutlineQueueMusic />}
         text='Queue'
         linkTarget={`${partyUrl}/queue`}
+      />
+      <NavItem
+        icon={<MdOutlineHistory />}
+        text='History'
+        linkTarget={`${partyUrl}/history`}
       />
     </div>
   );
