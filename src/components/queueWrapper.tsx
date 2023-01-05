@@ -41,5 +41,5 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
     <TrackItem key={Track.nameOf(track)} track={track} />
   ));
 
-  return <div>{minified ? tracks.slice(0, 3) : tracks}</div>;
+  return <div>{minified ? tracks.slice(0, 4) : tracks}</div>;
 }
