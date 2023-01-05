@@ -52,36 +52,10 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
     router.push(`/party/${partyCode}/queue`).catch(console.error);
   }
 
-  async function removeGuest(guest: Guest) {
-    const result = await JukeClient.removeGuest(partyCode, {
-      guestId: User.idOf(guest),
-    });
-    switch (result.code) {
-      case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_FOUND:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NO_CONTENT: // Everything worked out
-        return;
-      default:
-        return assertNeverReached(result);
-    }
-  }
-
   return (
     <div>
       <div className={styles.partyPage}>
-        <PartyHeader partyName={partyName} partyCode={partyCode} />
-        <PartyUserView
-          partyCode={partyCode}
-          isHost={isHost}
-          onGuestRemove={removeGuest}
-        />
+        <PartyHeader partyName={partyName} partyCode={partyCode} isHost={isHost} />
         <div className={styles.partyContent}>
           {playbackState ? (
             <div className={`${styles.playbackDesign}`}>
