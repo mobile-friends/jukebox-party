@@ -19,7 +19,6 @@ const axiosClient = axios.create({
   baseURL: Env.isProduction()
     ? `https://jukebox.herokuapp.com/api/`
     : 'http://localhost:3000/api/',
-  timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
