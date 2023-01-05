@@ -49,7 +49,7 @@ function isError(props: Props): props is ErrorProps {
 
 export default function SpotifyLogin(props: Props) {
   const router = useRouter();
-  const [isPremium, setIsPremium] = useState('');
+  const [spotifyAccountType, setSpotifyAccountType] = useState('');
 
   function goBackToStart() {
     router.push('/').catch(console.error);
@@ -70,16 +70,17 @@ export default function SpotifyLogin(props: Props) {
   useEffect(() => {
     if (isWaitingForPlaying(props)) {
       const interval = setInterval(() => {
-        setIsPremium(props.spotifyUser.account_type);
-        if (isPremium) checkIfPlaying(props.spotifyToken);
+        setSpotifyAccountType(props.spotifyUser.account_type);
+
+        if (spotifyAccountType === 'premium') checkIfPlaying(props.spotifyToken);
       }, 1000);
       return () => clearInterval(interval);
     }
   });
 
   if (isError(props)) return <div>Fehler: {props.error}</div>;
-  else if (isPremium !== '') {
-    if (isPremium !== 'premium') {
+  else if (spotifyAccountType !== '') {
+    if (spotifyAccountType !== 'premium') {
       return (
         <div className={`text-center ${styles.container}`}>
           <h2 className='text-primary'>
@@ -99,7 +100,7 @@ export default function SpotifyLogin(props: Props) {
           />
         </div>
       );
-    } else if (isPremium === 'premium' && isWaitingForPlaying(props)) {
+    } else if (spotifyAccountType === 'premium' && isWaitingForPlaying(props)) {
       return (
         <div className={`text-center ${styles.container}`}>
           <h2 className='text-primary'>Press play in the Spotify app</h2>
@@ -110,7 +111,10 @@ export default function SpotifyLogin(props: Props) {
         </div>
       );
     }
-  } else return <div className={`${styles.container}`}>Connecting to spotify...</div>;
+  } else
+    return (
+      <div className={`${styles.container}`}>Connecting to spotify...</div>
+    );
 }
 
 export const getServerSideProps: GetServerSideProps<Props> = async ({

@@ -92,9 +92,9 @@ export namespace SpotifyClient {
       throw new Error();
     }
     return {
-      nickname: data.display_name !== undefined ? data.display_name : '',
-      email: data.email !== undefined ? data.email : '',
-      account_type: data.product !== undefined ? data.product : '',
+      nickname: data.display_name === undefined ? 'undefined' : data.display_name,
+      email: data.email === undefined ? 'undefined' : data.email,
+      account_type: data.product === undefined ? 'undefined' : data.product,
     };
   }
 
