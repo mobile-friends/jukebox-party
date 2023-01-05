@@ -6,9 +6,10 @@ import UserListButton from './userListButton';
 interface Props {
   partyName: string;
   partyCode: PartyCode;
+  isHost: boolean;
 }
 
-export default function PartyHeader({ partyName, partyCode }: Props) {
+export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
   return (
     <div className={styles.container}>
       <div>
@@ -19,7 +20,7 @@ export default function PartyHeader({ partyName, partyCode }: Props) {
           <p className='text-center'>Pin: {partyCode}</p>
         </div>
         <div>
-          <UserListButton partyCode={partyCode} />
+          <UserListButton partyCode={partyCode} isHost={isHost} />
         </div>
       </div>
 
