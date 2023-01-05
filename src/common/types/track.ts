@@ -12,6 +12,7 @@ export interface Track {
   readonly artists: Artist[];
   readonly albumArtUrl: string;
   readonly [tag]: 'Track';
+  readonly id?: string;
 }
 
 /**
@@ -29,9 +30,10 @@ export namespace Track {
     name: string,
     duration: Duration,
     artists: Artist[],
-    albumArtUrl: string
+    albumArtUrl: string,
+    id?: string
   ): Track {
-    return Object.freeze({ name, duration, artists, albumArtUrl } as Track);
+    return Object.freeze({ name, duration, artists, albumArtUrl, id } as Track);
   }
 
   /**
