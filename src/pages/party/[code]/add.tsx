@@ -82,12 +82,12 @@ export default function AddTracks({ partyCode }: Props) {
           />
           <ul style={{ overflow: 'scroll' }}>
             {tracks?.map((track) => (
-              <TrackItem key={Track.nameOf(track)} track={track} />
+              <TrackItem key={track.id} track={track} />
             ))}
           </ul>
         </div>
       </div>
-
+            
       <Navbar partyCode={partyCode} />
     </div>
   );

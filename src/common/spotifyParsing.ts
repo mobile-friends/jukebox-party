@@ -51,6 +51,7 @@ export function parseTrack(track: TrackLike): Track {
     track.name,
     parseDurationOf(track),
     parseArtistsOf(track),
-    parseAlbumArtUrlOf(track)
+    parseAlbumArtUrlOf(track),
+    track.id
   );
 }

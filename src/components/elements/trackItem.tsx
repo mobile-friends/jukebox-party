@@ -22,8 +22,7 @@ function ArtistView(artist: Artist) {
 export default function TrackItem({ track }: Props) {
   const artists = Track.artistsOf(track).map(ArtistView);
   return (
-    // TODO: Use unique track id for key [JUKE-140]
-    <li className={styles.row} key={track.name}>
+    <li className={styles.row} key={track.id}>
       <img src={Track.albumArtUrlOf(track)} alt='Album art' />
       <div className='textInfo'>
         <p>{Track.nameOf(track)}</p>

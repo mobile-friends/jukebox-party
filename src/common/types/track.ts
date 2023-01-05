@@ -11,6 +11,7 @@ export interface Track {
   readonly duration: Duration;
   readonly artists: Artist[];
   readonly albumArtUrl: string;
+  id: string;
   readonly [tag]: 'Track';
 }
 
@@ -24,14 +25,16 @@ export namespace Track {
    * @param duration The tracks duration
    * @param artists The tracks artists
    * @param albumArtUrl The url to the tracks album art
+   * @param id track id
    */
   export function make(
     name: string,
     duration: Duration,
     artists: Artist[],
-    albumArtUrl: string
+    albumArtUrl: string,
+    id: string
   ): Track {
-    return Object.freeze({ name, duration, artists, albumArtUrl } as Track);
+    return Object.freeze({ name, duration, artists, albumArtUrl, id } as Track);
   }
 
   /**
@@ -65,4 +68,12 @@ export namespace Track {
   export function albumArtUrlOf(track: Track): string {
     return track.albumArtUrl;
   }
+
+  /**
+   * rGets the id of the track
+   * @param track The track
+   */
+    export function idOf(track: Track): string {
+      return track.id
+    }
 }
