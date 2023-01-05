@@ -56,7 +56,10 @@ export default function SpotifyLogin(props: Props) {
   }
 
   function goToLogin() {
-    router.push('/spotify-login').catch(console.error);
+    router.push({
+      pathname: '/spotify-login',
+      query: { newLogin: 'true' },
+    });
   }
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
@@ -143,6 +146,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return `https://accounts.spotify.com/authorize?${query}`;
   }
 
+  function newSpotifyUserAuthUrl() {
+    // developer.spotify.com/documentation/general/guides/authorization/code-flow#request-user-authorization
+    const query = querystring.stringify({
+      response_type: 'code',
+      client_id: Env.spotifyClientId(),
+      scope: Scope,
+      redirect_uri: redirectUrl(),
+      show_dialog: true,
+    });
+    return `https://accounts.spotify.com/authorize?${query}`;
+  }
+
   async function requestAccessToken(code: string): Promise<SpotifyTokenData> {
     // developer.spotify.com/documentation/general/guides/authorization/code-flow#request-access-token
     const url = 'https://accounts.spotify.com/api/token';
@@ -164,7 +179,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return res.data;
   }
 
-  if ('code' in query) {
+  if ('newLogin' in query) {
+    return {
+      props: {} as Props,
+      redirect: {
+        destination: newSpotifyUserAuthUrl(),
+      },
+    };
+  } else if ('code' in query) {
     // The request succeeded
     const code = query.code as string;
     const tokenData = await requestAccessToken(code);
