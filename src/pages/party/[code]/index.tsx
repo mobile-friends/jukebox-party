@@ -19,6 +19,7 @@ import QueueWrapper from '@component/queueWrapper';
 import Button from '@component/elements/button';
 import { useRouter } from 'next/router';
 import { useWindowSize } from '@hook/useWindowSize';
+import LyricsWrapper from '@component/lyricsWrapper';
 
 interface Props {
   partyName: string;
@@ -53,16 +54,24 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                 />
               </div>
               {windowSize !== null && windowSize.width > 750 ? (
-                <div className={`${styles.queueView}`}>
-                  <h2>Next is</h2>
-                  <QueueWrapper partyCode={partyCode} minified={true} />
-                  <div className={styles.queueInfo}>
-                    <Button
-                      styleType='tertiary'
-                      content='see full queue'
-                      onClick={goToQueue}
-                    />
+                <div>
+                  <div className={`${styles.queueView}`}>
+                    <h2>Next is</h2>
+                    <QueueWrapper partyCode={partyCode} minified={true} />
+                    <div className={styles.queueInfo}>
+                      <Button
+                        styleType='tertiary'
+                        content='see full queue'
+                        onClick={goToQueue}
+                      />
+                    </div>
                   </div>
+                  <>
+                    <LyricsWrapper
+                      playTime={playbackState.playTime}
+                      track={playbackState.track}
+                    />
+                  </>
                 </div>
               ) : (
                 <div></div>
