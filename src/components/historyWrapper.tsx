@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Track } from '@common/types/track';
 import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
-import { GetQueueResult } from '@endpoint/getQueue';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
-import { signOut } from 'next-auth/react';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import { GetHistoryResult } from '@endpoint/getHistory';
 

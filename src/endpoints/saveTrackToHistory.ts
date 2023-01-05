@@ -56,7 +56,7 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
     // if track is already in the history --> remove it and save it again
     // because the last played song should be last
     party.history.tracks.map(async (item) => {
-      if (item.name == track.name) {
+      if (item.id == track.id) {
         const index = party.history.tracks.indexOf(item);
         party.history.tracks.splice(index, 1);
       }
