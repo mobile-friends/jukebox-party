@@ -38,8 +38,4 @@ export namespace Env {
   export function nextAuthSecret(): string {
     return tryGet('NEXT_AUTH_SECRET');
   }
-
-  export function isProduction(): boolean {
-    return process?.env?.NODE_ENV === 'production';
-  }
 }

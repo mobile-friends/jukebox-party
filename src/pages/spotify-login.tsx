@@ -127,7 +127,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 
   function redirectUrl(): string {
     // TODO: Use dynamic port [JUKE-138]
-    return Env.isProduction()
+    return true
       ? `https://jukebox.herokuapp.com/spotify-login`
       : `http://localhost:3000/spotify-login`;
   }
