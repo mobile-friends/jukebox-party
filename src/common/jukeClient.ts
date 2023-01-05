@@ -16,7 +16,7 @@ import { RemoveGuestBody, RemoveGuestResult } from '@endpoint/removeGuest';
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
   baseURL: 'http://localhost:3000/api/',
-  timeout: 1000,
+  timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

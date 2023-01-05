@@ -16,7 +16,7 @@ type SpotifyResponse<T> = [ResponseData<T>, StatusCodes];
 
 const axiosClient = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
-  timeout: 1000,
+  timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -92,7 +92,8 @@ export namespace SpotifyClient {
       throw new Error();
     }
     return {
-      nickname: data.display_name === undefined ? 'undefined' : data.display_name,
+      nickname:
+        data.display_name === undefined ? 'undefined' : data.display_name,
       email: data.email === undefined ? 'undefined' : data.email,
       account_type: data.product === undefined ? 'undefined' : data.product,
     };
