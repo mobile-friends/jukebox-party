@@ -1,6 +1,6 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
-
+import { History } from './history';
 declare const tag: unique symbol;
 
 /**
@@ -59,7 +59,7 @@ export namespace Party {
     host: Host
   ) {
     const partyCode = PartyCode.generate();
-    return make(partyCode, name, spotifyToken, host, [], {});
+    return make(partyCode, name, spotifyToken, host, [], History.make([]));
   }
 
   /**
@@ -152,5 +152,21 @@ export namespace Party {
    */
   export function hasHostWithId(party: Party, id: UserId): boolean {
     return User.idOf(hostOf(party)) === id;
+  }
+
+  /**
+   * Saves the give history to the party
+   * @param party The party
+   * @param history The history
+   */
+  export function saveHistory(party: Party, history: History): Party {
+    return make(
+      party.code,
+      party.name,
+      party.spotifyToken,
+      party.host,
+      party.guests,
+      history
+    );
   }
 }
