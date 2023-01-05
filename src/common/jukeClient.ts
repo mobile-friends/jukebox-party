@@ -16,7 +16,7 @@ import { Env } from '@common/env';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
-  baseURL: true
+  baseURL: false
     ? `https://jukebox.herokuapp.com/api/`
     : 'http://localhost:3000/api/',
   timeout: 3000,
