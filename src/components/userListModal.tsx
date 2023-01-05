@@ -40,13 +40,13 @@ export default function UserListModal({ partyCode, isHost, onClosed }: Props) {
 
   function handleClick(e: BaseSyntheticEvent) {
     const targetClassName: string = e.target.className;
-    if(targetClassName.includes('background')) {
+    if(typeof(targetClassName) === 'string' && targetClassName.includes('background_clickable')) {
       onClosed();
     }
   }
 
   return (
-    <div className={styles.background} onClick={handleClick}>
+    <div className={styles.background_clickable} onClick={handleClick}>
       <div className={styles.modal}>
         <h2 className='text-center'>
           The party.<span className='text-italic text-primary'>people</span>
