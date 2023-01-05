@@ -23,7 +23,7 @@ export function parseDurationOf(track: TrackLike): Duration {
  * @param artist The artist
  */
 export function parseArtist(artist: SpotifyApi.ArtistObjectSimplified): Artist {
-  return Artist.make(artist.name);
+  return Artist.make(artist.name, artist.id);
 }
 
 /**
