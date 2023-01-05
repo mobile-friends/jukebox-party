@@ -25,4 +25,12 @@ const queue = async (
   );
 };
 
-export { queue };
+const postQueue = async (token: string, uri: string): Promise<void> => {
+  await jukeboxClient.post(`${baseURL}?uri=${uri}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    }
+  });
+};
+
+export { queue, postQueue };
