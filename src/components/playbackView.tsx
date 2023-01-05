@@ -10,6 +10,8 @@ import PlayButton from '@component/playButton';
 import { Duration } from '@common/types/duration';
 import { useSession } from 'next-auth/react';
 import useLivePartyUsers from '@hook/useLivePartyUsers';
+import { JukeClient } from '@common/jukeClient';
+import { History } from '@common/types/history';
 
 interface Props {
   /**
@@ -55,7 +57,14 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       (marqueeTextRef.current?.clientWidth ?? 0) >
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
+    saveTrackToHistory(track);
   }, [track.name]);
+
+  async function saveTrackToHistory(track: Track) {
+    const result = await JukeClient.saveTrackToHistory(partyCode, {
+      track: track,
+    });
+  }
 
   function getAnimationDuration(
     spanElem: RefObject<HTMLSpanElement>

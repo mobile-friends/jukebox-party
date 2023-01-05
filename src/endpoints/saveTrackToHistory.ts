@@ -53,10 +53,21 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
       return Response.partyNotFound(partyCode);
     }
 
+    // if track is already in the history --> remove it and save it again
+    // because the last played song should be last
+    party.history.tracks.map(async (item) => {
+      if (item.name == track.name) {
+        console.log(item.name);
+        const index = party.history.tracks.indexOf(item);
+        party.history.tracks.splice(index, 1);
+      }
+    });
+
     const history = History.addTrackTo(party, track);
     const partyWithNewHistory = Party.saveHistory(party, history);
 
     await PartyDb.store(firebaseDb, partyWithNewHistory);
+
     return Response.ok<SaveTrackToHistorySuccess>({ history: history });
   }
 );
