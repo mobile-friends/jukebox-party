@@ -5,7 +5,7 @@ import { arbPlaybackState } from './arb/playbackState';
 import { Track } from '@common/types/track';
 import { Duration } from '@common/types/duration';
 
-const testTrack = Track.make('Wow', Duration.Zero, [], '');
+const testTrack = Track.make('Wow', Duration.Zero, [], '', 'asdf0987');
 
 test('Starting states playing makes them playing', () => {
   fc.assert(
