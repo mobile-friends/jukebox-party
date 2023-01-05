@@ -56,7 +56,10 @@ export default function SpotifyLogin(props: Props) {
   }
 
   function goToLogin() {
-    router.push('/spotify-login').catch(console.error);
+    router.push({
+      pathname: '/spotify-login',
+      query: { newLogin: 'true' },
+    });
   }
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
@@ -84,19 +87,37 @@ export default function SpotifyLogin(props: Props) {
     if (spotifyAccountType !== 'premium') {
       return (
         <div className={`text-center ${styles.container}`}>
+          <h3>
+            Hi{' '}
+            <span className='text-italic'>
+              {props.spotifyUser.nickname === 'undefined'
+                ? ''
+                : props.spotifyUser.nickname}
+            </span>
+            !
+          </h3>
+          {props.spotifyUser.email === 'undefined' ? (
+            <></>
+          ) : (
+            <span className='text-muted'>
+              Account of {props.spotifyUser.email}
+            </span>
+          )}
+
           <h2 className='text-primary'>
             It looks like this is no premium account
           </h2>
-          <span>To use jukebox.party you must have a premium account.</span>
 
+          <p>Choose &apos;Not you?&apos; and log in with premium account</p>
           <Button
             content={'Log in with premium account'}
-            styleType={'primary'}
+            styleType={'primary block'}
             onClick={goToLogin}
           />
+          <p>or</p>
           <Button
             content={'Be part of a party'}
-            styleType={'tertiary'}
+            styleType={'secondary block'}
             onClick={goBackToStart}
           />
         </div>
@@ -104,6 +125,23 @@ export default function SpotifyLogin(props: Props) {
     } else if (spotifyAccountType === 'premium' && isWaitingForPlaying(props)) {
       return (
         <div className={`text-center ${styles.container}`}>
+          <h3>
+            Hi{' '}
+            <span className='text-italic'>
+              {props.spotifyUser.nickname === 'undefined'
+                ? ''
+                : props.spotifyUser.nickname}
+            </span>
+            !
+          </h3>
+          {props.spotifyUser.email === 'undefined' ? (
+            <></>
+          ) : (
+            <span className='text-muted'>
+              Account of {props.spotifyUser.email}
+            </span>
+          )}
+
           <h2 className='text-primary'>Press play in the Spotify app</h2>
           <span>
             Click play on the output device of your choice (laptop, smartphone,
@@ -144,6 +182,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return `https://accounts.spotify.com/authorize?${query}`;
   }
 
+  function newSpotifyUserAuthUrl() {
+    // developer.spotify.com/documentation/general/guides/authorization/code-flow#request-user-authorization
+    const query = querystring.stringify({
+      response_type: 'code',
+      client_id: Env.spotifyClientId(),
+      scope: Scope,
+      redirect_uri: redirectUrl(),
+      show_dialog: true,
+    });
+    return `https://accounts.spotify.com/authorize?${query}`;
+  }
+
   async function requestAccessToken(code: string): Promise<SpotifyTokenData> {
     // developer.spotify.com/documentation/general/guides/authorization/code-flow#request-access-token
     const url = 'https://accounts.spotify.com/api/token';
@@ -165,7 +215,14 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return res.data;
   }
 
-  if ('code' in query) {
+  if ('newLogin' in query) {
+    return {
+      props: {} as Props,
+      redirect: {
+        destination: newSpotifyUserAuthUrl(),
+      },
+    };
+  } else if ('code' in query) {
     // The request succeeded
     const code = query.code as string;
     const tokenData = await requestAccessToken(code);

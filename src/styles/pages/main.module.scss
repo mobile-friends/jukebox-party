@@ -4,4 +4,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .greeting {
+    margin-bottom: 20px;
+  }
+  .anotherAccount {
+    margin-top: 30px;
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
 }
