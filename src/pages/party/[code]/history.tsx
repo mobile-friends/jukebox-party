@@ -1,13 +1,13 @@
 import React from 'react';
 import Navbar from '@component/navbar';
 import JukeHeader from '@component/elements/jukeHeader';
-import QueueWrapper from '@component/queueWrapper';
 import { GetServerSideProps } from 'next/types';
 import { PartyCode } from '@common/types/partyCode';
 import { Party } from '@common/types/party';
 import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
 import { ServersideSession } from '@common/serversideSession';
+import HistoryWrappr from '@component/historyWrapper';
 
 interface Props {
   partyCode: PartyCode;
@@ -19,11 +19,11 @@ export default function Queue({ partyCode }: Props) {
       <div className='queueHeader'>
         <JukeHeader
           first={'party'}
-          second={'tracks'}
-          pageTitle={'Queue | jukebox.party'}
+          second={'history'}
+          pageTitle={'History | jukebox.party'}
         />
       </div>
-      <QueueWrapper partyCode={partyCode} minified={false} />
+      <HistoryWrappr partyCode={partyCode} minified={false} />
       <Navbar partyCode={partyCode} />
     </div>
   );

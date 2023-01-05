@@ -17,6 +17,7 @@ import {
   SaveTrackToHistoryBody,
   SaveTrackToHistoryResult,
 } from '@endpoint/saveTrackToHistory';
+import { GetHistoryResult } from '@endpoint/getHistory';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -187,7 +188,16 @@ export namespace JukeClient {
     partyCode: PartyCode,
     body: SaveTrackToHistoryBody
   ): Promise<SaveTrackToHistoryResult> {
-    const url = `parties/${partyCode}/history`;
+    const url = `parties/${partyCode}/history/save`;
     return post<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(url, body);
+  }
+
+  /**
+   * Gets the track-queue on a party
+   * @param partyCode The code of the party
+   */
+  export function getHistory(partyCode: PartyCode): Promise<GetHistoryResult> {
+    const url = `parties/${partyCode}/history/get`;
+    return get<GetHistoryResult>(url);
   }
 }

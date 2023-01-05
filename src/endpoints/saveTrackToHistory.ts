@@ -57,7 +57,6 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
     // because the last played song should be last
     party.history.tracks.map(async (item) => {
       if (item.name == track.name) {
-        console.log(item.name);
         const index = party.history.tracks.indexOf(item);
         party.history.tracks.splice(index, 1);
       }

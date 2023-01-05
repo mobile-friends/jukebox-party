@@ -95,6 +95,14 @@ export namespace Party {
   }
 
   /**
+   * Gets the history of a party
+   * @param party The party
+   */
+  export function historyOf(party: Party): History {
+    return party.history;
+  }
+
+  /**
    * Adds a guest to the party and returns the updated party
    * @param party The party
    * @param guest The guest
