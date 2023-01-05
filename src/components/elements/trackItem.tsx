@@ -11,8 +11,8 @@ interface Props {
 
 function ArtistView(artist: Artist) {
   const artistName = Artist.nameOf(artist);
-  // TODO: Use unique artist id for key [JUKE-140]
-  return <div key={artistName}>{artistName}</div>;
+  const artistId = Artist.idOf(artist);
+  return <div key={artistId}>{artistName}</div>;
 }
 
 /**
