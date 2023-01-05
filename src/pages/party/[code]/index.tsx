@@ -18,11 +18,17 @@ import PartyUserView from '@component/partyUserView';
 import QueueWrapper from '@component/queueWrapper';
 import Button from '@component/elements/button';
 import { useRouter } from 'next/router';
+import { useWindowSize } from '@hook/useWindowSize';
 
 interface Props {
   partyName: string;
   partyCode: PartyCode;
   isHost: boolean;
+}
+
+interface WindowSize {
+  width: number;
+  height: number;
 }
 
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
@@ -31,18 +37,13 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
 
   // Get the screen size to show/hide the queue box in the dome when a certain size
   //    is reached. This way unnecessary requests can be avoided.
-  const [windowSize, setWindowSize] = useState({
-    width: 0,
-    height: 0,
-  });
+  const [windowSize, setWindowSize] = useState<WindowSize>(useWindowSize);
+
   useEffect(() => {
     function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      setWindowSize(useWindowSize);
     }
-
+    
     window.addEventListener('resize', handleResize);
     handleResize();
     return () => window.removeEventListener('resize', handleResize);
