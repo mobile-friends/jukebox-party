@@ -26,28 +26,10 @@ interface Props {
   isHost: boolean;
 }
 
-interface WindowSize {
-  width: number;
-  height: number;
-}
-
 export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   const router = useRouter();
   const playbackState = useLivePlaybackState(partyCode);
-
-  // Get the screen size to show/hide the queue box in the dome when a certain size
-  //    is reached. This way unnecessary requests can be avoided.
-  const [windowSize, setWindowSize] = useState<WindowSize>(useWindowSize);
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize(useWindowSize);
-    }
-    
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const windowSize = useWindowSize();
 
   function goToQueue() {
     router.push(`/party/${partyCode}/queue`).catch(console.error);
@@ -70,7 +52,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                   partyCode={partyCode}
                 />
               </div>
-              {windowSize.width > 750 ? (
+              {windowSize !== null && windowSize.width > 750 ? (
                 <div className={`${styles.queueView}`}>
                   <h2>Next is</h2>
                   <QueueWrapper partyCode={partyCode} minified={true} />
