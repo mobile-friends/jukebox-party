@@ -38,4 +38,9 @@ export namespace Env {
   export function nextAuthSecret(): string {
     return tryGet('NEXT_AUTH_SECRET');
   }
+
+  export function isProduction(): boolean {
+    // TODO dynamisch mit ENV-Variablen machen - Funktioniert irgendwie nicht im Frontend
+    return false;
+  }
 }
