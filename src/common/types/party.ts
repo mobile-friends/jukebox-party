@@ -12,6 +12,7 @@ export interface Party {
   readonly spotifyToken: SpotifyToken;
   readonly host: Host;
   readonly guests: Guest[];
+  readonly history: History;
   readonly [tag]: 'Party';
 }
 
@@ -26,15 +27,24 @@ export namespace Party {
    * @param spotifyToken The spotify-token the party uses
    * @param host The parties host
    * @param guests The parties guests
+   * @param history The parties history
    */
   export function make(
     code: string,
     name: string,
     spotifyToken: SpotifyToken,
     host: Host,
-    guests: Guest[]
+    guests: Guest[],
+    history: History
   ): Party {
-    return Object.freeze({ code, name, spotifyToken, host, guests } as Party);
+    return Object.freeze({
+      code,
+      name,
+      spotifyToken,
+      host,
+      guests,
+      history,
+    } as Party);
   }
 
   /**
@@ -49,7 +59,7 @@ export namespace Party {
     host: Host
   ) {
     const partyCode = PartyCode.generate();
-    return make(partyCode, name, spotifyToken, host, []);
+    return make(partyCode, name, spotifyToken, host, [], {});
   }
 
   /**
@@ -96,7 +106,8 @@ export namespace Party {
       party.name,
       party.spotifyToken,
       party.host,
-      newGuests
+      newGuests,
+      party.history
     );
   }
 
@@ -129,7 +140,8 @@ export namespace Party {
       party.name,
       party.spotifyToken,
       party.host,
-      newGuests
+      newGuests,
+      party.history
     );
   }
 
