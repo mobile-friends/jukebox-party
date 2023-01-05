@@ -41,9 +41,7 @@ export namespace Env {
 
   export function isProduction(): boolean {
     // TODO dynamisch mit ENV-Variablen machen - Funktioniert irgendwie nicht im Frontend
-    console.log('process');
-    console.log(process);
-    console.log(process.env.NEXT_PUBLIC_ENVIRONMENT);
+
     return process.env.NEXT_PUBLIC_ENVIRONMENT === 'production';
   }
 }
