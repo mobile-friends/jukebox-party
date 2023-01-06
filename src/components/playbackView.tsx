@@ -14,8 +14,11 @@ import { JukeClient } from '@common/jukeClient';
 import { SaveTrackToHistoryResult } from '@endpoint/saveTrackToHistory';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import { RatedTrack } from '@common/types/ratedTrack';
 import { SaveRatingToRatedTrackResult } from '@endpoint/saveRatingToRatedTrack';
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
+import { MdStarRate } from 'react-icons/md';
+import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 
 interface Props {
   /**
@@ -40,6 +43,8 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   const artistRef = useRef<HTMLParagraphElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
 
+  const [trackRated, setTrackRated] = useState(false);
+
   const track = PlaybackState.trackOf(playbackState);
   const trackDuration = Track.durationOf(track);
   const artistViews = Track.artistsOf(track)
@@ -61,6 +66,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
     saveTrackToHistory();
+    setTrackRated(false);
   }, [track.name]);
 
   async function saveTrackToHistory() {
@@ -101,6 +107,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   function onSaveRatingToRatedTrack(result: SaveRatingToRatedTrackResult) {
     switch (result.code) {
       case StatusCodes.NO_CONTENT: //everything worked out
+        setTrackRated(true);
         return;
       case StatusCodes.BAD_REQUEST:
         // TODO: Handle error [JUKE-142]
@@ -178,11 +185,47 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       ) : (
         ''
       )}
-      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-        <div onClick={() => saveRatingToRatedTrack('like')}>LIKE</div>
-        <br></br>
-        <div onClick={() => saveRatingToRatedTrack('dislike')}>DISLIKE</div>
-      </div>
+      {!trackRated ? (
+        <Fab
+          mainButtonStyles={{
+            backgroundColor: '#ece32f',
+            height: '50px',
+            width: '50px',
+          }}
+          icon={<MdStarRate style={{ color: 'black' }} />}
+          event={'click'}
+          alwaysShowTitle={false}
+          style={{ bottom: 70, left: -10 }}
+        >
+          <Action
+            text='Dislike'
+            onClick={() => saveRatingToRatedTrack('dislike')}
+            style={{ backgroundColor: '#FF6F59', left: 3 }}
+          >
+            <AiFillDislike />
+          </Action>
+          <Action
+            text='Like'
+            onClick={() => saveRatingToRatedTrack('like')}
+            style={{ backgroundColor: '#77BFA3', left: 3 }}
+          >
+            <AiFillLike />
+          </Action>
+        </Fab>
+      ) : (
+        <Fab
+          mainButtonStyles={{
+            backgroundColor: '#fff',
+            opacity: '0.6',
+            height: '50px',
+            width: '50px',
+            pointerEvents: 'none',
+          }}
+          icon={<MdStarRate style={{ color: 'black' }} />}
+          alwaysShowTitle={false}
+          style={{ bottom: 70, left: -10 }}
+        ></Fab>
+      )}
     </div>
   );
 }
