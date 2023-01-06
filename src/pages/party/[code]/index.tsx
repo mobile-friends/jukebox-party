@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PlaybackView from '@component/playbackView';
 import { Party } from '@common/types/party';
 import Navbar from '@component/navbar';
@@ -10,11 +10,6 @@ import { PartyCode } from '@common/types/partyCode';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import PartyHeader from '@component/elements/partyHeader';
 import { ServersideSession } from '@common/serversideSession';
-import { Guest, User } from '@common/types/user';
-import { JukeClient } from '@common/jukeClient';
-import { StatusCodes } from 'http-status-codes';
-import { assertNeverReached } from '@common/util/assertions';
-import PartyUserView from '@component/partyUserView';
 import QueueWrapper from '@component/queueWrapper';
 import Button from '@component/elements/button';
 import { useRouter } from 'next/router';
