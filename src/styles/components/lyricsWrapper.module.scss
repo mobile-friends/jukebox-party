@@ -1,0 +1,22 @@
+.lyrics-wrapper {
+  display: flex;
+  align-content: center;
+  flex-flow: column;
+  padding: 2rem;
+  background: 'linear-gradient(90deg, rgba(255,208,5,1) 0%, rgba(236,227,47,1) 100%)';
+  gap: 1rem;
+  border-radius: 1rem;
+
+  .lyrics-line {
+    display: block;
+    text-align: center;
+    color: #7b761a;
+    font-size: 1.2rem;
+  }
+
+  .current {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: '#191919';
+  }
+}
