@@ -22,7 +22,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
         return res.json();
       })
       .then((data) => {
-        const lyrics = data?.lines?.map((line: any) => {
+        const lyrics = data?.lines?.map((line: unknown) => {
           return {
             startTime: parseInt(line.startTimeMs) / 1000,
             words: line.words,
@@ -31,7 +31,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
         setLyrics(lyrics);
         console.log(lyrics);
       });
-  }, [track]);
+  }, [track, trackId]);
 
   useEffect(() => {
     if (!lyrics || lyrics?.error) return;
@@ -54,49 +54,10 @@ export default function LyricsWrapper({ playTime, track }: Props) {
   }, [playTime]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignContent: 'center',
-        flexFlow: 'column',
-        padding: '2rem',
-        background:
-          'linear-gradient(90deg, rgba(255,208,5,1) 0%, rgba(236,227,47,1) 100%)',
-        gap: '1rem',
-        borderRadius: '1rem',
-      }}
-    >
-      <div
-        style={{
-          display: 'block',
-          textAlign: 'center',
-          color: '#7b761a',
-          fontSize: '1.2rem',
-        }}
-      >
-        {prevLine}
-      </div>
-      <div
-        style={{
-          display: 'block',
-          textAlign: 'center',
-          color: '#191919',
-          fontWeight: '600',
-          fontSize: '1.5rem',
-        }}
-      >
-        {currentLine}
-      </div>
-      <div
-        style={{
-          display: 'block',
-          textAlign: 'center',
-          color: '#7b761a',
-          fontSize: '1.2rem',
-        }}
-      >
-        {nextLine}
-      </div>
+    <div className='lyrics-wrapper'>
+      <div className='lyrics-line'>{prevLine}</div>
+      <div className='lyrics-line current'>{currentLine}</div>
+      <div className='lyrics-line'>{nextLine}</div>
     </div>
   );
 }
