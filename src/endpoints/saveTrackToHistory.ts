@@ -4,23 +4,18 @@ import firebaseDb from '@common/firebaseDb';
 import { requestHandler } from '@common/infrastructure/requestHandler';
 import {
   DtoError,
+  NoContent,
   NotImplementedError,
-  Ok,
   PartyNotFoundError,
 } from '@common/infrastructure/types';
 import { History } from '@common/types/history';
 import { Track } from '@common/types/track';
 import { tryQueryParam } from '@common/util/query';
 import { Response } from '@common/infrastructure/response';
-import { assertNeverReached } from '@common/util/assertions';
 import { Party } from '@common/types/party';
 
 export interface SaveTrackToHistoryBody {
   track: Track;
-}
-
-export interface SaveTrackToHistorySuccess {
-  history: History;
 }
 
 export type SaveTrackToHistoryError =
@@ -28,17 +23,13 @@ export type SaveTrackToHistoryError =
   | PartyNotFoundError
   | NotImplementedError;
 
-export type SaveTrackToHistoryResult =
-  | Ok<SaveTrackToHistorySuccess>
-  | SaveTrackToHistoryError;
+export type SaveTrackToHistoryResult = NoContent | SaveTrackToHistoryError;
 
 const PartyCodeQueryParamName = 'partyCode';
 
 export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
-  async (req) => {
-    const { track } = req.body;
-
-    const partyCodeParam = tryQueryParam(req.query, PartyCodeQueryParamName);
+  async ({ body, query }) => {
+    const partyCodeParam = tryQueryParam(query, PartyCodeQueryParamName);
     if (partyCodeParam === null) {
       return Response.missingQueryParam(PartyCodeQueryParamName);
     }
@@ -53,20 +44,24 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
       return Response.partyNotFound(partyCode);
     }
 
-    // if track is already in the history --> remove it and save it again
-    // because the last played song should be last
-    party.history.tracks.map(async (item) => {
-      if (item.id == track.id) {
-        const index = party.history.tracks.indexOf(item);
-        party.history.tracks.splice(index, 1);
-      }
-    });
+    const tmpParty = compareTrackWithHistoryTracks(party, body.track);
 
-    const history = History.addTrackTo(party, track);
-    const partyWithNewHistory = Party.saveHistory(party, history);
+    const history = History.addTrackTo(tmpParty.history, body.track);
+    const partyWithNewHistory = Party.saveHistory(tmpParty, history);
 
     await PartyDb.store(firebaseDb, partyWithNewHistory);
-
-    return Response.ok<SaveTrackToHistorySuccess>({ history: history });
+    return Response.noContent();
   }
 );
+
+// if track is already in the history --> remove it and save it again
+// because the last played song should be last
+function compareTrackWithHistoryTracks(party: Party, track: Track) {
+  party.history.tracks.map(async (item) => {
+    if (item.id === track.id) {
+      const index = party.history.tracks.indexOf(item);
+      party.history.tracks.splice(index, 1);
+    }
+  });
+  return party;
+}

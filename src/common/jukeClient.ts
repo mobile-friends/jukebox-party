@@ -187,7 +187,7 @@ export namespace JukeClient {
     partyCode: PartyCode,
     body: SaveTrackToHistoryBody
   ): Promise<SaveTrackToHistoryResult> {
-    const url = `parties/${partyCode}/history/save`;
+    const url = `parties/${partyCode}/history`;
     return post<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(url, body);
   }
 
@@ -196,7 +196,7 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    */
   export function getHistory(partyCode: PartyCode): Promise<GetHistoryResult> {
-    const url = `parties/${partyCode}/history/get`;
+    const url = `parties/${partyCode}/history`;
     return get<GetHistoryResult>(url);
   }
 }

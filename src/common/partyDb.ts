@@ -11,7 +11,7 @@ interface PartyEntry {
   spotifyToken: SpotifyToken;
   host: Host;
   guests?: Guest[];
-  history?: History;
+  history: History;
 }
 
 function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {

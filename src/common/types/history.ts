@@ -10,6 +10,7 @@ declare const tag: unique symbol;
  */
 export interface History {
   readonly tracks: Track[];
+  readonly [tag]: 'History';
 }
 
 /**
@@ -29,8 +30,8 @@ export namespace History {
    * @param history The History
    * @param track The Track
    */
-  export function addTrackTo(party: Party, track: Track): History {
-    const newTracks = [...party.history.tracks, track];
+  export function addTrackTo(history: History, track: Track): History {
+    const newTracks = [...history.tracks, track];
     return make(newTracks);
   }
 }

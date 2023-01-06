@@ -17,7 +17,7 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
   const playbackState = useLivePlaybackState(partyCode);
   const [currentHistoryTracks, setCurrentHistoryTracks] = useState<Track[]>([]);
 
-  function onQueueResult(result: GetHistoryResult) {
+  function onHistoryResult(result: GetHistoryResult) {
     switch (result.code) {
       case StatusCodes.OK:
         return setCurrentHistoryTracks(result.content.history.tracks);
@@ -36,7 +36,7 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
   }
 
   useEffect(() => {
-    JukeClient.getHistory(partyCode).then(onQueueResult).catch(console.error);
+    JukeClient.getHistory(partyCode).then(onHistoryResult).catch(console.error);
   }, [partyCode, playbackState, minified]);
 
   const tracks = currentHistoryTracks.map((track: Track) => (

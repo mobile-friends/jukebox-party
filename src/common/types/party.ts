@@ -59,7 +59,8 @@ export namespace Party {
     host: Host
   ) {
     const partyCode = PartyCode.generate();
-    return make(partyCode, name, spotifyToken, host, [], History.make([]));
+    const emptyHistory = History.make([]);
+    return make(partyCode, name, spotifyToken, host, [], emptyHistory);
   }
 
   /**
