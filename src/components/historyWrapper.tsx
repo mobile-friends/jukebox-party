@@ -43,5 +43,9 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
     <TrackItem key={Track.nameOf(track)} track={track} />
   ));
 
-  return <div>{minified ? tracks.slice(0, 5) : tracks}</div>;
+  return (
+    <div style={{ marginBottom: '84px' }}>
+      {minified ? tracks.slice(0, 5) : tracks}
+    </div>
+  );
 }
