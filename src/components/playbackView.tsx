@@ -14,6 +14,8 @@ import { JukeClient } from '@common/jukeClient';
 import { SaveTrackToHistoryResult } from '@endpoint/saveTrackToHistory';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import { RatedTrack } from '@common/types/ratedTrack';
+import { SaveRatingToRatedTrackResult } from '@endpoint/saveRatingToRatedTrack';
 
 interface Props {
   /**
@@ -58,10 +60,10 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       (marqueeTextRef.current?.clientWidth ?? 0) >
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
-    saveTrackToHistory(track);
+    saveTrackToHistory();
   }, [track.name]);
 
-  async function saveTrackToHistory(track: Track) {
+  async function saveTrackToHistory() {
     await JukeClient.saveTrackToHistory(partyCode, {
       track: track,
     })
@@ -70,6 +72,33 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   }
 
   function onSaveTrackToHistoryResult(result: SaveTrackToHistoryResult) {
+    switch (result.code) {
+      case StatusCodes.NO_CONTENT: //everything worked out
+        return;
+      case StatusCodes.BAD_REQUEST:
+        // TODO: Handle error [JUKE-142]
+        break;
+      case StatusCodes.NOT_FOUND:
+        // TODO: Handle error [JUKE-142]
+        break;
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle error [JUKE-142]
+        break;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
+  async function saveRatingToRatedTrack(rating: string) {
+    await JukeClient.saveRatingToRatedTrack(partyCode, {
+      track: track,
+      rating: rating,
+    })
+      .then(onSaveRatingToRatedTrack)
+      .catch(console.error);
+  }
+
+  function onSaveRatingToRatedTrack(result: SaveRatingToRatedTrackResult) {
     switch (result.code) {
       case StatusCodes.NO_CONTENT: //everything worked out
         return;
@@ -149,6 +178,11 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       ) : (
         ''
       )}
+      <div style={{ marginTop: '20px', marginBottom: '20px' }}>
+        <div onClick={() => saveRatingToRatedTrack('like')}>LIKE</div>
+        <br></br>
+        <div onClick={() => saveRatingToRatedTrack('dislike')}>DISLIKE</div>
+      </div>
     </div>
   );
 }

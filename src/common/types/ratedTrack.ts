@@ -17,8 +17,8 @@ export interface RatedTrack {
  * A Rating
  */
 export interface Rating {
-  readonly likes: string | null;
-  readonly dislikes: string | null;
+  readonly likes: number;
+  readonly dislikes: number;
   readonly [tag]: 'Rating';
 }
 
@@ -40,10 +40,7 @@ export namespace RatedTrack {
    * @param likes The likes
    * @param dislikes The dislikes
    */
-  export function makeRating(
-    likes: string | null,
-    dislikes: string | null
-  ): Rating {
+  export function makeRating(likes: number, dislikes: number): Rating {
     return Object.freeze({ likes, dislikes } as Rating);
   }
 

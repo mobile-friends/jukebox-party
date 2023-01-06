@@ -30,7 +30,7 @@ export namespace History {
    * @param track The Track
    */
   export function addTrackTo(history: History, track: Track): History {
-    const emptyRating = RatedTrack.makeRating(null, null);
+    const emptyRating = RatedTrack.makeRating(0, 0);
     const ratedTrack = RatedTrack.make(track, emptyRating);
     const newTracks = [...history.tracks, ratedTrack];
     return make(newTracks);

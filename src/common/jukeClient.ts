@@ -18,6 +18,10 @@ import {
   SaveTrackToHistoryResult,
 } from '@endpoint/saveTrackToHistory';
 import { GetHistoryResult } from '@endpoint/getHistory';
+import {
+  SaveRatingToRatedTrackBody,
+  SaveRatingToRatedTrackResult,
+} from '@endpoint/saveRatingToRatedTrack';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -198,5 +202,21 @@ export namespace JukeClient {
   export function getHistory(partyCode: PartyCode): Promise<GetHistoryResult> {
     const url = `parties/${partyCode}/history`;
     return get<GetHistoryResult>(url);
+  }
+
+  /**
+   * Saves the rating to the ratedTrack which is stored in the history s
+   * @param partyCode The code of the party
+   * @param body The request body
+   */
+  export function saveRatingToRatedTrack(
+    partyCode: PartyCode,
+    body: SaveRatingToRatedTrackBody
+  ): Promise<SaveRatingToRatedTrackResult> {
+    const url = `parties/${partyCode}/rating`;
+    return post<SaveRatingToRatedTrackBody, SaveRatingToRatedTrackResult>(
+      url,
+      body
+    );
   }
 }
