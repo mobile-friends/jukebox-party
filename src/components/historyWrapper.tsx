@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Track } from '@common/types/track';
 import { PartyCode } from '@common/types/partyCode';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import TrackItem from '@component/elements/trackItem';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import { GetHistoryResult } from '@endpoint/getHistory';
+import { History } from '@common/types/history';
+import RatedTrackItem from './elements/ratedTrackItem';
+import { RatedTrack } from '@common/types/ratedTrack';
 
 interface Props {
   partyCode: PartyCode;
@@ -15,7 +16,9 @@ interface Props {
 
 export default function HistoryWrappr({ partyCode, minified }: Props) {
   const playbackState = useLivePlaybackState(partyCode);
-  const [currentHistoryTracks, setCurrentHistoryTracks] = useState<Track[]>([]);
+  const [currentHistoryTracks, setCurrentHistoryTracks] = useState<
+    RatedTrack[]
+  >([]);
 
   function onHistoryResult(result: GetHistoryResult) {
     switch (result.code) {
@@ -39,8 +42,11 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
     JukeClient.getHistory(partyCode).then(onHistoryResult).catch(console.error);
   }, [partyCode, playbackState, minified]);
 
-  const tracks = currentHistoryTracks.map((track: Track) => (
-    <TrackItem key={Track.nameOf(track)} track={track} />
+  const tracks = currentHistoryTracks.map((ratedTrack: RatedTrack) => (
+    <RatedTrackItem
+      key={RatedTrack.nameOf(ratedTrack)}
+      ratedTrack={ratedTrack}
+    />
   ));
 
   return (
