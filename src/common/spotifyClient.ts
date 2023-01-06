@@ -16,7 +16,6 @@ type SpotifyResponse<T> = [ResponseData<T>, StatusCodes];
 
 const axiosClient = axios.create({
   baseURL: 'https://api.spotify.com/v1/',
-  timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
