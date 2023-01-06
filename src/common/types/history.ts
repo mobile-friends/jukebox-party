@@ -1,15 +1,14 @@
 import { Party } from './party';
+import { RatedTrack } from './ratedTrack';
 import { Track } from './track';
 
 declare const tag: unique symbol;
-
-//TODO: Bewertungen auch in der History speichern, also Objekt erweitern
 
 /**
  * A History
  */
 export interface History {
-  readonly tracks: Track[];
+  readonly tracks: RatedTrack[];
   readonly [tag]: 'History';
 }
 
@@ -19,9 +18,9 @@ export interface History {
 export namespace History {
   /**
    * Constructor function for History
-   * @param history The track which was playing
+   * @param tracks The tracks in the history
    */
-  export function make(tracks: Track[]): History {
+  export function make(tracks: RatedTrack[]): History {
     return Object.freeze({ tracks } as History);
   }
 
@@ -31,7 +30,9 @@ export namespace History {
    * @param track The Track
    */
   export function addTrackTo(history: History, track: Track): History {
-    const newTracks = [...history.tracks, track];
+    const emptyRating = RatedTrack.makeRating(null, null);
+    const ratedTrack = RatedTrack.make(track, emptyRating);
+    const newTracks = [...history.tracks, ratedTrack];
     return make(newTracks);
   }
 }

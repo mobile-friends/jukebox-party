@@ -58,7 +58,7 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
 // because the last played song should be last
 function compareTrackWithHistoryTracks(party: Party, track: Track) {
   party.history.tracks.map(async (item) => {
-    if (item.id === track.id) {
+    if (item.track.id === track.id) {
       const index = party.history.tracks.indexOf(item);
       party.history.tracks.splice(index, 1);
     }
