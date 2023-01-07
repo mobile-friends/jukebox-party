@@ -105,21 +105,23 @@ export default function AddTracks({ partyCode }: Props) {
             placeholder='What do you want to listen to?'
             onChange={onQueryInputChanged}
           />
-          <ul style={{ overflow: 'scroll' }}>
-            {tracks?.map((track) => (
-              <TrackItem key={track.id} track={track} />
-            ))}
-          </ul>
           {!tracks.length && recommendedTracks?.length ? (
             <>
-              <ul style={{ overflow: 'scroll' }}>
+              <h1>Maybe you like</h1>
+              <ul>
                 {recommendedTracks?.map((track) => (
                   <TrackItem key={track.id} track={track} />
                 ))}
               </ul>
             </>
           ) : (
-            <> </>
+            <>
+              <ul style={{ overflow: 'scroll' }}>
+                {tracks?.map((track) => (
+                  <TrackItem key={track.id} track={track} />
+                ))}
+              </ul>
+            </>
           )}
         </div>
       </div>
