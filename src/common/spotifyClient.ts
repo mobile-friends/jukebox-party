@@ -251,6 +251,40 @@ export namespace SpotifyClient {
   }
 
   /**
+   * Gets a tracks matching an id
+   * @param spotifyToken An active spotify token
+   * @param id The id of the track
+   */
+  export async function getTrack(
+    spotifyToken: SpotifyToken,
+    id: string
+  ): Promise<Track> {
+    function parseTrack(response: SpotifyApi.SingleTrackResponse): Track {
+      const { name, duration_ms, artists, album, id } = response;
+      const albumCoverUrl: string = album.images?.[0].url;
+      const artistsDomain = artists.map((artist) =>
+        Artist.make(artist.name, artist.id)
+      );
+      return (
+        Track.make(
+          name,
+          Duration.makeFromMillis(duration_ms),
+          artistsDomain,
+          albumCoverUrl,
+          id
+        ) ?? {}
+      );
+    }
+
+    const url = `/tracks/${id}`;
+    const [data] = await get<SpotifyApi.SingleTrackResponse>(url, spotifyToken);
+    if (isError(data)) {
+      throw new Error();
+    }
+    return parseTrack(data);
+  }
+
+  /**
    * Gets an artist matching an id
    * @param spotifyToken An active spotify token
    * @param id The id of the artist
