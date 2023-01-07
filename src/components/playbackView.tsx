@@ -225,6 +225,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         ''
       )}
       {allowedToRate ? (
+        // TODO: andere Lösung finden oder es schaffen, dass der Button sich responsive verhält [JUKE-160]
         <Fab
           mainButtonStyles={{
             backgroundColor: '#ece32f',
