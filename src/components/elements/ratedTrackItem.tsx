@@ -1,33 +1,69 @@
-import styles from '@style/components/trackListItemView.module.scss';
+import styles from '@style/components/historyTrackListItemView.module.scss';
 import { Artist } from '@common/types/artist';
-import { RatedTrack } from '@common/types/ratedTrack';
+import { RatedTrack, Rating } from '@common/types/ratedTrack';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 
 interface Props {
   /**
    * The ratedTrack to display
    */
   ratedTrack: RatedTrack;
+  //The total user Amount to get the percentages of the ratings
+  userAmount: number;
 }
 
 function ArtistView(artist: Artist) {
   const artistName = Artist.nameOf(artist);
   const artistId = Artist.idOf(artist);
-  return <div key={artistId}>{artistName}</div>;
+  return (
+    <div className={styles.artistText} key={artistId}>
+      {artistName}
+    </div>
+  );
+}
+
+function RatingView(rating: Rating, userAmount: number) {
+  const likePercentage = Math.round((rating.likes / userAmount) * 100);
+  const dislikePercentage = Math.round((rating.dislikes / userAmount) * 100);
+  if (likePercentage >= dislikePercentage) {
+    return (
+      <div>
+        <AiFillLike size={32} color='#ece32f' />
+        <p className={styles.ratingText}>{likePercentage}%</p>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <AiFillDislike size={32} color='#ece32f' />
+        <p className={styles.ratingText}>{dislikePercentage}%</p>
+      </div>
+    );
+  }
 }
 
 /**
- * An entry in the queue track-list
+ * An entry in the history track-list
  * @constructor
  */
-export default function RatedTrackItem({ ratedTrack }: Props) {
+export default function RatedTrackItem({ ratedTrack, userAmount }: Props) {
   const artists = RatedTrack.artistsOf(ratedTrack).map(ArtistView);
   return (
     <li className={styles.row} key={ratedTrack.track.id}>
-      <img src={RatedTrack.albumArtUrlOf(ratedTrack)} alt='Album art' />
-      <div className='textInfo'>
-        <p>{RatedTrack.nameOf(ratedTrack)}</p>
-        {artists}
+      <div className={styles.imageTextWrapper}>
+        <img src={RatedTrack.albumArtUrlOf(ratedTrack)} alt='Album art' />
+        <div className={styles.textInfo}>
+          <p>{RatedTrack.nameOf(ratedTrack)}</p>
+          {artists}
+        </div>
       </div>
+      {ratedTrack.rating.likes !== 0 || ratedTrack.rating.dislikes !== 0 ? (
+        <div className={styles.ratingWrapper}>
+          {RatingView(ratedTrack.rating, userAmount)}
+        </div>
+      ) : (
+        <></>
+      )}
     </li>
   );
 }

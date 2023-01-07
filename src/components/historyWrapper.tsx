@@ -8,6 +8,7 @@ import { GetHistoryResult } from '@endpoint/getHistory';
 import { History } from '@common/types/history';
 import RatedTrackItem from './elements/ratedTrackItem';
 import { RatedTrack } from '@common/types/ratedTrack';
+import useLivePartyUsers from '@hook/useLivePartyUsers';
 
 interface Props {
   partyCode: PartyCode;
@@ -16,9 +17,15 @@ interface Props {
 
 export default function HistoryWrappr({ partyCode, minified }: Props) {
   const playbackState = useLivePlaybackState(partyCode);
+  const users = useLivePartyUsers(partyCode);
+  const userAmount = users?.guests.length ? +users?.guests.length + 1 : 1;
   const [currentHistoryTracks, setCurrentHistoryTracks] = useState<
     RatedTrack[]
   >([]);
+
+  useEffect(() => {
+    JukeClient.getHistory(partyCode).then(onHistoryResult).catch(console.error);
+  }, [partyCode, playbackState, minified]);
 
   function onHistoryResult(result: GetHistoryResult) {
     switch (result.code) {
@@ -38,14 +45,11 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
     }
   }
 
-  useEffect(() => {
-    JukeClient.getHistory(partyCode).then(onHistoryResult).catch(console.error);
-  }, [partyCode, playbackState, minified]);
-
   const tracks = currentHistoryTracks.map((ratedTrack: RatedTrack) => (
     <RatedTrackItem
-      key={RatedTrack.nameOf(ratedTrack)}
+      key={RatedTrack.idOf(ratedTrack)}
       ratedTrack={ratedTrack}
+      userAmount={userAmount}
     />
   ));
 

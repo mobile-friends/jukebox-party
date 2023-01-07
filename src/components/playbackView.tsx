@@ -138,10 +138,8 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         if (currentHistoryTrack) {
           const allUserIds = currentHistoryTrack.rating.userIds;
           if (allUserIds?.find((id) => id === userId)) {
-            console.log('not allowed');
             setAllowedToRate(false);
           } else {
-            console.log('allowed');
             setAllowedToRate(true);
           }
         }
