@@ -132,19 +132,17 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     const result = await getHistory();
     switch (result.code) {
       case StatusCodes.OK:
-        for (
-          let index = 0;
-          index < result.content.history.tracks.length;
-          index++
-        ) {
-          if (result.content.history.tracks[index].track.id === track.id) {
-            const allUserIds =
-              result.content.history.tracks[index].rating.userIds;
-            if (allUserIds?.map((item: string) => item === userId)) {
-              setAllowedToRate(false);
-            } else {
-              setAllowedToRate(true);
-            }
+        const currentHistoryTrack = result.content.history.tracks.find(
+          (t) => t.track.id === track.id
+        );
+        if (currentHistoryTrack) {
+          const allUserIds = currentHistoryTrack.rating.userIds;
+          if (allUserIds?.find((id) => id === userId)) {
+            console.log('not allowed');
+            setAllowedToRate(false);
+          } else {
+            console.log('allowed');
+            setAllowedToRate(true);
           }
         }
         return;
