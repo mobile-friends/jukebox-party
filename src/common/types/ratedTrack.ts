@@ -1,5 +1,4 @@
 import { Artist } from './artist';
-import { Duration } from './duration';
 import { Track } from './track';
 
 declare const tag: unique symbol;
@@ -19,6 +18,7 @@ export interface RatedTrack {
 export interface Rating {
   readonly likes: number;
   readonly dislikes: number;
+  readonly userIds: string[];
   readonly [tag]: 'Rating';
 }
 
@@ -39,9 +39,14 @@ export namespace RatedTrack {
    * Makes a new Rating
    * @param likes The likes
    * @param dislikes The dislikes
+   * @param userIds The users who rated the track
    */
-  export function makeRating(likes: number, dislikes: number): Rating {
-    return Object.freeze({ likes, dislikes } as Rating);
+  export function makeRating(
+    likes: number,
+    dislikes: number,
+    userIds: string[]
+  ): Rating {
+    return Object.freeze({ likes, dislikes, userIds } as Rating);
   }
 
   /**

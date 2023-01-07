@@ -1,5 +1,5 @@
 import { Party } from './party';
-import { RatedTrack } from './ratedTrack';
+import { RatedTrack, Rating } from './ratedTrack';
 import { Track } from './track';
 
 declare const tag: unique symbol;
@@ -30,8 +30,21 @@ export namespace History {
    * @param track The Track
    */
   export function addTrackTo(history: History, track: Track): History {
-    const emptyRating = RatedTrack.makeRating(0, 0);
+    const emptyRating = RatedTrack.makeRating(0, 0, []);
     const ratedTrack = RatedTrack.make(track, emptyRating);
+    const newTracks = [...history.tracks, ratedTrack];
+    return make(newTracks);
+  }
+
+  /**
+   * Adds a track to the history and returns the updated history
+   * @param history The History
+   * @param track The Track
+   */
+  export function addRatedTrackTo(
+    history: History,
+    ratedTrack: RatedTrack
+  ): History {
     const newTracks = [...history.tracks, ratedTrack];
     return make(newTracks);
   }

@@ -17,6 +17,7 @@ import { RatedTrack } from '@common/types/ratedTrack';
 export interface SaveRatingToRatedTrackBody {
   track: Track;
   rating: string;
+  userId: string;
 }
 
 export type SaveRatingToRatedTrackError =
@@ -51,7 +52,12 @@ export default requestHandler<
 
   const index = getIndexOfTrack(party.history, body.track);
   if (index !== null) {
-    const rating = getRatingForTrack(party.history, index, body.rating);
+    const rating = getRatingForTrack(
+      party.history,
+      index,
+      body.rating,
+      body.userId
+    );
     const ratedTrack = RatedTrack.make(
       party.history.tracks[index].track,
       rating
@@ -76,11 +82,14 @@ function getIndexOfTrack(history: History, track: Track): number | null {
 function getRatingForTrack(
   history: History,
   index: number,
-  ratingString: string
+  ratingString: string,
+  userId: string
 ) {
   const trackRating = history.tracks[index].rating;
+  const allUserIds = [...(trackRating.userIds ?? []), userId];
   return RatedTrack.makeRating(
     trackRating.likes + +(ratingString === 'like'),
-    trackRating.dislikes + +!(ratingString === 'like')
+    trackRating.dislikes + +!(ratingString === 'like'),
+    allUserIds
   );
 }

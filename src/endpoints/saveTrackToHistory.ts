@@ -13,6 +13,7 @@ import { Track } from '@common/types/track';
 import { tryQueryParam } from '@common/util/query';
 import { Response } from '@common/infrastructure/response';
 import { Party } from '@common/types/party';
+import { RatedTrack } from '@common/types/ratedTrack';
 
 export interface SaveTrackToHistoryBody {
   track: Track;
@@ -44,24 +45,29 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
       return Response.partyNotFound(partyCode);
     }
 
-    const tmpParty = compareTrackWithHistoryTracks(party, body.track);
+    let history = null;
+    if (party.history.tracks.length > 0) {
+      party.history.tracks.map(async (item) => {
+        if (item.track.id === body.track.id) {
+          const index = party.history.tracks.indexOf(item);
+          const ratedTrack = party.history.tracks[index];
+          party.history.tracks.splice(index, 1);
+          history = History.addRatedTrackTo(party.history, ratedTrack);
+        } else {
+          history = History.addTrackTo(party.history, body.track);
+        }
+      });
+    } else {
+      history = History.addTrackTo(party.history, body.track);
+      const partyWithNewHistory = Party.saveHistory(party, history);
+      await PartyDb.store(firebaseDb, partyWithNewHistory);
+    }
 
-    const history = History.addTrackTo(tmpParty.history, body.track);
-    const partyWithNewHistory = Party.saveHistory(tmpParty, history);
+    if (history !== null) {
+      const partyWithNewHistory = Party.saveHistory(party, history);
+      await PartyDb.store(firebaseDb, partyWithNewHistory);
+    }
 
-    await PartyDb.store(firebaseDb, partyWithNewHistory);
     return Response.noContent();
   }
 );
-
-// if track is already in the history --> remove it and save it again
-// because the last played song should be last
-function compareTrackWithHistoryTracks(party: Party, track: Track) {
-  party.history.tracks.map(async (item) => {
-    if (item.track.id === track.id) {
-      const index = party.history.tracks.indexOf(item);
-      party.history.tracks.splice(index, 1);
-    }
-  });
-  return party;
-}
