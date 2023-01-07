@@ -251,6 +251,31 @@ export namespace SpotifyClient {
   }
 
   /**
+   * Gets an artist matching an id
+   * @param spotifyToken An active spotify token
+   * @param id The id of the artist
+   */
+  export async function getArtist(
+    spotifyToken: SpotifyToken,
+    id: string
+  ): Promise<Artist> {
+    function parseArtist(response: SpotifyApi.SingleArtistResponse): Artist {
+      const { name, genres, id } = response;
+      return Artist.make(name, id, genres) ?? {};
+    }
+
+    const url = `/artists/${id}`;
+    const [data] = await get<SpotifyApi.SingleArtistResponse>(
+      url,
+      spotifyToken
+    );
+    if (isError(data)) {
+      throw new Error();
+    }
+    return parseArtist(data);
+  }
+
+  /**
    * Gets the current playback-state
    * @param spotifyToken An active spotify token
    */
