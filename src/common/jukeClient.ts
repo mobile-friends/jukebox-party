@@ -18,6 +18,7 @@ import {
   SaveTrackToHistoryResult,
 } from '@endpoint/saveTrackToHistory';
 import { GetHistoryResult } from '@endpoint/getHistory';
+import { GetRecommendationsResult } from '@endpoint/getRecommendations';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -148,6 +149,17 @@ export namespace JukeClient {
       q: query,
     })}`;
     return get<SearchTracksResult>(url);
+  }
+
+  /**
+   * Gets recommendations for the current party
+   * @param partyCode The code of the party
+   */
+  export function getRecommendations(
+    partyCode: PartyCode
+  ): Promise<GetRecommendationsResult> {
+    const url = `parties/${partyCode}/recommendations`;
+    return get<GetRecommendationsResult>(url);
   }
 
   /**
