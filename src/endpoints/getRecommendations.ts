@@ -7,6 +7,7 @@ import {
 } from '@common/infrastructure/types';
 import { SpotifyClient } from '@common/spotifyClient';
 import { Track } from '@common/types/track';
+import { log } from 'console';
 
 export interface GetRecommendationsSuccess {
   items: Track[];
@@ -31,12 +32,14 @@ export default requestHandler<NoBody, GetRecommendationsResult>(
       seedTrack.artists[0].id
     );
     const seedGenres = seedArtist.genres?.slice(0, 3) as string[];
+    const limit = 5;
 
     const items = await SpotifyClient.getRecommendations(
       spotifyToken,
       [seedTrack],
       [seedArtist],
-      seedGenres
+      seedGenres,
+      limit
     );
 
     return Response.ok<GetRecommendationsSuccess>({ items });
