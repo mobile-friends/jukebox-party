@@ -7,6 +7,7 @@ import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
 import { StatusCodes } from 'http-status-codes';
 import { SpotifyUser } from './types/user';
+import { Artist } from './types/artist';
 
 type SpotifyError = { error: SpotifyApi.ErrorObject };
 
@@ -105,12 +106,17 @@ export namespace SpotifyClient {
    */
   export async function getRecommendations(
     spotifyToken: SpotifyToken,
-    seedTrackIds: string[]
+    seedTrackIds: Track[],
+    seedArtistIds: Artist[],
+    seedGenreIds: string[],
+    limit = 10
   ): Promise<Track[]> {
-    // TODO: Seed tracks, seed artists and seed genres are required
     // TODO: Handle no seed tracks
-    const url = `/recommendations?limit=1?${querystring.stringify({
-      seed_tracks: seedTrackIds.join(','),
+    const url = `/recommendations?${querystring.stringify({
+      limit,
+      seed_tracks: seedTrackIds.map((t) => t.id).join(','),
+      seed_artists: seedArtistIds.map((t) => t.id).join(','),
+      seed_genres: seedGenreIds.join(','),
     })}`;
     const [data] = await get<SpotifyApi.RecommendationsFromSeedsResponse>(
       url,
@@ -248,6 +254,65 @@ export namespace SpotifyClient {
       return [];
     }
     return parseTracksIn(data);
+  }
+
+  /**
+   * Gets a tracks matching an id
+   * @param spotifyToken An active spotify token
+   * @param id The id of the track
+   */
+  export async function getTrack(
+    spotifyToken: SpotifyToken,
+    id: string
+  ): Promise<Track> {
+    function parseTrack(response: SpotifyApi.SingleTrackResponse): Track {
+      const { name, duration_ms, artists, album, id } = response;
+      const albumCoverUrl: string = album.images?.[0].url;
+      const artistsDomain = artists.map((artist) =>
+        Artist.make(artist.name, artist.id)
+      );
+      return (
+        Track.make(
+          name,
+          Duration.makeFromMillis(duration_ms),
+          artistsDomain,
+          albumCoverUrl,
+          id
+        ) ?? {}
+      );
+    }
+
+    const url = `/tracks/${id}`;
+    const [data] = await get<SpotifyApi.SingleTrackResponse>(url, spotifyToken);
+    if (isError(data)) {
+      throw new Error();
+    }
+    return parseTrack(data);
+  }
+
+  /**
+   * Gets an artist matching an id
+   * @param spotifyToken An active spotify token
+   * @param id The id of the artist
+   */
+  export async function getArtist(
+    spotifyToken: SpotifyToken,
+    id: string
+  ): Promise<Artist> {
+    function parseArtist(response: SpotifyApi.SingleArtistResponse): Artist {
+      const { name, genres, id } = response;
+      return Artist.make(name, id, genres) ?? {};
+    }
+
+    const url = `/artists/${id}`;
+    const [data] = await get<SpotifyApi.SingleArtistResponse>(
+      url,
+      spotifyToken
+    );
+    if (isError(data)) {
+      throw new Error();
+    }
+    return parseArtist(data);
   }
 
   /**

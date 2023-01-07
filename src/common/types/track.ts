@@ -13,6 +13,7 @@ export interface Track {
   readonly albumArtUrl: string;
   readonly [tag]: 'Track';
   readonly id: string;
+  readonly genres?: string[];
 }
 
 /**
@@ -25,16 +26,25 @@ export namespace Track {
    * @param duration The tracks duration
    * @param artists The tracks artists
    * @param albumArtUrl The url to the tracks album art
-   * @param id track id
+   * @param [id] track id
+   * @param [genres] track genres
    */
   export function make(
     name: string,
     duration: Duration,
     artists: Artist[],
     albumArtUrl: string,
-    id?: string
+    id?: string,
+    genres?: string[]
   ): Track {
-    return Object.freeze({ name, duration, artists, albumArtUrl, id } as Track);
+    return Object.freeze({
+      name,
+      duration,
+      artists,
+      albumArtUrl,
+      id,
+      genres,
+    } as Track);
   }
 
   /**
@@ -59,6 +69,15 @@ export namespace Track {
    */
   export function artistsOf(track: Track): Artist[] {
     return track.artists;
+  }
+
+  /**
+   * Gets the genres of a track
+   * @param track The track
+   */
+  export function genresOf(track: Track): string[] {
+    if (track.genres) return track.genres;
+    return track.artists.flatMap((artist) => artist.genres || []);
   }
 
   /**
