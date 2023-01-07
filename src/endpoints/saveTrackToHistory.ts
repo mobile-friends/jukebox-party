@@ -45,29 +45,22 @@ export default requestHandler<SaveTrackToHistoryBody, SaveTrackToHistoryResult>(
       return Response.partyNotFound(partyCode);
     }
 
-    let history = null;
-    if (party.history.tracks.length > 0) {
-      party.history.tracks.map(async (item) => {
-        if (item.track.id === body.track.id) {
-          const index = party.history.tracks.indexOf(item);
-          const ratedTrack = party.history.tracks[index];
-          party.history.tracks.splice(index, 1);
-          history = History.addRatedTrackTo(party.history, ratedTrack);
-        } else {
-          history = History.addTrackTo(party.history, body.track);
-        }
-      });
+    let history = party.history;
+
+    const index = party.history.tracks.findIndex(
+      (item) => item.track.id === body.track.id
+    );
+
+    if (index !== -1) {
+      const ratedTrack = party.history.tracks[index];
+      party.history.tracks.splice(index, 1);
+      history = History.addRatedTrackTo(history, ratedTrack);
     } else {
-      history = History.addTrackTo(party.history, body.track);
-      const partyWithNewHistory = Party.saveHistory(party, history);
-      await PartyDb.store(firebaseDb, partyWithNewHistory);
+      history = History.addTrackTo(history, body.track);
     }
 
-    if (history !== null) {
-      const partyWithNewHistory = Party.saveHistory(party, history);
-      await PartyDb.store(firebaseDb, partyWithNewHistory);
-    }
-
+    const partyWithNewHistory = Party.saveHistory(party, history);
+    await PartyDb.store(firebaseDb, partyWithNewHistory);
     return Response.noContent();
   }
 );
