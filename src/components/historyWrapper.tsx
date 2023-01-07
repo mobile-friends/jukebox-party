@@ -5,7 +5,6 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import { GetHistoryResult } from '@endpoint/getHistory';
-import { History } from '@common/types/history';
 import RatedTrackItem from './elements/ratedTrackItem';
 import { RatedTrack } from '@common/types/ratedTrack';
 import useLivePartyUsers from '@hook/useLivePartyUsers';

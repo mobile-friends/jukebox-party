@@ -25,21 +25,18 @@ function ArtistView(artist: Artist) {
 function RatingView(rating: Rating, userAmount: number) {
   const likePercentage = Math.round((rating.likes / userAmount) * 100);
   const dislikePercentage = Math.round((rating.dislikes / userAmount) * 100);
-  if (likePercentage >= dislikePercentage) {
-    return (
-      <div>
+  const ratingPercentage =
+    likePercentage >= dislikePercentage ? likePercentage : dislikePercentage;
+  return (
+    <div>
+      {likePercentage >= dislikePercentage ? (
         <AiFillLike size={32} color='#ece32f' />
-        <p className={styles.ratingText}>{likePercentage}%</p>
-      </div>
-    );
-  } else {
-    return (
-      <div>
+      ) : (
         <AiFillDislike size={32} color='#ece32f' />
-        <p className={styles.ratingText}>{dislikePercentage}%</p>
-      </div>
-    );
-  }
+      )}
+      <p className={styles.ratingText}>{ratingPercentage}%</p>
+    </div>
+  );
 }
 
 /**
