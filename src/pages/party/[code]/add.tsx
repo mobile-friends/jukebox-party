@@ -17,6 +17,8 @@ import TrackItem from '@component/elements/trackItem';
 import JukeHeader from '@component/elements/jukeHeader';
 import { ServersideSession } from '@common/serversideSession';
 import { signOut } from 'next-auth/react';
+import { trace } from 'console';
+import { GetRecommendationsResult } from '@endpoint/getRecommendations';
 
 interface Props {
   partyCode: PartyCode;
@@ -33,6 +35,8 @@ function isValidQueryString(s: string): s is QueryString {
 export default function AddTracks({ partyCode }: Props) {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [recommendedTracks, setRecommendedTracks] = useState<Track[]>([]);
+
   useRouter();
 
   const onQueryInputChanged = async (input: string) => {
@@ -58,6 +62,21 @@ export default function AddTracks({ partyCode }: Props) {
     }
   }
 
+  function onRecommendationsResult(result: GetRecommendationsResult) {
+    switch (result.code) {
+      case StatusCodes.OK:
+        return setRecommendedTracks(result.content.items);
+      case StatusCodes.UNAUTHORIZED:
+        // TODO: Redirect to better unauthorized page [JUKE-143]
+        return signOut({ callbackUrl: '/' }).catch(console.error);
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle errors [JUKE-142]
+        break;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
   useEffect(() => {
     if (queryString === null) return;
 
@@ -65,6 +84,12 @@ export default function AddTracks({ partyCode }: Props) {
       .then(onSearchResult)
       .catch(console.error);
   }, [partyCode, queryString]);
+
+  useEffect(() => {
+    JukeClient.getRecommendations(partyCode)
+      .then(onRecommendationsResult)
+      .catch(console.error);
+  }, [partyCode]);
 
   return (
     <div>
@@ -85,9 +110,20 @@ export default function AddTracks({ partyCode }: Props) {
               <TrackItem key={track.id} track={track} />
             ))}
           </ul>
+          {!tracks.length && recommendedTracks?.length ? (
+            <>
+              <ul style={{ overflow: 'scroll' }}>
+                {recommendedTracks?.map((track) => (
+                  <TrackItem key={track.id} track={track} />
+                ))}
+              </ul>
+            </>
+          ) : (
+            <> </>
+          )}
         </div>
       </div>
-            
+
       <Navbar partyCode={partyCode} />
     </div>
   );
