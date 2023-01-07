@@ -7,6 +7,7 @@ import { Duration } from '@common/types/duration';
 import HTTPMethod from 'http-method-enum';
 import { StatusCodes } from 'http-status-codes';
 import { SpotifyUser } from './types/user';
+import { Artist } from './types/artist';
 
 type SpotifyError = { error: SpotifyApi.ErrorObject };
 
@@ -105,12 +106,17 @@ export namespace SpotifyClient {
    */
   export async function getRecommendations(
     spotifyToken: SpotifyToken,
-    seedTrackIds: string[]
+    seedTrackIds: Track[],
+    seedArtistIds: Artist[],
+    seedGenreIds: string[],
+    limit = 10
   ): Promise<Track[]> {
-    // TODO: Seed tracks, seed artists and seed genres are required
     // TODO: Handle no seed tracks
-    const url = `/recommendations?limit=1?${querystring.stringify({
-      seed_tracks: seedTrackIds.join(','),
+    const url = `/recommendations?${querystring.stringify({
+      limit,
+      seed_tracks: seedTrackIds.map((t) => t.id).join(','),
+      seed_artists: seedArtistIds.map((t) => t.id).join(','),
+      seed_genres: seedGenreIds.join(','),
     })}`;
     const [data] = await get<SpotifyApi.RecommendationsFromSeedsResponse>(
       url,
