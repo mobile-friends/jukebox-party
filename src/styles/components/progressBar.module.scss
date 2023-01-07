@@ -1,3 +1,5 @@
+@import '../helper/variables';
+
 .containerStyles {
   height: 5px;
   width: 100%;
@@ -7,7 +9,7 @@
 
 .fillerStyles {
   height: 100%;
-  background-color: #ece32f;
+  background-color: $primary-color;
   border-radius: inherit;
   text-align: right;
   transition: width 1s ease-in-out;
@@ -16,7 +18,7 @@
 .circle {
   height: 15px;
   width: 15px;
-  background-color: #ece32f;
+  background-color: $primary-color;
   border-radius: 50%;
   display: inline-block;
   position: relative;
