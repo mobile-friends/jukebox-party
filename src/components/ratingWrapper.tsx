@@ -134,5 +134,18 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   }
 
   return (
+    <div className={styles.container}>
+      <Button
+        styleType='icon-only rating bg-green'
+        content={<AiFillLike />}
+        onClick={() => saveRatingToRatedTrack('like')}
+      />
+
+      <Button
+        styleType={`icon-only rating bg-red`}
+        content={<AiFillDislike />}
+        onClick={() => saveRatingToRatedTrack('dislike')}
+      />
+    </div>
   );
 }
