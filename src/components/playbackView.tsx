@@ -63,9 +63,6 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
     saveTrackToHistory();
-    //bug workaround
-    const interval = setInterval(isUserAllowedToRate, 3000);
-    return () => clearInterval(interval);
   }, [track.name]);
 
   async function saveTrackToHistory() {
@@ -92,71 +89,6 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       default:
         return assertNeverReached(result);
     }
-  }
-
-  async function saveRatingToRatedTrack(rating: string) {
-    if (userId) {
-      await JukeClient.saveRatingToRatedTrack(partyCode, {
-        track: track,
-        rating: rating,
-        userId: userId,
-      })
-        .then(onSaveRatingToRatedTrack)
-        .catch(console.error);
-    }
-  }
-
-  function onSaveRatingToRatedTrack(result: SaveRatingToRatedTrackResult) {
-    switch (result.code) {
-      case StatusCodes.NO_CONTENT: //everything worked out
-        setAllowedToRate(false);
-        return;
-      case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_FOUND:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error [JUKE-142]
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  }
-
-  async function isUserAllowedToRate() {
-    const result = await getHistory();
-    switch (result.code) {
-      case StatusCodes.OK:
-        const currentHistoryTrack = result.content.history.tracks.find(
-          (t) => t.track.id === track.id
-        );
-        if (currentHistoryTrack) {
-          const allUserIds = currentHistoryTrack.rating.userIds;
-          if (allUserIds?.find((id) => id === userId)) {
-            setAllowedToRate(false);
-          } else {
-            setAllowedToRate(true);
-          }
-        }
-        return;
-      case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_FOUND:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error [JUKE-142]
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  }
-
-  function getHistory() {
-    return JukeClient.getHistory(partyCode);
   }
 
   function getAnimationDuration(
