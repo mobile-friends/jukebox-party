@@ -321,7 +321,7 @@ export namespace SpotifyClient {
    */
   export async function getPlaybackState(
     spotifyToken: SpotifyToken
-  ): Promise<PlaybackState | null> {
+  ): Promise<PlaybackState | null | unknown> {
     function parsePlaybackState(
       response: SpotifyApi.CurrentPlaybackResponse
     ): PlaybackState | null {
@@ -347,8 +347,11 @@ export namespace SpotifyClient {
     // This means that spotify is not currently playing
     if (status === StatusCodes.NO_CONTENT) return null;
 
-    // TODO: Handle errors [JUKE-139]
     if (isError(data)) {
+      // This happens sporadically when too many requests are sent with one token for too long.
+      if (status === StatusCodes.SERVICE_UNAVAILABLE) return undefined;
+
+      // TODO: Handle errors [JUKE-139]
       throw new Error();
     }
 

@@ -40,6 +40,10 @@ export type NoSpotifyError = MakeError<
   'NoSpotifyError'
 >;
 
+export interface ServiceUnavailableError {
+  code: StatusCodes.SERVICE_UNAVAILABLE;
+}
+
 export type NotImplementedError = MakeError<
   StatusCodes.NOT_IMPLEMENTED,
   'NotImplementedError'
@@ -70,6 +74,7 @@ export type ErrorResult =
   | MethodNotAllowedError
   | NoSpotifyError
   | NotImplementedError
+  | ServiceUnavailableError
   | DtoError
   | PartyNotFoundError;
 

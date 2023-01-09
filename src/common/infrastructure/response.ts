@@ -9,6 +9,7 @@ import {
   Ok,
   PartyNotFoundError,
   ResponseData,
+  ServiceUnavailableError,
 } from '@common/infrastructure/types';
 import HTTPMethod from 'http-method-enum';
 import { PartyCode } from '@common/types/partyCode';
@@ -24,6 +25,10 @@ export namespace Response {
 
   export function noContent(): NoContent {
     return { code: StatusCodes.NO_CONTENT };
+  }
+
+  export function serviceUnavailable(): ServiceUnavailableError {
+    return { code: StatusCodes.SERVICE_UNAVAILABLE };
   }
 
   export function methodNotAllowed(
