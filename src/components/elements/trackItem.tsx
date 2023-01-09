@@ -12,7 +12,11 @@ interface Props {
 function ArtistView(artist: Artist) {
   const artistName = Artist.nameOf(artist);
   const artistId = Artist.idOf(artist);
-  return <div key={artistId}>{artistName}</div>;
+  return (
+    <span className={styles.artist} key={artistId}>
+      {artistName}
+    </span>
+  );
 }
 
 /**
