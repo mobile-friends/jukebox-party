@@ -1,0 +1,32 @@
+.container {
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  ul {
+    overflow: scroll;
+  }
+
+  .greeting {
+    margin-bottom: 20px;
+  }
+  .anotherAccount {
+    margin-top: 30px;
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
+
+  h1 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.loading {
+  margin: auto;
+}

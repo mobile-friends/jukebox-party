@@ -1,0 +1,51 @@
+.container {
+  margin-bottom: 20px;
+  overflow: scroll;
+
+  > div {
+    margin: 20px 0;
+
+    @media only screen and (min-width: 750px) {
+      .guestContainer {
+        width: 70%;
+        margin: auto;
+      }
+    }
+
+    .guestContainer {
+      display: flex;
+      justify-content: center;
+
+      table {
+        margin: 10px auto;
+        width: 100%;
+        border-collapse: collapse;
+
+        tr {
+          border-bottom: 1px solid #ffffff60;
+
+          &:hover {
+            background-color: #ffffff10;
+          }
+
+          td {
+            min-height: 54px;
+            padding: 0 20px;
+            border: none;
+          }
+          td:first-of-type {
+            text-align: start;
+          }
+          td:last-of-type {
+            display: flex;
+            justify-content: flex-end;
+          }
+        }
+      }
+
+      p {
+        margin: 20px 0;
+      }
+    }
+  }
+}

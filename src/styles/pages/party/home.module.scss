@@ -1,0 +1,69 @@
+.partyPage {
+  padding: 20px;
+
+  height: calc(100vh - 84.5px);
+  display: grid;
+  grid-template-rows: min-content 1fr;
+
+  .partyContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: scroll;
+
+    .smaller_box {
+      padding: 0 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .queueView {
+      display: none;
+    }
+  }
+
+  @media only screen and (min-width: 750px) {
+    .playbackDesign {
+      height: 100%;
+      display: grid;
+      grid-template-columns: max-content auto;
+      padding: 20px;
+
+      > div {
+        padding: 20px;
+      }
+
+      .trackView {
+        max-width: 380px;
+        background-color: rgb(47, 47, 47);
+        border-radius: 20px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        -webkit-box-shadow: 5px 5px 15px -1px rgba(0, 0, 0, 0.6);
+        -moz-box-shadow: 5px 5px 15px -1px rgba(0, 0, 0, 0.6);
+        box-shadow: 5px 5px 15px -1px rgba(0, 0, 0, 0.6);
+      }
+
+      .queueView {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: scroll;
+
+        .queueInfo {
+          margin-top: 15px;
+          padding: 0 20px; 
+
+          Button {
+            margin: auto;
+          }
+        }
+      }
+    }
+  }
+}

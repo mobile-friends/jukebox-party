@@ -1,0 +1,60 @@
+@import '../helper/variables';
+
+li.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ffffff25;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-family: Arial, Helvetica, sans-serif;
+
+  &:hover {
+    background: #ffffff25;
+  }
+
+  > div.imageTextWrapper {
+    display: flex;
+    justify-content: flex-start;
+
+    img {
+      width: 50px;
+    }
+
+    > div.textInfo {
+      display: flex;
+      flex-direction: column;
+      margin-left: 20px;
+      padding-top: 5px;
+
+      > p {
+        margin: 0;
+        font-size: 1.2rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      > div.artistText {
+        font-size: 0.7rem;
+        color: $light-color-shade;
+      }
+    }
+  }
+
+  > div.ratingWrapper {
+    display: flex;
+    justify-content: flex-end;
+    text-align: center;
+    align-items: center;
+
+    > div {
+      > p.ratingText {
+        font-size: 0.8rem;
+        color: $light-color-shade;
+      }
+    }
+  }
+
+  width: 100%;
+}

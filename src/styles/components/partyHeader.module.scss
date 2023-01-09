@@ -1,0 +1,22 @@
+.container {
+  margin-bottom: 20px;
+
+  > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+
+    > div {
+      padding: 0 10px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    > div:last-child {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+}
