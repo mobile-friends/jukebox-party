@@ -5,6 +5,10 @@
   flex-direction: column;
   justify-content: space-between;
 
+  ul {
+    overflow: scroll;
+  }
+
   .greeting {
     margin-bottom: 20px;
   }
@@ -21,4 +25,8 @@
     margin-top: 10px;
     margin-bottom: 10px;
   }
+}
+
+.loading {
+  margin: auto;
 }

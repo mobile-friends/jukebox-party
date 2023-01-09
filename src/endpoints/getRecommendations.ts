@@ -32,7 +32,7 @@ export default requestHandler<NoBody, GetRecommendationsResult>(
       seedTrack.artists[0].id
     );
     const seedGenres = seedArtist.genres?.slice(0, 3) as string[];
-    const limit = 10;
+    const limit = 7;
 
     const items = await SpotifyClient.getRecommendations(
       spotifyToken,

@@ -1,24 +1,24 @@
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import Input from '@component/elements/input';
-import { Track } from '@common/types/track';
-import styles from '../../../styles/pages/main.module.scss';
-import { GetServerSideProps } from 'next/types';
-import Navbar from '@component/navbar';
-import { PartyCode } from '@common/types/partyCode';
-import { PartyDb } from '@common/partyDb';
 import firebaseDb from '@common/firebaseDb';
-import { Party } from '@common/types/party';
 import { JukeClient } from '@common/jukeClient';
+import { PartyDb } from '@common/partyDb';
+import { ServersideSession } from '@common/serversideSession';
+import { Party } from '@common/types/party';
+import { PartyCode } from '@common/types/partyCode';
+import { Track } from '@common/types/track';
+import { assertNeverReached } from '@common/util/assertions';
+import Input from '@component/elements/input';
+import JukeHeader from '@component/elements/jukeHeader';
+import TrackItem from '@component/elements/trackItem';
+import Navbar from '@component/navbar';
+import { GetRecommendationsResult } from '@endpoint/getRecommendations';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { StatusCodes } from 'http-status-codes';
-import { assertNeverReached } from '@common/util/assertions';
-import TrackItem from '@component/elements/trackItem';
-import JukeHeader from '@component/elements/jukeHeader';
-import { ServersideSession } from '@common/serversideSession';
 import { signOut } from 'next-auth/react';
-import { trace } from 'console';
-import { GetRecommendationsResult } from '@endpoint/getRecommendations';
+import { useRouter } from 'next/router';
+import { GetServerSideProps } from 'next/types';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import ReactLoading from 'react-loading';
+import styles from '../../../styles/pages/main.module.scss';
 
 interface Props {
   partyCode: PartyCode;
@@ -36,6 +36,12 @@ export default function AddTracks({ partyCode }: Props) {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [recommendedTracks, setRecommendedTracks] = useState<Track[]>([]);
+
+  // TODO - remove this artifical loading time after fixing useEffect calling twice error
+  const [showRecommendations, setShowRecommendations] = useState(false);
+  setTimeout(() => {
+    setShowRecommendations(true);
+  }, 2500);
 
   useRouter();
 
@@ -79,13 +85,12 @@ export default function AddTracks({ partyCode }: Props) {
 
   useEffect(() => {
     if (queryString === null) return;
-
     JukeClient.searchTracks(partyCode, queryString)
       .then(onSearchResult)
       .catch(console.error);
   }, [partyCode, queryString]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     JukeClient.getRecommendations(partyCode)
       .then(onRecommendationsResult)
       .catch(console.error);
@@ -107,12 +112,24 @@ export default function AddTracks({ partyCode }: Props) {
           />
           {!tracks.length && recommendedTracks?.length ? (
             <>
-              <h1>Maybe you like</h1>
-              <ul>
-                {recommendedTracks?.map((track) => (
-                  <TrackItem key={track.id} track={track} />
-                ))}
-              </ul>
+              <h1>Maybe you like:</h1>
+              {showRecommendations ? (
+                <ul>
+                  {recommendedTracks?.map((track) => (
+                    <TrackItem key={track.id} track={track} />
+                  ))}
+                </ul>
+              ) : (
+                <>
+                  <ReactLoading
+                    className={styles.loading}
+                    type={'bubbles'}
+                    color={'white'}
+                    height={'50%'}
+                    width={'50%'}
+                  />
+                </>
+              )}
             </>
           ) : (
             <>
