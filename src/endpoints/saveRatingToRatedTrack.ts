@@ -86,10 +86,24 @@ function getRatingForTrack(
   userId: string
 ) {
   const trackRating = history.tracks[index].rating;
-  const allUserIds = [...(trackRating.userIds ?? []), userId];
-  return RatedTrack.makeRating(
-    trackRating.likes + +(ratingString === 'like'),
-    trackRating.dislikes + +!(ratingString === 'like'),
-    allUserIds
+
+  const like = RatedTrack.makeLike(
+    ratingString === 'like'
+      ? trackRating.likes.amount + 1
+      : trackRating.likes.amount,
+    ratingString === 'like'
+      ? [...(trackRating.likes.userIds ?? []), userId]
+      : trackRating.likes.userIds ?? []
   );
+
+  const dislike = RatedTrack.makeDislike(
+    ratingString !== 'like'
+      ? trackRating.dislikes.amount + 1
+      : trackRating.dislikes.amount,
+    ratingString !== 'like'
+      ? [...(trackRating.dislikes.userIds ?? []), userId]
+      : trackRating.dislikes.userIds ?? []
+  );
+
+  return RatedTrack.makeRating(like, dislike);
 }

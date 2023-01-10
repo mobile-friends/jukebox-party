@@ -28,6 +28,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   const userId = data?.user.id;
 
   const [isAllowedToRate, setIsAllowedToRate] = useState(true);
+  const [userRating, setUserRating] = useState('');
 
   // useEffect(() => {});
 
@@ -71,8 +72,17 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   async function isUserAllowedToRate() {
     const currentTrackInfo = await getCurrentHistoryTrack();
 
+    //nur zum Ausprobieren, weiß nicht wo du es haben willst bzw. es brauchst :)
+    if (userId) {
+      const userRating = await getUserRatingFromCurrentTrack();
+      console.log(userRating);
+    }
+
     if (currentTrackInfo) {
-      const allUserIds = currentTrackInfo.rating.userIds;
+      const allUserIds = [
+        ...(currentTrackInfo.rating.likes.userIds ?? []),
+        currentTrackInfo.rating.dislikes.userIds ?? [],
+      ];
       allUserIds?.find((id) => id === userId)
         ? setIsAllowedToRate(false)
         : setIsAllowedToRate(true);
@@ -104,6 +114,29 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
 
   async function getHistory() {
     return JukeClient.getHistory(partyCode);
+  }
+
+  async function getUserRatingFromCurrentTrack() {
+    const result = await getUserRating();
+    switch (result.code) {
+      case StatusCodes.OK:
+        return result.content.rating;
+      case StatusCodes.BAD_REQUEST:
+        // TODO: Handle error [JUKE-142]
+        break;
+      case StatusCodes.NOT_FOUND:
+        // TODO: Handle error [JUKE-142]
+        break;
+      case StatusCodes.NOT_IMPLEMENTED:
+        // TODO: Handle error [JUKE-142]
+        break;
+      default:
+        return assertNeverReached(result);
+    }
+  }
+
+  async function getUserRating() {
+    return JukeClient.getUserRating(partyCode, track.id, userId!);
   }
 
   return (

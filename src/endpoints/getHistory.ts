@@ -32,8 +32,6 @@ export type GetHistoryResult = Ok<GetHistorySuccess> | GetHistoryError;
 const PartyCodeQueryParamName = 'partyCode';
 
 export default requestHandler<GetHistoryBody, GetHistoryResult>(async (req) => {
-  const { track } = req.body;
-
   const partyCodeParam = tryQueryParam(req.query, PartyCodeQueryParamName);
   if (partyCodeParam === null) {
     return Response.missingQueryParam(PartyCodeQueryParamName);

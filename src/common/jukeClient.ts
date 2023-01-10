@@ -23,6 +23,7 @@ import {
   SaveRatingToRatedTrackBody,
   SaveRatingToRatedTrackResult,
 } from '@endpoint/saveRatingToRatedTrack';
+import { GetUserRatingResult } from '@endpoint/getUserRating';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -230,5 +231,18 @@ export namespace JukeClient {
       url,
       body
     );
+  }
+
+  /**
+   * Gets the rating of the user from the track which is currently playing
+   * @param partyCode The code of the party
+   */
+  export function getUserRating(
+    partyCode: PartyCode,
+    trackId: string,
+    userId: string
+  ): Promise<GetUserRatingResult> {
+    const url = `parties/${partyCode}/${trackId}/${userId}`;
+    return get<GetUserRatingResult>(url);
   }
 }
