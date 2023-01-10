@@ -28,7 +28,6 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   const userId = data?.user.id;
 
   const [isAllowedToRate, setIsAllowedToRate] = useState(true);
-  const [userRating, setUserRating] = useState('');
 
   // useEffect(() => {});
 
