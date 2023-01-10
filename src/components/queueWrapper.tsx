@@ -38,7 +38,12 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
   }, [partyCode, playbackState, minified]);
 
   const tracks = currentQueueTracks.map((track: Track) => (
-    <TrackItem key={track.id} track={track} />
+    <TrackItem
+      key={track.id}
+      track={track}
+      canBeQueued={false}
+      partyCode={partyCode}
+    />
   ));
 
   return <div>{minified ? tracks.slice(0, 4) : tracks}</div>;

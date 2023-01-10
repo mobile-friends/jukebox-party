@@ -116,7 +116,12 @@ export default function AddTracks({ partyCode }: Props) {
               {showRecommendations ? (
                 <ul>
                   {recommendedTracks?.map((track) => (
-                    <TrackItem key={track.id} track={track} />
+                    <TrackItem
+                      key={track.id}
+                      track={track}
+                      canBeQueued={true}
+                      partyCode={partyCode}
+                    />
                   ))}
                 </ul>
               ) : (
@@ -135,7 +140,12 @@ export default function AddTracks({ partyCode }: Props) {
             <>
               <ul style={{ overflow: 'scroll' }}>
                 {tracks?.map((track) => (
-                  <TrackItem key={track.id} track={track} />
+                  <TrackItem
+                    key={track.id}
+                    track={track}
+                    canBeQueued={true}
+                    partyCode={partyCode}
+                  />
                 ))}
               </ul>
             </>
