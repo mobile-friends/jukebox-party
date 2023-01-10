@@ -23,8 +23,10 @@ function ArtistView(artist: Artist) {
 }
 
 function RatingView(rating: Rating, userAmount: number) {
-  const likePercentage = Math.round((rating.likes / userAmount) * 100);
-  const dislikePercentage = Math.round((rating.dislikes / userAmount) * 100);
+  const likePercentage = Math.round((rating.likes.amount / userAmount) * 100);
+  const dislikePercentage = Math.round(
+    (rating.dislikes.amount / userAmount) * 100
+  );
   const ratingPercentage =
     likePercentage >= dislikePercentage ? likePercentage : dislikePercentage;
   return (
@@ -54,7 +56,8 @@ export default function RatedTrackItem({ ratedTrack, userAmount }: Props) {
           {artists}
         </div>
       </div>
-      {ratedTrack.rating.likes !== 0 || ratedTrack.rating.dislikes !== 0 ? (
+      {ratedTrack.rating.likes.amount !== 0 ||
+      ratedTrack.rating.dislikes.amount !== 0 ? (
         <div className={styles.ratingWrapper}>
           {RatingView(ratedTrack.rating, userAmount)}
         </div>
