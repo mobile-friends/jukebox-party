@@ -39,11 +39,9 @@ export namespace Env {
     return tryGet('NEXT_AUTH_SECRET');
   }
 
-  export function port(): number {
-    return parseInt(process.env.NEXT_PUBLIC_PORT || '3000');
-  }
-
   export function isProduction(): boolean {
+    // TODO dynamisch mit ENV-Variablen machen - Funktioniert irgendwie nicht im Frontend
+    console.log('isProduction? ' + process.env.NEXT_PUBLIC_ENVIRONMENT);
     return process.env.NEXT_PUBLIC_ENVIRONMENT === 'production';
   }
 }
