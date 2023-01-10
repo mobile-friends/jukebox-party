@@ -168,7 +168,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     console.log('env : ' + Env.isProduction());
     return Env.isProduction()
       ? `https://jukebox.herokuapp.com/spotify-login`
-      : `http://localhost:3000/spotify-login`;
+      : `http://localhost:${Env.port()}/api/`;
   }
 
   function spotifyUserAuthUrl() {

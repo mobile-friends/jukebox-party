@@ -30,7 +30,7 @@ import { AddToQueueBody, AddToQueueResult } from '@endpoint/addToQueue';
 const axiosClient = axios.create({
   baseURL: Env.isProduction()
     ? `https://jukebox.herokuapp.com/api/`
-    : 'http://localhost:3000/api/',
+    : `http://localhost:${Env.port()}/api/`,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -147,7 +147,10 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    * @param track The track to be added
    */
-  export function addToQueue(partyCode: PartyCode, track: Track): Promise<AddToQueueResult> {
+  export function addToQueue(
+    partyCode: PartyCode,
+    track: Track
+  ): Promise<AddToQueueResult> {
     const url = `parties/${partyCode}/queue`;
     return post<AddToQueueBody, AddToQueueResult>(url, { track });
   }
