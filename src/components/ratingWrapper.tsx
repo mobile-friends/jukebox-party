@@ -32,6 +32,9 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   // useEffect(() => {});
 
   async function trySaveRating(rating: string) {
+    //beim ersten Mal drücken auf einen Button ist 'isAllowedToRate' immer false obwohl es eigenltich true sein sollte,
+    //beim zweiten Mal drücken geht es, aber ich werd nicht schlau daraus, wieso es beim ersten Mal false ist :D
+    //vielleicht findest du was :)
     await isUserAllowedToRate();
     console.log(isAllowedToRate);
     if (isAllowedToRate) saveRatingToRatedTrack(rating);
@@ -78,11 +81,9 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
     }
 
     if (currentTrackInfo) {
-      const allUserIds = [
-        ...(currentTrackInfo.rating.likes.userIds ?? []),
-        currentTrackInfo.rating.dislikes.userIds ?? [],
-      ];
-      allUserIds?.find((id) => id === userId)
+      currentTrackInfo.rating.likes.userIds?.find((id) => id === userId)
+        ? setIsAllowedToRate(false)
+        : currentTrackInfo.rating.dislikes.userIds?.find((id) => id === userId)
         ? setIsAllowedToRate(false)
         : setIsAllowedToRate(true);
     }
