@@ -80,54 +80,52 @@ export default function CreateParty({ spotifyToken, spotifyUser }: Props) {
   }
 
   return (
-    <div>
-      <div className={styles.container}>
-        <JukeHeader
-          first={'create'}
-          second={'party'}
-          pageTitle={'Create a jukebox.party'}
-        />
+    <div className={styles.container}>
+      <JukeHeader
+        first={'create'}
+        second={'party'}
+        pageTitle={'Create a jukebox.party'}
+      />
 
-        <div>
-          {spotifyUser === null ? (
-            <></>
-          ) : (
-            <div className={styles.greeting}>
-              <h2 className='text-center'>
-                Hi <span className='text-italic'>{spotifyUser.nickname}</span>!
-              </h2>
-              <p className='text-muted text-center'>
-                Account from {spotifyUser.email}
-              </p>
-            </div>
-          )}
-          <form>
-            <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
-            <UserNameInput initialValue={null} onValueChanged={setHostName} />
-            <Button
-              content='Create party'
-              styleType='primary block'
-              onClick={onCreatePartyClicked}
-            />
-          </form>
-          <div className={styles.anotherAccount}>
+      <div>
+        {spotifyUser === null ? (
+          <></>
+        ) : (
+          <div className={styles.greeting}>
+            <h2 className='text-center'>
+              Hi <span className='text-italic'>{spotifyUser.nickname}</span>!
+            </h2>
             <p className='text-muted text-center'>
-              Not you? Log out and use another account
+              Account from {spotifyUser.email}
             </p>
-            <Button
-              content='Use another account'
-              styleType='secondary block'
-              onClick={goToLogin}
-            />
           </div>
+        )}
+        <form>
+          <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
+          <UserNameInput initialValue={null} onValueChanged={setHostName} />
+          <Button
+            content='Create party'
+            styleType='primary block'
+            onClick={onCreatePartyClicked}
+          />
+        </form>
+        <div className={styles.anotherAccount}>
+          <p className='text-muted text-center'>
+            Not you? Log out and use another account
+          </p>
+          <Button
+            content='Use another account'
+            styleType='secondary block'
+            onClick={goToLogin}
+          />
         </div>
-
-        <Button
-          content='Back'
-          styleType='tertiary block'
-          onClick={onBackClicked}
-        />
       </div>
+
+      <Button
+        content='Back'
+        styleType='tertiary block'
+        onClick={onBackClicked}
+      />
     </div>
   );
 }

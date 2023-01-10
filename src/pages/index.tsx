@@ -61,33 +61,31 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <div className={styles.container}>
-        <JukeHeader
-          first={'jukebox'}
-          second={'party'}
-          pageTitle={'Join a jukebox.party'}
-        />
-        <form>
-          <UserNameInput initialValue={null} onValueChanged={setGuestName} />
-          {partyCodeParam !== routerNotReady && (
-            <PartyCodeInput
-              initialValue={partyCodeParam}
-              onValueChanged={setPartyCode}
-            />
-          )}
-          <Button
-            content='Join party'
-            styleType='primary block'
-            onClick={onJoinPartyClicked}
+    <div className={styles.container}>
+      <JukeHeader
+        first={'jukebox'}
+        second={'party'}
+        pageTitle={'Join a jukebox.party'}
+      />
+      <form>
+        <UserNameInput initialValue={null} onValueChanged={setGuestName} />
+        {partyCodeParam !== routerNotReady && (
+          <PartyCodeInput
+            initialValue={partyCodeParam}
+            onValueChanged={setPartyCode}
           />
-        </form>
+        )}
         <Button
-          content='Create party'
-          styleType='tertiary block'
-          onClick={onCreatePartyClicked}
+          content='Join party'
+          styleType='primary block'
+          onClick={onJoinPartyClicked}
         />
-      </div>
+      </form>
+      <Button
+        content='Create party'
+        styleType='tertiary block'
+        onClick={onCreatePartyClicked}
+      />
     </div>
   );
 }
