@@ -22,12 +22,15 @@ export default function AboutUsModal({ onClosed }: Props) {
   return (
     <div className={styles.background_clickable} onClick={handleClick}>
       <div className={styles.modal}>
-        <h2 className='text-center'>
-          The party.<span className='text-italic text-primary'>people</span>
-          <p>that created this app</p>
-        </h2>
-
         <div>
+          <h2 className='text-center'>
+            about jukebox.
+            <span className='text-italic text-primary'>party</span>
+          </h2>
+          <h3 className='text-center'>and the people that created this app</h3>
+        </div>
+
+        <div className={styles.textBlock}>
           <p>
             Jukebox.party was created during a project at the University of
             Applied Sciences St. Pölten.
@@ -39,8 +42,6 @@ export default function AboutUsModal({ onClosed }: Props) {
             whole semester.
           </p>
           <p>
-            Within one semester seven students came up with the idea and
-            implemented it with Next.js.
             Within this time we, seven studens, came up with the idea and
             implemented Jukebox.party with Next.js.
           </p>
