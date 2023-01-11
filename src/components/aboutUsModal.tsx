@@ -32,9 +32,17 @@ export default function AboutUsModal({ onClosed }: Props) {
             Jukebox.party was created during a project at the University of
             Applied Sciences St. Pölten.
           </p>
+          <br />
+          <p>
+            As part of our Masters Programm Interactive Technologies, within the
+            Masterclass Mobile, we had to implement a group project during the
+            whole semester.
+          </p>
           <p>
             Within one semester seven students came up with the idea and
             implemented it with Next.js.
+            Within this time we, seven studens, came up with the idea and
+            implemented Jukebox.party with Next.js.
           </p>
         </div>
 
