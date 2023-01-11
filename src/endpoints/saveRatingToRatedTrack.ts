@@ -17,7 +17,7 @@ import { RatedTrack } from '@common/types/ratedTrack';
 export interface SaveRatingToRatedTrackBody {
   track: Track;
   rating: string;
-  userId: string;
+  userId: UserId;
 }
 
 export type SaveRatingToRatedTrackError =
@@ -83,7 +83,7 @@ function getRatingForTrack(
   history: History,
   index: number,
   ratingString: string,
-  userId: string
+  userId: UserId
 ) {
   const trackRating = history.tracks[index].rating;
 
