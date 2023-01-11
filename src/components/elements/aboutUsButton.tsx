@@ -1,16 +1,16 @@
 import useToggle from '@hook/useToggle';
 import Button from './button';
 import AboutUsModal from '@component/aboutUsModal';
-import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { MdInfoOutline } from 'react-icons/md';
 
-export default function AboutUsButton() {
+export default function UserListButton() {
   const [isModalVisible, toggleModalVisibility] = useToggle();
 
   return (
     <div>
       <Button
         styleType='icon-only small'
-        content={<AiOutlineInfoCircle />}
+        content={<MdInfoOutline />}
         onClick={toggleModalVisibility}
       />
 
