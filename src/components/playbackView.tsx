@@ -65,19 +65,17 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       (marqueeTextRef.current?.clientWidth ?? 0) >
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
-    saveTrackToHistory();
-    //bug workaround
-    const interval = setInterval(isUserAllowedToRate, 3000);
-    return () => clearInterval(interval);
-  }, [track.name]);
 
-  async function saveTrackToHistory() {
-    await JukeClient.saveTrackToHistory(partyCode, {
+    JukeClient.saveTrackToHistory(partyCode, {
       track: track,
     })
       .then(onSaveTrackToHistoryResult)
       .catch(console.error);
-  }
+
+    //auskommentiert, weil die Logik sich im Branch 160 eh geändert hat
+    //const interval = setInterval(isUserAllowedToRate, 3000);
+    //return () => clearInterval(interval);
+  }, [track.name]);
 
   function onSaveTrackToHistoryResult(result: SaveTrackToHistoryResult) {
     switch (result.code) {
