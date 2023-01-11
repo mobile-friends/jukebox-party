@@ -37,9 +37,9 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
     JukeClient.getQueue(partyCode).then(onQueueResult).catch(console.error);
   }, [partyCode, playbackState, minified]);
 
-  const tracks = currentQueueTracks.map((track: Track) => (
+  const tracks = currentQueueTracks.map((track: Track, index) => (
     <TrackItem
-      key={track.id}
+      key={index}
       track={track}
       canBeQueued={false}
       partyCode={partyCode}
