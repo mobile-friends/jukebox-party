@@ -1,5 +1,6 @@
 import { PartyCode } from '@common/types/partyCode';
 import styles from '@style/components/partyHeader.module.scss';
+import AboutUsButton from './aboutUsButton';
 import QrButton from './qrButton';
 import UserListButton from './userListButton';
 
@@ -18,6 +19,9 @@ export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
         </div>
         <div>
           <p className='text-center'>Pin: {partyCode}</p>
+        </div>
+        <div>
+          <AboutUsButton />
         </div>
         <div>
           <UserListButton partyCode={partyCode} isHost={isHost} />
