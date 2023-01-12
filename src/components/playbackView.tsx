@@ -59,19 +59,13 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       (marqueeTextRef.current?.clientWidth ?? 0) >
         (marqueeWrapperRef.current?.clientWidth ?? 0)
     );
-    saveTrackToHistory();
-  }, [track.name]);
 
     JukeClient.saveTrackToHistory(partyCode, {
       track: track,
     })
       .then(onSaveTrackToHistoryResult)
       .catch(console.error);
-
-    //auskommentiert, weil die Logik sich im Branch 160 eh geändert hat
-    //const interval = setInterval(isUserAllowedToRate, 3000);
-    //return () => clearInterval(interval);
-  }, [track.name]);
+  }, [partyCode, track]);
 
   function onSaveTrackToHistoryResult(result: SaveTrackToHistoryResult) {
     switch (result.code) {
