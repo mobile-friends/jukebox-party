@@ -25,6 +25,8 @@ import {
 } from '@endpoint/saveRatingToRatedTrack';
 import { Track } from './types/track';
 import { AddToQueueBody, AddToQueueResult } from '@endpoint/addToQueue';
+import { NoBody } from './infrastructure/requestHandler';
+import { ClosePartyResult } from '@endpoint/closeParty';
 
 // TODO: Move port into env and load dynamically [JUKE-138]
 const axiosClient = axios.create({
@@ -147,7 +149,10 @@ export namespace JukeClient {
    * @param partyCode The code of the party
    * @param track The track to be added
    */
-  export function addToQueue(partyCode: PartyCode, track: Track): Promise<AddToQueueResult> {
+  export function addToQueue(
+    partyCode: PartyCode,
+    track: Track
+  ): Promise<AddToQueueResult> {
     const url = `parties/${partyCode}/queue`;
     return post<AddToQueueBody, AddToQueueResult>(url, { track });
   }
@@ -204,6 +209,19 @@ export namespace JukeClient {
   ): Promise<RemoveGuestResult> {
     const url = `parties/${partyCode}/remove`;
     return post<RemoveGuestBody, RemoveGuestResult>(url, body);
+  }
+
+  /**
+   * Close the party
+   * @param partyCode The code of the party
+   * @param body The request body
+   */
+  export function closeParty(
+    partyCode: PartyCode,
+    body: NoBody
+  ): Promise<ClosePartyResult> {
+    const url = `parties/${partyCode}/close`;
+    return post<NoBody, ClosePartyResult>(url, body);
   }
 
   /**

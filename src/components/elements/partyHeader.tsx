@@ -1,6 +1,7 @@
 import { PartyCode } from '@common/types/partyCode';
 import styles from '@style/components/partyHeader.module.scss';
 import AboutUsButton from './aboutUsButton';
+import ExitButton from './exitButton';
 import QrButton from './qrButton';
 import UserListButton from './userListButton';
 
@@ -14,6 +15,9 @@ export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
   return (
     <div className={styles.container}>
       <div>
+        <div>
+          <ExitButton partyCode={partyCode} isHost={isHost} />
+        </div>
         <div>
           <QrButton partyCode={partyCode} />
         </div>

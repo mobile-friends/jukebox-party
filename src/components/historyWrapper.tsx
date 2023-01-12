@@ -12,9 +12,14 @@ import useLivePartyUsers from '@hook/useLivePartyUsers';
 interface Props {
   partyCode: PartyCode;
   minified: boolean;
+  onEndScreen?: boolean;
 }
 
-export default function HistoryWrappr({ partyCode, minified }: Props) {
+export default function HistoryWrappr({
+  partyCode,
+  minified,
+  onEndScreen,
+}: Props) {
   const playbackState = useLivePlaybackState(partyCode);
   const users = useLivePartyUsers(partyCode);
   const userAmount = users?.guests.length ? +users?.guests.length + 1 : 1;
@@ -53,7 +58,7 @@ export default function HistoryWrappr({ partyCode, minified }: Props) {
   ));
 
   return (
-    <div style={{ marginBottom: '84px' }}>
+    <div style={{ marginBottom: !onEndScreen ? '84px' : '0px' }}>
       {minified ? tracks.slice(0, 5) : tracks}
     </div>
   );

@@ -2,21 +2,14 @@
   margin-bottom: 20px;
 
   > div {
-    display: grid;
-    grid-template-columns: 2fr 2fr 1fr 1fr;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
     > div {
-      padding: 0 10px;
-
       display: flex;
       flex-direction: column;
       justify-content: center;
-    }
-
-    > div:last-child {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
     }
   }
 }
