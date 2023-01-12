@@ -9,17 +9,34 @@ declare const tag: unique symbol;
 export interface RatedTrack {
   readonly track: Track;
   readonly rating: Rating;
-  readonly [tag]: 'Track';
+  readonly [tag]: 'RatedTrack';
 }
 
 /**
  * A Rating
  */
 export interface Rating {
-  readonly likes: number;
-  readonly dislikes: number;
-  readonly userIds: string[];
+  readonly likes: Likes;
+  readonly dislikes: Dislikes;
   readonly [tag]: 'Rating';
+}
+
+/**
+ * A like with the amount of likes and the userIds
+ */
+export interface Likes {
+  readonly amount: number;
+  readonly userIds: UserId[];
+  readonly [tag]: 'Likes';
+}
+
+/**
+ * A Dislike with the amount of dislikes and the userIds
+ */
+export interface Dislikes {
+  readonly amount: number;
+  readonly userIds: UserId[];
+  readonly [tag]: 'Dislikes';
 }
 
 /**
@@ -39,14 +56,27 @@ export namespace RatedTrack {
    * Makes a new Rating
    * @param likes The likes
    * @param dislikes The dislikes
-   * @param userIds The users who rated the track
    */
-  export function makeRating(
-    likes: number,
-    dislikes: number,
-    userIds: string[]
-  ): Rating {
-    return Object.freeze({ likes, dislikes, userIds } as Rating);
+  export function makeRating(likes: Likes, dislikes: Dislikes): Rating {
+    return Object.freeze({ likes, dislikes } as Rating);
+  }
+
+  /**
+   * Makes a new Like
+   * @param amount The likes
+   * @param userIds The userIds
+   */
+  export function makeLike(amount: number, userIds: UserId[]): Likes {
+    return Object.freeze({ amount, userIds } as Likes);
+  }
+
+  /**
+   * Makes a new Dislike
+   * @param amount The likes
+   * @param userIds The userIds
+   */
+  export function makeDislike(amount: number, userIds: UserId[]): Dislikes {
+    return Object.freeze({ amount, userIds } as Dislikes);
   }
 
   /**

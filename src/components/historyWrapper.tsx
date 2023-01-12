@@ -22,6 +22,7 @@ export default function HistoryWrappr({
 }: Props) {
   const playbackState = useLivePlaybackState(partyCode);
   const users = useLivePartyUsers(partyCode);
+  // +1 to add the host to the userAmount
   const userAmount = users?.guests.length ? +users?.guests.length + 1 : 1;
   const [currentHistoryTracks, setCurrentHistoryTracks] = useState<
     RatedTrack[]
@@ -49,7 +50,7 @@ export default function HistoryWrappr({
     }
   }
 
-  const tracks = currentHistoryTracks.map((ratedTrack: RatedTrack) => (
+  const trackItems = currentHistoryTracks.map((ratedTrack: RatedTrack) => (
     <RatedTrackItem
       key={RatedTrack.idOf(ratedTrack)}
       ratedTrack={ratedTrack}
@@ -59,7 +60,7 @@ export default function HistoryWrappr({
 
   return (
     <div style={{ marginBottom: !onEndScreen ? '84px' : '0px' }}>
-      {minified ? tracks.slice(0, 5) : tracks}
+      {minified ? trackItems.slice(0, 5) : trackItems}
     </div>
   );
 }

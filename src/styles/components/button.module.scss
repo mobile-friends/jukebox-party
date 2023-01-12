@@ -48,6 +48,26 @@ button {
       }
     }
 
+    &.rating {
+      background-color: #ffffff20;
+      color: $light-color;
+      height: 54px;
+      width: 54px;
+      display: flex;
+
+      margin: 10px;
+      font-size: 25px;
+    }
+
+    &.bg-highlight {
+      color: $dark-color;
+      background-color: $primary-color;
+    }
+
+    &.disabled {
+      opacity: 0.6;
+    }
+
     &.big {
       background-color: $light-color;
       color: $dark-color;

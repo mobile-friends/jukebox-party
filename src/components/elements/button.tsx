@@ -14,7 +14,11 @@ type Selector =
   | 'icon-only'
   | 'small'
   | 'big'
-  | 'block';
+  | 'block'
+  | 'rating'
+  | 'bg-highlight'
+  | 'disabled'
+  | '';
 
 type Style =
   | Selector

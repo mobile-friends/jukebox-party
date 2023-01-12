@@ -14,11 +14,7 @@ import { JukeClient } from '@common/jukeClient';
 import { SaveTrackToHistoryResult } from '@endpoint/saveTrackToHistory';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import { SaveRatingToRatedTrackResult } from '@endpoint/saveRatingToRatedTrack';
-import { Fab, Action } from 'react-tiny-fab';
-import 'react-tiny-fab/dist/styles.css';
-import { MdStarRate } from 'react-icons/md';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
+import RatingWrapper from './ratingWrapper';
 
 interface Props {
   /**
@@ -42,8 +38,6 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
   const artistRef = useRef<HTMLParagraphElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
-
-  const [allowedToRate, setAllowedToRate] = useState(false);
 
   const track = PlaybackState.trackOf(playbackState);
   const trackDuration = Track.durationOf(track);
@@ -71,11 +65,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     })
       .then(onSaveTrackToHistoryResult)
       .catch(console.error);
-
-    //auskommentiert, weil die Logik sich im Branch 160 eh geändert hat
-    //const interval = setInterval(isUserAllowedToRate, 3000);
-    //return () => clearInterval(interval);
-  }, [track.name]);
+  }, [partyCode, track]);
 
   function onSaveTrackToHistoryResult(result: SaveTrackToHistoryResult) {
     switch (result.code) {
@@ -93,71 +83,6 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       default:
         return assertNeverReached(result);
     }
-  }
-
-  async function saveRatingToRatedTrack(rating: string) {
-    if (userId) {
-      await JukeClient.saveRatingToRatedTrack(partyCode, {
-        track: track,
-        rating: rating,
-        userId: userId,
-      })
-        .then(onSaveRatingToRatedTrack)
-        .catch(console.error);
-    }
-  }
-
-  function onSaveRatingToRatedTrack(result: SaveRatingToRatedTrackResult) {
-    switch (result.code) {
-      case StatusCodes.NO_CONTENT: //everything worked out
-        setAllowedToRate(false);
-        return;
-      case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_FOUND:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error [JUKE-142]
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  }
-
-  async function isUserAllowedToRate() {
-    const result = await getHistory();
-    switch (result.code) {
-      case StatusCodes.OK:
-        const currentHistoryTrack = result.content.history.tracks.find(
-          (t) => t.track.id === track.id
-        );
-        if (currentHistoryTrack) {
-          const allUserIds = currentHistoryTrack.rating.userIds;
-          if (allUserIds?.find((id) => id === userId)) {
-            setAllowedToRate(false);
-          } else {
-            setAllowedToRate(true);
-          }
-        }
-        return;
-      case StatusCodes.BAD_REQUEST:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_FOUND:
-        // TODO: Handle error [JUKE-142]
-        break;
-      case StatusCodes.NOT_IMPLEMENTED:
-        // TODO: Handle error [JUKE-142]
-        break;
-      default:
-        return assertNeverReached(result);
-    }
-  }
-
-  function getHistory() {
-    return JukeClient.getHistory(partyCode);
   }
 
   function getAnimationDuration(
@@ -222,58 +147,8 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
       ) : (
         ''
       )}
-      {allowedToRate ? (
-        // TODO: andere Lösung finden oder es schaffen, dass der Button sich responsive verhält [JUKE-160]
-        <Fab
-          mainButtonStyles={{
-            backgroundColor: '#ece32f',
-            height: '45px',
-            width: '45px',
-          }}
-          icon={<MdStarRate style={{ color: 'black' }} />}
-          event={'click'}
-          alwaysShowTitle={false}
-          style={{ bottom: 70, left: -15 }}
-        >
-          <Action
-            text='Dislike'
-            onClick={() => saveRatingToRatedTrack('dislike')}
-            style={{
-              backgroundColor: '#FF6F59',
-              left: 5,
-              height: '45px',
-              width: '45px',
-            }}
-          >
-            <AiFillDislike />
-          </Action>
-          <Action
-            text='Like'
-            onClick={() => saveRatingToRatedTrack('like')}
-            style={{
-              backgroundColor: '#77BFA3',
-              left: 5,
-              height: '45px',
-              width: '45px',
-            }}
-          >
-            <AiFillLike />
-          </Action>
-        </Fab>
-      ) : (
-        <Fab
-          mainButtonStyles={{
-            backgroundColor: '#fff',
-            opacity: '0.6',
-            height: '45px',
-            width: '45px',
-            pointerEvents: 'none',
-          }}
-          icon={<MdStarRate style={{ color: 'black' }} />}
-          alwaysShowTitle={false}
-          style={{ bottom: 70, left: -15 }}
-        ></Fab>
-      )}
+
+      <RatingWrapper partyCode={partyCode} playbackState={playbackState} />
     </div>
   );
 }

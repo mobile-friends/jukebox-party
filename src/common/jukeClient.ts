@@ -23,6 +23,7 @@ import {
   SaveRatingToRatedTrackBody,
   SaveRatingToRatedTrackResult,
 } from '@endpoint/saveRatingToRatedTrack';
+import { GetUserRatingResult } from '@endpoint/getUserRating';
 import { Track } from './types/track';
 import { AddToQueueBody, AddToQueueResult } from '@endpoint/addToQueue';
 import { NoBody } from './infrastructure/requestHandler';
@@ -260,5 +261,18 @@ export namespace JukeClient {
       url,
       body
     );
+  }
+
+  /**
+   * Gets the rating of the user from the track which is currently playing
+   * @param partyCode The code of the party
+   */
+  export function getUserRating(
+    partyCode: PartyCode,
+    trackId: string,
+    userId: string
+  ): Promise<GetUserRatingResult> {
+    const url = `parties/${partyCode}/${trackId}/${userId}`;
+    return get<GetUserRatingResult>(url);
   }
 }
