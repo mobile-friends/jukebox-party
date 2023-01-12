@@ -14,7 +14,6 @@ import { JukeClient } from '@common/jukeClient';
 import { SaveTrackToHistoryResult } from '@endpoint/saveTrackToHistory';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import { SaveRatingToRatedTrackResult } from '@endpoint/saveRatingToRatedTrack';
 import RatingWrapper from './ratingWrapper';
 
 interface Props {
@@ -39,8 +38,6 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
   const artistRef = useRef<HTMLParagraphElement>(null);
   const [showMarqueeBlur, setShowMarqueeBlur] = useState(false);
-
-  const [allowedToRate, setAllowedToRate] = useState(false);
 
   const track = PlaybackState.trackOf(playbackState);
   const trackDuration = Track.durationOf(track);
