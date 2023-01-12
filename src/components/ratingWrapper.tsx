@@ -1,5 +1,5 @@
 import styles from '@style/components/ratingWrapper.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PlaybackState } from '@common/types/playbackState';
 import { PartyCode } from '@common/types/partyCode';
 import { useSession } from 'next-auth/react';
@@ -28,13 +28,13 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   const userId = data?.user.id;
 
   const [isAllowedToRate, setIsAllowedToRate] = useState(true);
+  const [isSongLiked, setSongLiked] = useState('');
 
-  // useEffect(() => {});
+  useEffect(() => {
+    isUserAllowedToRate();
+  });
 
   async function trySaveRating(rating: string) {
-    //beim ersten Mal drücken auf einen Button ist 'isAllowedToRate' immer false obwohl es eigenltich true sein sollte,
-    //beim zweiten Mal drücken geht es, aber ich werd nicht schlau daraus, wieso es beim ersten Mal false ist :D
-    //vielleicht findest du was :)
     await isUserAllowedToRate();
     console.log(isAllowedToRate);
     if (isAllowedToRate) saveRatingToRatedTrack(rating);
@@ -77,7 +77,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
     //nur zum Ausprobieren, weiß nicht wo du es haben willst bzw. es brauchst :)
     if (userId) {
       const userRating = await getUserRatingFromCurrentTrack();
-      console.log(userRating);
+      setSongLiked(userRating === undefined ? '' : userRating);
     }
 
     if (currentTrackInfo) {
@@ -142,13 +142,25 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   return (
     <div className={styles.container}>
       <Button
-        styleType='icon-only rating bg-green'
+        styleType={`icon-only rating ${
+          !isAllowedToRate
+            ? isSongLiked === 'like'
+              ? 'bg-highlight'
+              : 'disabled'
+            : ''
+        }`}
         content={<AiFillLike />}
         onClick={() => trySaveRating('like')}
       />
 
       <Button
-        styleType={`icon-only rating bg-red`}
+        styleType={`icon-only rating ${
+          !isAllowedToRate
+            ? isSongLiked === 'dislike'
+              ? 'bg-highlight'
+              : 'disabled'
+            : ''
+        }`}
         content={<AiFillDislike />}
         onClick={() => trySaveRating('dislike')}
       />

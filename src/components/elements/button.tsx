@@ -16,8 +16,9 @@ type Selector =
   | 'big'
   | 'block'
   | 'rating'
-  | 'bg-red'
-  | 'bg-green';
+  | 'bg-highlight'
+  | 'disabled'
+  | '';
 
 type Style =
   | Selector

@@ -59,12 +59,13 @@ button {
       font-size: 25px;
     }
 
-    &.bg-red {
-      background-color: rgb(212, 24, 24);
+    &.bg-highlight {
+      color: $dark-color;
+      background-color: $primary-color;
     }
 
-    &.bg-green {
-      background-color: rgb(33, 181, 20);
+    &.disabled {
+      opacity: 0.6;
     }
 
     &.big {
