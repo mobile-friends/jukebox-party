@@ -13,9 +13,20 @@ export default function LyricsWrapper({ playTime, track }: Props) {
   const [currentLine, setCurrentLine] = useState<string>('');
   const [prevLine, setPrevLine] = useState<string>('');
   const [nextLine, setNextLine] = useState<string>('');
+  const [dominantColors, setDominantColors] = useState<any>();
+
+  const getColor = async (imageUrl: string) => {
+    const response = await fetch(
+      `https://lentoapi.herokuapp.com/dominantColor?url=${imageUrl}`
+    ).catch((err) => console.log(err));
+    const data = await response?.json();
+    setDominantColors(data);
+    return data;
+  };
 
   useEffect(() => {
     if (track.id === trackId) return;
+    getColor(track.albumArtUrl);
     setTrackId(track.id?.toString() as string);
     fetch(`https://spotify-lyric-api.herokuapp.com/?trackid=${track.id}`)
       .then((res) => {
@@ -53,10 +64,36 @@ export default function LyricsWrapper({ playTime, track }: Props) {
 
   return lyrics ? (
     <>
-      <div className={styles.lyricsWrapper}>
-        <div className={styles.lyricsLine}>{prevLine}</div>
-        <div className={styles.lyricsLineCurrent}>{currentLine}</div>
-        <div className={styles.lyricsLine}>{nextLine}</div>
+      <div
+        className={styles.lyricsWrapper}
+        style={{
+          background: `linear-gradient(120deg,${dominantColors?.hex} 0%, ${dominantColors?.hexDark} 120%`,
+        }}
+      >
+        <div
+          className={styles.lyricsLine}
+          style={{
+            color: dominantColors?.hexDark,
+          }}
+        >
+          {prevLine}
+        </div>
+        <div
+          className={styles.lyricsLineCurrent}
+          style={{
+            color: dominantColors?.hexLight,
+          }}
+        >
+          {currentLine}
+        </div>
+        <div
+          className={styles.lyricsLine}
+          style={{
+            color: dominantColors?.hexDark,
+          }}
+        >
+          {nextLine}
+        </div>
       </div>
     </>
   ) : (
