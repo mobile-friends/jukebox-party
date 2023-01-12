@@ -92,13 +92,11 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
 
   async function getCurrentHistoryTrack() {
     const result = await getHistory();
-    let currentTrack;
     switch (result.code) {
       case StatusCodes.OK:
-        currentTrack = result.content.history.tracks.find(
+        return result.content.history.tracks.find(
           (t) => t.track.id === track.id
         );
-        return currentTrack;
       case StatusCodes.BAD_REQUEST:
         // TODO: Handle error [JUKE-142]
         break;
