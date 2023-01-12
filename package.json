@@ -24,6 +24,7 @@
     "react-loading": "^2.0.3",
     "react-qr-code": "^2.0.11",
     "react-tiny-fab": "^4.0.4",
+    "react-toastify": "^9.1.1",
     "sass": "^1.56.1",
     "zod": "^3.20.2"
   },
