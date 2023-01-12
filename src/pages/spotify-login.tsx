@@ -152,7 +152,7 @@ export default function SpotifyLogin(props: Props) {
     }
   } else
     return (
-      <div className={`${styles.container}`}>Connecting to spotify...</div>
+      <div className={`text-center ${styles.container}`}>Connecting to spotify...</div>
     );
 }
 
