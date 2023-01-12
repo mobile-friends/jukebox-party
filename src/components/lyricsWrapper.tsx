@@ -97,7 +97,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
             color: dominantColors?.hexDark,
           }}
         >
-          {prevLine}
+          {prevLine ? prevLine : '♪'}
         </div>
         <div
           className={styles.lyricsLineCurrent}
@@ -113,7 +113,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
             color: dominantColors?.hexDark,
           }}
         >
-          {nextLine}
+          {nextLine ? nextLine : '♪'}
         </div>
       </div>
     </>
