@@ -1,11 +1,27 @@
-import React, { useEffect, useState } from 'react';
 import { Duration } from '@common/types/duration';
 import { Track } from '@common/types/track';
 import styles from '@style/components/lyricsWrapper.module.scss';
+import { useEffect, useState } from 'react';
 interface Props {
   playTime: Duration;
   track: Track;
 }
+
+const getNoLyricsFound = () => {
+  const noLyricsFound = [
+    "In this tune, you'll need to freestyle with the words.",
+    'This melody calls for some impromptu lyricism.',
+    'Time to wing it with the lyrics on this one.',
+    'Get ready to improvise like a jazz musician with the words in thissong.',
+    'The lyrics in this song are a blank canvas, go forth and paint a masterpiece',
+    'This song is like a game of Mad Libs, but with lyrics.',
+    'The lyrics in thissong are like a choose your own adventure book, make your own story.',
+    'In this song, the lyrics are like a game of Jenga, build it up as you go.',
+    'The words in this song are like clay, mold them into something great.',
+    'This song is like a game of telephone, pass on the lyrics and see how it changes',
+  ];
+  return noLyricsFound[Math.floor(Math.random() * noLyricsFound.length)];
+};
 
 export default function LyricsWrapper({ playTime, track }: Props) {
   const [lyrics, setLyrics] = useState<any>();
@@ -14,6 +30,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
   const [prevLine, setPrevLine] = useState<string>('');
   const [nextLine, setNextLine] = useState<string>('');
   const [dominantColors, setDominantColors] = useState<any>();
+  const [noLyricsText, setNoLyricsText] = useState<string>(getNoLyricsFound());
 
   const getColor = async (imageUrl: string) => {
     const response = await fetch(
@@ -33,6 +50,10 @@ export default function LyricsWrapper({ playTime, track }: Props) {
         return res.json();
       })
       .then((data) => {
+        if (data.error || data.syncType === 'UNSYNCED') {
+          setNoLyricsText(getNoLyricsFound);
+          return;
+        }
         const lyrics = data?.lines?.map((line: any) => {
           return {
             startTime: parseInt(line.startTimeMs) / 1000,
@@ -41,14 +62,14 @@ export default function LyricsWrapper({ playTime, track }: Props) {
         });
         setLyrics(lyrics);
       })
-      .catch(() => setLyrics(null));
+      .catch(() => {
+        setNoLyricsText(getNoLyricsFound);
+        setLyrics(null);
+      });
   }, [track, trackId]);
 
   useEffect(() => {
-    if (!lyrics) {
-      setCurrentLine('No lyrics found');
-      return;
-    }
+    if (!lyrics) return;
     const currentLine = lyrics.reduce((prev: any, curr: any) => {
       return Math.abs(curr.startTime - playTime) <
         Math.abs(prev.startTime - playTime)
@@ -98,8 +119,36 @@ export default function LyricsWrapper({ playTime, track }: Props) {
     </>
   ) : (
     <>
-      <div className={styles.lyricsNotFound}>
-        <div>No lyrics found for this song.</div>
+      <div
+        className={styles.lyricsWrapper}
+        style={{
+          background: `linear-gradient(120deg,${dominantColors?.hex} 0%, ${dominantColors?.hexDark} 120%`,
+        }}
+      >
+        <div
+          className={styles.lyricsLine}
+          style={{
+            color: dominantColors?.hexDark,
+          }}
+        >
+          ♩♪♫♬
+        </div>
+        <div
+          className={styles.lyricsLineCurrent}
+          style={{
+            color: dominantColors?.hexLight,
+          }}
+        >
+          {noLyricsText}
+        </div>
+        <div
+          className={styles.lyricsLine}
+          style={{
+            color: dominantColors?.hexDark,
+          }}
+        >
+          greetings your jukebot ♫
+        </div>
       </div>
     </>
   );
