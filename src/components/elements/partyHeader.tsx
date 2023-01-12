@@ -9,6 +9,7 @@ import QrButton from './qrButton';
 import UserListButton from './userListButton';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaCopy } from 'react-icons/fa';
+import { lchown } from 'fs/promises';
 
 interface Props {
   partyName: string;
@@ -30,8 +31,10 @@ export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
       theme: 'dark',
     });
 
+  const location = useLocation();
+
   useEffect(() => {
-    const origin = useLocation().origin;
+    const origin = location.origin;
     setPartyLink(`${origin}/?partyCode=${partyCode}`);
   }, []);
 
