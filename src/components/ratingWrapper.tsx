@@ -92,9 +92,10 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
 
   async function getCurrentHistoryTrack() {
     const result = await getHistory();
+    let currentTrack;
     switch (result.code) {
       case StatusCodes.OK:
-        const currentTrack = result.content.history.tracks.find(
+        currentTrack = result.content.history.tracks.find(
           (t) => t.track.id === track.id
         );
         return currentTrack;
