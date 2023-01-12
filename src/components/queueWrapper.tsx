@@ -34,8 +34,14 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
   }
 
   useEffect(() => {
-    JukeClient.getQueue(partyCode).then(onQueueResult).catch(console.error);
-  }, [partyCode, playbackState, minified]);
+    async function getQueue() {
+      JukeClient.getQueue(partyCode).then(onQueueResult).catch(console.error);
+    }
+
+    getQueue();
+    const interval = setInterval(getQueue, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const tracks = currentQueueTracks.map((track: Track, index) => (
     <TrackItem

@@ -65,7 +65,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
     })
       .then(onSaveTrackToHistoryResult)
       .catch(console.error);
-  }, [partyCode, track]);
+  }, [partyCode, track.id]);
 
   function onSaveTrackToHistoryResult(result: SaveTrackToHistoryResult) {
     switch (result.code) {
