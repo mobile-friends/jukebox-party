@@ -36,7 +36,6 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
 
   async function trySaveRating(rating: string) {
     await isUserAllowedToRate();
-    console.log(isAllowedToRate);
     if (isAllowedToRate) saveRatingToRatedTrack(rating);
   }
 
@@ -74,7 +73,6 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   async function isUserAllowedToRate() {
     const currentTrackInfo = await getCurrentHistoryTrack();
 
-    //nur zum Ausprobieren, weiß nicht wo du es haben willst bzw. es brauchst :)
     if (userId) {
       const userRating = await getUserRatingFromCurrentTrack();
       setRatingState(userRating === undefined ? '' : userRating);
