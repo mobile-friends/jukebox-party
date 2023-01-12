@@ -31,10 +31,9 @@ export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
       theme: 'dark',
     });
 
-  const location = useLocation();
-
   useEffect(() => {
-    const origin = location.origin;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const origin = useLocation().origin;
     setPartyLink(`${origin}/?partyCode=${partyCode}`);
   }, []);
 
