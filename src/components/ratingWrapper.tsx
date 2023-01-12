@@ -28,7 +28,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
   const userId = data?.user.id;
 
   const [isAllowedToRate, setIsAllowedToRate] = useState(true);
-  const [isSongLiked, setSongLiked] = useState('');
+  const [ratingState, setRatingState] = useState('');
 
   useEffect(() => {
     isUserAllowedToRate();
@@ -77,7 +77,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
     //nur zum Ausprobieren, weiß nicht wo du es haben willst bzw. es brauchst :)
     if (userId) {
       const userRating = await getUserRatingFromCurrentTrack();
-      setSongLiked(userRating === undefined ? '' : userRating);
+      setRatingState(userRating === undefined ? '' : userRating);
     }
 
     if (currentTrackInfo) {
@@ -144,7 +144,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
       <Button
         styleType={`icon-only rating ${
           !isAllowedToRate
-            ? isSongLiked === 'like'
+            ? ratingState === 'like'
               ? 'bg-highlight'
               : 'disabled'
             : ''
@@ -156,7 +156,7 @@ export default function RatingWrapper({ playbackState, partyCode }: Props) {
       <Button
         styleType={`icon-only rating ${
           !isAllowedToRate
-            ? isSongLiked === 'dislike'
+            ? ratingState === 'dislike'
               ? 'bg-highlight'
               : 'disabled'
             : ''
