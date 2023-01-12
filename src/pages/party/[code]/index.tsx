@@ -49,14 +49,14 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                 />
               </div>
               {windowSize !== null && windowSize.width > 750 ? (
-                <div>
+                <div style={{ display: 'grid', padding: '0 2rem' }}>
                   <div className={`${styles.queueView}`}>
-                    <h2>Next is</h2>
+                    <h2>Next up:</h2>
                     <QueueWrapper partyCode={partyCode} minified={true} />
                     <div className={styles.queueInfo}>
                       <Button
                         styleType='tertiary'
-                        content='see full queue'
+                        content='SEE FULL QUEUE'
                         onClick={goToQueue}
                       />
                     </div>

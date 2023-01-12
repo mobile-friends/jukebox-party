@@ -11,10 +11,11 @@
 @import 'components/navItem.module';
 @import 'components/queueHeader.module';
 @import 'components/qrCodeModal.module';
+@import url('https://fonts.cdnfonts.com/css/circular-std');
 
 * {
-  font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
-    'Arial', sans-serif;
+  font-family: 'Circular Std', 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue',
+    'Helvetica', 'Arial', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
