@@ -5,6 +5,8 @@ import Button from './elements/button';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
+import { Guest, User } from '@common/types/user';
+import { useSession } from 'next-auth/react';
 
 type ModalCloseListener = () => void;
 
@@ -28,6 +30,9 @@ interface Props {
  * @constructor
  */
 export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
+  const { data } = useSession();
+  const userId = data?.user.id;
+
   function handleClick(e: BaseSyntheticEvent) {
     const targetClassName: string = e.target.className;
     if (
@@ -59,8 +64,28 @@ export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
     }
   }
 
-  //TODO: JUKE-148
-  async function leaveParty() {}
+  async function leaveParty() {
+    if (userId) {
+      const result = await JukeClient.removeGuest(partyCode, {
+        guestId: userId,
+      });
+      switch (result.code) {
+        case StatusCodes.BAD_REQUEST:
+          // TODO: Handle error [JUKE-142]
+          break;
+        case StatusCodes.NOT_FOUND:
+          // TODO: Handle error [JUKE-142]
+          break;
+        case StatusCodes.NOT_IMPLEMENTED:
+          // TODO: Handle error [JUKE-142]
+          break;
+        case StatusCodes.NO_CONTENT: // Everything worked out
+          return;
+        default:
+          return assertNeverReached(result);
+      }
+    }
+  }
 
   return (
     <div className={styles.background_clickable} onClick={handleClick}>
@@ -75,7 +100,7 @@ export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
         <div className={styles.content}>
           <p className='text-center'>
             {isHost
-              ? 'If you close the party...'
+              ? 'If you close the party, all users will be kicked out. '
               : 'You can join again, if you change your mind!'}
           </p>
         </div>
@@ -83,7 +108,7 @@ export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
         <div className={styles.closebar}>
           <Button
             styleType='primary block'
-            content={isHost ? 'No,..!' : 'No, I want to stay!'}
+            content={isHost ? "No, don't close it!" : 'No, I want to stay!'}
             onClick={onClosed}
           />
         </div>
@@ -91,7 +116,7 @@ export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
         <div className={styles.closebar}>
           <Button
             styleType='secondary block'
-            content={isHost ? 'Yes, close it!' : 'Yes, leave!'}
+            content={isHost ? 'Yes, close it!' : 'Yes, I want to leave!'}
             onClick={isHost ? closeParty : leaveParty}
           />
         </div>
