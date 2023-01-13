@@ -32,7 +32,7 @@ function isValidQueryString(s: string): s is QueryString {
   return s.length >= MinQueryLength;
 }
 
-export default function AddTracks({ partyCode }: Props) {
+export default function AddTracksPage({ partyCode }: Props) {
   const [queryString, setQueryString] = useState<QueryString | null>(null);
   const [tracks, setTracks] = useState<Track[]>([]);
   const [recommendedTracks, setRecommendedTracks] = useState<Track[]>([]);
@@ -158,7 +158,7 @@ export default function AddTracks({ partyCode }: Props) {
   );
 }
 
-AddTracks.auth = true;
+AddTracksPage.auth = true;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const partyCode = await ServersideSession.tryGetPartyCode(ctx);

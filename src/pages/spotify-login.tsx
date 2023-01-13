@@ -47,7 +47,7 @@ function isError(props: Props): props is ErrorProps {
   return props.kind === 'Error';
 }
 
-export default function SpotifyLogin(props: Props) {
+export default function SpotifyLoginPage(props: Props) {
   const router = useRouter();
   const [spotifyAccountType, setSpotifyAccountType] = useState('');
 

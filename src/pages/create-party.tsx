@@ -20,7 +20,7 @@ interface SpotifyProps {
 
 type Props = SpotifyProps;
 
-export default function CreateParty({ spotifyToken, spotifyUser }: Props) {
+export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string | null>(null);
   const [hostName, setHostName] = useState<string | null>(null);

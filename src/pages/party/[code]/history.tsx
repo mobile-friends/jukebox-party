@@ -13,7 +13,7 @@ interface Props {
   partyCode: PartyCode;
 }
 
-export default function History({ partyCode }: Props) {
+export default function HistoryPage({ partyCode }: Props) {
   return (
     <div className='queueContainer'>
       <div className='queueHeader'>
@@ -29,7 +29,7 @@ export default function History({ partyCode }: Props) {
   );
 }
 
-History.auth = true;
+HistoryPage.auth = true;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const partyCode = await ServersideSession.tryGetPartyCode(ctx);

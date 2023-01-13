@@ -22,7 +22,7 @@ interface Props {
   isHost: boolean;
 }
 
-export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
+export default function PartyHomePage({ partyName, partyCode, isHost }: Props) {
   const router = useRouter();
   const playbackState = useLivePlaybackState(partyCode);
   const windowSize = useWindowSize();
@@ -91,7 +91,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   );
 }
 
-PartyRoom.auth = true;
+PartyHomePage.auth = true;
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const user = await ServersideSession.tryGetAuthUser(ctx);

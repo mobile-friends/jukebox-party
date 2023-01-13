@@ -12,7 +12,7 @@ import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
 import useQueryParam, { routerNotReady } from '@hook/useQueryParam';
 
-export default function Home() {
+export default function HomePage() {
   const router = useRouter();
   const partyCodeParam = useQueryParam('partyCode');
   const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
