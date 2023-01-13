@@ -31,20 +31,33 @@ export default function AboutUsModal({ onClosed }: Props) {
         </div>
 
         <div className={styles.textBlock}>
+          <br></br>
           <p>
-            Jukebox.party was created during a project at the University of
-            Applied Sciences St. Pölten.
+            Jukebox is an app built by a group of students that allows for group
+            sessions on Spotify. Perfect for parties and other social
+            gatherings, Jukebox allows multiple users to add and vote on songs
+            in real-time, creating the ultimate collaborative music experience.
+            With the power of Spotify's extensive library and easy-to-use
+            interface, Jukebox makes it simple for friends and family to come
+            together and create the perfect soundtrack for any occasion. Plus,
+            it's easy for others to join your session through the use of a
+            unique QR code.
           </p>
-          <br />
+          <br></br>
           <p>
-            As part of our Masters Programm Interactive Technologies, within the
-            Masterclass Mobile, we had to implement a group project during the
-            whole semester.
+            Team: Eva Altenburger, Ramon Brullo, Lukas Ganster, Fabian Gaugusch,
+            Michelle Markl, Lisa Polena, Alexander Schuster
           </p>
-          <p>
-            Within this time we, seven studens, came up with the idea and
-            implemented Jukebox.party with Next.js.
-          </p>
+          <br></br>
+          <span>Version 1.0 (last updated 17.January 2023) - </span>
+          <a
+            style={{ color: 'white' }}
+            target='_blank'
+            href='https://www.fhstp.ac.at/en/legal-information/legal-information?set_language=en'
+            rel='noreferrer'
+          >
+            Legal information
+          </a>
         </div>
 
         <div>
