@@ -12,6 +12,7 @@ import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
 import useQueryParam, { routerNotReady } from '@hook/useQueryParam';
 import { PagePath } from '@common/pagePath';
+import Head from 'next/head';
 
 export default function HomePage() {
   const router = useRouter();
