@@ -3,10 +3,11 @@ import React from 'react';
 import Button from '../../components/elements/button';
 import styles from '../../styles/pages/404.module.scss';
 import JukeHeader from '@component/elements/jukeHeader';
+import { PagePath } from '@common/pagePath';
 
 function PartyNotFound() {
   async function goToJoinPage() {
-    await router.push('/');
+    await router.push(PagePath.Home);
   }
 
   return (

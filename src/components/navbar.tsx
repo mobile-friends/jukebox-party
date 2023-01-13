@@ -8,6 +8,7 @@ import styles from '@style/components/navbar.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import { HiOutlineQueueList } from 'react-icons/hi2';
 import { useWindowSize } from '@hook/useWindowSize';
+import { PagePath } from '@common/pagePath';
 
 interface Props {
   partyCode: PartyCode;
@@ -18,28 +19,34 @@ interface Props {
  * @constructor
  */
 export default function Navbar({ partyCode }: Props) {
-  // Points to the home-page of the current party
-  const partyUrl = `/party/${partyCode}`;
   const windowSize = useWindowSize();
 
   return (
     <div className={styles.navbar}>
-      <NavItem icon={<AiFillHome />} text='Home' linkTarget={partyUrl} />
+      <NavItem
+        icon={<AiFillHome />}
+        text='Home'
+        linkTarget={PagePath.partyHome(partyCode)}
+      />
       <NavItem
         icon={<TbMicrophone2 />}
         text='Lyrics'
-        linkTarget={`${partyUrl}/lyrics`}
+        linkTarget={PagePath.partyLyrics(partyCode)}
       />
-      <NavItem icon={<BsSearch />} text='Add' linkTarget={`${partyUrl}/add`} />
+      <NavItem
+        icon={<BsSearch />}
+        text='Add'
+        linkTarget={PagePath.partyAdd(partyCode)}
+      />
       <NavItem
         icon={<HiOutlineQueueList />}
         text='Queue'
-        linkTarget={`${partyUrl}/queue`}
+        linkTarget={PagePath.partyQueue(partyCode)}
       />
       <NavItem
         icon={<MdOutlineHistory />}
         text='History'
-        linkTarget={`${partyUrl}/history`}
+        linkTarget={PagePath.partyHistory(partyCode)}
       />
     </div>
   );

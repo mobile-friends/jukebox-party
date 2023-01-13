@@ -8,6 +8,7 @@ import { assertNeverReached } from '@common/util/assertions';
 import TrackItem from '@component/elements/trackItem';
 import { signOut } from 'next-auth/react';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
+import { PagePath } from '@common/pagePath';
 
 interface Props {
   partyCode: PartyCode;
@@ -24,7 +25,7 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
         return setCurrentQueueTracks(result.content.tracks);
       case StatusCodes.UNAUTHORIZED:
         // TODO: Redirect to better unauthorized page [JUKE-143]
-        return signOut({ callbackUrl: '/' }).catch(console.error);
+        return signOut({ callbackUrl: PagePath.Home }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors [JUKE-142]
         break;

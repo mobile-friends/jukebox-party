@@ -7,6 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import { Guest, User } from '@common/types/user';
 import { useSession } from 'next-auth/react';
+import { PagePath } from '@common/pagePath';
 
 type ModalCloseListener = () => void;
 
@@ -57,7 +58,7 @@ export default function ExitModal({ partyCode, onClosed, isHost }: Props) {
         // TODO: Handle error [JUKE-142]
         break;
       case StatusCodes.NO_CONTENT: // Everything worked out
-        location.assign(`/party/${partyCode}/closed`);
+        location.assign(PagePath.partyClosed(partyCode));
         return;
       default:
         return assertNeverReached(result);

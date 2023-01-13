@@ -12,6 +12,7 @@ import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
 import { SpotifyUser } from '@common/types/user';
 import { SpotifyClient } from '@common/spotifyClient';
+import { PagePath } from '@common/pagePath';
 
 interface SpotifyProps {
   spotifyToken: SpotifyToken | null;
@@ -26,7 +27,7 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   const [hostName, setHostName] = useState<string | null>(null);
 
   function goBackToStart() {
-    router.push('/').catch(console.error);
+    router.push(PagePath.Home).catch(console.error);
   }
 
   useEffect(() => {
@@ -42,9 +43,8 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   }
 
   async function goToPartyPage(partyCode: PartyCode, userId: string) {
-    const partyUrl = `/party/${partyCode}`;
     await signIn('Juke', {
-      callbackUrl: partyUrl,
+      callbackUrl: PagePath.partyHome(partyCode),
       partyCode,
       userId,
     });
@@ -67,10 +67,7 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   }
 
   function goToLogin() {
-    router.push({
-      pathname: '/spotify-login',
-      query: { newLogin: 'true' },
-    });
+    router.push(PagePath.spotifyLogin(true));
   }
 
   async function onCreatePartyClicked() {

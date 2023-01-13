@@ -5,6 +5,7 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import { signOut } from 'next-auth/react';
+import { PagePath } from '@common/pagePath';
 
 export default function useLivePlaybackState(
   partyCode: PartyCode,
@@ -22,7 +23,7 @@ export default function useLivePlaybackState(
           break;
         case StatusCodes.UNAUTHORIZED:
           // TODO: Redirect to better unauthorized page [JUKE-143]
-          return signOut({ callbackUrl: '/' }).catch(console.error);
+          return signOut({ callbackUrl: PagePath.Home }).catch(console.error);
         case StatusCodes.SERVICE_UNAVAILABLE:
           console.error('Playback state unavailable');
           break;

@@ -2,13 +2,13 @@ import { GetServerSideProps } from 'next/types';
 import * as querystring from 'querystring';
 import axios from 'axios';
 import { SpotifyClient } from '@common/spotifyClient';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Env } from '@common/env';
 import { SpotifyUser } from '@common/types/user';
-import React from 'react';
 import styles from '../styles/pages/spotifyLogin.module.scss';
 import Button from '@component/elements/button';
+import { PagePath } from '@common/pagePath';
 
 interface SpotifyTokenData {
   access_token: SpotifyToken;
@@ -33,12 +33,6 @@ type Props = ErrorProps | WaitForPlayingProps;
 const Scope =
   'user-read-recently-played user-read-playback-state user-top-read user-modify-playback-state user-read-currently-playing user-follow-read playlist-read-private user-read-email user-read-private user-library-read playlist-read-collaborative';
 
-function makePartyUrl(spotifyToken: SpotifyToken) {
-  return `/create-party?${querystring.stringify({
-    token: spotifyToken,
-  })}`;
-}
-
 function isWaitingForPlaying(props: Props): props is WaitForPlayingProps {
   return props.kind === 'WaitForPlaying';
 }
@@ -52,21 +46,17 @@ export default function SpotifyLoginPage(props: Props) {
   const [spotifyAccountType, setSpotifyAccountType] = useState('');
 
   function goBackToStart() {
-    router.push('/').catch(console.error);
+    router.push(PagePath.Home).catch(console.error);
   }
 
   function goToLogin() {
-    router.push({
-      pathname: '/spotify-login',
-      query: { newLogin: 'true' },
-    });
+    router.push(PagePath.spotifyLogin(true));
   }
 
   async function checkIfPlaying(spotifyToken: SpotifyToken) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
     if (isPlaying) {
-      const partyUrl = makePartyUrl(spotifyToken);
-      await router.push(partyUrl);
+      await router.push(PagePath.createParty(spotifyToken));
     }
   }
 
@@ -216,7 +206,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     return res.data;
   }
 
-  if ('newLogin' in query) {
+  if ('newLogin' in query && query['newLogin'] === 'true') {
     return {
       props: {} as Props,
       redirect: {
@@ -235,11 +225,10 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
     );
 
     if (isPlaying) {
-      const redirectUrl = makePartyUrl(spotifyToken);
       return {
         props: {} as Props,
         redirect: {
-          destination: redirectUrl,
+          destination: PagePath.createParty(spotifyToken),
         },
       };
     } else {

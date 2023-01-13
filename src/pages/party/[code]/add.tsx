@@ -19,6 +19,7 @@ import { GetServerSideProps } from 'next/types';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
 import styles from '../../../styles/pages/main.module.scss';
+import { PagePath } from '@common/pagePath';
 
 interface Props {
   partyCode: PartyCode;
@@ -59,7 +60,7 @@ export default function AddTracksPage({ partyCode }: Props) {
         break;
       case StatusCodes.UNAUTHORIZED:
         // TODO: Redirect to better unauthorized page [JUKE-143]
-        return signOut({ callbackUrl: '/' }).catch(console.error);
+        return signOut({ callbackUrl: PagePath.Home }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors [JUKE-142]
         break;
@@ -74,7 +75,7 @@ export default function AddTracksPage({ partyCode }: Props) {
         return setRecommendedTracks(result.content.items);
       case StatusCodes.UNAUTHORIZED:
         // TODO: Redirect to better unauthorized page [JUKE-143]
-        return signOut({ callbackUrl: '/' }).catch(console.error);
+        return signOut({ callbackUrl: PagePath.Home }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors [JUKE-142]
         break;
@@ -163,13 +164,13 @@ AddTracksPage.auth = true;
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const partyCode = await ServersideSession.tryGetPartyCode(ctx);
   if (!partyCode) {
-    return { redirect: { destination: '/' }, props: {} as Props };
+    return { redirect: { destination: PagePath.Home }, props: {} as Props };
   }
   const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
 
   if (PartyDb.isError(party)) {
     return {
-      redirect: { destination: '/' }, // TODO: Add better non-auth page [JUKE-143]
+      redirect: { destination: PagePath.Home }, // TODO: Add better non-auth page [JUKE-143]
       props: {} as Props,
     };
   }

@@ -11,6 +11,7 @@ import { useState } from 'react';
 import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
 import useQueryParam, { routerNotReady } from '@hook/useQueryParam';
+import { PagePath } from '@common/pagePath';
 
 export default function HomePage() {
   const router = useRouter();
@@ -19,11 +20,11 @@ export default function HomePage() {
   const [guestName, setGuestName] = useState<string | null>(null);
 
   function goToLogin() {
-    router.push('/spotify-login').catch(console.error);
+    router.push(PagePath.spotifyLogin(false)).catch(console.error);
   }
 
   async function goTo404() {
-    await router.push(`/party/404`);
+    await router.push(PagePath.PartyNotFound);
   }
 
   async function joinParty(partyCode: PartyCode, guestName: string) {
@@ -34,7 +35,7 @@ export default function HomePage() {
     switch (result.code) {
       case StatusCodes.OK:
         return await signIn('Juke', {
-          callbackUrl: `/party/${partyCode}`,
+          callbackUrl: PagePath.partyHome(partyCode),
           partyCode,
           userId: result.content.userId,
         });

@@ -11,6 +11,7 @@ import { useWindowSize } from '@hook/useWindowSize';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next/types';
 import styles from '../../../styles/pages/party/home.module.scss';
+import { PagePath } from '@common/pagePath';
 
 interface Props {
   partyName: string;
@@ -24,7 +25,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
   const windowSize = useWindowSize();
 
   function goToQueue() {
-    router.push(`/party/${partyCode}/queue`).catch(console.error);
+    router.push(PagePath.partyQueue(partyCode)).catch(console.error);
   }
 
   return (
@@ -65,12 +66,12 @@ PartyRoom.auth = true;
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const user = await ServersideSession.tryGetAuthUser(ctx);
   if (!user) {
-    return { redirect: { destination: '/' }, props: {} as Props };
+    return { redirect: { destination: PagePath.Home }, props: {} as Props };
   }
   const party = await PartyDb.tryGetByCode(firebaseDb, user.partyCode);
   if (PartyDb.isError(party))
     return {
-      redirect: { destination: '/party/404' },
+      redirect: { destination: PagePath.PartyNotFound },
       props: {} as Props,
     };
   return {
