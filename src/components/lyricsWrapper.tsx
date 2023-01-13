@@ -2,6 +2,7 @@ import { Duration } from '@common/types/duration';
 import { Track } from '@common/types/track';
 import styles from '@style/components/lyricsWrapper.module.scss';
 import { useEffect, useState } from 'react';
+
 interface Props {
   playTime: Duration;
   track: Track;

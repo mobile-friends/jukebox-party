@@ -13,7 +13,6 @@ import { Track } from '@common/types/track';
 import { tryQueryParam } from '@common/util/query';
 import { Response } from '@common/infrastructure/response';
 import { Party } from '@common/types/party';
-import { RatedTrack } from '@common/types/ratedTrack';
 
 export interface SaveTrackToHistoryBody {
   track: Track;

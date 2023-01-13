@@ -5,7 +5,6 @@ import Button from './elements/button';
 import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
-import { Guest, User } from '@common/types/user';
 import { useSession } from 'next-auth/react';
 import { PagePath } from '@common/pagePath';
 

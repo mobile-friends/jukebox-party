@@ -1,6 +1,7 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
 import { History } from './history';
+
 declare const tag: unique symbol;
 
 /**

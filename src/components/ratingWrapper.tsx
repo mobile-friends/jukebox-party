@@ -7,7 +7,7 @@ import { JukeClient } from '@common/jukeClient';
 import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import { SaveRatingToRatedTrackResult } from '@endpoint/saveRatingToRatedTrack';
-import { AiFillLike, AiFillDislike } from 'react-icons/ai';
+import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import Button from './elements/button';
 
 interface Props {

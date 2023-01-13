@@ -9,7 +9,6 @@ import QrButton from './qrButton';
 import UserListButton from './userListButton';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaCopy } from 'react-icons/fa';
-import { lchown } from 'fs/promises';
 
 interface Props {
   partyName: string;

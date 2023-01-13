@@ -31,6 +31,7 @@ export namespace Artist {
     if (Array.isArray(artist)) return artist.map((a) => a.name).join(', ');
     return artist.name;
   }
+
   /**
    * Gets the id of an artist
    * @param artist The artist

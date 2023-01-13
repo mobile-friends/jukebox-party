@@ -1,5 +1,4 @@
-import { Party } from './party';
-import { RatedTrack, Rating } from './ratedTrack';
+import { RatedTrack } from './ratedTrack';
 import { Track } from './track';
 
 declare const tag: unique symbol;

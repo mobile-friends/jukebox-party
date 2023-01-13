@@ -7,7 +7,6 @@ import {
 } from '@common/infrastructure/types';
 import { SpotifyClient } from '@common/spotifyClient';
 import { Track } from '@common/types/track';
-import { log } from 'console';
 
 export interface GetRecommendationsSuccess {
   items: Track[];

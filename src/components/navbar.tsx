@@ -3,7 +3,7 @@ import NavItem from './elements/navItem';
 import { BsSearch } from 'react-icons/bs';
 import { TbMicrophone2 } from 'react-icons/tb';
 import { AiFillHome } from 'react-icons/ai';
-import { MdOutlineHistory, MdOutlineQueueMusic } from 'react-icons/md';
+import { MdOutlineHistory } from 'react-icons/md';
 import styles from '@style/components/navbar.module.scss';
 import { PartyCode } from '@common/types/partyCode';
 import { HiOutlineQueueList } from 'react-icons/hi2';

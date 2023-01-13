@@ -4,7 +4,6 @@ import { PartyCode } from '@common/types/partyCode';
 import { useLocation } from '@hook/useLocation';
 import { BaseSyntheticEvent } from 'react';
 import Button from './elements/button';
-import { Env } from '@common/env';
 
 type ModalCloseListener = () => void;
 
