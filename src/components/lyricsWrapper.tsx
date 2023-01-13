@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 interface Props {
   playTime: Duration;
   track: Track;
+  showInfo: boolean;
 }
 
 const getNoLyricsFound = () => {
@@ -23,7 +24,11 @@ const getNoLyricsFound = () => {
   return noLyricsFound[Math.floor(Math.random() * noLyricsFound.length)];
 };
 
-export default function LyricsWrapper({ playTime, track }: Props) {
+export default function LyricsWrapper({
+  playTime,
+  track,
+  showInfo = false,
+}: Props) {
   const [lyrics, setLyrics] = useState<any>();
   const [trackId, setTrackId] = useState<string>('');
   const [currentLine, setCurrentLine] = useState<string>('');
@@ -41,7 +46,23 @@ export default function LyricsWrapper({ playTime, track }: Props) {
     return data;
   };
 
+  const showLyricsInfo = () => {
+    return showInfo ? (
+      <div className={styles.lyricsInfo}>
+        <img src={track.albumArtUrl}></img>
+        <div>
+          <b>{track.name}</b> <br></br>
+          <span>{track.artists.map((a) => a.name).join(',')}</span>
+        </div>
+      </div>
+    ) : (
+      <></>
+    );
+  };
+
   useEffect(() => {
+    console.log({ track, lyrics });
+
     if (track.id === trackId) return;
     getColor(track.albumArtUrl);
     setTrackId(track.id?.toString() as string);
@@ -52,7 +73,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
       .then((data) => {
         if (data.error || data.syncType === 'UNSYNCED') {
           setNoLyricsText(getNoLyricsFound);
-          return;
+          return setLyrics(null);
         }
         const lyrics = data?.lines?.map((line: any) => {
           return {
@@ -91,6 +112,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
           background: `linear-gradient(120deg,${dominantColors?.hex} 0%, ${dominantColors?.hexDark} 120%`,
         }}
       >
+        {showLyricsInfo()}
         <div
           className={styles.lyricsLine}
           style={{
@@ -125,6 +147,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
           background: `linear-gradient(120deg,${dominantColors?.hex} 0%, ${dominantColors?.hexDark} 120%`,
         }}
       >
+        {showLyricsInfo()}
         <div
           className={styles.lyricsLine}
           style={{

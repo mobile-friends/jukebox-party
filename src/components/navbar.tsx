@@ -25,15 +25,11 @@ export default function Navbar({ partyCode }: Props) {
   return (
     <div className={styles.navbar}>
       <NavItem icon={<AiFillHome />} text='Home' linkTarget={partyUrl} />
-      {windowSize !== null && windowSize?.width < 750 ? (
-        <NavItem
-          icon={<TbMicrophone2 />}
-          text='Lyrics'
-          linkTarget={`${partyUrl}/lyrics`}
-        />
-      ) : (
-        <></>
-      )}
+      <NavItem
+        icon={<TbMicrophone2 />}
+        text='Lyrics'
+        linkTarget={`${partyUrl}/lyrics`}
+      />
       <NavItem icon={<BsSearch />} text='Add' linkTarget={`${partyUrl}/add`} />
       <NavItem
         icon={<HiOutlineQueueList />}

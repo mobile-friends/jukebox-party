@@ -1,6 +1,7 @@
 @import '../helper/variables.scss';
 
 .lyricsWrapper {
+  position: relative;
   display: grid;
   align-content: center;
   padding: 2rem;
@@ -41,5 +42,35 @@
   > div {
     @extend .lyricsLine;
     color: $light-color;
+  }
+}
+
+.lyricsInfo {
+  position: absolute;
+  z-index: 99;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  left: 0%;
+  > img {
+    width: 50px;
+    margin-right: 20px;
+  }
+
+  span {
+    font-size: 0.8em !important;
+  }
+  box-shadow: $jukebox-shadow;
+}
+
+@media only screen and (max-width: 900px) {
+  .lyricsLineCurrent {
+    font-size: 2rem !important;
+  }
+  .lyricsLine {
+    font-size: 1.4rem !important;
   }
 }

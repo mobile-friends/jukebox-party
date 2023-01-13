@@ -40,6 +40,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
             <LyricsWrapper
               playTime={playbackState.playTime}
               track={playbackState.track}
+              showInfo={true}
             />
           ) : (
             <div className='text-center smaller_box'>

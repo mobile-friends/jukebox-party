@@ -65,6 +65,7 @@ export default function PartyRoom({ partyName, partyCode, isHost }: Props) {
                     <LyricsWrapper
                       playTime={playbackState.playTime}
                       track={playbackState.track}
+                      showInfo={false}
                     />
                   </>
                 </div>
