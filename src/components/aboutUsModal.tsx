@@ -37,10 +37,10 @@ export default function AboutUsModal({ onClosed }: Props) {
             sessions on Spotify. Perfect for parties and other social
             gatherings, Jukebox allows multiple users to add and vote on songs
             in real-time, creating the ultimate collaborative music experience.
-            With the power of Spotify's extensive library and easy-to-use
+            With the power of Spotify´s extensive library and easy-to-use
             interface, Jukebox makes it simple for friends and family to come
             together and create the perfect soundtrack for any occasion. Plus,
-            it's easy for others to join your session through the use of a
+            it´s easy for others to join your session through the use of a
             unique QR code.
           </p>
           <br></br>
