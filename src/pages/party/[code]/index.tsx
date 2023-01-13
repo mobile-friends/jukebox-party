@@ -50,7 +50,7 @@ export default function PartyHomePage({ partyName, partyCode, isHost }: Props) {
                 />
               </div>
               {windowSize !== null && windowSize.width > 750 ? (
-                <div style={{ display: 'grid', padding: '0 2rem' }}>
+                <div style={{ display: 'grid', padding: '0 20px' }}>
                   <div className={`${styles.queueView}`}>
                     <h2>Next up:</h2>
                     <QueueWrapper partyCode={partyCode} minified={true} />

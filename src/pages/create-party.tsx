@@ -97,7 +97,7 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
             </p>
           </div>
         )}
-        <form>
+        <form className={styles.form}>
           <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
           <UserNameInput initialValue={null} onValueChanged={setHostName} />
           <Button

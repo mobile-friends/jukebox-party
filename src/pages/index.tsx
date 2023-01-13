@@ -68,7 +68,7 @@ export default function HomePage() {
         second={'party'}
         pageTitle={'Join a jukebox.party'}
       />
-      <form>
+      <form className={styles.form}>
         <UserNameInput initialValue={null} onValueChanged={setGuestName} />
         {partyCodeParam !== routerNotReady && (
           <PartyCodeInput
