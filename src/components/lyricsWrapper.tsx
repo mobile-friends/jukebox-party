@@ -52,7 +52,7 @@ export default function LyricsWrapper({
         <img src={track.albumArtUrl}></img>
         <div>
           <b>{track.name}</b> <br></br>
-          <span>{track.artists.map((a) => a.name).join(',')}</span>
+          <span>{track.artists.map((a) => a.name).join(', ')}</span>
         </div>
       </div>
     ) : (
