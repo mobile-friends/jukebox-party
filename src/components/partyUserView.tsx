@@ -59,10 +59,14 @@ export default function PartyUserView({
 
   return (
     <div className={`text-center ${styles.container}`}>
-      <h3>party.<span className='text-italic text-primary'>host</span>: {hostName}</h3>
+      <h3>
+        party.<span className='text-italic text-primary'>host</span>: {hostName}
+      </h3>
 
       <div>
-        <h3>party.<span className='text-italic text-primary'>guests</span></h3>
+        <h3>
+          party.<span className='text-italic text-primary'>guests</span>
+        </h3>
         <div className={styles.guestContainer}>
           {hasGuests ? (
             <>

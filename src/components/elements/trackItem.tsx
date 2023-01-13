@@ -41,7 +41,7 @@ export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
     <li
       className={styles.row}
       key={track.id}
-      onClick={() => { 
+      onClick={() => {
         if (!canBeQueued) {
           return;
         }

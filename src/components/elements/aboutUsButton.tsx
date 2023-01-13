@@ -14,9 +14,7 @@ export default function UserListButton() {
         onClick={toggleModalVisibility}
       />
 
-      {isModalVisible && (
-        <AboutUsModal onClosed={toggleModalVisibility}/>
-      )}
+      {isModalVisible && <AboutUsModal onClosed={toggleModalVisibility} />}
     </div>
   );
 }

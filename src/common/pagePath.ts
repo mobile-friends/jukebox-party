@@ -80,5 +80,4 @@ export namespace PagePath {
   export function partyClosed(partyCode: PartyCode) {
     return `/party/${partyCode}/closed`;
   }
-
 }

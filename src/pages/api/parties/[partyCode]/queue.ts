@@ -5,5 +5,5 @@ import { endpoint } from '@common/infrastructure/endpoint';
 
 export default endpoint({
   [HTTPMethod.GET]: handleGetQueueRequest,
-  [HTTPMethod.POST]: handleAddToQueueRequest
+  [HTTPMethod.POST]: handleAddToQueueRequest,
 });

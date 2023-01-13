@@ -393,7 +393,10 @@ export namespace SpotifyClient {
    * @param spotifyToken An active spotify token
    * @param track The track's ID
    */
-  export async function addToQueue(spotifyToken: SpotifyToken, track: string): Promise<void> {
+  export async function addToQueue(
+    spotifyToken: SpotifyToken,
+    track: string
+  ): Promise<void> {
     const url = `/me/player/queue?uri=spotify:track:${track}`;
     const [data] = await post<void>(url, spotifyToken);
 

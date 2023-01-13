@@ -40,7 +40,10 @@ export default function UserListModal({ partyCode, isHost, onClosed }: Props) {
 
   function handleClick(e: BaseSyntheticEvent) {
     const targetClassName: string = e.target.className;
-    if(typeof(targetClassName) === 'string' && targetClassName.includes('background_clickable')) {
+    if (
+      typeof targetClassName === 'string' &&
+      targetClassName.includes('background_clickable')
+    ) {
       onClosed();
     }
   }
@@ -59,7 +62,11 @@ export default function UserListModal({ partyCode, isHost, onClosed }: Props) {
         />
 
         <div className={styles.closebar}>
-          <Button styleType='secondary block' content='Close' onClick={onClosed} />
+          <Button
+            styleType='secondary block'
+            content='Close'
+            onClick={onClosed}
+          />
         </div>
       </div>
     </div>
