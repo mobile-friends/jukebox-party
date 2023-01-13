@@ -55,7 +55,7 @@ export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
             notify();
           }}
         >
-          <p className='text-center'>Pin: {partyCode}</p>
+          <p className='text-center'>PIN: {partyCode}</p>
           <FaCopy size={15} />
         </div>
         <div>
