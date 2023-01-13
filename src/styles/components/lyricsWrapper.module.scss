@@ -49,6 +49,8 @@
 .lyricsInfo {
   background: linear-gradient(45deg, rgb(0 0 0 / 29%), transparent);
   position: absolute;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   z-index: 99;
   text-align: center;
   display: flex;
