@@ -61,8 +61,6 @@ export default function LyricsWrapper({
   };
 
   useEffect(() => {
-    console.log({ track, lyrics });
-
     if (track.id === trackId) return;
     getColor(track.albumArtUrl);
     setTrackId(track.id?.toString() as string);

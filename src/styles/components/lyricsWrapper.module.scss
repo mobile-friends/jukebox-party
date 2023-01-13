@@ -7,14 +7,15 @@
   padding: 2rem;
   background: linear-gradient(
     90deg,
-    $primary-color 0%,
-    adjust-hue($primary-color, -10) 100%
+    $dark-color 0%,
+    adjust-hue($dark-color, -10) 100%
   );
   gap: 1rem;
   border-radius: 1rem;
   transition: ease-in-out 0.5s;
   box-shadow: $jukebox-shadow;
   height: 100%;
+  transition: 500ms ease-in-out;
 
   .lyricsLine {
     display: block;
