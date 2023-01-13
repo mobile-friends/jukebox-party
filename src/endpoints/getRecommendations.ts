@@ -18,29 +18,32 @@ export type GetRecommendationsResult =
   | Ok<GetRecommendationsSuccess>
   | GetRecommendationsError;
 
+export async function getRecommendationsWith(spotifyToken: SpotifyToken) {
+  const seedTrack = (await SpotifyClient.getCurrentTrack(
+    spotifyToken
+  )) as Track;
+  const seedArtist = await SpotifyClient.getArtist(
+    spotifyToken,
+    seedTrack.artists[0].id
+  );
+  const seedGenres = seedArtist.genres.slice(0, 3) ;
+  const limit = 7;
+
+  return await SpotifyClient.getRecommendations(
+    spotifyToken,
+    [seedTrack],
+    [seedArtist],
+    seedGenres,
+    limit
+  );
+}
+
 export default requestHandler<NoBody, GetRecommendationsResult>(
   async ({ spotifyToken }) => {
     if (spotifyToken === null) {
       return Response.noSpotify();
     }
-    const seedTrack = (await SpotifyClient.getCurrentTrack(
-      spotifyToken
-    )) as Track;
-    const seedArtist = await SpotifyClient.getArtist(
-      spotifyToken,
-      seedTrack.artists[0].id
-    );
-    const seedGenres = seedArtist.genres?.slice(0, 3) as string[];
-    const limit = 7;
-
-    const items = await SpotifyClient.getRecommendations(
-      spotifyToken,
-      [seedTrack],
-      [seedArtist],
-      seedGenres,
-      limit
-    );
-
+    const items = await getRecommendationsWith(spotifyToken);
     return Response.ok<GetRecommendationsSuccess>({ items });
   }
 );

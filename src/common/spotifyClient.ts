@@ -269,16 +269,15 @@ export namespace SpotifyClient {
       const { name, duration_ms, artists, album, id } = response;
       const albumCoverUrl: string = album.images?.[0].url;
       const artistsDomain = artists.map((artist) =>
-        Artist.make(artist.name, artist.id)
+        Artist.make(artist.name, artist.id, [])
       );
-      return (
-        Track.make(
-          name,
-          Duration.makeFromMillis(duration_ms),
-          artistsDomain,
-          albumCoverUrl,
-          id
-        ) ?? {}
+      return Track.make(
+        name,
+        Duration.makeFromMillis(duration_ms),
+        artistsDomain,
+        albumCoverUrl,
+        id,
+        []
       );
     }
 

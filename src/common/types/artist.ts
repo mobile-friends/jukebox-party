@@ -7,7 +7,7 @@ declare const tag: unique symbol;
 export interface Artist {
   readonly name: string;
   readonly id: string;
-  readonly genres?: string[];
+  readonly genres: string[];
   readonly [tag]: 'Artist';
 }
 
@@ -19,7 +19,7 @@ export namespace Artist {
    * Makes an artist object
    * @param name The artists name
    */
-  export function make(name: string, id: string, genres?: string[]): Artist {
+  export function make(name: string, id: string, genres: string[]): Artist {
     return Object.freeze({ name, id, genres } as Artist);
   }
 
