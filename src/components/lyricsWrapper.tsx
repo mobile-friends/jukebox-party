@@ -84,7 +84,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
             color: dominantColors?.hexLight,
           }}
         >
-          {currentLine}
+          {currentLine ? currentLine : '♪'}
         </div>
         <div
           className={styles.lyricsLine}
@@ -92,7 +92,7 @@ export default function LyricsWrapper({ playTime, track }: Props) {
             color: dominantColors?.hexDark,
           }}
         >
-          {nextLine}
+          {nextLine ? nextLine : currentLine ? '♪' : 'greetings your jukebot ♫'}
         </div>
       </div>
     </>
