@@ -27,10 +27,6 @@ export namespace Response {
     return { code: StatusCodes.NO_CONTENT };
   }
 
-  export function serviceUnavailable(): ServiceUnavailableError {
-    return { code: StatusCodes.SERVICE_UNAVAILABLE };
-  }
-
   export function methodNotAllowed(
     allowedMethods: HTTPMethod[]
   ): MethodNotAllowedError {
@@ -113,6 +109,16 @@ export namespace Response {
       error: {
         kind: 'NotImplementedError',
         message,
+      },
+    };
+  }
+
+  export function serviceUnavailable(): ServiceUnavailableError {
+    return {
+      code: StatusCodes.SERVICE_UNAVAILABLE,
+      error: {
+        kind: 'ServiceUnavailableError',
+        message: 'The called endpoint is currently not available',
       },
     };
   }

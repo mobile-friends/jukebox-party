@@ -40,9 +40,10 @@ export type NoSpotifyError = MakeError<
   'NoSpotifyError'
 >;
 
-export interface ServiceUnavailableError {
-  code: StatusCodes.SERVICE_UNAVAILABLE;
-}
+export type ServiceUnavailableError = MakeError<
+  StatusCodes.SERVICE_UNAVAILABLE,
+  'ServiceUnavailableError'
+>;
 
 export type NotImplementedError = MakeError<
   StatusCodes.NOT_IMPLEMENTED,
