@@ -11,6 +11,7 @@ export interface Party {
   readonly code: PartyCode;
   readonly name: string;
   readonly spotifyToken: SpotifyToken;
+  readonly refreshToken: SpotifyRefreshToken;
   readonly host: Host;
   readonly guests: Guest[];
   readonly history: History;
@@ -26,6 +27,7 @@ export namespace Party {
    * @param code The parties code
    * @param name The parties name
    * @param spotifyToken The spotify-token the party uses
+   * @param refreshToken The refresh-token to use for this party
    * @param host The parties host
    * @param guests The parties guests
    * @param history The parties history
@@ -34,6 +36,7 @@ export namespace Party {
     code: string,
     name: string,
     spotifyToken: SpotifyToken,
+    refreshToken: SpotifyRefreshToken,
     host: Host,
     guests: Guest[],
     history: History
@@ -42,6 +45,7 @@ export namespace Party {
       code,
       name,
       spotifyToken,
+      refreshToken,
       host,
       guests,
       history,
@@ -52,16 +56,26 @@ export namespace Party {
    * Starts a new party
    * @param name The parties name
    * @param spotifyToken The spotify-token the party uses
+   * @param refreshToken The refresh-token to use for this party
    * @param host The parties host-user
    */
   export function startNew(
     name: string,
     spotifyToken: SpotifyToken,
+    refreshToken: SpotifyRefreshToken,
     host: Host
   ) {
     const partyCode = PartyCode.generate();
     const emptyHistory = History.make([]);
-    return make(partyCode, name, spotifyToken, host, [], emptyHistory);
+    return make(
+      partyCode,
+      name,
+      spotifyToken,
+      refreshToken,
+      host,
+      [],
+      emptyHistory
+    );
   }
 
   /**
@@ -115,6 +129,7 @@ export namespace Party {
       party.code,
       party.name,
       party.spotifyToken,
+      party.refreshToken,
       party.host,
       newGuests,
       party.history
@@ -149,6 +164,7 @@ export namespace Party {
       party.code,
       party.name,
       party.spotifyToken,
+      party.refreshToken,
       party.host,
       newGuests,
       party.history
@@ -174,6 +190,7 @@ export namespace Party {
       party.code,
       party.name,
       party.spotifyToken,
+      party.refreshToken,
       party.host,
       party.guests,
       history

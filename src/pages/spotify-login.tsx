@@ -14,7 +14,7 @@ interface SpotifyTokenData {
   access_token: SpotifyToken;
   token_type: 'Bearer';
   expires_in: number;
-  refresh_token: string;
+  refresh_token: SpotifyRefreshToken;
 }
 
 interface ErrorProps {
@@ -25,6 +25,7 @@ interface ErrorProps {
 interface WaitForPlayingProps {
   kind: 'WaitForPlaying';
   spotifyToken: SpotifyToken;
+  refreshToken: SpotifyRefreshToken;
   spotifyUser: SpotifyUser;
 }
 
@@ -53,10 +54,13 @@ export default function SpotifyLoginPage(props: Props) {
     router.push(PagePath.spotifyLogin(true));
   }
 
-  async function checkIfPlaying(spotifyToken: SpotifyToken) {
+  async function checkIfPlaying(
+    spotifyToken: SpotifyToken,
+    refresh: SpotifyRefreshToken
+  ) {
     const isPlaying = await SpotifyClient.isCurrentlyPlaying(spotifyToken);
     if (isPlaying) {
-      await router.push(PagePath.createParty(spotifyToken));
+      await router.push(PagePath.createParty(spotifyToken, refresh));
     }
   }
 
@@ -66,7 +70,7 @@ export default function SpotifyLoginPage(props: Props) {
         setSpotifyAccountType(props.spotifyUser.account_type);
 
         if (spotifyAccountType === 'premium')
-          checkIfPlaying(props.spotifyToken);
+          checkIfPlaying(props.spotifyToken, props.refreshToken);
       }, 1000);
       return () => clearInterval(interval);
     }
@@ -228,12 +232,20 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
       return {
         props: {} as Props,
         redirect: {
-          destination: PagePath.createParty(spotifyToken),
+          destination: PagePath.createParty(
+            spotifyToken,
+            tokenData.refresh_token
+          ),
         },
       };
     } else {
       return {
-        props: { kind: 'WaitForPlaying', spotifyToken, spotifyUser },
+        props: {
+          kind: 'WaitForPlaying',
+          spotifyToken,
+          refreshToken: tokenData.refresh_token,
+          spotifyUser,
+        },
       };
     }
   } else if ('error' in query) {

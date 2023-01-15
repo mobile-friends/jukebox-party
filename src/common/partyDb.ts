@@ -9,6 +9,7 @@ interface PartyEntry {
   code: PartyCode;
   name: string;
   spotifyToken: SpotifyToken;
+  refreshToken: SpotifyRefreshToken;
   host: Host;
   guests?: Guest[];
   history: History;
@@ -28,6 +29,7 @@ function tryParseEntry(entry: PartyEntry): Party | PartyDb.Error {
       entry.code,
       entry.name,
       entry.spotifyToken,
+      entry.refreshToken,
       entry.host,
       entry.guests ?? [],
       entry.history ?? History.make([])

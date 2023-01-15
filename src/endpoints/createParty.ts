@@ -10,16 +10,17 @@ export interface CreatePartyBody {
   partyName: string;
   hostName: string;
   spotifyToken: SpotifyToken;
+  refreshToken: SpotifyRefreshToken;
 }
 
 export type CreatePartyResult = Created<PartyCredentials>;
 
 export default requestHandler<CreatePartyBody, CreatePartyResult>(
   async (req) => {
-    const { partyName, hostName, spotifyToken } = req.body;
+    const { partyName, hostName, spotifyToken, refreshToken } = req.body;
     const host = User.makeHost(hostName);
-    const party = Party.startNew(partyName, spotifyToken, host);
-
+    const party = Party.startNew(partyName, spotifyToken, refreshToken, host);
+console.log(party)
     await PartyDb.store(firebaseDb, party);
     return Response.created<PartyCredentials>({
       partyCode: Party.codeOf(party),

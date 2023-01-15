@@ -16,12 +16,17 @@ import { PagePath } from '@common/pagePath';
 
 interface SpotifyProps {
   spotifyToken: SpotifyToken | null;
+  refreshToken: SpotifyRefreshToken | null;
   spotifyUser: SpotifyUser | null;
 }
 
 type Props = SpotifyProps;
 
-export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
+export default function CreatePartyPage({
+  spotifyToken,
+  spotifyUser,
+  refreshToken,
+}: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string | null>(null);
   const [hostName, setHostName] = useState<string | null>(null);
@@ -53,12 +58,14 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   async function tryCreateParty(
     partyName: string,
     hostName: string,
-    spotifyToken: SpotifyToken
+    spotifyToken: SpotifyToken,
+    refreshToken: SpotifyRefreshToken
   ) {
     const result = await JukeClient.createParty({
       partyName,
       hostName,
       spotifyToken,
+      refreshToken,
     });
     if (result.code === StatusCodes.CREATED) {
       const { partyCode, userId: hostId } = result.content;
@@ -71,8 +78,13 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (partyName !== null && hostName !== null && spotifyToken) {
-      await tryCreateParty(partyName, hostName, spotifyToken);
+    if (
+      partyName !== null &&
+      hostName !== null &&
+      spotifyToken &&
+      refreshToken !== null
+    ) {
+      await tryCreateParty(partyName, hostName, spotifyToken, refreshToken);
     }
   }
 
@@ -130,13 +142,20 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
-  const { token: spotifyToken } = query;
-  if (typeof spotifyToken === 'string') {
+  const { token: spotifyToken, refresh } = query;
+  if (typeof spotifyToken === 'string' && typeof refresh === 'string') {
     const spotifyUser: SpotifyUser = await SpotifyClient.getSpotifyUserInfo(
       spotifyToken as SpotifyToken
     );
     return {
-      props: { spotifyToken: spotifyToken as SpotifyToken, spotifyUser },
+      props: {
+        spotifyToken: spotifyToken as SpotifyToken,
+        refreshToken: refresh as SpotifyRefreshToken,
+        spotifyUser,
+      },
     };
-  } else return { props: { spotifyToken: null, spotifyUser: null } };
+  } else
+    return {
+      props: { spotifyToken: null, refreshToken: null, spotifyUser: null },
+    };
 };
