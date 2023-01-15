@@ -2,8 +2,8 @@
  Data for spotify-authentication
  */
 export interface SpotifyAuthData {
-  accessToken: SpotifyToken;
-  refreshToken: SpotifyRefreshToken;
+  readonly accessToken: SpotifyToken;
+  readonly refreshToken: SpotifyRefreshToken;
 }
 
 /**
@@ -19,6 +19,6 @@ export namespace SpotifyAuthData {
     accessToken: SpotifyToken,
     refreshToken: SpotifyRefreshToken
   ): SpotifyAuthData {
-    return { accessToken, refreshToken };
+    return Object.freeze({ accessToken, refreshToken });
   }
 }
