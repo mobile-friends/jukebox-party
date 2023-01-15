@@ -134,17 +134,10 @@ export namespace PartyDb {
       snapshot.forEach((party) => {
         const partyDbKey = party.key!;
         const currentParty = party.val() as PartyEntry;
-        const createdAt = moment(currentParty.createdAt);
-        if (createdAt.isBefore(moment().subtract(3, 'days'))) {
-          console.log(`Deleting party ${currentParty.code}`);
-          doc
-            .child(partyDbKey)
-            .remove()
-            .then(() => {
-              console.log(`Deleted party ${currentParty.code}`);
-            });
-        } else {
-          console.log(`Not deleting party ${currentParty.code}`);
+        if (
+          moment(currentParty.createdAt).isBefore(moment().subtract(3, 'days'))
+        ) {
+          doc.child(partyDbKey).remove();
         }
       });
     });
