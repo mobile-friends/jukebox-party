@@ -129,6 +129,7 @@ export namespace PartyDb {
    * @param db The database
    */
   export async function clear(db: FirebaseDatabase): Promise<void> {
+    console.info('Clearing parties...');
     const partiesCollection = db.ref('parties');
     await partiesCollection.get().then((snapshot) => {
       snapshot.forEach((party) => {
@@ -138,6 +139,7 @@ export namespace PartyDb {
         if (
           moment(currentParty.createdAt).isBefore(moment().subtract(3, 'days'))
         ) {
+          console.info(`Deleting party ${partyDbKey}`);
           partiesCollection.child(partyDbKey).remove();
         }
       });
