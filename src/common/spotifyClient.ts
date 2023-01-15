@@ -320,7 +320,7 @@ export namespace SpotifyClient {
    */
   export async function getPlaybackState(
     spotifyToken: SpotifyToken
-  ): Promise<PlaybackState | null | unknown> {
+  ): Promise<PlaybackState | null | undefined> {
     function parsePlaybackState(
       response: SpotifyApi.CurrentPlaybackResponse
     ): PlaybackState | null {
