@@ -5,6 +5,7 @@ import { FirebaseDatabase } from '@firebase/database-types';
 import { Guest, Host } from '@common/types/user';
 import { History } from './types/history';
 import { SpotifyAuthData } from '@common/types/spotifyAuthData';
+import moment from 'moment';
 
 interface PartyEntry {
   code: PartyCode;
@@ -130,8 +131,14 @@ export namespace PartyDb {
   export async function clear(db: FirebaseDatabase): Promise<void> {
     const doc = db.ref('parties');
     await doc.get().then((snapshot) => {
-      snapshot.forEach((child) => {
-        console.log(child.val());
+      snapshot.forEach((party) => {
+        const partyDbKey = party.key!;
+        const currentParty = party.val() as PartyEntry;
+        if (
+          moment(currentParty.createdAt).isBefore(moment().subtract(3, 'days'))
+        ) {
+          doc.child(partyDbKey).remove();
+        }
       });
     });
   }
