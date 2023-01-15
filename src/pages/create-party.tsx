@@ -136,7 +136,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({
 }) => {
   const { token: spotifyToken, refresh } = query;
   if (typeof spotifyToken === 'string' && typeof refresh === 'string') {
-    const spotifyAuthData = SpotifyAuthData.make(
+    const spotifyAuthData = SpotifyAuthData.makeNew(
       spotifyToken as SpotifyToken,
       refresh as SpotifyRefreshToken
     );
