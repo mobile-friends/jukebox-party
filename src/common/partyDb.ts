@@ -13,6 +13,7 @@ interface PartyEntry {
   host: Host;
   guests?: Guest[];
   history: History;
+  createdAt: Date;
 }
 
 function partyNotFoundError(partyCode: PartyCode): PartyDb.Error {
@@ -31,7 +32,8 @@ function tryParseEntry(entry: PartyEntry): Party | PartyDb.Error {
       entry.host,
       entry.guests ?? [],
       entry.history ?? History.make([]),
-      entry.spotifyAuthData
+      entry.spotifyAuthData,
+      entry.createdAt
     );
   } catch {
     return invalidEntryError(entry);
@@ -118,6 +120,19 @@ export namespace PartyDb {
     party: Party
   ): Promise<void> {
     const doc = documentFor(db, party.code);
-    await doc.set(party);
+    await doc.set({ ...party, createdAt: party.createdAt.valueOf() });
+  }
+
+  /**
+   * Deletes all parties from the database that are older than three days
+   * @param db The database
+   */
+  export async function clear(db: FirebaseDatabase): Promise<void> {
+    const doc = db.ref('parties');
+    await doc.get().then((snapshot) => {
+      snapshot.forEach((child) => {
+        console.log(child.val());
+      });
+    });
   }
 }

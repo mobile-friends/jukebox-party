@@ -16,6 +16,7 @@ export interface Party {
   readonly history: History;
   readonly spotifyAuthData: SpotifyAuthData;
   readonly [tag]: 'Party';
+  readonly createdAt: Date;
 }
 
 /**
@@ -37,7 +38,8 @@ export namespace Party {
     host: Host,
     guests: Guest[],
     history: History,
-    spotifyAuthData: SpotifyAuthData
+    spotifyAuthData: SpotifyAuthData,
+    createdAt: Date
   ): Party {
     return Object.freeze({
       code,
@@ -46,6 +48,7 @@ export namespace Party {
       guests,
       history,
       spotifyAuthData,
+      createdAt,
     }) as Party;
   }
 
@@ -62,7 +65,15 @@ export namespace Party {
   ) {
     const partyCode = PartyCode.generate();
     const emptyHistory = History.make([]);
-    return make(partyCode, name, host, [], emptyHistory, spotifyAuthData);
+    return make(
+      partyCode,
+      name,
+      host,
+      [],
+      emptyHistory,
+      spotifyAuthData,
+      new Date()
+    );
   }
 
   /**
@@ -118,7 +129,8 @@ export namespace Party {
       party.host,
       newGuests,
       party.history,
-      party.spotifyAuthData
+      party.spotifyAuthData,
+      party.createdAt
     );
   }
 
@@ -152,7 +164,8 @@ export namespace Party {
       party.host,
       newGuests,
       party.history,
-      party.spotifyAuthData
+      party.spotifyAuthData,
+      party.createdAt
     );
   }
 
@@ -177,7 +190,8 @@ export namespace Party {
       party.host,
       party.guests,
       history,
-      party.spotifyAuthData
+      party.spotifyAuthData,
+      party.createdAt
     );
   }
 
@@ -188,7 +202,8 @@ export namespace Party {
       party.host,
       party.guests,
       party.history,
-      SpotifyAuthData.refresh(party.spotifyAuthData, newToken)
+      SpotifyAuthData.refresh(party.spotifyAuthData, newToken),
+      party.createdAt
     );
   }
 }
