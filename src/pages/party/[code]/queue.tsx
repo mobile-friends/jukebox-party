@@ -22,6 +22,7 @@ export default function PartyQueuePage({ partyCode }: Props) {
           first={'party'}
           second={'tracks'}
           pageTitle={'Queue | jukebox.party'}
+          showSubtitle={false}
         />
       </div>
       <QueueWrapper partyCode={partyCode} minified={false} />

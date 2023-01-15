@@ -13,7 +13,7 @@ function PartyNotFound() {
   return (
     <div>
       <div className={styles.container}>
-        <JukeHeader first={'no'} second={'party'} />
+        <JukeHeader first={'no'} second={'party'} showSubtitle={true} />
         <div className={styles.backLink}>
           <h2 className='text-light text-center'>
             Your party code is not valid.

@@ -65,9 +65,10 @@ export default function HomePage() {
   return (
     <div className={styles.container}>
       <JukeHeader
-        first={'jukebox'}
-        second={'party'}
+        first={'Jukebox'}
+        second={'party🎉'}
         pageTitle={'Join a jukebox.party'}
+        showSubtitle={true}
       />
       <form className={styles.form}>
         <UserNameInput initialValue={null} onValueChanged={setGuestName} />
