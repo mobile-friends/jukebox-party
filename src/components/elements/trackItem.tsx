@@ -3,6 +3,8 @@ import { Track } from '@common/types/track';
 import { Artist } from '@common/types/artist';
 import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
   /**
@@ -37,6 +39,20 @@ function ArtistView(artist: Artist) {
  */
 export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
   const artists = Track.artistsOf(track).map(ArtistView);
+  const notify = () => {
+    toast(`"${track.name}" has been added to queue`, {
+      position: 'bottom-center',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+      type: 'success'
+    });
+  };
+
   return (
     <li
       className={styles.row}
@@ -45,7 +61,11 @@ export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
         if (!canBeQueued) {
           return;
         }
-        JukeClient.addToQueue(partyCode, track);
+        JukeClient.addToQueue(partyCode, track)
+          .then(() => {
+            notify();
+          });
+
       }}
     >
       <img src={Track.albumArtUrlOf(track)} alt='Album art' />
@@ -53,6 +73,7 @@ export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
         <p>{Track.nameOf(track)}</p>
         {artists}
       </div>
+      <ToastContainer />
     </li>
   );
 }
