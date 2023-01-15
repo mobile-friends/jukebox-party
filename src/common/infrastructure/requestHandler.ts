@@ -5,6 +5,9 @@ import firebaseDb from '@common/firebaseDb';
 import { StatusCodes } from 'http-status-codes';
 import { AuthUser, ServersideSession } from '@common/serversideSession';
 import { Party } from '@common/types/party';
+import { SpotifyAuthData } from '@common/types/spotifyAuthData';
+import axios from 'axios';
+import { Env } from '@common/env';
 
 export type Query = { [key: string]: string | string[] | undefined };
 
@@ -20,6 +23,39 @@ type HandlerFunc<TBody, TResult extends ApiResult> = (
   req: Request<TBody>
 ) => SyncOrAsync<TResult>;
 
+interface RefreshResponse {
+  access_token: string;
+  token_type: 'Bearer';
+  expires_in: number;
+}
+
+async function refreshTokenFor(party: Party): Promise<SpotifyToken> {
+  const authHeader =
+    'Basic ' +
+    new Buffer(
+      Env.spotifyClientId() + ':' + Env.spotifyClientSecret()
+    ).toString('base64');
+  const res = await axios.post<RefreshResponse>(
+    'https://accounts.spotify.com/api/token',
+    {
+      grant_type: 'refresh_token',
+      refresh_token: party.spotifyAuthData.refreshToken,
+    },
+    {
+      headers: {
+        Authorization: authHeader,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  );
+  const newParty = Party.refreshAuthData(
+    party,
+    res.data.access_token as SpotifyToken
+  );
+  await PartyDb.store(firebaseDb, newParty);
+  return newParty.spotifyAuthData.accessToken;
+}
+
 async function tryGetSpotifyTokenFor({
   partyCode,
   id,
@@ -27,6 +63,9 @@ async function tryGetSpotifyTokenFor({
   const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
 
   if (PartyDb.isError(party) || !Party.hasUserWithId(party, id)) return null;
+
+  if (SpotifyAuthData.isExpired(party.spotifyAuthData))
+    return await refreshTokenFor(party);
   return party.spotifyAuthData.accessToken;
 }
 

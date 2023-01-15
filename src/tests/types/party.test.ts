@@ -5,7 +5,7 @@ import { SpotifyAuthData } from '@common/types/spotifyAuthData';
 const testName = 'The best party';
 const testHost = User.makeHost('User McHost');
 const testGuest = User.makeGuest('Mr. Guest');
-const testSpotifyAuthData = SpotifyAuthData.make(
+const testSpotifyAuthData = SpotifyAuthData.makeNew(
   '' as SpotifyToken,
   '' as SpotifyRefreshToken
 );

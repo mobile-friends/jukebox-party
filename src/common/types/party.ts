@@ -180,4 +180,15 @@ export namespace Party {
       party.spotifyAuthData
     );
   }
+
+  export function refreshAuthData(party: Party, newToken: SpotifyToken): Party {
+    return Party.make(
+      party.code,
+      party.name,
+      party.host,
+      party.guests,
+      party.history,
+      SpotifyAuthData.refresh(party.spotifyAuthData, newToken)
+    );
+  }
 }
