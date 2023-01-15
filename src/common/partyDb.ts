@@ -4,12 +4,12 @@ import firebase from 'firebase/app';
 import { FirebaseDatabase } from '@firebase/database-types';
 import { Guest, Host } from '@common/types/user';
 import { History } from './types/history';
+import { SpotifyAuthData } from '@common/types/spotifyAuthData';
 
 interface PartyEntry {
   code: PartyCode;
   name: string;
-  spotifyToken: SpotifyToken;
-  refreshToken: SpotifyRefreshToken;
+  spotifyAuthData: SpotifyAuthData;
   host: Host;
   guests?: Guest[];
   history: History;
@@ -28,11 +28,10 @@ function tryParseEntry(entry: PartyEntry): Party | PartyDb.Error {
     return Party.make(
       entry.code,
       entry.name,
-      entry.spotifyToken,
-      entry.refreshToken,
       entry.host,
       entry.guests ?? [],
-      entry.history ?? History.make([])
+      entry.history ?? History.make([]),
+      entry.spotifyAuthData
     );
   } catch {
     return invalidEntryError(entry);

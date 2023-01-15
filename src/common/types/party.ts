@@ -1,6 +1,7 @@
 import { Guest, Host, User } from './user';
 import { PartyCode } from './partyCode';
 import { History } from './history';
+import { SpotifyAuthData } from '@common/types/spotifyAuthData';
 
 declare const tag: unique symbol;
 
@@ -10,11 +11,10 @@ declare const tag: unique symbol;
 export interface Party {
   readonly code: PartyCode;
   readonly name: string;
-  readonly spotifyToken: SpotifyToken;
-  readonly refreshToken: SpotifyRefreshToken;
   readonly host: Host;
   readonly guests: Guest[];
   readonly history: History;
+  readonly spotifyAuthData: SpotifyAuthData;
   readonly [tag]: 'Party';
 }
 
@@ -26,56 +26,43 @@ export namespace Party {
    * Constructor function for parties
    * @param code The parties code
    * @param name The parties name
-   * @param spotifyToken The spotify-token the party uses
-   * @param refreshToken The refresh-token to use for this party
    * @param host The parties host
    * @param guests The parties guests
    * @param history The parties history
+   * @param spotifyAuthData Spotify authentication data
    */
   export function make(
     code: string,
     name: string,
-    spotifyToken: SpotifyToken,
-    refreshToken: SpotifyRefreshToken,
     host: Host,
     guests: Guest[],
-    history: History
+    history: History,
+    spotifyAuthData: SpotifyAuthData
   ): Party {
     return Object.freeze({
       code,
       name,
-      spotifyToken,
-      refreshToken,
       host,
       guests,
       history,
-    } as Party);
+      spotifyAuthData,
+    }) as Party;
   }
 
   /**
    * Starts a new party
    * @param name The parties name
-   * @param spotifyToken The spotify-token the party uses
-   * @param refreshToken The refresh-token to use for this party
    * @param host The parties host-user
+   * @param spotifyAuthData Spotify authentication data
    */
   export function startNew(
     name: string,
-    spotifyToken: SpotifyToken,
-    refreshToken: SpotifyRefreshToken,
-    host: Host
+    host: Host,
+    spotifyAuthData: SpotifyAuthData
   ) {
     const partyCode = PartyCode.generate();
     const emptyHistory = History.make([]);
-    return make(
-      partyCode,
-      name,
-      spotifyToken,
-      refreshToken,
-      host,
-      [],
-      emptyHistory
-    );
+    return make(partyCode, name, host, [], emptyHistory, spotifyAuthData);
   }
 
   /**
@@ -128,11 +115,10 @@ export namespace Party {
     return make(
       party.code,
       party.name,
-      party.spotifyToken,
-      party.refreshToken,
       party.host,
       newGuests,
-      party.history
+      party.history,
+      party.spotifyAuthData
     );
   }
 
@@ -163,11 +149,10 @@ export namespace Party {
     return make(
       party.code,
       party.name,
-      party.spotifyToken,
-      party.refreshToken,
       party.host,
       newGuests,
-      party.history
+      party.history,
+      party.spotifyAuthData
     );
   }
 
@@ -189,11 +174,10 @@ export namespace Party {
     return make(
       party.code,
       party.name,
-      party.spotifyToken,
-      party.refreshToken,
       party.host,
       party.guests,
-      history
+      history,
+      party.spotifyAuthData
     );
   }
 }

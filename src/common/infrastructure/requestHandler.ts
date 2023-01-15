@@ -26,14 +26,8 @@ async function tryGetSpotifyTokenFor({
 }: AuthUser): Promise<SpotifyToken | null> {
   const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
 
-  if (
-    party === null ||
-    PartyDb.isError(party) ||
-    !Party.hasUserWithId(party, id)
-  )
-    return null;
-
-  return party.spotifyToken;
+  if (PartyDb.isError(party) || !Party.hasUserWithId(party, id)) return null;
+  return party.spotifyAuthData.accessToken;
 }
 
 export function requestHandler<TBody, TResult extends ApiResult>(
