@@ -129,15 +129,16 @@ export namespace PartyDb {
    * @param db The database
    */
   export async function clear(db: FirebaseDatabase): Promise<void> {
-    const doc = db.ref('parties');
-    await doc.get().then((snapshot) => {
+    const partiesCollection = db.ref('parties');
+    await partiesCollection.get().then((snapshot) => {
       snapshot.forEach((party) => {
-        const partyDbKey = party.key!;
+        const partyDbKey = party.key;
+        if (partyDbKey === null) throw new Error('Party key is null');
         const currentParty = party.val() as PartyEntry;
         if (
           moment(currentParty.createdAt).isBefore(moment().subtract(3, 'days'))
         ) {
-          doc.child(partyDbKey).remove();
+          partiesCollection.child(partyDbKey).remove();
         }
       });
     });
