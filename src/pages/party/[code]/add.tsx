@@ -137,7 +137,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     };
   }
 
-  const recommendations = await getRecommendationsWith(party.spotifyToken);
+  const recommendations = await getRecommendationsWith(
+    party.spotifyAuthData.accessToken
+  );
 
   return {
     props: {

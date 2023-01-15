@@ -34,10 +34,15 @@ export namespace PagePath {
   /**
    * Makes the path to the create-party-page
    * @param spotifyToken The spotify-token for the party
+   * @param refresh The refresh-token to use for the party
    */
-  export function createParty(spotifyToken: SpotifyToken) {
+  export function createParty(
+    spotifyToken: SpotifyToken,
+    refresh: SpotifyRefreshToken
+  ) {
     return `/create-party?${querystring.stringify({
       token: spotifyToken,
+      refresh,
     })}`;
   }
 

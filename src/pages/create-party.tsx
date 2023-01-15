@@ -13,15 +13,19 @@ import JukeHeader from '@component/elements/jukeHeader';
 import { SpotifyUser } from '@common/types/user';
 import { SpotifyClient } from '@common/spotifyClient';
 import { PagePath } from '@common/pagePath';
+import { SpotifyAuthData } from '@common/types/spotifyAuthData';
 
 interface SpotifyProps {
-  spotifyToken: SpotifyToken | null;
+  spotifyAuthData: SpotifyAuthData | null;
   spotifyUser: SpotifyUser | null;
 }
 
 type Props = SpotifyProps;
 
-export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
+export default function CreatePartyPage({
+  spotifyAuthData,
+  spotifyUser,
+}: Props) {
   const router = useRouter();
   const [partyName, setPartyName] = useState<string | null>(null);
   const [hostName, setHostName] = useState<string | null>(null);
@@ -31,10 +35,10 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   }
 
   useEffect(() => {
-    if (spotifyToken === null) goBackToStart();
+    if (spotifyAuthData === null) goBackToStart();
   });
 
-  if (spotifyToken === null) {
+  if (spotifyAuthData === null) {
     return <div>No token</div>;
   }
 
@@ -53,12 +57,12 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   async function tryCreateParty(
     partyName: string,
     hostName: string,
-    spotifyToken: SpotifyToken
+    spotifyAuthData: SpotifyAuthData
   ) {
     const result = await JukeClient.createParty({
       partyName,
       hostName,
-      spotifyToken,
+      spotifyAuthData,
     });
     if (result.code === StatusCodes.CREATED) {
       const { partyCode, userId: hostId } = result.content;
@@ -71,8 +75,8 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
   }
 
   async function onCreatePartyClicked() {
-    if (partyName !== null && hostName !== null && spotifyToken) {
-      await tryCreateParty(partyName, hostName, spotifyToken);
+    if (partyName !== null && hostName !== null && spotifyAuthData !== null) {
+      await tryCreateParty(partyName, hostName, spotifyAuthData);
     }
   }
 
@@ -130,13 +134,23 @@ export default function CreatePartyPage({ spotifyToken, spotifyUser }: Props) {
 export const getServerSideProps: GetServerSideProps<Props> = async ({
   query,
 }) => {
-  const { token: spotifyToken } = query;
-  if (typeof spotifyToken === 'string') {
+  const { token: spotifyToken, refresh } = query;
+  if (typeof spotifyToken === 'string' && typeof refresh === 'string') {
+    const spotifyAuthData = SpotifyAuthData.makeNew(
+      spotifyToken as SpotifyToken,
+      refresh as SpotifyRefreshToken
+    );
     const spotifyUser: SpotifyUser = await SpotifyClient.getSpotifyUserInfo(
       spotifyToken as SpotifyToken
     );
     return {
-      props: { spotifyToken: spotifyToken as SpotifyToken, spotifyUser },
+      props: {
+        spotifyAuthData,
+        spotifyUser,
+      },
     };
-  } else return { props: { spotifyToken: null, spotifyUser: null } };
+  } else
+    return {
+      props: { spotifyAuthData: null, spotifyUser: null },
+    };
 };
