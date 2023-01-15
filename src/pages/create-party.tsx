@@ -86,6 +86,7 @@ export default function CreatePartyPage({
         first={'create'}
         second={'party'}
         pageTitle={'Create a jukebox.party'}
+        showSubtitle={false}
       />
 
       <div>

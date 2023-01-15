@@ -23,6 +23,7 @@ export default function Closed({ partyCode }: Props) {
           first={'party'}
           second={'end'}
           pageTitle={'End | jukebox.party'}
+          showSubtitle={true}
         />
       </div>
       <div className={styles.textContainer}>

@@ -4,9 +4,15 @@ interface Props {
   first: string;
   second: string;
   pageTitle?: string;
+  showSubtitle?: boolean;
 }
 
-export default function JukeHeader({ first, second, pageTitle }: Props) {
+export default function JukeHeader({
+  first,
+  second,
+  pageTitle,
+  showSubtitle = false,
+}: Props) {
   return (
     <>
       <Head>
@@ -23,6 +29,13 @@ export default function JukeHeader({ first, second, pageTitle }: Props) {
       <h1 className='text-center'>
         {first}.<span className='text-primary text-italic'>{second}</span>
       </h1>
+      {showSubtitle ? (
+        <h3 className='text-center'>
+          because music is always better with friends
+        </h3>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
