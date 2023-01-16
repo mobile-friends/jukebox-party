@@ -16,8 +16,8 @@ interface Props {
 
 export default function HistoryPage({ partyCode }: Props) {
   return (
-    <div className='queueContainer'>
-      <div className='queueHeader'>
+    <div className='pageContainer'>
+      <div className='pageHeader'>
         <JukeHeader
           first={'party'}
           second={'history'}

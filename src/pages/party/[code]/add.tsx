@@ -69,8 +69,8 @@ export default function AddTracksPage({ partyCode, recommendations }: Props) {
 
   return (
     <div>
-      <div className='queueContainer'>
-        <div className='queueHeader'>
+      <div className='pageContainer'>
+        <div className='pageHeader'>
           <JukeHeader
             first={'search'}
             second={'track'}
