@@ -16,9 +16,9 @@ function ArtistView(artist: Artist) {
   const artistName = Artist.nameOf(artist);
   const artistId = Artist.idOf(artist);
   return (
-    <div className={styles.artistText} key={artistId}>
+    <span className={styles.artistText} key={artistId}>
       {artistName}
-    </div>
+    </span>
   );
 }
 

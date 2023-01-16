@@ -25,8 +25,7 @@ li.row {
     }
 
     > div.textInfo {
-      display: flex;
-      flex-direction: column;
+      display: block;
       margin-left: 20px;
       padding-top: 5px;
 
@@ -37,9 +36,17 @@ li.row {
         overflow: hidden;
       }
 
-      > div.artistText {
-        font-size: 0.7rem;
+      > .artistText {
+        font-size: 0.8rem;
         color: $light-color-shade;
+      }
+
+      .artistText::after {
+        content: ',';
+      }
+
+      .artistText:last-child:after {
+        content: '';
       }
     }
   }
