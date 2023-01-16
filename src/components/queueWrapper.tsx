@@ -9,6 +9,7 @@ import TrackItem from '@component/elements/trackItem';
 import { signOut } from 'next-auth/react';
 import useLivePlaybackState from '@hook/useLivePlaybackState';
 import { PagePath } from '@common/pagePath';
+import { useRouter } from 'next/router';
 
 interface Props {
   partyCode: PartyCode;
@@ -16,7 +17,6 @@ interface Props {
 }
 
 export default function QueueWrapper({ partyCode, minified }: Props) {
-  const playbackState = useLivePlaybackState(partyCode);
   const [currentQueueTracks, setCurrentQueueTracks] = useState<Track[]>([]);
 
   function onQueueResult(result: GetQueueResult) {
@@ -24,8 +24,7 @@ export default function QueueWrapper({ partyCode, minified }: Props) {
       case StatusCodes.OK:
         return setCurrentQueueTracks(result.content.tracks);
       case StatusCodes.UNAUTHORIZED:
-        // TODO: Redirect to better unauthorized page [JUKE-143]
-        return signOut({ callbackUrl: PagePath.Home }).catch(console.error);
+        return signOut({ callbackUrl: PagePath.PartyNotFound }).catch(console.error);
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors [JUKE-142]
         break;

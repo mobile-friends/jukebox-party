@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
   if (!(party && !PartyDb.isError(party))) {
     return {
-      redirect: { destination: PagePath.Home }, // TODO: Add better non-auth page [JUKE-143]
+      redirect: { destination: PagePath.PartyNotFound }, 
       props: {} as Props,
     };
   }
