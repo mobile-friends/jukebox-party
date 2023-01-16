@@ -19,7 +19,7 @@ interface Props {
 export default function PartyHeader({ partyName, partyCode, isHost }: Props) {
   const [partyLink, setPartyLink] = useState<string>('');
   const notify = () =>
-    toast('Link copied!', {
+    toast('Link copied to clipboard.', {
       position: 'bottom-center',
       autoClose: 5000,
       hideProgressBar: false,
