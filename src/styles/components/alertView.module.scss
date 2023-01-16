@@ -1,14 +1,14 @@
 .alertWrapper {
-    background: $dark-color;
-    padding: 25px;
-    border-radius: 20px;
-    margin: 25px;
+  background: $dark-color;
+  padding: 25px;
+  border-radius: 10px;
+  margin: 25px;
 
-    h2 {
-        padding-bottom: 10px;
+  h2 {
+    padding-bottom: 10px;
 
-        .trackName {
-            color: $primary-color;
-        }
+    .trackName {
+      color: $primary-color;
     }
+  }
 }
