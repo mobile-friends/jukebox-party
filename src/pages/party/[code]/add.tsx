@@ -50,7 +50,9 @@ export default function AddTracksPage({ partyCode, recommendations }: Props) {
         // TODO: Handle errors [JUKE-142]
         break;
       case StatusCodes.UNAUTHORIZED:
-        return signOut({ callbackUrl: PagePath.PartyNotFound }).catch(console.error);
+        return signOut({ callbackUrl: PagePath.PartyNotFound }).catch(
+          console.error
+        );
       case StatusCodes.NOT_IMPLEMENTED:
         // TODO: Handle errors [JUKE-142]
         break;
@@ -129,12 +131,13 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 
   if (PartyDb.isError(party)) {
     return {
-      redirect: { destination: PagePath.PartyNotFound }, 
+      redirect: { destination: PagePath.PartyNotFound },
       props: {} as Props,
     };
   }
 
   const recommendations = await getRecommendationsWith(
+    partyCode,
     party.spotifyAuthData.accessToken
   );
 
