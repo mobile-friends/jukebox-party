@@ -10,9 +10,7 @@ import Input from '@component/elements/input';
 import JukeHeader from '@component/elements/jukeHeader';
 import TrackItem from '@component/elements/trackItem';
 import Navbar from '@component/navbar';
-import {
-  getRecommendationsWith,
-} from '@endpoint/getRecommendations';
+import { getRecommendationsWith } from '@endpoint/getRecommendations';
 import { SearchTracksResult } from '@endpoint/searchTracks';
 import { StatusCodes } from 'http-status-codes';
 import { signOut } from 'next-auth/react';
@@ -71,18 +69,20 @@ export default function AddTracksPage({ partyCode, recommendations }: Props) {
 
   return (
     <div>
-      <div className={styles.container}>
-        <JukeHeader
-          first={'search'}
-          second={'track'}
-          pageTitle={'Add | jukebox.party'}
-        />
-        <div className={styles.container} style={{ padding: 0 }}>
+      <div className='queueContainer'>
+        <div className='queueHeader'>
+          <JukeHeader
+            first={'search'}
+            second={'track'}
+            pageTitle={'Add | jukebox.party'}
+          />
           <Input
             type={'text'}
             placeholder='What do you want to listen to?'
             onChange={onQueryInputChanged}
           />
+        </div>
+        <div className={styles.container} style={{ padding: 0 }}>
           {!tracks.length && hasRecommendations ? (
             <>
               <h1>Maybe you like:</h1>

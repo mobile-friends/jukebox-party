@@ -37,7 +37,7 @@ export default (function Input({
   hasError,
   onChange,
 }: Props) {
-  const errorStyle = hasError ? 'input-error' : '';
+  const errorStyle = hasError ? 'input-error' : 'input-add';
 
   function onChanged(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
