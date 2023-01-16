@@ -11,7 +11,6 @@ import JukeHeader from '@component/elements/jukeHeader';
 import TrackItem from '@component/elements/trackItem';
 import Navbar from '@component/navbar';
 import {
-  GetRecommendationsResult,
   getRecommendationsWith,
 } from '@endpoint/getRecommendations';
 import { SearchTracksResult } from '@endpoint/searchTracks';
@@ -21,7 +20,6 @@ import { GetServerSideProps } from 'next/types';
 import { useEffect, useState } from 'react';
 import styles from '../../../styles/pages/main.module.scss';
 import { PagePath } from '@common/pagePath';
-import { SpotifyClient } from '@common/spotifyClient';
 
 interface Props {
   partyCode: PartyCode;
