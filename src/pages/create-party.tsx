@@ -104,7 +104,10 @@ export default function CreatePartyPage({
         )}
         <form className={styles.form}>
           <PartyNameInput initialValue={null} onValueChanged={setPartyName} />
-          <UserNameInput initialValue={null} onValueChanged={setHostName} />
+          <UserNameInput
+            initialValue={spotifyUser?.nickname ?? null}
+            onValueChanged={setHostName}
+          />
           <Button
             content='Create party'
             styleType='primary block'
