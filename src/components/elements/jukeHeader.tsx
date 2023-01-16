@@ -30,7 +30,7 @@ export default function JukeHeader({
         {first}.<span className='text-primary text-italic'>{second}</span>
       </h1>
       {showSubtitle ? (
-        <h3 className='text-center'>
+        <h3 className='text-center' style={{padding: '5px 20px'}}>
           because music is always better with friends
         </h3>
       ) : (
