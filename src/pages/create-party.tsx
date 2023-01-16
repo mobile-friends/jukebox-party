@@ -76,8 +76,6 @@ export default function CreatePartyPage({
   }
 
   async function onCreatePartyClicked() {
-    console.log({ partyName, hostName, spotifyAuthData });
-
     if (partyName !== null && hostName !== null && spotifyAuthData !== null) {
       await tryCreateParty(partyName, hostName, spotifyAuthData);
     }

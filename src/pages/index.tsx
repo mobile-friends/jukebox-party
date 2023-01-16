@@ -7,7 +7,7 @@ import { StatusCodes } from 'http-status-codes';
 import { assertNeverReached } from '@common/util/assertions';
 import { signIn } from 'next-auth/react';
 import PartyCodeInput from '@component/partyCodeInput';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserNameInput from '@component/userNameInput';
 import JukeHeader from '@component/elements/jukeHeader';
 import useQueryParam, { routerNotReady } from '@hook/useQueryParam';
@@ -19,6 +19,10 @@ export default function HomePage() {
   const partyCodeParam = useQueryParam('partyCode');
   const [partyCode, setPartyCode] = useState<PartyCode | null>(null);
   const [guestName, setGuestName] = useState<string | null>(null);
+
+  useEffect(() => {
+    setPartyCode(PartyCode.tryMake(partyCodeParam as string));
+  }, [partyCodeParam]);
 
   function goToLogin() {
     router.push(PagePath.spotifyLogin(false)).catch(console.error);
