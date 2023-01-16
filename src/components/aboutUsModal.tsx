@@ -24,10 +24,9 @@ export default function AboutUsModal({ onClosed }: Props) {
       <div className={styles.modal}>
         <div>
           <h2 className='text-center'>
-            about jukebox.
+            about Jukebox.
             <span className='text-italic text-primary'>party</span>
           </h2>
-          <h3 className='text-center'>and the people that created this app</h3>
         </div>
 
         <div className={styles.textBlock}>
