@@ -14,17 +14,13 @@ function PartyNotFound() {
     <div>
       <div className={styles.container}>
         <JukeHeader first={'no'} second={'party'} showSubtitle={true} />
-        <div className={styles.backLink}>
-          <h2 className='text-light text-center'>
-            This party does not exist.
-          </h2>
-          <div className={styles.btnWidth}>
-            <Button
-              content='Join another party'
-              styleType='primary'
-              onClick={goToJoinPage}
-            />
-          </div>
+        <div className={styles.content}>
+          <h2 className='text-light text-center' style={{padding: '10px'}}>This party does not exist.</h2>
+          <Button
+            content='Join another party'
+            styleType='primary block'
+            onClick={goToJoinPage}
+          />
         </div>
       </div>
     </div>
