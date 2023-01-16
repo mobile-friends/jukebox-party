@@ -33,6 +33,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   const users = useLivePartyUsers(partyCode);
   const partyHostId = users?.host.id;
   const userId = data?.user.id;
+  const isHost = partyHostId === userId;
 
   const marqueeWrapperRef = useRef<HTMLParagraphElement>(null);
   const marqueeTextRef = useRef<HTMLSpanElement>(null);
@@ -95,7 +96,11 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
   return (
     <div>
       <div className={styles.trackImg}>
-        <img src={Track.albumArtUrlOf(track)} alt='Album art' />
+        <img
+          src={Track.albumArtUrlOf(track)}
+          alt='Album art'
+          className={isHost ? styles.smallAlbumArt : ''}
+        />
       </div>
 
       <div className={styles.trackInfo}>
@@ -129,7 +134,7 @@ export default function PlaybackView({ playbackState, partyCode }: Props) {
         <label>{durationLeftText}</label>
       </div>
 
-      {userId === partyHostId ? (
+      {isHost ? (
         <div className={styles.buttonContainer}>
           <NextAndPreviousButton
             skipDirection={SkipDirection.Backward}
