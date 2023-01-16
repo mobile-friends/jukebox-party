@@ -21,6 +21,7 @@ export default function HomePage() {
   const [guestName, setGuestName] = useState<string | null>(null);
 
   useEffect(() => {
+    if (partyCodeParam === null) return;
     setPartyCode(PartyCode.tryMake(partyCodeParam as string));
   }, [partyCodeParam]);
 
