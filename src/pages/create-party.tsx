@@ -37,7 +37,7 @@ export default function CreatePartyPage({
   useEffect(() => {
     if (spotifyAuthData === null) goBackToStart();
     setHostName(spotifyUser?.nickname ?? null);
-  });
+  }, [spotifyUser]);
 
   if (spotifyAuthData === null) {
     return <div>No token</div>;
