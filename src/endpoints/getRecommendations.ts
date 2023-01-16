@@ -5,6 +5,7 @@ import {
   NoSpotifyError,
   NotImplementedError,
   Ok,
+  PartyNotFoundError,
 } from '@common/infrastructure/types';
 import { JukeClient } from '@common/jukeClient';
 import { PartyDb } from '@common/partyDb';
@@ -12,12 +13,16 @@ import { SpotifyClient } from '@common/spotifyClient';
 import { Party } from '@common/types/party';
 import { PartyCode } from '@common/types/partyCode';
 import { Track } from '@common/types/track';
+import { tryQueryParam } from '@common/util/query';
 
 export interface GetRecommendationsSuccess {
   items: Track[];
 }
 
-export type GetRecommendationsError = NoSpotifyError | NotImplementedError;
+export type GetRecommendationsError =
+  | NoSpotifyError
+  | NotImplementedError
+  | PartyNotFoundError;
 
 export type GetRecommendationsResult =
   | Ok<GetRecommendationsSuccess>
@@ -29,10 +34,7 @@ export async function getRecommendationsWith(
 ) {
   let useHistory = false;
   let historyTracks: Track[] = [];
-  const party = await PartyDb.tryGetByCode(firebaseDb, partyCode);
-  if (PartyDb.isError(party)) {
-    return Response.partyNotFound(partyCode);
-  }
+  const party = (await PartyDb.tryGetByCode(firebaseDb, partyCode)) as Party;
   const history = Party.historyOf(party);
   const historyIsInUse = history?.tracks?.length > 1;
   if (historyIsInUse) {
@@ -60,12 +62,18 @@ export async function getRecommendationsWith(
   );
 }
 
-export default requestHandler<NoBody, GetRecommendationsResult>(
-  async ({ spotifyToken }) => {
-    if (spotifyToken === null) {
-      return Response.noSpotify();
-    }
-    const items = await getRecommendationsWith(spotifyToken);
-    return Response.ok<GetRecommendationsSuccess>({ items });
+const PartyCodeQueryParamName = 'partyCode';
+
+export default requestHandler<NoBody, GetRecommendationsResult>(async (req) => {
+  // TODO using real TypeScript
+  const partyCodeParam = tryQueryParam(req.query, PartyCodeQueryParamName);
+  const partyCode = PartyCode.tryMake(partyCodeParam as string) as PartyCode;
+
+  const spotifyToken = req.spotifyToken;
+  if (spotifyToken === null) {
+    return Response.noSpotify();
   }
-);
+
+  const items = await getRecommendationsWith(partyCode, spotifyToken);
+  return Response.ok<GetRecommendationsSuccess>({ items });
+});
