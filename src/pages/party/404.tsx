@@ -16,7 +16,7 @@ function PartyNotFound() {
         <JukeHeader first={'no'} second={'party'} showSubtitle={true} />
         <div className={styles.backLink}>
           <h2 className='text-light text-center'>
-            Your party code is not valid.
+            This party does not exist.
           </h2>
           <div className={styles.btnWidth}>
             <Button
