@@ -1,13 +1,14 @@
-.react-confirm-alert-overlay {
-    background: #000;
-}
-.alertWrapper{
+.alertWrapper {
     background: $dark-color;
     padding: 25px;
     border-radius: 20px;
     margin: 25px;
 
-    h1 {
+    h2 {
         padding-bottom: 10px;
+
+        .trackName {
+            color: $primary-color;
+        }
     }
 }

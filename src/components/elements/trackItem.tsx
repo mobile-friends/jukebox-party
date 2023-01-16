@@ -52,6 +52,7 @@ export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
           ></AlertView>
         );
       },
+      overlayClassName: styles.addAlert
     });
   };
 

@@ -44,7 +44,7 @@ export default function AlertView({ track, partyCode, onClose }: Props) {
 
   return (
     <div className='alertWrapper'>
-      <h1>Do you want to add {track.name} to the queue?</h1>
+      <h2>Do you want to add <span className='trackName'>{track.name}</span> to the queue?</h2>
       <Button
         content='Yes, add it'
         styleType='primary block'
