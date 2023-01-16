@@ -1,12 +1,12 @@
 import styles from '@style/components/trackListItemView.module.scss';
 import { Track } from '@common/types/track';
 import { Artist } from '@common/types/artist';
-import { JukeClient } from '@common/jukeClient';
 import { PartyCode } from '@common/types/partyCode';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import AlertView from '@component/alertView';
 
 interface Props {
   /**
@@ -43,34 +43,15 @@ export default function TrackItem({ track, canBeQueued, partyCode }: Props) {
   const artists = Track.artistsOf(track).map(ArtistView);
   const confirm = () => {
     confirmAlert({
-      title: 'Please confirm',
-      message: `Do you want to add "${track.name}" to the queue?`,
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => {
-            JukeClient.addToQueue(partyCode, track).then(() => {
-              notify();
-            });
-          }
-        },
-        {
-          label: 'No'
-        }
-      ]
-    });
-  };
-  const notify = () => {
-    toast(`"${track.name}" has been added to queue`, {
-      position: 'bottom-center',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'dark',
-      type: 'success'
+      customUI: ({ onClose }) => {
+        return (
+          <AlertView
+            track={track}
+            partyCode={partyCode}
+            onClose={onClose}
+          ></AlertView>
+        );
+      },
     });
   };
 

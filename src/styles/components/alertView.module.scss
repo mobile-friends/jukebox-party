@@ -1,0 +1,13 @@
+.react-confirm-alert-overlay {
+    background: #000;
+}
+.alertWrapper{
+    background: $dark-color;
+    padding: 25px;
+    border-radius: 20px;
+    margin: 25px;
+
+    h1 {
+        padding-bottom: 10px;
+    }
+}
