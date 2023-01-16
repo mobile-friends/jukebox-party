@@ -40,11 +40,15 @@ export default function AlertView({ track, partyCode, onClose }: Props) {
     await JukeClient.addToQueue(partyCode, track).then(() => {
       notify();
     });
+    onClose();
   }
 
   return (
     <div className='alertWrapper'>
-      <h2>Do you want to add <span className='trackName'>{track.name}</span> to the queue?</h2>
+      <h2>
+        Do you want to add <span className='trackName'>{track.name}</span> to
+        the queue?
+      </h2>
       <Button
         content='Yes, add it'
         styleType='primary block'
