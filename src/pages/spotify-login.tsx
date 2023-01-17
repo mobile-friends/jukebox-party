@@ -99,7 +99,7 @@ export default function SpotifyLoginPage(props: Props) {
           )}
 
           <h2 className='text-primary'>
-            It looks like this is no premium account
+            Your account is not enabled for Jukebox.
           </h2>
 
           <p>Choose &apos;Not you?&apos; and log in with premium account</p>
