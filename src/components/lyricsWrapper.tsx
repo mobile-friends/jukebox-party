@@ -90,9 +90,10 @@ export default function LyricsWrapper({
 
   useEffect(() => {
     if (!lyrics) return;
+    const constantDelay = 1300;
     const currentLine = lyrics.reduce((prev: any, curr: any) => {
-      return Math.abs(curr.startTime - playTime) <
-        Math.abs(prev.startTime - playTime)
+      return Math.abs((curr.startTime+constantDelay) - playTime) <
+        Math.abs((prev.startTime+constantDelay) - playTime)
         ? curr
         : prev;
     });
@@ -150,7 +151,7 @@ export default function LyricsWrapper({
         <div
           className={styles.lyricsLine}
           style={{
-            color: dominantColors?.hexDark,
+            color: dominantColors?.hexDark ?? 'black',
           }}
         >
           ♩♪♫♬
@@ -166,7 +167,7 @@ export default function LyricsWrapper({
         <div
           className={styles.lyricsLine}
           style={{
-            color: dominantColors?.hexDark,
+            color: dominantColors?.hexDark ?? 'black',
           }}
         >
           greetings your jukebot ♫
