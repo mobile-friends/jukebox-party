@@ -92,8 +92,8 @@ export default function LyricsWrapper({
     if (!lyrics) return;
     const constantDelay = 1300;
     const currentLine = lyrics.reduce((prev: any, curr: any) => {
-      return Math.abs((curr.startTime+constantDelay) - playTime) <
-        Math.abs((prev.startTime+constantDelay) - playTime)
+      return Math.abs((curr.startTime) - playTime) <
+        Math.abs((prev.startTime) - playTime)
         ? curr
         : prev;
     });
